@@ -176,6 +176,7 @@
     <ClInclude Include="gl\glad\glad.h" />
     <ClInclude Include="gl\glfw\win64\glfw3.h" />
     <ClInclude Include="oagle.h" />
+    <ClInclude Include="oaglem.h" />
     <ClInclude Include="resources.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
