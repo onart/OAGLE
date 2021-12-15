@@ -16,6 +16,8 @@
 #include <cstdio>
 #include <cassert>
 
+constexpr float PI = 3.14159265358979323846f;
+
 namespace onart {
 
 	/// <summary>
@@ -116,7 +118,8 @@ namespace onart {
 		/// <summary>
 		/// T형 배열로 사용할 수 있도록 포인터를 리턴합니다.
 		/// </summary>
-		inline operator T* () const { return entry; }
+		inline operator T* () { return &x; }
+		inline operator const T* () const { return &x; }
 
 		/// <summary>
 		/// 부호를 반전시켜 리턴합니다.
@@ -564,6 +567,7 @@ namespace onart {
 		/// 행 우선 순서로 된 배열을 리턴합니다.
 		/// </summary>
 		inline operator float* () { return a; }
+		inline operator const float* () const { return a; }
 
 		/// <summary>
 		/// 좌측 상단 3x3 행렬로 캐스트합니다.
@@ -778,10 +782,10 @@ namespace onart {
 			float cy = cosf(yaw / 2);	float sy = sinf(yaw / 2);
 			float cp = cosf(pitch / 2);	float sp = sinf(pitch / 2);
 			float cr = cosf(roll / 2);	float sr = sinf(roll / 2);
-
+			
 			return Quaternion(cr * cp * cy + sr * sp * sy, sr * cp * cy - cr * sp * sy, cr * sp * cy + sr * cp * sy, cr * cr * sy - sr * sp * cy);
 		}
-
+		
 	};
 
 	/// <summary>

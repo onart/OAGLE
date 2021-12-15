@@ -20,6 +20,9 @@
     <ClCompile Include="gl\glad\glad.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OA_Shader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources.h">
@@ -35,6 +38,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="oaglem.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Shader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

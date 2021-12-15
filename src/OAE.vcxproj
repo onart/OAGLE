@@ -171,13 +171,16 @@
   <ItemGroup>
     <ClCompile Include="gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OA_Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="constants.h" />
     <ClInclude Include="gl\glad\glad.h" />
     <ClInclude Include="gl\glfw\win64\glfw3.h" />
     <ClInclude Include="oagle.h" />
     <ClInclude Include="oaglem.h" />
     <ClInclude Include="resources.h" />
+    <ClInclude Include="OA_Shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
