@@ -1,8 +1,10 @@
 #include <cstdio>
 #include <cstdlib>
+
 #include "oagle.h"
 #include "oaglem.h"
 #include "OA_Shader.h"
+#include "OA_Vertex.h"
 
 // 창 관련
 GLFWwindow* window = nullptr;
@@ -37,7 +39,7 @@ void update() {
 }
 
 void render() {
-	
+	glfwSwapBuffers(window);
 }
 
 // 이벤트 콜백 함수
@@ -130,6 +132,10 @@ bool init() {
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+	onart::Model::rectModel();
+	onart::Model::circleModel();
+	onart::Model::sphereModel();
+	onart::Model::cuboidModel();
 #ifdef _DEBUG
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(glErrCallback, 0);

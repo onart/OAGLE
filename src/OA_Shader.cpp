@@ -1,13 +1,17 @@
 #include "gl/glad/glad.h"
 
 #include "OA_Shader.h"
+#include "OA_Vertex.h"
 
 #include <cassert>
 #include <cstdio>
 #include <filesystem>
 #include <string>
+#include <map>
 
 namespace onart {
+
+	extern std::map<std::string, Model> models;
 	
 	Shader* Shader::usingShader = nullptr;
 
@@ -244,5 +248,16 @@ namespace onart {
 			glUseProgram(id);
 			usingShader = this;
 		}
+	}
+
+	void Shader::draw(Model& m) {
+		glBindVertexArray(m.getID());
+		glDrawElements(GL_TRIANGLES, m.getLength(), GL_UNSIGNED_INT, nullptr);
+	}
+
+	void Shader::draw(const char* name) {
+		Model& m = models[name];
+		glBindVertexArray(m.getID());
+		glDrawElements(GL_TRIANGLES, m.getLength(), GL_UNSIGNED_INT, nullptr);
 	}
 }

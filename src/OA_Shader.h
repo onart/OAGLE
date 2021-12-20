@@ -5,12 +5,14 @@
 
 namespace onart {
 
+	class Model;
 	/// <summary>
 	/// 정점(vertex) 셰이더 - 조각(fragment) 셰이더가 연결된 프로그램
 	/// <para>이 클래스는 스레드 안전성이 보장되지 않습니다.</para>
 	/// </summary>
 	class Shader
 	{
+
 		public:
 			/// <summary>
 			/// 셰이더 유니폼 변수 디버그용 코드입니다.
@@ -115,7 +117,13 @@ namespace onart {
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
 			/// </summary>
-			void drawVAO();	// TODO: vertex, vertex buffer, vertex array object 캡슐화 (이유: 인덱스 수를 알아야 그림)
+			void draw(Model& m);
+
+			/// <summary>
+			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
+			/// </summary>
+			/// <param name="name">전역 map인 models에 들어 있는 이름</param>
+			void draw(const char* name);
 
 		private:
 			static Shader* usingShader;
