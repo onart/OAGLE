@@ -121,6 +121,14 @@ bool init() {
 
 	//program2.initWithMemory();
 	//program3.initWIthMemory();
+	glClearColor(39 / 255.0f, 40 / 255.0f, 34 / 255.0f, 1.0f);
+
+	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glEnable.xhtml
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 #ifdef _DEBUG
 	glEnable(GL_DEBUG_OUTPUT);

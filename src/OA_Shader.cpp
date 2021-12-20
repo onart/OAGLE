@@ -55,6 +55,14 @@ namespace onart {
 		glAttachShader(id, fs);
 
 		glLinkProgram(id);
+		validateShaderProgram();
+
+		// fixed sampler2d
+		use();
+		uniform("surface", 0);
+		uniform("alphaMask", 1);
+		uniform("bumpMap", 2);
+		uniform("surface2", 3);
 	}
 
 	unsigned Shader::compileScript(const char* script, unsigned type) {
@@ -221,13 +229,19 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
+	void Shader::texture(unsigned tex, TexCode idx) {
+		int i = (int)idx;
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, tex);
+	}
+
 	void Shader::use() {
 		if (id == 0) {
 			printf("%p: 사용할 수 없는 셰이더 프로그램입니다.\n", this);
 			return;
 		}
 		if (usingShader != this) { 
-			glUseProgram(id); 
+			glUseProgram(id);
 			usingShader = this;
 		}
 	}

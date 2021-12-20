@@ -12,7 +12,23 @@ namespace onart {
 	class Shader
 	{
 		public:
+			/// <summary>
+			/// 셰이더 유니폼 변수 디버그용 코드입니다.
+			/// <para>SUCCESS: 성공</para>
+			/// <para>NOTFOUND: 셰이더 프로그램에 해당 이름이 없습니다.</para>
+			/// <para>INVALID: 셰이더 프로그램에 해당 이름에 대하여 유효하지 않은 값이 전달되었습니다.</para>
+			/// </summary>
 			enum class UniformCode { SUCCESS, NOTFOUND, INVALID };
+
+			/// <summary>
+			/// 텍스처 전달용 코드입니다.
+			/// <para>SURFACE0: 기본 표면 이미지입니다.</para>
+			/// <para>ALPHA: 투명도 마스크 이미지입니다.</para>
+			/// <para>BUMP: 법선 매핑을 위한 이미지입니다.</para>
+			/// <para>SURFACE1: 단일 개체에 대하여 추가 이미지가 필요한 경우 사용할 수 있습니다. 단, 가급적 별개의 정점 그룹을 사용하는 것을 추천합니다.</para>
+			/// </summary>
+			enum class TexCode { SURFACE0 = 0, ALPHA, BUMP, SURFACE1 };
+
 			/// <summary>
 			/// 스크립트 파일에서 읽어서 프로그램을 생성합니다.
 			/// </summary>
@@ -82,6 +98,24 @@ namespace onart {
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
 			UniformCode uniform(const char* name, const mat4& m4, bool tr = true);
+
+			/// <summary>
+			/// 셰이더 프로그램에 텍스처 정보를 보냅니다.
+			/// </summary>
+			/// <param name="tex">텍스처 객체입니다.</param>
+			/// <param name="idx">그려질 객체에 대하여 몇 번째 텍스처일지 결정합니다.</param>
+			void texture(unsigned tex, TexCode idx = TexCode::SURFACE0);
+
+			/// <summary>
+			/// 셰이더 프로그램의 id를 얻습니다.
+			/// 엔진에서 캡슐화되지 않은 부분을 사용할 수 있습니다.
+			/// </summary>
+			inline unsigned getID() { return id; };
+
+			/// <summary>
+			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
+			/// </summary>
+			void drawVAO();	// TODO: vertex, vertex buffer, vertex array object 캡슐화 (이유: 인덱스 수를 알아야 그림)
 
 		private:
 			static Shader* usingShader;
