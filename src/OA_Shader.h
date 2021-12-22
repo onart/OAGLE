@@ -5,7 +5,7 @@
 
 namespace onart {
 
-	class Model;
+	class Mesh;
 	/// <summary>
 	/// 정점(vertex) 셰이더 - 조각(fragment) 셰이더가 연결된 프로그램
 	/// <para>이 클래스는 스레드 안전성이 보장되지 않습니다.</para>
@@ -117,17 +117,17 @@ namespace onart {
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
 			/// </summary>
-			void draw(Model& m);
+			void draw(Mesh& m);
 
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
 			/// </summary>
 			/// <param name="name">전역 map인 models에 들어 있는 이름</param>
-			void draw(const char* name);
+			//void draw(const char* name);
 
 		private:
 			static Shader* usingShader;
-			unsigned id = 0;
+			unsigned id;
 
 			unsigned compileScript(const char* script, unsigned type);
 			bool validateShaderProgram();

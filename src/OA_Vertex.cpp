@@ -1,16 +1,44 @@
 #include "OA_Vertex.h"
 #include "gl/glad/glad.h"
-#include <map>
-#include <string>
 
 namespace onart {
 
-	std::map<std::string, Model> models;
+	std::map<std::string, Mesh*> Mesh::list;
 
-	void Model::rectModel(bool reset) {
+	Mesh* Mesh::get(const std::string& name) {
+		auto m = list.find(name);
+		if (m == list.end()) return nullptr;
+		else return m->second;
+	}
+
+	Mesh::~Mesh() {
+		glDeleteBuffers(1, &vb);
+		glDeleteBuffers(1, &ib);
+		glDeleteVertexArrays(1, &vao);
+	}
+
+	bool Mesh::add(const std::string& name, Mesh* mesh) {
+		if (!unload(name)) return false;
+		list[name] = mesh;
+		return true;
+	}
+
+	bool Mesh::unload(const std::string& name) {
+		static const char* RESERVED[] = { "circ", "clnd", "rect", "cubo", "sphr", "" };
+		for (char** p = (char**)RESERVED; (*p)[0]; p++) {
+			if (name == (*p)) return false;
+		}
+		auto m = list.find(name);
+		if (m == list.end()) return true;
+		delete m->second;
+		list.erase(m);
+		return true;
+	}
+
+	void Mesh::rectModel() {
 		static unsigned VB = 0, IB = 0, VAO = 0;
+		
 		if (VAO) {
-			if (!reset) return;
 			glDeleteBuffers(1, &VB);
 			glDeleteBuffers(1, &IB);
 			glDeleteVertexArrays(1, &VAO);
@@ -32,37 +60,15 @@ namespace onart {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-
-		glEnableVertexAttribArray(0);	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
-		glEnableVertexAttribArray(1);	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, norm));
-		glEnableVertexAttribArray(2);	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tc));
-#ifdef USE_BUMP
-		glEnableVertexAttribArray(3);	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tan));
-		glEnableVertexAttribArray(4);	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitan));
-#ifdef USE_ANIM
-		glEnableVertexAttribArray(5);	glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
-		glEnableVertexAttribArray(6);	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
-#endif // USE_ANIM
-#else
-#ifdef USE_ANIM
-		glEnableVertexAttribArray(3);	glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
-		glEnableVertexAttribArray(4);	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
-#endif // USE_ANIM
-#endif
-		glBindVertexArray(0);
-		models.erase("rect");
-		models.insert({ "rect", Model(VAO, 36) });
+		VAO = createVAO(VB, IB);
+		if (list.find("rect") != list.end()) { delete list["rect"]; }
+		list["rect"] = new Mesh(VB, IB, VAO, 36);
 	}
 
-	void Model::circleModel(bool reset) {
+	void Mesh::circleModel() {
 		static unsigned VB = 0, IB = 0, VAO = 0;
 		constexpr unsigned N = 36;
 		if (VAO) {
-			if (!reset) return;
 			glDeleteBuffers(1, &VB);
 			glDeleteBuffers(1, &IB);
 			glDeleteVertexArrays(1, &VAO);
@@ -90,38 +96,16 @@ namespace onart {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * N * 3, indices, GL_STATIC_DRAW);
 
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-
-		glEnableVertexAttribArray(0);	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
-		glEnableVertexAttribArray(1);	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, norm));
-		glEnableVertexAttribArray(2);	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tc));
-#ifdef USE_BUMP
-		glEnableVertexAttribArray(3);	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tan));
-		glEnableVertexAttribArray(4);	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitan));
-#ifdef USE_ANIM
-		glEnableVertexAttribArray(5);	glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
-		glEnableVertexAttribArray(6);	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
-#endif // USE_ANIM
-#else
-#ifdef USE_ANIM
-		glEnableVertexAttribArray(3);	glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
-		glEnableVertexAttribArray(4);	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
-#endif // USE_ANIM
-#endif
-		glBindVertexArray(0);
-		models.erase("circ");
-		models.insert({ "circ", Model(VAO, N * 3) });
+		VAO = createVAO(VB, IB);
+		if (list.find("circ") != list.end()) { delete list["circ"]; }
+		list["circ"] = new Mesh(VB, IB, VAO, N * 3);
 		delete[] circ, indices;
 	}
 
-	void Model::sphereModel(bool reset) {
+	void Mesh::sphereModel() {
 		static unsigned VB = 0, IB = 0, VAO = 0;
 		constexpr unsigned N = 36;
 		if (VAO) {
-			if (!reset) return;
 			glDeleteBuffers(1, &VB);
 			glDeleteBuffers(1, &IB);
 			glDeleteVertexArrays(1, &VAO);
@@ -159,34 +143,13 @@ namespace onart {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * N * N * 12, indices, GL_STATIC_DRAW);
 
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-
-		glEnableVertexAttribArray(0);	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
-		glEnableVertexAttribArray(1);	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, norm));
-		glEnableVertexAttribArray(2);	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tc));
-#ifdef USE_BUMP
-		glEnableVertexAttribArray(3);	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tan));
-		glEnableVertexAttribArray(4);	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitan));
-#ifdef USE_ANIM
-		glEnableVertexAttribArray(5);	glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
-		glEnableVertexAttribArray(6);	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
-#endif // USE_ANIM
-#else
-#ifdef USE_ANIM
-		glEnableVertexAttribArray(3);	glVertexAttribIPointer(3, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
-		glEnableVertexAttribArray(4);	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
-#endif // USE_ANIM
-#endif
-		glBindVertexArray(0);
-		models.erase("sphr");
-		models.insert({ "sphr", Model(VAO, N * N * 12) });
+		VAO = createVAO(VB, IB);
+		if (list.find("sphr") != list.end()) { delete list["sphr"]; }
+		list["sphr"] = new Mesh(VB, IB, VAO, N * N * 12);
 		delete[] sphr, indices;
 	}
 
-	void Model::cuboidModel(bool reset) {
+	void Mesh::cuboidModel() {
 		static unsigned VB = 0, IB = 0, VAO = 0;
 		Vertex cube[] = {
 		{vec3(-1,-1,-1),vec3(0,0,-1),vec2(1.0f / 2, 0)},
@@ -237,10 +200,17 @@ namespace onart {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
+		VAO = createVAO(VB, IB);
+		if (list.find("cubo") != list.end()) { delete list["cubo"]; }
+		list["cubo"] = new Mesh(VB, IB, VAO, 36);
+	}
+
+	unsigned Mesh::createVAO(unsigned vb, unsigned ib) {
+		unsigned vao;
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+		glBindBuffer(GL_ARRAY_BUFFER, vb);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
 
 		glEnableVertexAttribArray(0);	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
 		glEnableVertexAttribArray(1);	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, norm));
@@ -259,8 +229,6 @@ namespace onart {
 #endif // USE_ANIM
 #endif
 		glBindVertexArray(0);
-		models.erase("cubo");
-		models.insert({ "cubo", Model(VAO, 36) });
+		return vao;
 	}
-
 }

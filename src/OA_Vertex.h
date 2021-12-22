@@ -3,6 +3,9 @@
 
 #include "oaglem.h"
 
+#include <map>
+#include <string>
+
 namespace onart {
 
 	/// <summary>
@@ -47,43 +50,66 @@ namespace onart {
 
 	};
 
-	class Model {
+	/// <summary>
+	/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)의 클래스입니다. 기본적으로 스택 생성이 불가능합니다.
+	/// </summary>
+	class Mesh {
 		public:
+			/// <summary>
+			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 이름으로 찾아옵니다. 없는 경우 nullptr를 리턴합니다.
+			/// </summary>
+			static Mesh* get(const std::string& name);
+			/// <summary>
+			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 새로 추가합니다. 단, 예약된 이름을 사용할 수 없으며 그 외에 이미 있는 이름을 대상으로 시도하면 기존 모델을 덮어씁니다. 성공 여부를 리턴합니다.
+			/// <para>예약된 이름: rect, circ, sphr, clnd, cubo, (빈 문자열)</para>
+			/// </summary>
+			static bool add(const std::string& name, Mesh* m);
+			/// <summary>
+			/// 기초 모델을 메모리에서 제거합니다. 단, 빌트인 모델은 제거할 수 없습니다. 성공 여부를 리턴합니다. 이미 없는 이름을 제거하려고 시도할 경우 성공으로 취급됩니다.
+			/// </summary>
+			static bool unload(const std::string& name);
 			/// <summary>
 			/// 정점 배열 오브젝트의 id를 얻습니다.
 			/// </summary>
-			inline unsigned getID() const { return id; }
+			inline unsigned getID() const { return vao; }
 			/// <summary>
 			/// 정점 배열의 길이를 얻습니다.
 			/// </summary>			
 			inline unsigned getLength() const { return length; }
 			/// <summary>
-			/// 직사각형 정점 배열 오브젝트를 생성합니다. STL map인 models에서 찾을 수 있습니다. ("rect")
+			/// 직사각형 정점 배열 오브젝트를 생성합니다. 재 호출 시 모델을 처음부터 다시 생성합니다.
 			/// 텍스처 이미지는 그대로 직사각형에 들어갑니다.
 			/// </summary>
-			static void rectModel(bool reset = false);
+			static void rectModel();
 			/// <summary>
-			/// 원 정점 배열 오브젝트를 생성하고 리턴합니다. STL map인 models에서 찾을 수 있습니다. ("circ")
+			/// 원 정점 배열 오브젝트를 생성하고 리턴합니다. 재 호출 시 모델을 처음부터 다시 생성합니다.
 			/// 텍스처 이미지는 정사각형 이미지에 내접하는 원입니다.
 			/// </summary>
-			static void circleModel(bool reset = false);
+			static void circleModel();
 			/// <summary>
-			/// 구 정점 배열 오브젝트를 생성하고 리턴합니다. STL map인 models에서 찾을 수 있습니다. ("sphr")
+			/// 구 정점 배열 오브젝트를 생성하고 리턴합니다. 재 호출 시 모델을 처음부터 다시 생성합니다.
 			/// 텍스처 이미지는 지구본과 세계지도의 관계와 동일합니다.
 			/// </summary>
-			static void sphereModel(bool reset = false);
+			static void sphereModel();
 			/// <summary>
-			/// 직육면체 정점 배열 오브젝트를 생성하고 리턴합니다. STL map인 models에서 찾을 수 있습니다. ("cubo")
+			/// 직육면체 정점 배열 오브젝트를 생성하고 리턴합니다. 재 호출 시 모델을 처음부터 다시 생성합니다.
 			/// 텍스처 이미지는 4x3 배열의 가득 찬 직사각형이 있을 때 1행 2열이 상,
 			/// 2행은 각각 좌, 전, 우, 후,
 			/// 3행 2열은 하 방향입니다.
 			/// </summary>
-			static void cuboidModel(bool reset = false);
-			inline Model() :id(0), length(0) {}
+			static void cuboidModel();
+			/// <summary>
+			/// 정점 버퍼와 인덱스 버퍼를 가지고 정점 버퍼 오브젝트를 생성하고 리턴합니다.
+			/// </summary>
+			static unsigned createVAO(unsigned vb, unsigned ib);
+			inline Mesh() {}
 		private:
-			inline Model(unsigned id, unsigned length) :id(id), length(length) {}
-			const unsigned id;
-			const unsigned length;
+			inline Mesh(unsigned vb, unsigned ib, unsigned vao, unsigned length) :vb(vb), ib(ib), vao(vao), length(length) {};
+			~Mesh();	// 프로그램 종료 전까지 임의로 메시 삭제 불가능
+			unsigned vb = 0, ib = 0, vao = 0;
+			const unsigned length = 0;
+
+			static std::map<std::string, Mesh*> list;
 	};
 }
 

@@ -132,10 +132,10 @@ bool init() {
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	onart::Model::rectModel();
-	onart::Model::circleModel();
-	onart::Model::sphereModel();
-	onart::Model::cuboidModel();
+	onart::Mesh::rectModel();
+	onart::Mesh::circleModel();
+	onart::Mesh::sphereModel();
+	onart::Mesh::cuboidModel();
 #ifdef _DEBUG
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(glErrCallback, 0);

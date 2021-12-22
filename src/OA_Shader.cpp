@@ -11,7 +11,7 @@
 
 namespace onart {
 
-	extern std::map<std::string, Model> models;
+	extern std::map<std::string, Mesh> list;
 	
 	Shader* Shader::usingShader = nullptr;
 
@@ -250,14 +250,15 @@ namespace onart {
 		}
 	}
 
-	void Shader::draw(Model& m) {
+	void Shader::draw(Mesh& m) {
 		glBindVertexArray(m.getID());
 		glDrawElements(GL_TRIANGLES, m.getLength(), GL_UNSIGNED_INT, nullptr);
 	}
-
+	/* //예정: 정점 데이터=메시, 메시+메터리얼+애니메이션=모델, 모델+기능=개체. 이때 name은 모델을 기준으로 검색됨
 	void Shader::draw(const char* name) {
-		Model& m = models[name];
+		Mesh* m = list[name];
 		glBindVertexArray(m.getID());
 		glDrawElements(GL_TRIANGLES, m.getLength(), GL_UNSIGNED_INT, nullptr);
 	}
+	*/
 }
