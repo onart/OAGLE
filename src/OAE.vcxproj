@@ -184,6 +184,10 @@
     <ClInclude Include="resources.h" />
     <ClInclude Include="OA_Shader.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\p3f.txt" />
+    <None Include="resources\p3v.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

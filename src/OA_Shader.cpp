@@ -10,8 +10,6 @@
 #include <map>
 
 namespace onart {
-
-	extern std::map<std::string, Mesh> list;
 	
 	Shader* Shader::usingShader = nullptr;
 
@@ -48,7 +46,7 @@ namespace onart {
 		glUseProgram(id);
 
 		unsigned vs = compileScript(vert, GL_VERTEX_SHADER);
-		unsigned fs = compileScript(vert, GL_FRAGMENT_SHADER);
+		unsigned fs = compileScript(frag, GL_FRAGMENT_SHADER);
 
 		if (vs == 0 || fs == 0) { 
 			id = 0;

@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include "resources.h"
 #include "oagle.h"
 #include "oaglem.h"
 #include "OA_Shader.h"
@@ -122,7 +123,7 @@ glErrCallback(GLenum source,
 bool init() {
 
 	//program2.initWithMemory();
-	//program3.initWIthMemory();
+	program3.initWithMemory(p3vert, p3frag);
 	glClearColor(39 / 255.0f, 40 / 255.0f, 34 / 255.0f, 1.0f);
 
 	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glEnable.xhtml

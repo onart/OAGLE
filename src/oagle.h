@@ -17,7 +17,7 @@
 	int VMAJOR = 2, VMINOR = 0;
 	constexpr bool IS_ES = true;
 #else
-	int VMAJOR = 3, VMINOR = 3;
+	int VMAJOR = 4, VMINOR = 6;
 	constexpr bool IS_ES = false;
 #endif
 	int SLVMAJOR = 0, SLVMINOR = 0;

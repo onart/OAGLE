@@ -53,4 +53,12 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\p3f.txt">
+      <Filter>셰이더</Filter>
+    </None>
+    <None Include="resources\p3v.txt">
+      <Filter>셰이더</Filter>
+    </None>
+  </ItemGroup>
 </Project>
