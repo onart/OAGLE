@@ -121,7 +121,7 @@ namespace onart {
 		return true;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, int i) {
+	Shader::UniformCode Shader::uniform(const char* name, int i) const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform1i(uloc, i);
@@ -132,7 +132,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, float f) {
+	Shader::UniformCode Shader::uniform(const char* name, float f) const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform1f(uloc, f);
@@ -143,7 +143,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, bool b) {
+	Shader::UniformCode Shader::uniform(const char* name, bool b) const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform1i(uloc, b);
@@ -154,7 +154,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const vec2& v2) {
+	Shader::UniformCode Shader::uniform(const char* name, const vec2& v2) const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform2fv(uloc, 1, v2);
@@ -165,7 +165,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const vec3& v3) {
+	Shader::UniformCode Shader::uniform(const char* name, const vec3& v3)const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform3fv(uloc, 1, v3);
@@ -176,7 +176,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const vec4& v4) {
+	Shader::UniformCode Shader::uniform(const char* name, const vec4& v4)const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform4fv(uloc, 1, v4);
@@ -187,7 +187,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const ivec2& v2) {
+	Shader::UniformCode Shader::uniform(const char* name, const ivec2& v2)const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform2iv(uloc, 1, v2);
@@ -198,7 +198,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const ivec3& v3) {
+	Shader::UniformCode Shader::uniform(const char* name, const ivec3& v3)const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform3iv(uloc, 1, v3);
@@ -209,7 +209,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const ivec4& v4) {
+	Shader::UniformCode Shader::uniform(const char* name, const ivec4& v4)const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniform4iv(uloc, 1, v4);
@@ -220,7 +220,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const mat4& m4, bool tr) {
+	Shader::UniformCode Shader::uniform(const char* name, const mat4& m4, bool tr)const {
 		assert(usingShader == this);
 		int uloc = glGetUniformLocation(id, name);
 		glUniformMatrix4fv(uloc, 1, tr, m4);
@@ -231,7 +231,7 @@ namespace onart {
 		return UniformCode::SUCCESS;
 	}
 
-	void Shader::texture(unsigned tex, TexCode idx) {
+	void Shader::texture(unsigned tex, TexCode idx) const {
 		int i = (int)idx;
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, tex);
@@ -248,7 +248,7 @@ namespace onart {
 		}
 	}
 
-	void Shader::draw(Mesh& m) {
+	void Shader::draw(Mesh& m) const {
 		glBindVertexArray(m.getID());
 		glDrawElements(GL_TRIANGLES, m.getLength(), GL_UNSIGNED_INT, nullptr);
 	}

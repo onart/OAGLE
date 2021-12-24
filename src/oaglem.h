@@ -19,7 +19,6 @@
 constexpr float PI = 3.14159265358979323846f;
 
 namespace onart {
-
 	/// <summary>
 	/// N차원 벡터입니다. 길이에 관계없이 상호 변환이 가능합니다.
 	/// </summary>
@@ -653,6 +652,7 @@ namespace onart {
 
 		/// <summary>
 		/// 표준 뷰 볼륨 직육면체에 들어올 대상 뿔대(절두체)를 조절하는 투사 행렬을 계산합니다.
+		/// 순수 2D 게임을 만드는 경우, 단위 행렬에 aspect만 적용하면 됩니다.
 		/// </summary>
 		/// <param name="fovy">field of view Y: 뿔대의 Y축 방향(화면 기준 세로) 라디안 각도입니다.</param>
 		/// <param name="aspect">표시 뷰포트 비율(가로/세로)입니다.</param>

@@ -54,70 +54,70 @@ namespace onart {
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, bool b);
+			UniformCode uniform(const char* name, bool b)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, int i);
+			UniformCode uniform(const char* name, int i)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, float f);
+			UniformCode uniform(const char* name, float f)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, const vec2& v2);
+			UniformCode uniform(const char* name, const vec2& v2)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, const vec3& v3);
+			UniformCode uniform(const char* name, const vec3& v3)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, const vec4& v4);
+			UniformCode uniform(const char* name, const vec4& v4) const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, const ivec2& v2);
+			UniformCode uniform(const char* name, const ivec2& v2)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, const ivec3& v3);
+			UniformCode uniform(const char* name, const ivec3& v3)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, const ivec4& v4);
+			UniformCode uniform(const char* name, const ivec4& v4)const;
 			/// <summary>
 			/// 셰이더 프로그램에 uniform 변수를 보냅니다. 행렬을 전치로 보낼지 여부를 직접 선택합니다.
 			/// </summary>
 			/// <returns>디버그 모드에 한하여 실패 코드를 리턴합니다.</returns>
-			UniformCode uniform(const char* name, const mat4& m4, bool tr = true);
+			UniformCode uniform(const char* name, const mat4& m4, bool tr = true)const;
 
 			/// <summary>
 			/// 셰이더 프로그램에 텍스처 정보를 보냅니다.
 			/// </summary>
 			/// <param name="tex">텍스처 객체입니다.</param>
 			/// <param name="idx">그려질 객체에 대하여 몇 번째 텍스처일지 결정합니다.</param>
-			void texture(unsigned tex, TexCode idx = TexCode::SURFACE0);
+			void texture(unsigned tex, TexCode idx = TexCode::SURFACE0) const;
 
 			/// <summary>
 			/// 셰이더 프로그램의 id를 얻습니다.
 			/// 엔진에서 캡슐화되지 않은 부분을 사용할 수 있습니다.
 			/// </summary>
-			inline unsigned getID() { return id; };
+			inline unsigned getID() const { return id; };
 
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
 			/// </summary>
-			void draw(Mesh& m);
+			void draw(Mesh& m) const;
 
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.

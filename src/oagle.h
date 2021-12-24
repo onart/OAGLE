@@ -31,33 +31,6 @@
 
 namespace onart {
 
-	/// <summary>
-	/// 뷰포트의 비율을 결정합니다.
-	/// </summary>
-	class {
-		private:
-			unsigned R_WIDTH = 16, R_HEIGHT = 9;
-			float ratio = 16.0f / 9;
-		public:
-			/// <summary>
-			/// 종횡비를 설정합니다.
-			/// </summary>
-			/// <param name="rw">가로의 상대적 길이</param>
-			/// <param name="rh">세로의 상대적 길이</param>
-			inline void setRatio(unsigned rw, unsigned rh){
-				R_WIDTH = rw;
-				R_HEIGHT = rh;
-				ratio = (float)rw / rh;
-			}
-			/// <summary>
-			/// 설정된 종횡비를 리턴합니다.
-			/// </summary>
-			/// <returns></returns>
-			inline float getRatio() {
-				return ratio;
-			}
-	} vp;
-
 	constexpr int R_WIDTH = 16;
 	constexpr int R_HEIGHT = 9;
 	constexpr float LRPOL = R_WIDTH > R_HEIGHT ? (float)R_WIDTH / R_HEIGHT : 1;

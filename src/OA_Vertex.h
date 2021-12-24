@@ -58,7 +58,9 @@ namespace onart {
 			/// <summary>
 			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 이름으로 찾아옵니다. 없는 경우 nullptr를 리턴합니다.
 			/// </summary>
-			static Mesh* get(const std::string& name);
+			/// <param name="name">불러올 때 직접 정한 이름</param>
+			/// <returns>메시의 위치를 가리키는 포인터의 주소(Mesh**)</returns>
+			static Mesh** get(const std::string& name);
 			/// <summary>
 			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 새로 추가합니다. 단, 예약된 이름을 사용할 수 없으며 그 외에 이미 있는 이름을 대상으로 시도하면 기존 모델을 덮어씁니다. 성공 여부를 리턴합니다.
 			/// <para>예약된 이름: rect, circ, sphr, clnd, cubo, (빈 문자열)</para>

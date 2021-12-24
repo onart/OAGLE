@@ -5,10 +5,10 @@ namespace onart {
 
 	std::map<std::string, Mesh*> Mesh::list;
 
-	Mesh* Mesh::get(const std::string& name) {
+	Mesh** Mesh::get(const std::string& name) {
 		auto m = list.find(name);
 		if (m == list.end()) return nullptr;
-		else return m->second;
+		else return &(m->second);
 	}
 
 	Mesh::~Mesh() {
@@ -31,6 +31,7 @@ namespace onart {
 		auto m = list.find(name);
 		if (m == list.end()) return true;
 		delete m->second;
+		m->second = nullptr;
 		list.erase(m);
 		return true;
 	}
