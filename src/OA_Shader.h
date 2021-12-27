@@ -113,12 +113,12 @@ namespace onart {
 			/// 엔진에서 캡슐화되지 않은 부분을 사용할 수 있습니다.
 			/// </summary>
 			inline unsigned getID() const { return id; };
-
+			
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
 			/// </summary>
 			void draw(Mesh& m) const;
-
+			
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
 			/// </summary>

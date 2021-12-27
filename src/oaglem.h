@@ -649,7 +649,19 @@ namespace onart {
 					0, 0, 0, 1
 				);
 		}
-
+		/// <summary>
+		/// 병진, 회전, 배율 행렬 T, R, S를 구한 후 곱하는 것보다 조금 더 빠르게 계산합니다.
+		/// </summary>
+		/// <param name="translation">병진</param>
+		/// <param name="rotation">회전</param>
+		/// <param name="scale">배율</param>
+		inline static mat4 TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
+			mat4 r = rotation.toMat4();
+			r[0] *= scale.x;	r[1] *= scale.y;	r[2] *= scale.z;	r[3] = translation.x;
+			r[4] *= scale.x;	r[5] *= scale.y;	r[6] *= scale.z;	r[4] = translation.y;
+			r[8] *= scale.x;	r[9] *= scale.y;	r[10] *= scale.z;	r[11] = translation.z;
+			return r;
+		}
 		/// <summary>
 		/// 표준 뷰 볼륨 직육면체에 들어올 대상 뿔대(절두체)를 조절하는 투사 행렬을 계산합니다.
 		/// 순수 2D 게임을 만드는 경우, 단위 행렬에 aspect만 적용하면 됩니다.
