@@ -173,6 +173,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Material.cpp" />
     <ClCompile Include="OA_Model.cpp" />
+    <ClCompile Include="OA_Random.cpp" />
     <ClCompile Include="OA_Shader.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
   </ItemGroup>
@@ -184,6 +185,7 @@
     <ClInclude Include="oaglem.h" />
     <ClInclude Include="OA_Material.h" />
     <ClInclude Include="OA_Model.h" />
+    <ClInclude Include="OA_Random.h" />
     <ClInclude Include="OA_Vertex.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="OA_Shader.h" />

@@ -32,6 +32,9 @@
     <ClCompile Include="OA_Material.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OA_Random.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources.h">
@@ -68,6 +71,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="stb_truetype.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Random.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
