@@ -19,6 +19,7 @@
 constexpr float PI = 3.14159265358979323846f;
 
 namespace onart {
+	struct Quaternion;
 	/// <summary>
 	/// N차원 벡터입니다. 길이에 관계없이 상호 변환이 가능합니다.
 	/// </summary>
@@ -482,24 +483,24 @@ namespace onart {
 		inline mat4 operator*(const mat4& m) const {
 			return mat4(
 				_11 * m._11 + _12 * m._21 + _13 * m._31 + _14 * m._41,
-				_11 * m._12 + _12 * m._22 + _13 * m._32 + _14 + m._42,
-				_11 * m._13 + _12 * m._23 + _13 * m._33 + _14 + m._43,
-				_11 * m._14 + _12 * m._24 + _13 * m._34 + _14 + m._44,
+				_11 * m._12 + _12 * m._22 + _13 * m._32 + _14 * m._42,
+				_11 * m._13 + _12 * m._23 + _13 * m._33 + _14 * m._43,
+				_11 * m._14 + _12 * m._24 + _13 * m._34 + _14 * m._44,
 
 				_21* m._11 + _22 * m._21 + _23 * m._31 + _24 * m._41,
-				_21* m._12 + _22 * m._22 + _23 * m._32 + _24 + m._42,
-				_21* m._13 + _22 * m._23 + _23 * m._33 + _24 + m._43,
-				_21* m._14 + _22 * m._24 + _23 * m._34 + _24 + m._44,
+				_21* m._12 + _22 * m._22 + _23 * m._32 + _24 * m._42,
+				_21* m._13 + _22 * m._23 + _23 * m._33 + _24 * m._43,
+				_21* m._14 + _22 * m._24 + _23 * m._34 + _24 * m._44,
 
 				_31* m._11 + _32 * m._21 + _33 * m._31 + _34 * m._41,
-				_31* m._12 + _32 * m._22 + _33 * m._32 + _34 + m._42,
-				_31* m._13 + _32 * m._23 + _33 * m._33 + _34 + m._43,
-				_31* m._14 + _32 * m._24 + _33 * m._34 + _34 + m._44,
+				_31* m._12 + _32 * m._22 + _33 * m._32 + _34 * m._42,
+				_31* m._13 + _32 * m._23 + _33 * m._33 + _34 * m._43,
+				_31* m._14 + _32 * m._24 + _33 * m._34 + _34 * m._44,
 
 				_41* m._11 + _42 * m._21 + _43 * m._31 + _44 * m._41,
-				_41* m._12 + _42 * m._22 + _43 * m._32 + _44 + m._42,
-				_41* m._13 + _42 * m._23 + _43 * m._33 + _44 + m._43,
-				_41* m._14 + _42 * m._24 + _43 * m._34 + _44 + m._44
+				_41* m._12 + _42 * m._22 + _43 * m._32 + _44 * m._42,
+				_41* m._13 + _42 * m._23 + _43 * m._33 + _44 * m._43,
+				_41* m._14 + _42 * m._24 + _43 * m._34 + _44 * m._44
 			);
 		}
 		inline mat4& operator*=(const mat4& m) { return *this = operator*(m); }
@@ -655,13 +656,7 @@ namespace onart {
 		/// <param name="translation">병진</param>
 		/// <param name="rotation">회전</param>
 		/// <param name="scale">배율</param>
-		inline static mat4 TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
-			mat4 r = rotation.toMat4();
-			r[0] *= scale.x;	r[1] *= scale.y;	r[2] *= scale.z;	r[3] = translation.x;
-			r[4] *= scale.x;	r[5] *= scale.y;	r[6] *= scale.z;	r[4] = translation.y;
-			r[8] *= scale.x;	r[9] *= scale.y;	r[10] *= scale.z;	r[11] = translation.z;
-			return r;
-		}
+		inline static mat4 TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale);
 		/// <summary>
 		/// 표준 뷰 볼륨 직육면체에 들어올 대상 뿔대(절두체)를 조절하는 투사 행렬을 계산합니다.
 		/// 순수 2D 게임을 만드는 경우, 단위 행렬에 aspect만 적용하면 됩니다.
@@ -836,6 +831,14 @@ namespace onart {
 	inline mat3 mat3::rotate(float roll, float pitch, float yaw) { return mat3(mat4::rotate(roll, pitch, yaw)); }
 	inline mat4 mat4::rotate(const vec3& axis, float angle) { return Quaternion::rotation(axis, angle).toMat4(); }
 	inline mat4 mat4::rotate(float roll, float pitch, float yaw) { return Quaternion::euler(yaw, pitch, roll).toMat4(); }
+	inline mat4 mat4::TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
+		// 곱 36회/합 6회, T*R*S 따로 하는 경우 곱 155회/합 102회
+		mat4 r = rotation.toMat4();
+		r[0] *= scale.x;	r[1] *= scale.y;	r[2] *= scale.z;	r[3] = translation.x;
+		r[4] *= scale.x;	r[5] *= scale.y;	r[6] *= scale.z;	r[4] = translation.y;
+		r[8] *= scale.x;	r[9] *= scale.y;	r[10] *= scale.z;	r[11] = translation.z;
+		return r;
+	}
 }
 
 #endif // !__OAGLEM_H__

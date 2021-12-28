@@ -16,18 +16,20 @@ namespace onart {
 		/// </summary>
 		bool isActive = true;
 	protected:
-		Transform transform;
-	private:
 		/// <summary>
-		/// 개체의 시각(timepoint)입니다. 개체가 Active한 경우에만 흘러갑니다.
+		/// 개체의 위치, 크기, 회전을 나타냅니다.
 		/// </summary>
-		float localTp = 0;
+		Transform transform;
+		/// <summary>
+		/// 개체의 시각(timepoint)입니다. 개체가 Active한 경우에만 증가합니다.
+		/// </summary>
+		const float& localTp;
 		/// <summary>
 		/// 게임이 실행된 후 현재 프레임에 들어오기까지 흐른 시간(초)입니다.
 		/// </summary>
 		static const float& tp;
-		
-		
+	private:
+		float lt = 0;
 	};
 }
 

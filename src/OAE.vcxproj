@@ -176,7 +176,6 @@
     <ClCompile Include="OA_Model.cpp" />
     <ClCompile Include="OA_Random.cpp" />
     <ClCompile Include="OA_Shader.cpp" />
-    <ClCompile Include="OA_Transform.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>

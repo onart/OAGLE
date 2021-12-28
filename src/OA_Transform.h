@@ -6,32 +6,50 @@
 namespace onart {
 	/// <summary>
 	/// 개체의 위치, 크기, 회전 상태를 나타내는 클래스입니다. (다형성을 가상함수 테이블 때문에 사용하지 않고 모두 인라인 함수인 대신 이 계층의 코딩이 약간 번거로워집니다.)
-	/// 주어진 것 외 다른 행렬 클래스를 사용하는 경우 이 클래스를 그대로 사용할 수 없을 가능성이 매우 높습니다.
-	/// <para>맨 앞에 d가 붙은 setter 멤버함수는 매 프레임마다 위치/회전/크기 중 둘 이상 업데이트될 수 있는 개체에 대하여 사용하는 것이 좋습니다. 이후 dGetModel()로 모델 행렬을 얻어와야만 합니다.</para>
-	/// <para>맨 앞에 d가 붙지 않은 setter 멤버함수는 매 프레임마다 주로 하나 이하가 업데이트되는 개체에 대하여 사용하는 것이 좋습니다. 이후 getModel()로 모델 행렬을 얻어오면 됩니다. 예를 들어 2D 게임에서 회전이 없는 주인공 같은 경우 이 함수를 사용하는 것이 훨씬 효율이 높습니다.</para>
+	/// <para>oaglem.h 외 다른 행렬 클래스를 사용하는 경우 이 클래스를 그대로 사용할 수 없을 가능성이 매우 높습니다.</para>
+	/// <para>맨 앞에 d가 붙은 setter 멤버함수는 매 프레임마다 위치/회전/크기 중 둘 이상 업데이트될 수 있는 개체에 대하여 사용하는 것이 좋습니다.</para>
+	/// <para>맨 앞에 d가 붙지 않은 setter 멤버함수는 매 프레임마다 주로 하나 이하가 업데이트되는 개체에 대하여 사용하는 것이 좋습니다.</para>
 	/// <para>어떤 방식으로 업데이트하든 결과는 같으므로, 최적화가 충분한 경우 d가 붙은 멤버만 사용하는 것도 방법입니다.</para>
+	/// (중요) parent가 유효하지 않은 포인터인 경우에 대한 예외 케이스는 상정되지 않았습니다. 따라서 Transform은 웬만해선 Entity의 멤버로만 사용하며, parent 포인터를 사용하는 경우 응용(Entity 파생) 계층에서 반드시 부모와의 관리를 직접 하시기 바랍니다.
 	/// </summary>
 	class Transform
 	{
 	private:
+		Transform* parent = nullptr;
+		bool ready;
 		Quaternion rotation;
 		vec3 scale = 1;
 		vec3 pos;
 		mat4 model;
+		/// <summary>
+		/// NOTE: ready를 true로 만들 수 있는 함수는 여기뿐이어야 합니다.
+		/// </summary>
+		inline void TRS() { model = mat4::TRS(pos, rotation, scale); ready = true; }
 	public:
-		inline Transform(const vec3& pos = 0, const vec3& scale = 1, const Quaternion& rot = { 1,0,0,0 }) :pos(pos), rotation(rot), scale(scale) { model = mat4::TRS(pos, rotation, scale); }
-		inline Transform(const Transform& tr) : pos(tr.getPosition()), rotation(tr.getRotation()), scale(tr.getScale()) { model = mat4::TRS(pos, rotation, scale); }
+		inline Transform(const vec3& pos = 0, const vec3& scale = 1, const Quaternion& rot = { 1,0,0,0 }, Transform* parent = nullptr) :pos(pos), rotation(rot), scale(scale), parent(parent) { TRS(); }
+		inline Transform(const Transform& tr) : pos(tr.getPosition()), rotation(tr.getRotation()), scale(tr.getScale()), parent(tr.getParent()) { TRS(); }
+		/// <summary>
+		/// 부모 트랜스폼을 설정합니다.
+		/// </summary>
+		/// <param name="p">부모 트랜스폼</param>
+		inline void setParent(Transform* p = nullptr) { parent = p; }
+		inline Transform* getParent() const { return parent; }
 		/// <summary>
 		/// 인게임 모델 4x4 행렬을 리턴합니다.
-		/// <para>매 프레임마다 위치/회전/크기 중 주로 하나 이하가 업데이트되는 경우 이 함수가 조금 더 빠릅니다.</para>
+		/// </summary>
+		inline const mat4& getModel() { 
+			if (!ready) { TRS(); }
+			if (parent) {
+				return parent->getModel() * model;
+			}
+			else {
+				return model;
+			}
+		}
+		/// <summary>
+		/// 이 함수는 const Transform 객체에서 model을 얻는 데 쓰입니다.
 		/// </summary>
 		inline const mat4& getModel() const { return model; }
-		/// <summary>
-		/// 인게임 모델 4x4 행렬을 계산한 후 리턴합니다.
-		/// <para>매 프레임마다 위치/회전/크기 중 둘 이상 업데이트될 수 있는 경우 이 함수가 조금 더 빠릅니다.</para>
-		/// </summary>
-		inline const mat4& dGetModel() { model = mat4::TRS(pos, rotation, scale); return model; }
-		
 		/// <summary>
 		/// 3D 위치를 리턴합니다.
 		/// </summary>
@@ -47,7 +65,7 @@ namespace onart {
 		/// <summary>
 		/// 3D 크기 배율을 설정합니다.
 		/// </summary>
-		inline void dSetScale(const vec3& sc) { scale = sc; }
+		inline void dSetScale(const vec3& sc) { scale = sc; ready = false; }
 		/// <summary>
 		/// 3D 크기 배율을 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -60,25 +78,25 @@ namespace onart {
 				model[8] *= v.x;	model[9] *= v.y;	model[10] *= v.z;
 			}
 			else {
-				model = mat4::TRS(pos, rotation, scale);
+				TRS();
 			}
 		}
 		/// <summary>
 		/// 3D 크기 배율을 설정합니다.
 		/// </summary>
-		inline void dSetScale(float x = 1, float y = 1, float z = 1) { scale.x = x; scale.y = y; scale.z = z; }
+		inline void dSetScale(float x, float y, float z) { scale.x = x; scale.y = y; scale.z = z; ready = false; }
 		/// <summary>
 		/// 3D 크기 배율을 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setScale(float x = 1, float y = 1, float z = 1) { setScale({ x,y,z }); }
+		inline void setScale(float x, float y, float z) { setScale({ x,y,z }); }
 		/// <summary>
 		/// 3D 위치를 설정합니다.
 		/// </summary>
-		inline void dSetPosition(const vec3& p) { pos = p; }
+		inline void dSetPosition(const vec3& p) { pos = p; ready = false; }
 		/// <summary>
 		/// 3D 위치를 설정합니다.
 		/// </summary>
-		inline void dSetPosition(float x, float y, float z) { pos.x = x; pos.y = y; pos.z = z; }
+		inline void dSetPosition(float x, float y, float z) { pos.x = x; pos.y = y; pos.z = z; ready = false; }
 		/// <summary>
 		/// 3D 위치를 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -90,15 +108,15 @@ namespace onart {
 		/// <summary>
 		/// x좌표만 변경합니다.
 		/// </summary>
-		inline void dSetPositionX(float x) { pos.x = x; }
+		inline void dSetPositionX(float x) { pos.x = x; ready = false; }
 		/// <summary>
 		/// y좌표만 변경합니다.
 		/// </summary>
-		inline void dSetPositionY(float y) { pos.y = y; }
+		inline void dSetPositionY(float y) { pos.y = y; ready = false; }
 		/// <summary>
 		/// z좌표만 변경합니다.
 		/// </summary>
-		inline void dSetPositionZ(float z) { pos.z = z; }
+		inline void dSetPositionZ(float z) { pos.z = z; ready = false; }
 		/// <summary>
 		/// x좌표만 변경하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -114,11 +132,11 @@ namespace onart {
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동합니다.
 		/// </summary>
-		inline void dAddPosition(const vec3& dp) { pos += dp; }
+		inline void dAddPosition(const vec3& dp) { pos += dp; ready = false; }
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동합니다.
 		/// </summary>
-		inline void dAddPosition(float x, float y, float z) { pos.x += x; pos.y += y; pos.z += z; }
+		inline void dAddPosition(float x, float y, float z) { pos.x += x; pos.y += y; pos.z += z; ready = false; }
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -130,15 +148,15 @@ namespace onart {
 		/// <summary>
 		/// x좌표만 누적합니다.
 		/// </summary>
-		inline void dAddPositionX(float x) { pos.x += x; }
+		inline void dAddPositionX(float x) { pos.x += x; ready = false; }
 		/// <summary>
 		/// y좌표만 누적합니다.
 		/// </summary>
-		inline void dAddPositionY(float y) { pos.y += y; }
+		inline void dAddPositionY(float y) { pos.y += y; ready = false; }
 		/// <summary>
 		/// z좌표만 누적합니다.
 		/// </summary>
-		inline void dAddPositionZ(float z) { pos.z += z; }
+		inline void dAddPositionZ(float z) { pos.z += z; ready = false; }
 		/// <summary>
 		/// x좌표만 누적하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -154,69 +172,69 @@ namespace onart {
 		/// <summary>
 		/// 3D 회전을 설정합니다.
 		/// </summary>
-		inline void dSetRotation(const Quaternion& q) { rotation = q; }
+		inline void dSetRotation(const Quaternion& q) { rotation = q; ready = false; }
 		/// <summary>
 		/// 3D 회전을 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setRotation(const Quaternion& q) { rotation = q; model = mat4::TRS(pos, rotation, scale); }
+		inline void setRotation(const Quaternion& q) { rotation = q; TRS(); }
 		/// <summary>
 		/// 3D 회전을 설정합니다.
 		/// </summary>
 		/// <param name="axis">회전축</param>
 		/// <param name="angle">회전각</param>
-		inline void dSetRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle); }
+		inline void dSetRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle); ready = false; }
 		/// <summary>
 		/// 3D 회전을 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle); model = mat4::TRS(pos, rotation, scale); }
+		inline void setRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle); TRS(); }
 		/// <summary>
 		/// 3D 회전을 설정합니다. 오른손 법칙을 기억하세요.
 		/// </summary>
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void dSetRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll); }
+		inline void dSetRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll); ready = false; }
 		/// <summary>
 		/// 3D 회전을 설정하고 모델 행렬을 업데이트합니다. 오른손 법칙을 기억하세요.
 		/// </summary>
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void setRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll); model = mat4::TRS(pos, rotation, scale); }
+		inline void setRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll); TRS(); }
 		/// <summary>
 		/// 3D 회전을 추가로 가합니다.
 		/// </summary>
-		inline void dAddRotation(const Quaternion& q) { rotation = q * rotation; }
+		inline void dAddRotation(const Quaternion& q) { rotation = q * rotation; ready = false; }
 		/// <summary>
 		/// 3D 회전을 추가로 가하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addRotation(const Quaternion& q) { rotation = q * rotation; model = mat4::TRS(pos, rotation, scale); }
+		inline void addRotation(const Quaternion& q) { rotation = q * rotation; TRS(); }
 		/// <summary>
 		/// 3D 회전을 추가로 가합니다.
 		/// </summary>
 		/// <param name="axis">회전축</param>
 		/// <param name="angle">회전각</param>
-		inline void dAddRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle) * rotation; }
+		inline void dAddRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle) * rotation; ready = false; }
 		/// <summary>
 		/// 3D 회전을 추가로 가하고 모델 행렬을 업데이트합니다.
 		/// </summary>
 		/// <param name="axis">회전축</param>
 		/// <param name="angle">회전각</param>
-		inline void dAddRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle) * rotation; model = mat4::TRS(pos, rotation, scale); }
+		inline void addRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle) * rotation; TRS(); }
 		/// <summary>
 		/// 3D 회전을 추가로 가합니다. 오른손 법칙을 기억하세요.
 		/// </summary>
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void dAddRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll) * rotation; }
+		inline void dAddRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll) * rotation; ready = false; }
 		/// <summary>
 		/// 3D 회전을 추가로 가하고 모델 행렬을 업데이트합니다. 오른손 법칙을 기억하세요.
 		/// </summary>
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void dAddRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll) * rotation; model = mat4::TRS(pos, rotation, scale); }
+		inline void addRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll) * rotation; TRS(); }
 	};
 }
 
