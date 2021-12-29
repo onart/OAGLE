@@ -173,6 +173,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
+    <ClCompile Include="OA_Input.cpp" />
     <ClCompile Include="OA_Material.cpp" />
     <ClCompile Include="OA_Model.cpp" />
     <ClCompile Include="OA_Random.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="oaglem.h" />
     <ClInclude Include="OA_Anim.h" />
     <ClInclude Include="OA_Entity.h" />
+    <ClInclude Include="OA_Input.h" />
     <ClInclude Include="OA_Material.h" />
     <ClInclude Include="OA_Model.h" />
     <ClInclude Include="OA_Random.h" />
@@ -202,6 +204,7 @@
     <ClInclude Include="stb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="cpp.hint" />
     <None Include="resources\p3f.txt" />
     <None Include="resources\p3v.txt" />
   </ItemGroup>

@@ -4,7 +4,9 @@
 #include <vector>
 #include <string>
 #include <map>
+
 #include "OA_Transform.h"
+#include "OA_Input.h"
 
 namespace onart {
 	class Model;

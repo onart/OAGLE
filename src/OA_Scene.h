@@ -1,6 +1,8 @@
 #ifndef __OA_SCENE_H__
 #define __OA_SCENE_H__
 
+#include "OA_Input.h"
+
 #include <string>
 #include <vector>
 #include <set>
@@ -58,6 +60,7 @@ namespace onart {
 	protected:
 		std::vector<Entity*> entities;
 		int id;
+		static const float& deltaTime;
 		/// <summary>
 		/// 다른 씬으로 전환합니다.
 		/// </summary>

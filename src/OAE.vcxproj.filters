@@ -47,6 +47,9 @@
     <ClCompile Include="OA_TestScene.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OA_Input.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources.h">
@@ -103,6 +106,9 @@
     <ClInclude Include="OA_TestScene.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="OA_Input.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\p3f.txt">
@@ -111,5 +117,6 @@
     <None Include="resources\p3v.txt">
       <Filter>셰이더</Filter>
     </None>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

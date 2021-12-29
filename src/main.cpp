@@ -7,6 +7,7 @@
 #include "OA_Shader.h"
 #include "OA_Vertex.h"
 #include "OA_TestScene.h"
+#include "OA_Input.h"
 
 // 창 관련
 GLFWwindow* window = nullptr;
@@ -65,7 +66,8 @@ onart::Shader program2;		// 뷰-프로젝션 행렬 및 셰이딩의 영향을 받지 않는 셰이더
 /// <para>프레임 넘버가 아닌 키가 눌린 시간을 이용하려면 응용 측에서 값을 저장하는 편이 좋습니다.</para>
 /// </summary>
 int pressedKey[GLFW_KEY_LAST + 1] = { 0, };
-int pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 1] = { 0, };
+int pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 3] = { 0, };
+int keyCount = 0;
 
 onart::ivec2 mousePos;	// 마우스의 위치를 저장합니다.
 
@@ -89,9 +91,11 @@ void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
 	switch (action) {
 		case GLFW_PRESS:
 			pressedKey[key] = frame;
+			keyCount++;
 			break;
 		case GLFW_RELEASE:
 			pressedKey[key] = -frame;
+			keyCount--;
 			break;
 	}
 }
@@ -131,7 +135,12 @@ void reshape(GLFWwindow* window, int width, int height) {
 /// </summary>
 void scroll(GLFWwindow* window, double xoffset, double yoffset)
 {
-	
+	if (yoffset > 0) {
+		pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 1] = frame;;
+	}
+	else if (yoffset < 0) {
+		pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 2] = frame;
+	}
 }
 
 /// <summary>

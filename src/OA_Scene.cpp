@@ -1,10 +1,13 @@
 #include "OA_Scene.h"
 #include "OA_Entity.h"
 
-namespace onart {
+extern float tp, dt;
 
+namespace onart {
+	
 	Scene* Scene::currentScene;
 	std::set<EntityKey> Scene::nonstop;
+	const float& Scene::deltaTime = dt;
 
 	void Scene::update() {
 		if (isPaused) {
