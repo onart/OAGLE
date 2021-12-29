@@ -6,6 +6,9 @@
 #include <map>
 #include <string>
 
+#define USE_BUMP
+#define USE_ANIM
+
 namespace onart {
 
 	/// <summary>

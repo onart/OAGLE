@@ -120,6 +120,16 @@ namespace onart {
 			void draw(Mesh& m) const;
 			
 			/// <summary>
+			/// 정점 배열 객체를 바인드합니다. 동일한 메시를 여러 번 그릴 때 약간 성능이 더 높을 것입니다.
+			/// </summary>
+			void bind(Mesh& m);
+
+			/// <summary>
+			/// 정점 배열 객체를 그립니다.
+			/// </summary>
+			void draw() const;
+
+			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
 			/// </summary>
 			/// <param name="name">전역 map인 models에 들어 있는 이름</param>
@@ -128,6 +138,7 @@ namespace onart {
 		private:
 			static Shader* usingShader;
 			unsigned id;
+			size_t recentLen;
 
 			unsigned compileScript(const char* script, unsigned type);
 			bool validateShaderProgram();

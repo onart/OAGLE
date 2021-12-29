@@ -9,16 +9,14 @@ namespace onart {
 		mesh = Mesh::get(meshName);
 	}
 
-	void Model::render(const Shader& shader) {
+	void Model::render(Shader& shader, const unsigned material, const vec4& color) {
 		size_t sz = materials.size();	// 당장 1임을 가정
 		shader.uniform("color", color);
-		for (size_t i = 0; i < sz; i++) {
-			shader.uniform("Ka", materials[i]->getAmbient());
-			shader.uniform("Kd", materials[i]->getDiffuse());
-			shader.uniform("Ks", materials[i]->getSpecular());
+		shader.uniform("Ka", materials[material]->getAmbient());
+		shader.uniform("Kd", materials[material]->getDiffuse());
+		shader.uniform("Ks", materials[material]->getSpecular());
 			
-			shader.texture(materials[i]->getDiffuseTex(), Shader::TexCode::SURFACE0);
-			shader.draw(**mesh);
-		}
+		shader.texture(materials[material]->getDiffuseTex(), Shader::TexCode::SURFACE0);
+		shader.draw(**mesh);
 	}
 }

@@ -171,10 +171,12 @@
   <ItemGroup>
     <ClCompile Include="gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="OA_Anim.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
     <ClCompile Include="OA_Material.cpp" />
     <ClCompile Include="OA_Model.cpp" />
     <ClCompile Include="OA_Random.cpp" />
+    <ClCompile Include="OA_Scene.cpp" />
     <ClCompile Include="OA_Shader.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
   </ItemGroup>
@@ -184,10 +186,12 @@
     <ClInclude Include="gl\glfw\win64\glfw3.h" />
     <ClInclude Include="oagle.h" />
     <ClInclude Include="oaglem.h" />
+    <ClInclude Include="OA_Anim.h" />
     <ClInclude Include="OA_Entity.h" />
     <ClInclude Include="OA_Material.h" />
     <ClInclude Include="OA_Model.h" />
     <ClInclude Include="OA_Random.h" />
+    <ClInclude Include="OA_Scene.h" />
     <ClInclude Include="OA_Transform.h" />
     <ClInclude Include="OA_Vertex.h" />
     <ClInclude Include="resources.h" />

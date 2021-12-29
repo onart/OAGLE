@@ -1,20 +1,59 @@
 #ifndef __OA_ENTITY_H__
 #define __OA_ENTITY_H__
 
+#include <vector>
 #include <string>
+#include <map>
 #include "OA_Transform.h"
 
 namespace onart {
+	class Model;
 	/// <summary>
 	/// 게임 속 세상에 존재하는 개체들입니다.
 	/// </summary>
 	class Entity
 	{
+#ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY 매크로를 정의한 경우 정수 키를 사용할 수 있습니다.
+		using EntityKey = int;
+#else
+		using EntityKey = std::string;
+#endif
 	public:
+		Entity(const EntityKey& k, const Transform& transform);
+		~Entity();
+		/// <summary>
+		/// 위치를 얻습니다. 카메라 등과 같이 월드 좌표를 지속적으로 추적하는 것을 위해 만들어졌습니다.
+		/// </summary>
+		inline const vec3& getPos() { return transform.getPosition(); }
 		/// <summary>
 		/// 개체가 active하다는 것은 update()가 매 프레임 호출된다는 의미입니다.
 		/// </summary>
 		bool isActive = true;
+		/// <summary>
+		/// true인 경우에만 개체가 화면에 렌더링됩니다.
+		/// </summary>
+		bool isRendered = true;
+		/// <summary>
+		/// 기본적으로 응용 계층에서 접근할 일 없는 함수입니다. 꼭 필요한 경우가 아니라면 오버라이딩 및 호출하지 않는 것이 좋습니다.
+		/// </summary>
+		virtual void render();
+		/// <summary>
+		/// 기본적으로 응용 계층에서 접근할 일 없는 함수입니다. 꼭 필요한 경우가 아니라면 오버라이딩 및 호출하지 않는 것이 좋습니다.
+		/// </summary>
+		virtual void update();
+		/// <summary>
+		/// Update() 함수를 오버라이딩하여 개체가 프레임마다 취하는 행동을 정의합니다.
+		/// </summary>
+		virtual void Update();
+		/// <summary>
+		/// 현존 객체 중에서 해당 키를 가진 것들을 찾습니다. 없는 경우 빈 벡터를 반환합니다.
+		/// </summary>
+		static std::vector<Entity*> gets(const EntityKey& k);
+		/// <summary>
+		/// 현존 객체 중에서 해당 키를 가진 것 중 가장 앞의 하나를 찾습니다. 없는 경우 nullptr를 반환합니다. 이 키에 대하여 하나의 개체만 있을 것이 확실한 경우 사용하기에 좋습니다.
+		/// </summary>
+		static Entity* get(const EntityKey& k);
+
 	protected:
 		/// <summary>
 		/// 개체의 위치, 크기, 회전을 나타냅니다.
@@ -30,6 +69,9 @@ namespace onart {
 		static const float& tp;
 	private:
 		float lt = 0;
+		EntityKey key;
+		Model* model;
+		static std::multimap<EntityKey, Entity*> entities;
 	};
 }
 
