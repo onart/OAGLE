@@ -138,7 +138,7 @@ namespace onart {
 		private:
 			static Shader* usingShader;
 			unsigned id;
-			size_t recentLen;
+			int recentLen;
 
 			unsigned compileScript(const char* script, unsigned type);
 			bool validateShaderProgram();

@@ -178,6 +178,7 @@
     <ClCompile Include="OA_Random.cpp" />
     <ClCompile Include="OA_Scene.cpp" />
     <ClCompile Include="OA_Shader.cpp" />
+    <ClCompile Include="OA_TestScene.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="OA_Model.h" />
     <ClInclude Include="OA_Random.h" />
     <ClInclude Include="OA_Scene.h" />
+    <ClInclude Include="OA_TestScene.h" />
     <ClInclude Include="OA_Transform.h" />
     <ClInclude Include="OA_Vertex.h" />
     <ClInclude Include="resources.h" />

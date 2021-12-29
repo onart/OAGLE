@@ -70,7 +70,7 @@ namespace onart {
 	private:
 		float lt = 0;
 		EntityKey key;
-		Model* model;
+		Model* model = nullptr;
 		static std::multimap<EntityKey, Entity*> entities;
 	};
 }

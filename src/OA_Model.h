@@ -27,7 +27,7 @@ namespace onart {
 		/// <param name="shader">셰이더</param>
 		/// <param name="material">메터리얼 번호(이 모델에서 사용하는 것만 따집니다.)</param>
 		/// <param name="color">색상(mix가 아니라 *로 적용됩니다.)</param>
-		void render(Shader& shader, const unsigned material = 0, const vec4& color = 1);
+		void render(Shader& shader, const int material = 0, const vec4& color = 1);
 	private:
 		Mesh** mesh;
 		std::string meshName;

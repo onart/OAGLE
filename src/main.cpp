@@ -6,6 +6,7 @@
 #include "oaglem.h"
 #include "OA_Shader.h"
 #include "OA_Vertex.h"
+#include "OA_TestScene.h"
 
 // 창 관련
 GLFWwindow* window = nullptr;
@@ -74,6 +75,7 @@ void update() {
 	float cur = (float)glfwGetTime();
 	dt = cur - tp;
 	tp = cur;
+	onart::Scene::currentScene->update();
 }
 
 void render() {
@@ -132,6 +134,9 @@ void scroll(GLFWwindow* window, double xoffset, double yoffset)
 	
 }
 
+/// <summary>
+/// 게임을 종료합니다.
+/// </summary>
 void exitGame() {
 	glfwSetWindowShouldClose(window, 1);
 }
@@ -174,6 +179,8 @@ bool init() {
 	onart::Mesh::circleModel();
 	onart::Mesh::sphereModel();
 	onart::Mesh::cuboidModel();
+
+	onart::Scene::currentScene = new onart::TestScene();
 #ifdef _DEBUG
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(glErrCallback, 0);
