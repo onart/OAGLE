@@ -12,6 +12,7 @@
 // 창 관련
 GLFWwindow* window = nullptr;
 onart::ivec2 windowSize;
+onart::ivec4 vp_lurd;	// 좌측 하단이 (0,0)
 
 namespace onart {
 	/// <summary>
@@ -35,7 +36,6 @@ namespace onart {
 		/// <summary>
 		/// 설정된 종횡비를 리턴합니다.
 		/// </summary>
-		/// <returns></returns>
 		inline float getRatio() {
 			return ratio;
 		}
@@ -121,11 +121,19 @@ void reshape(GLFWwindow* window, int width, int height) {
 	float dpir = onart::dpiRatio();
 	windowSize.x = width = int(width * dpir);
 	windowSize.y = height = int(height * dpir);
-	
-	if (width < height * onart::vp.getRatio()) {
+	if (width < height * r) {
+		vp_lurd[0] = 0;
+		vp_lurd[3] = int(height - width / r) / 2;
+		vp_lurd[2] = width;
+		vp_lurd[1] = vp_lurd[3] + int(width / r);
+		print(vp_lurd);
 		glViewport(0, int(height - width / r) / 2, width, int(width / r));
 	}
 	else {
+		vp_lurd[0] = int(width - height * r) / 2;
+		vp_lurd[3] = 0;
+		vp_lurd[2] = int(height * r);
+		vp_lurd[1] = height;
 		glViewport(int(width - height * r) / 2, 0, int(height * r), height);
 	}
 }
@@ -194,6 +202,7 @@ bool init() {
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(glErrCallback, 0);
 #endif
+	reshape(window, 1280, 720);
 	return true;
 }
 

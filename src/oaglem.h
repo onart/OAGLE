@@ -839,6 +839,25 @@ namespace onart {
 		r[8] *= scale.x;	r[9] *= scale.y;	r[10] *= scale.z;	r[11] = translation.z;
 		return r;
 	}
+
+	/// <summary>
+	/// 편리한 디버그를 위한 값 출력 함수입니다.
+	/// </summary>
+	/// <param name="v">표시할 변수</param>
+	/// <param name="tag">이름</param>
+	inline void print(const vec2& v, const char* tag = "") { printf("%s: %f %f\n", tag, v.x, v.y); }
+	inline void print(const ivec2& v, const char* tag = "") { printf("%s: %d %d\n", tag, v.x, v.y); }
+	inline void print(const uvec2& v, const char* tag = "") { printf("%s: %u %u\n", tag, v.x, v.y); }
+	inline void print(const dvec2& v, const char* tag = "") { printf("%s: %f %f\n", tag, v.x, v.y); }
+	inline void print(const vec3& v, const char* tag = "") { printf("%s: %f %f %f\n", tag, v.x, v.y, v.z); }
+	inline void print(const ivec3& v, const char* tag = "") { printf("%s: %d %d %d\n", tag, v.x, v.y, v.z); }
+	inline void print(const uvec3& v, const char* tag = "") { printf("%s: %u %u %u\n", tag, v.x, v.y, v.z); }
+	inline void print(const dvec3& v, const char* tag = "") { printf("%s: %f %f %f\n", tag, v.x, v.y, v.z); }
+	inline void print(const vec4& v, const char* tag = "") { printf("%s: %f %f %f %f\n", tag, v.x, v.y, v.z, v.w); }
+	inline void print(const ivec4& v, const char* tag = "") { printf("%s: %d %d %d %d\n", tag, v.x, v.y, v.z, v.w); }
+	inline void print(const uvec4& v, const char* tag = "") { printf("%s: %u %u %u %u\n", tag, v.x, v.y, v.z, v.w); }
+	inline void print(const dvec4& v, const char* tag = "") { printf("%s: %f %f %f %f\n", tag, v.x, v.y, v.z, v.w); }
+	inline void print(const mat4& m, const char* tag = "") { printf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", tag, m._11, m._12, m._13, m._14, m._21, m._22, m._23, m._24, m._31, m._32, m._33, m._34, m._41, m._42, m._43, m._44); }
 }
 
 #endif // !__OAGLEM_H__

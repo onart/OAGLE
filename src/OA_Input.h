@@ -11,12 +11,16 @@
 	#endif // _WIN64
 #endif // _WIN32
 
+#include <vector>
+
+#include "oaglem.h"
+
 extern int pressedKey[];
 extern int pressedMouseKey[];
 extern int frame;
 extern int keyCount;
 
-#include <vector>
+extern onart::ivec2 mousePos;
 
 namespace onart::Input {
 	/// <summary>
@@ -192,6 +196,17 @@ namespace onart::Input {
 	/// GLFW 3.3.6 버전에서는 안전합니다.
 	/// </summary>
 	std::vector<KeyCode> allKeyInputsForNow();
+
+	/// <summary>
+	/// 창 내에서 마우스 포인터의 위치를 리턴합니다. 좌측 상단이 (0,0)이며 단위는 px입니다.
+	/// </summary>
+	inline ivec2 cursorPos() { return mousePos; }
+
+	/// <summary>
+	/// 마우스 포인터의 위치를 게임 화면 기준으로 리턴합니다. 좌측 상단이 (0,0), 그리고 우측 하단이 (1,1)입니다.
+	/// *고 dpi 화면에 대한 보정이 검증되지 않은 상태입니다.
+	/// </summary>
+	vec2 relativeCursorPos();
 }
 
 #endif // !__OA_INPUT_H__

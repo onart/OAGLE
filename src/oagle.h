@@ -152,7 +152,6 @@ namespace onart {
 		glfwSetWindowSize(window, width, height);
 		glfwMakeContextCurrent(window);
 		glfwShowWindow(window);
-
 		return window;
 	}
 
