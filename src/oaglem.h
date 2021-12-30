@@ -114,12 +114,18 @@ namespace onart {
 		template <unsigned E> inline nvec operator*(const nvec<E, T>& v) const { auto r(*this); r *= v; return r; }
 		template <unsigned E> inline nvec operator/(const nvec<E, T>& v) const { auto r(*this); r /= v; return r; }
 
-
 		/// <summary>
 		/// T형 배열로 사용할 수 있도록 포인터를 리턴합니다.
 		/// </summary>
 		inline operator T* () { return &x; }
 		inline operator const T* () const { return &x; }
+
+		/// <summary>
+		/// 명시적 캐스트가 가능한 타입이라면 벡터도 명시적으로 캐스트가 가능합니다.
+		/// 성분별로 캐스트해서 새로 만드는 것과 비교하여 특별히 성능적 면에서 나을 부분은 없으며
+		/// 유연한 코드만을 위해 추가하였습니다.
+		/// </summary>
+		template <class T2> inline operator nvec<D, T2>() { nvec<D, T2> n; for (unsigned i = 0; i < D; i++) { n[i] = (T2)entry[i]; } return n; }
 
 		/// <summary>
 		/// 부호를 반전시켜 리턴합니다.

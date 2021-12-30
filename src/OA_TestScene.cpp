@@ -2,6 +2,6 @@
 #include <cstdio>
 
 namespace onart {
-	void TestScene::Update() { auto mp=Input::relativeCursorPos(); printf("%f %f\r", mp.x,mp.y); }
+	void TestScene::Update() { print(Input::relativeCursorPos(),"cursor"); }
 	void TestScene::init() {  }
 }
