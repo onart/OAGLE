@@ -7,10 +7,10 @@ extern onart::Shader program3;
 
 namespace onart {
 
-	const float& Entity::tp = tp;
+	const float& Entity::tp = ::tp;
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
-	Entity::Entity(const EntityKey& k, const Transform& transform) :key(k), transform(transform), localTp(lt) {
+	Entity::Entity(const EntityKey& k, const Transform& transform) :key(k), transform(transform), localTp(lt), animState(as) {
 		
 	}
 
@@ -55,6 +55,10 @@ namespace onart {
 	}
 
 	void Entity::Update() {
+
+	}
+
+	void Entity::act(int kp) {
 
 	}
 }
