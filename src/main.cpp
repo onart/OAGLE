@@ -50,6 +50,10 @@ namespace onart {
 	} vp;
 }
 
+void setRatio(unsigned rw, unsigned rh) {
+	onart::vp.setRatio(rw, rh);
+}
+
 // 프레임/시간
 int frame = 1;
 float tp = 0, dt;

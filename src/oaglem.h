@@ -18,6 +18,15 @@
 
 constexpr float PI = 3.14159265358979323846f;
 
+/// <summary>
+/// 라디안을 입력하면 도 단위로 변경합니다.
+/// </summary>
+constexpr float deg(float rad) { return rad * 180 / PI; }
+/// <summary>
+/// 도 단위를 입력하면 라디안으로 변경합니다.
+/// </summary>
+constexpr float rad(float deg) { return deg / 180 * PI; }
+
 namespace onart {
 	struct Quaternion;
 	/// <summary>
@@ -185,7 +194,7 @@ namespace onart {
 	/// <param name="a">선형 보간 대상 1(t=0에 가까울수록 이 벡터에 가깝습니다.)</param>
 	/// <param name="b">선형 보간 대상 2(t=1에 가까울수록 이 벡터에 가깝습니다.)</param>
 	/// <param name="t">선형 보간 값</param>	
-	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, const nvec<D, float>& t) { return a * (1 - t) * b * t; }
+	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, const nvec<D, float>& t) { return a * (1 - t) + b * t; }
 
 	/// <summary>
 	/// 2차원 이미지의 회전연산을 위한 2x2 행렬입니다. 단, 3차원 연산의 z축을 0으로 고정하는 것이 더 일반적인 방법입니다.
@@ -863,7 +872,9 @@ namespace onart {
 	inline void print(const ivec4& v, const char* tag = "", char end = '\n') { printf("%s: %d %d %d %d%c", tag, v.x, v.y, v.z, v.w, end); }
 	inline void print(const uvec4& v, const char* tag = "", char end = '\n') { printf("%s: %u %u %u %u%c", tag, v.x, v.y, v.z, v.w, end); }
 	inline void print(const dvec4& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f %f%c", tag, v.x, v.y, v.z, v.w, end); }
+	inline void print(const Quaternion& q, const char* tag = "", char end = '\n') { printf("%s: %f + %fi + %fj + %fk%c", tag, q.c1, q.ci, q.cj, q.ck, end); }
 	inline void print(const mat4& m, const char* tag = "") { printf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", tag, m._11, m._12, m._13, m._14, m._21, m._22, m._23, m._24, m._31, m._32, m._33, m._34, m._41, m._42, m._43, m._44); }
+	
 }
 
 #endif // !__OAGLEM_H__
