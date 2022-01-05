@@ -86,10 +86,17 @@ namespace onart {
 	void Animation3D::go(float elapsed, Entity* e, float dynamicTps) {
 		program3.use();
 		float tp = getTp(elapsed * dynamicTps);
+
+		auto slb = std::prev(sigKp.lower_bound(tp));
+		if (slb != sigKp.end()) {
+			int i = (int)std::distance(sigKp.begin(), slb);
+			if (e->getAnimKey() != i)e->act(i);
+		}
+		
 	}
 
-	Animation3D::Animation3D(aiAnimation* anim, float duration, int tps, bool loop)
-	:Animation(loop, duration, tps) {
+	Animation3D::Animation3D(aiAnimation* anim, float duration, int tps, bool loop, const std::set<float>& sig_kp)
+		:Animation(loop, duration, tps), sigKp(sig_kp) {
 		for (size_t k = 0; k < anim->mNumChannels; k++) {
 			aiNodeAnim* cut = anim->mChannels[k];
 			BoneAnim& ba = keys[cut->mNodeName.C_Str()] = BoneAnim();
@@ -108,7 +115,7 @@ namespace onart {
 		}
 	}
 
-	Animation* Animation3D::load(const std::string& name, const std::string& file, bool loop) {
+	Animation* Animation3D::load(const std::string& name, const std::string& file, bool loop, const std::set<float>& sig_kp) {
 		Animation* anim = get(name);
 		if (anim) return anim;
 
@@ -124,14 +131,14 @@ namespace onart {
 			return nullptr;
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
-		Animation* ret = new Animation3D(anim0, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop);
+		Animation* ret = new Animation3D(anim0, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
 		
 		delete scn;
 		push(name, ret);
 		return ret;
 	}
 
-	Animation* Animation3D::load(const std::string& name, const unsigned char* dat, size_t len, bool loop) {
+	Animation* Animation3D::load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::set<float>& sig_kp) {
 		Animation* anim = get(name);
 		if (anim) return anim;
 		Assimp::Importer importer;
@@ -147,7 +154,7 @@ namespace onart {
 			return nullptr;
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
-		Animation* ret = new Animation3D(anim0, anim0->mDuration, int(anim0->mTicksPerSecond), loop);
+		Animation* ret = new Animation3D(anim0, anim0->mDuration, int(anim0->mTicksPerSecond), loop, sig_kp);
 
 		delete scn;
 		push(name, ret);

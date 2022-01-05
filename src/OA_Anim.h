@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <map>
+#include <set>
 #include <string>
 
 class aiAnimation;
@@ -94,8 +95,8 @@ namespace onart {
 
 	/// <summary>
 	/// 3D 개체의 관절 애니메이션입니다. 현재 버전은 편의상 .dae 모델 파일을 디스크 혹은 메모리에서 로드하는 것만 허용합니다.
-	/// 3D 개체의 시각적 키포인트는 최대 64개의 뼈의 위치, 회전, 크기로 구성되며 act()는 위치, 회전, 크기 모든 키포인트에 대하여 한 번에 8비트씩 담아 호출됩니다.
-	/// 0xff &amp; kp는 회전, 0xff00 &amp; kp는 위치, 0xff0000 &amp; kp는 크기에 해당합니다.
+	/// 3D 개체의 시각적 키포인트는 최대 64개의 뼈의 위치, 회전, 크기로 구성됩니다.
+	/// 뼈가 많은 만큼 몇 번째 프레임인지 판단하여 매번 호출하는 것은 불가능합니다. 애니메이션을 생성할 때 개체가 act()로 알림받을 시점(timepoint)을 직접 명시해 주세요.
 	/// 3D 관절 애니메이션에서 "뼈"는 셰이더로 이름순으로 전달됩니다. 다른 모델에 동일한 애니메이션을 적용하고 싶은 경우
 	/// 모델에서 정점-뼈 대응을 할 때 반드시 동일한 이름의 뼈를 사용하시기 바랍니다.
 	/// </summary>
@@ -107,7 +108,8 @@ namespace onart {
 		/// <param name="name">애니메이션의 이름을 정해주세요. 중복인 경우 덮어쓰지 않고 기존의 것을 그대로 리턴합니다.</param>
 		/// <param name="file">파일 이름을 입력해주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
-		static Animation* load(const std::string& name, const std::string& file, bool loop);
+		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
+		static Animation* load(const std::string& name, const std::string& file, bool loop, const std::set<float>& sig_kp);
 		/// <summary>
 		/// .dae 파일 형식의 배열 변수에서 3D 관절 애니메이션을 로드합니다.
 		/// </summary>
@@ -115,11 +117,14 @@ namespace onart {
 		/// <param name="dat">변수 주소를 대입해 주세요.</param>
 		/// <param name="len">배열 변수의 길이를 입력해 주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
-		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop);
+		/// /// <param name="sig_kp">act()로 알림받을 시점(float)</param>
+		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::set<float>& sig_kp);
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
-		Animation3D(aiAnimation*, float duration, int tps, bool loop);
+		Animation3D(aiAnimation*, float duration, int tps, bool loop, const std::set<float>& sig_kp);
+		std::set<float> sigKp;
 		std::map<std::string, BoneAnim> keys;
+		// 뼈 트리 추가
 	};
 }
 
