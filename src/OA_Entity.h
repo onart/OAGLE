@@ -37,11 +37,15 @@ namespace onart {
 		/// </summary>
 		bool isRendered = true;
 		/// <summary>
+		/// 응용 단계에서 사용하지 않는 것이 좋습니다.
+		/// </summary>
+		void act(int kp);
+		/// <summary>
 		/// 애니메이션의 특정 키포인트를 지났을 때 개체가 취할 행동입니다.
 		/// 이벤트를 전달하는 용도로 사용할 수도 있으나 키포인트 번호와 중복되지 않도록 응용 단계에서 통일하는 편이 추천됩니다.
 		/// </summary>
-		/// <param name="kp">이벤트 플래그</param>
-		virtual void act(int kp);
+		/// <param name="kp">이벤트 플래그/키포인트</param>
+		virtual void Act(int kp);
 		/// <summary>
 		/// 기본적으로 응용 계층에서 접근할 일 없는 함수입니다. 꼭 필요한 경우가 아니라면 오버라이딩 및 호출하지 않는 것이 좋습니다.
 		/// </summary>
@@ -54,6 +58,10 @@ namespace onart {
 		/// Update() 함수를 오버라이딩하여 개체가 프레임마다 취하는 행동을 정의합니다.
 		/// </summary>
 		virtual void Update();
+		/// <summary>
+		/// 현재 애니메이션 키를 읽습니다. 응용 단계에서 사용할 일 없는 함수입니다.
+		/// </summary>
+		inline int getAnimKey() { return animKp; }
 		/// <summary>
 		/// 현존 객체 중에서 해당 키를 가진 것들을 찾습니다. 없는 경우 빈 벡터를 반환합니다.
 		/// </summary>
@@ -79,7 +87,7 @@ namespace onart {
 		/// <summary>
 		/// 애니메이션 상태를 변경합니다. 현재 적용 중인 번호를 고르면 그 애니메이션은 처음부터 다시 시작합니다.
 		/// </summary>
-		inline void setAnim(int idx) { as = idx; animStartTimepoint = tp; }
+		inline void setAnim(int idx, float dynamicTps = 1) { as = idx; animKp = 0; animStartTimepoint = tp; animTps = dynamicTps; }
 		/// <summary>
 		/// 게임이 실행된 후 현재 프레임에 들어오기까지 흐른 시간(초)입니다.
 		/// </summary>
@@ -90,6 +98,8 @@ namespace onart {
 		Model* model = nullptr;
 		int as = 0;
 		float animStartTimepoint;
+		float animTps = 1;
+		int animKp = 0;
 		std::vector<Animation*> anims;
 		static std::multimap<EntityKey, Entity*> entities;
 	};

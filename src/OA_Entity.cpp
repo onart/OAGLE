@@ -1,6 +1,7 @@
 #include "OA_Entity.h"
 #include "OA_Shader.h"
 #include "OA_Model.h"
+#include "OA_Anim.h"
 
 extern float tp, dt;
 extern onart::Shader program3;
@@ -10,8 +11,8 @@ namespace onart {
 	const float& Entity::tp = ::tp;
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
-	Entity::Entity(const EntityKey& k, const Transform& transform) :key(k), transform(transform), localTp(lt), animState(as) {
-		
+	Entity::Entity(const EntityKey& k, const Transform& transform) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt) {
+
 	}
 
 	Entity::~Entity() {
@@ -43,7 +44,9 @@ namespace onart {
 	void Entity::render() {
 		program3.use();
 		program3.uniform("model", transform.getModel());
+		anims[as]->go(lt - animStartTimepoint, this, animTps);
 		model->render(program3);
+		
 		//program3.draw(model);
 	}
 
@@ -59,6 +62,11 @@ namespace onart {
 	}
 
 	void Entity::act(int kp) {
+		animKp = kp;
+		Act(kp);
+	}
+
+	void Entity::Act(int kp) {
 
 	}
 }
