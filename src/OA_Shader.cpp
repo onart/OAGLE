@@ -10,7 +10,7 @@
 #include <map>
 
 namespace onart {
-	
+
 	Shader* Shader::usingShader = nullptr;
 
 	void Shader::initWithFile(const char* vert, const char* frag) {
@@ -20,7 +20,7 @@ namespace onart {
 			printf("셰이더 파일이 없습니다: %s\n", vert);
 			return;
 		}
-		auto size = std::filesystem::file_size(vert);
+		auto size = (size_t)std::filesystem::file_size(vert);
 		char* vertScript = new char[size + 1];
 		fread_s(vertScript, size, 1, size, fp);
 		vertScript[size] = '\0';
@@ -32,7 +32,7 @@ namespace onart {
 			delete[] vertScript;
 			return;
 		}
-		size = std::filesystem::file_size(frag);
+		size = (size_t)std::filesystem::file_size(frag);
 		char* fragScript = new char[size + 1];
 		fread_s(fragScript, size, 1, size, fp);
 		fragScript[size] = '\0';

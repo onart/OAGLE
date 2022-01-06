@@ -5,6 +5,7 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 #define USE_BUMP
 #define USE_ANIM
@@ -66,9 +67,9 @@ namespace onart {
 			static Mesh** get(const std::string& name);
 			/// <summary>
 			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 새로 추가합니다. 단, 예약된 이름을 사용할 수 없으며 그 외에 이미 있는 이름을 대상으로 시도하면 기존 모델을 덮어씁니다. 성공 여부를 리턴합니다.
-			/// <para>예약된 이름: rect, circ, sphr, clnd, cubo, (빈 문자열)</para>
+			/// <para>예약된 이름: rect, circ, sphr, clnd, cubo, icubo, (빈 문자열)</para>
 			/// </summary>
-			static bool add(const std::string& name, Mesh* m);
+			static bool add(const std::string& name, const std::vector<Vertex>& v, const std::vector<unsigned>& i);
 			/// <summary>
 			/// 기초 모델을 메모리에서 제거합니다. 단, 빌트인 모델은 제거할 수 없습니다. 성공 여부를 리턴합니다. 이미 없는 이름을 제거하려고 시도할 경우 성공으로 취급됩니다.
 			/// </summary>
@@ -103,6 +104,22 @@ namespace onart {
 			/// 3행 2열은 하 방향입니다.
 			/// </summary>
 			static void cuboidModel();
+			/// <summary>
+			/// 직육면체 정점 배열 오브젝트를 생성하고 리턴합니다. 텍스처가 직육면체 내부에서만 보이도록 하는 차이가 있습니다. 재 호출 시 모델을 처음부터 다시 생성합니다.
+			/// 텍스처 이미지는 4x3 배열의 가득 찬 직사각형이 있을 때 1행 2열이 상,
+			/// 2행은 각각 좌, 전, 우, 후,
+			/// 3행 2열은 하 방향입니다.
+			/// </summary>
+			static void iCuboidModel();
+			/// <summary>
+			/// 정점 벡터와 인덱스 벡터를 가지고 정점 버퍼 오브젝트를 생성하고 리턴합니다.
+			/// </summary>
+			/// <param name="v">정점 벡터</param>
+			/// <param name="i">인덱스 벡터</param>
+			/// <param name="vb">정점 버퍼를 받을 주소</param>
+			/// <param name="ib">인덱스 버퍼를 받을 주소</param>
+			/// <returns></returns>
+			static unsigned createVAO(const std::vector<Vertex>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib);
 			/// <summary>
 			/// 정점 버퍼와 인덱스 버퍼를 가지고 정점 버퍼 오브젝트를 생성하고 리턴합니다.
 			/// </summary>

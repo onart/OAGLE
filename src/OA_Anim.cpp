@@ -4,8 +4,12 @@
 #include "OA_Vertex.h"
 
 #ifdef _MSC_VER
-#pragma comment(lib, "assimp/assimp.lib")
-#pragma warning(disable: 26495 26812)
+#ifdef _WIN64
+	#pragma comment(lib, "assimp/assimp64.lib")
+#else
+	#pragma comment(lib, "assimp/assimp32.lib")
+#endif
+	#pragma warning(disable: 26495 26812)
 #endif
 
 #include "assimp/Importer.hpp"
@@ -126,7 +130,7 @@ namespace onart {
 			return nullptr;
 		}
 		if (!scn->HasAnimations()) {
-			printf("\n파일에 애니메이션이 없습니다\n");
+			printf("\n파일에 애니메이션이 없습니다.\n");
 			delete scn;
 			return nullptr;
 		}
@@ -154,7 +158,7 @@ namespace onart {
 			return nullptr;
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
-		Animation* ret = new Animation3D(anim0, anim0->mDuration, int(anim0->mTicksPerSecond), loop, sig_kp);
+		Animation* ret = new Animation3D(anim0, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
 
 		delete scn;
 		push(name, ret);

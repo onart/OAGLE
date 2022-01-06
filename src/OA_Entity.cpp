@@ -44,8 +44,8 @@ namespace onart {
 	void Entity::render() {
 		program3.use();
 		program3.uniform("model", transform.getModel());
-		anims[as]->go(lt - animStartTimepoint, this, animTps);
-		model->render(program3);
+		if (as >= 0)anims[as]->go(lt - animStartTimepoint, this, animTps);
+		if (model)model->render(program3);
 		
 		//program3.draw(model);
 	}

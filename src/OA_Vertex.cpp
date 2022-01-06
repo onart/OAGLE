@@ -17,14 +17,16 @@ namespace onart {
 		glDeleteVertexArrays(1, &vao);
 	}
 
-	bool Mesh::add(const std::string& name, Mesh* mesh) {
+	bool Mesh::add(const std::string& name, const std::vector<Vertex>& v, const std::vector<unsigned>& i) {
 		if (!unload(name)) return false;
-		list[name] = mesh;
+		unsigned vb, ib, vao;
+		vao = createVAO(v, i, &vb, &ib);
+		list[name] = new Mesh(vb, ib, vao, unsigned(i.size()));
 		return true;
 	}
 
 	bool Mesh::unload(const std::string& name) {
-		static const char* RESERVED[] = { "circ", "clnd", "rect", "cubo", "sphr", "" };
+		static const char* RESERVED[] = { "circ", "clnd", "rect", "cubo", "sphr","icubo", "" };
 		for (char** p = (char**)RESERVED; (*p)[0]; p++) {
 			if (name == (*p)) return false;
 		}
@@ -45,23 +47,16 @@ namespace onart {
 			glDeleteVertexArrays(1, &VAO);
 		}
 
-		Vertex rect[] = {
+		std::vector<Vertex> rect = {
 			Vertex{vec3(0.5f,0.5f,0.0f),vec3(1,1,1),vec2(1,1)},
 			Vertex{vec3(0.5f,-0.5f,0.0f),vec3(1,1,1),vec2(1,0)},
 			Vertex{vec3(-0.5f,-0.5f,0.0f),vec3(1,1,1),vec2(0,0)},
 			Vertex{vec3(-0.5f,0.5f,0.0f),vec3(1,1,1),vec2(0,1)},
 		};
 
-		unsigned indices[] = { 0,3,1,1,3,2 };
-		glGenBuffers(1, &VB);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(rect), rect, GL_STATIC_DRAW);
+		std::vector<unsigned> indices = { 0,3,1,1,3,2 };
 
-		glGenBuffers(1, &IB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-		VAO = createVAO(VB, IB);
+		VAO = createVAO(rect, indices, &VB, &IB);
 		if (list.find("rect") != list.end()) { delete list["rect"]; }
 		list["rect"] = new Mesh(VB, IB, VAO, 36);
 	}
@@ -75,8 +70,8 @@ namespace onart {
 			glDeleteVertexArrays(1, &VAO);
 		}
 
-		Vertex* circ = new Vertex[N + 1];
-		unsigned* indices = new unsigned[N * 3];
+		std::vector<Vertex> circ(N + 1);
+		std::vector<unsigned> indices(N * 3);
 		circ[0] = { vec3(0), vec3(0,0,-1.0f), vec2(0.5f) };
 		for (unsigned k = 0; k < N; k++)
 		{
@@ -89,18 +84,9 @@ namespace onart {
 			indices[tk + 1] = k + 1;
 			indices[tk + 2] = k + 2;
 		}
-		glGenBuffers(1, &VB);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (N + 1), circ, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &IB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * N * 3, indices, GL_STATIC_DRAW);
-
-		VAO = createVAO(VB, IB);
+		VAO = createVAO(circ, indices, &VB, &IB);
 		if (list.find("circ") != list.end()) { delete list["circ"]; }
 		list["circ"] = new Mesh(VB, IB, VAO, N * 3);
-		delete[] circ, indices;
 	}
 
 	void Mesh::sphereModel() {
@@ -111,8 +97,8 @@ namespace onart {
 			glDeleteBuffers(1, &IB);
 			glDeleteVertexArrays(1, &VAO);
 		}
-		Vertex* sphr = new Vertex[(N + 1) * (2 * N + 1)];
-		unsigned* indices = new unsigned[N * N * 12];
+		std::vector<Vertex> sphr((N + 1) * (2 * N + 1));
+		std::vector<unsigned> indices(N * N * 12);
 		int idx = 0;
 		for (unsigned i = 0; i < N + 1; i++) {
 			float th = i * PI / N;
@@ -136,23 +122,14 @@ namespace onart {
 			}
 		}
 #undef rc
-		glGenBuffers(1, &VB);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * N * (N - 2), sphr, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &IB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * N * N * 12, indices, GL_STATIC_DRAW);
-
-		VAO = createVAO(VB, IB);
+		VAO = createVAO(sphr, indices, &VB, &IB);
 		if (list.find("sphr") != list.end()) { delete list["sphr"]; }
 		list["sphr"] = new Mesh(VB, IB, VAO, N * N * 12);
-		delete[] sphr, indices;
 	}
 
 	void Mesh::cuboidModel() {
 		static unsigned VB = 0, IB = 0, VAO = 0;
-		Vertex cube[] = {
+		std::vector<Vertex> cube = {
 		{vec3(-1,-1,-1),vec3(0,0,-1),vec2(1.0f / 2, 0)},
 		{vec3(-1,-1,-1),vec3(0,-1,0),vec2(3.0f / 4, 1.0f / 3)},
 		{vec3(-1,-1,-1),vec3(-1,0,0),vec2(3.0f / 4, 1.0f / 3)},
@@ -185,7 +162,7 @@ namespace onart {
 		{vec3(+1,+1,+1),vec3(0,1,0),vec2(1.0f / 4, 2.0f / 3)},
 		{vec3(+1,+1,+1),vec3(0,0,1),vec2(1.0f / 4, 2.0f / 3)},
 		};
-		unsigned indices[] = {
+		std::vector<unsigned> indices = {
 		0,6,20,0,20,14,
 		18,21,15,18,15,12,
 		23,3,17,9,3,23,
@@ -193,17 +170,69 @@ namespace onart {
 		2,11,8,2,5,11,
 		1,16,4,1,13,16
 		};
-		glGenBuffers(1, &VB);
-		glBindBuffer(GL_ARRAY_BUFFER, VB);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(cube), cube, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &IB);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IB);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-		VAO = createVAO(VB, IB);
+		VAO = createVAO(cube, indices, &VB, &IB);
 		if (list.find("cubo") != list.end()) { delete list["cubo"]; }
 		list["cubo"] = new Mesh(VB, IB, VAO, 36);
+	}
+
+	void Mesh::iCuboidModel() {
+		static unsigned VB = 0, IB = 0, VAO = 0;
+		std::vector<Vertex> cube = {
+		{vec3(-1,-1,-1),vec3(0,0,-1),vec2(1.0f / 2, 0)},
+		{vec3(-1,-1,-1),vec3(0,-1,0),vec2(3.0f / 4, 1.0f / 3)},
+		{vec3(-1,-1,-1),vec3(-1,0,0),vec2(3.0f / 4, 1.0f / 3)},
+
+		{vec3(-1,-1,+1),vec3(0,0,+1),vec2(1.0f / 2, 1)},
+		{vec3(-1,-1,+1),vec3(0,-1,0),vec2(3.0f / 4, 2.0f / 3)},
+		{vec3(-1,-1,+1),vec3(-1,0,0),vec2(3.0f / 4, 2.0f / 3)},
+
+		{vec3(-1,+1,-1),vec3(0,0,-1),vec2(1.0f / 4, 0)},
+		{vec3(-1,+1,-1),vec3(0,1,0), vec2(0, 1.0f / 3)},
+		{vec3(-1,+1,-1),vec3(-1,0,0),vec2(1, 1.0f / 3)},
+
+		{vec3(-1,+1,+1),vec3(0,0,1),vec2(1.0f / 4, 1)},
+		{vec3(-1,+1,+1),vec3(0,1,0),vec2(0, 2.0f / 3)},
+		{vec3(-1,+1,+1),vec3(-1,0,0),vec2(1, 2.0f / 3)},
+
+		{vec3(+1,-1,-1),vec3(1,0,0),vec2(1.0f / 2, 1.0f / 3)},
+		{vec3(+1,-1,-1),vec3(0,-1,0),vec2(1.0f / 2, 1.0f / 3)},
+		{vec3(+1,-1,-1),vec3(0,0,-1),vec2(1.0f / 2, 1.0f / 3)},
+
+		{vec3(+1,-1,+1),vec3(1,0,0),vec2(1.0f / 2, 2.0f / 3)},
+		{vec3(+1,-1,+1),vec3(0,-1,0),vec2(1.0f / 2, 2.0f / 3)},
+		{vec3(+1,-1,+1),vec3(0,0,1),vec2(1.0f / 2, 2.0f / 3)},
+
+		{vec3(+1,+1,-1),vec3(1,0,0),vec2(1.0f / 4, 1.0f / 3)},
+		{vec3(+1,+1,-1),vec3(0,1,0),vec2(1.0f / 4, 1.0f / 3)},
+		{vec3(+1,+1,-1),vec3(0,0,-1),vec2(1.0f / 4, 1.0f / 3)},
+
+		{vec3(+1,+1,+1),vec3(1,0,0),vec2(1.0f / 4, 2.0f / 3)},
+		{vec3(+1,+1,+1),vec3(0,1,0),vec2(1.0f / 4, 2.0f / 3)},
+		{vec3(+1,+1,+1),vec3(0,0,1),vec2(1.0f / 4, 2.0f / 3)},
+		};
+		std::vector<unsigned> indices = {
+		0,20,6,0,14,20,
+		18,15,21,18,12,15,
+		23,17,3,9,23,3,
+		7,22,10,7,19,22,
+		2,8,11,2,11,5,
+		1,4,16,1,16,13
+		};
+		VAO = createVAO(cube, indices, &VB, &IB);
+		if (list.find("icubo") != list.end()) { delete list["icubo"]; }
+		list["icubo"] = new Mesh(VB, IB, VAO, 36);
+	}
+
+	unsigned Mesh::createVAO(const std::vector<Vertex>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib) {
+		glGenBuffers(1, vb);
+		glBindBuffer(GL_ARRAY_BUFFER, *vb);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * v.size(), &v[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, ib);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *ib);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * i.size(), &i[0], GL_STATIC_DRAW);
+
+		return createVAO(*vb, *ib);
 	}
 
 	unsigned Mesh::createVAO(unsigned vb, unsigned ib) {
