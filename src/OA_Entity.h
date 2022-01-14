@@ -89,6 +89,11 @@ namespace onart {
 		/// </summary>
 		inline void setAnim(int idx, float dynamicTps = 1) { as = idx; animKp = 0; animStartTimepoint = tp; animTps = dynamicTps; }
 		/// <summary>
+		/// 애니메이션을 저장 배열의 끝에 추가합니다.
+		/// </summary>
+		/// <param name="name"></param>
+		void addAnim(const std::string& name);
+		/// <summary>
 		/// 게임이 실행된 후 현재 프레임에 들어오기까지 흐른 시간(초)입니다.
 		/// </summary>
 		static const float& tp;

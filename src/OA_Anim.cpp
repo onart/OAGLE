@@ -37,50 +37,52 @@ namespace onart {
 	Animation2D::Animation2D(bool loop, const std::map<float, unsigned>& tex, const std::map<float, vec4>& rects, const std::map<float, vec2>& pivots)
 		: tex(tex), rects(rects), pivots(pivots), Animation(loop, rects.empty() ? 0 : rects.rbegin()->first) {
 		hasPivot = pivots.size();
-		if (!rects.empty()) {
-			auto v = rects.begin()->second;
-		}
+		assert(!hasPivot || pivots.size() == rects.size() && "피벗을 설정하는 경우에는 각 rect에 대하여 피벗이 하나씩 대응해야 합니다.");
+		assert(tex.empty() || tex.begin()->first == 0 && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
+		assert(rects.empty() || rects.begin()->first == 0 && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
+		assert(pivots.empty() || pivots.begin()->first == 0 && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
 	}
 
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
 		static Mesh** rect = nullptr;
-		if (!(*rect))rect = Mesh::get("rect");
+		if (!rect || !(*rect))rect = Mesh::get("rect");
 
 		float tp = getTp(elapsed * dynamicTps);
-
-		auto tlb = std::prev(tex.upper_bound(tp));
-		if (tlb != tex.end()) {
-			program3.texture(tlb->second);
-		}
-
-		auto rlb = std::prev(rects.upper_bound(tp));
-		if (rlb != rects.end()) {
-			program3.uniform("useFull", false);
-			program3.uniform("ldwh", rlb->second);
-			int i = (int)std::distance(rects.begin(), rlb);
-			if (e->getAnimKey() != i)e->act(i);
+		if (tex.empty()) {
+			program3.uniform("oneColor", true);
 		}
 		else {
+			program3.uniform("oneColor", false);
+			program3.texture(std::prev(tex.upper_bound(tp))->second);
+		}
+		
+		if (rects.empty()) {
 			program3.uniform("useFull", true);
 		}
-
-		if (hasPivot) {
-			auto plb = std::prev(pivots.upper_bound(tp));
-			// 베이스 직사각형 중심: (0,0), 양극단: +-0.5
-			vec2 pivv = -(plb->second); pivv += 0.5f;
-			vec2 xy(rlb->second.z, rlb->second.w);
-			
-			/// 중심이동 후 크기변환
-			mat4 pivMat(
-				xy.x, 0, 0, xy.x * pivv.x,
-				0, xy.y, 0, xy.y * pivv.y,
-				0, 0, 1, 0,
-				0, 0, 0, 1
-			);
-			program3.uniform("nopiv", false);
-			program3.uniform("piv", pivMat);
-		}
 		else {
+			program3.uniform("useFull", false);
+			auto rub = std::prev(rects.upper_bound(tp));
+			program3.uniform("ldwh", rub->second);
+			int i = (int)std::distance(rects.begin(), rub);
+			if (e->getAnimKey() != i)e->act(i);
+			if (hasPivot) {
+				auto pub = std::prev(pivots.upper_bound(tp));
+				// 베이스 직사각형 중심: (0,0), 양극단: +-0.5
+				vec2 pivv = -(pub->second); pivv += 0.5f;
+				vec2 xy(rub->second.z, rub->second.w);
+
+				/// 중심이동 후 크기변환
+				mat4 pivMat(
+					xy.x, 0, 0, xy.x * pivv.x,
+					0, xy.y, 0, xy.y * pivv.y,
+					0, 0, 1, 0,
+					0, 0, 0, 1
+				);
+				program3.uniform("nopiv", false);
+				program3.uniform("piv", pivMat);
+			}
+		}
+		if (!hasPivot) {
 			program3.uniform("nopiv", true);
 		}
 		program3.bind(**rect);
@@ -97,6 +99,15 @@ namespace onart {
 			if (e->getAnimKey() != i)e->act(i);
 		}
 		
+		for (auto& bone : keys) {
+			bone.second.setTrans(tp);
+		}
+
+		setGlobalTrans(btree);
+		int i = 0;
+		for (mat4& m : u) {
+			program3.uniform(("bones[" + std::to_string(i++) + ']').c_str(), m);
+		}
 	}
 
 	Animation3D::Animation3D(aiAnimation* anim, float duration, int tps, bool loop, const std::set<float>& sig_kp)
@@ -108,15 +119,19 @@ namespace onart {
 				aiVectorKey& kpt = cut->mPositionKeys[i];
 				ba.keyPos[(float)kpt.mTime] = vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z);
 			}
+			assert((cut->mNumPositionKeys == 0 || ba.keyPos.begin()->first == 0) && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
 			for (size_t i = 0; i < cut->mNumScalingKeys; i++) {
 				aiVectorKey& kpt = cut->mScalingKeys[i];
 				ba.keyScale[(float)kpt.mTime] = vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z);
 			}
+			assert((cut->mNumScalingKeys == 0 || ba.keyScale.begin()->first == 0) && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
 			for (size_t i = 0; i < cut->mNumRotationKeys; i++) {
 				aiQuatKey& kpt = cut->mRotationKeys[i];
 				ba.keyRot[(float)kpt.mTime] = Quaternion(kpt.mValue.w, kpt.mValue.x, kpt.mValue.y, kpt.mValue.z);
 			}
+			assert((cut->mRotationKeys == 0 || ba.keyRot.begin()->first == 0) && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
 		}
+
 	}
 
 	Animation* Animation3D::load(const std::string& name, const std::string& file, bool loop, const std::set<float>& sig_kp) {
@@ -163,5 +178,58 @@ namespace onart {
 		delete scn;
 		push(name, ret);
 		return ret;
+	}
+
+	void Animation3D::BoneAnim::setTrans(float tp) {
+		vec3 pos; vec3 scale(1);	Quaternion rotation;
+		if (!keyPos.empty()) {
+			auto p2 = keyPos.upper_bound(tp);
+			if (p2 == keyPos.end()) {
+				pos = std::prev(p2)->second;
+			}
+			else {
+				auto p1 = std::prev(p2);
+				float interp = (tp - p1->first) / (p2->first - p1->first);
+				pos = lerp(p1->second, p2->second, interp);
+			}
+		}
+		if (!keyRot.empty()) {
+			auto p2 = keyRot.upper_bound(tp);
+			if (p2 == keyRot.end()) {
+				rotation = std::prev(p2)->second;
+			}
+			else {
+				auto p1 = std::prev(p2);
+				float interp = (tp - p1->first) / (p2->first - p1->first);
+				rotation = slerp(p1->second, p2->second, interp);
+			}
+		}
+		if (!keyScale.empty()) {
+			auto p2 = keyScale.upper_bound(tp);
+			if (p2 == keyScale.end()) {
+				scale = std::prev(p2)->second;
+			}
+			else {
+				auto p1 = std::prev(p2);
+				float interp = (tp - p1->first) / (p2->first - p1->first);
+				scale = lerp(p1->second, p2->second, interp);
+			}
+		}
+		localTransform = mat4::TRS(pos, rotation, scale);
+	}
+
+	void Animation3D::setGlobalTrans(BoneTree& t, const mat4& parent) {
+		mat4 nodeTransform = t.transformation;
+		bool isBone = keys.find(t.name) != keys.end();
+		if (isBone) {
+			nodeTransform = keys[t.name].localTransform;
+		}
+		mat4 global = parent * nodeTransform;
+		if (isBone) {
+			
+		}
+		for (auto& ch : t.children) {
+			setGlobalTrans(t, global);
+		}
 	}
 }

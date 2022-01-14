@@ -69,4 +69,9 @@ namespace onart {
 	void Entity::Act(int kp) {
 
 	}
+
+	void Entity::addAnim(const std::string& name) {
+		Animation* anim = Animation::get(name);
+		if (anim) { anims.push_back(anim); }
+	}
 }

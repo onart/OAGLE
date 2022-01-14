@@ -87,15 +87,6 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 뼈 하나에 대한 위치/회전/크기 변환입니다.
-	/// </summary>
-	struct BoneAnim {
-		std::map<float, vec3> keyPos;
-		std::map<float, Quaternion> keyRot;
-		std::map<float, vec3> keyScale;
-	};
-
-	/// <summary>
 	/// 3D 개체의 관절 애니메이션입니다. 현재 버전은 편의상 .dae 모델 파일을 디스크 혹은 메모리에서 로드하는 것만 허용합니다.
 	/// 3D 개체의 시각적 키포인트는 최대 64개의 뼈의 위치, 회전, 크기로 구성됩니다.
 	/// 뼈가 많은 만큼 몇 번째 프레임인지 판단하여 매번 호출하는 것은 불가능합니다. 애니메이션을 생성할 때 개체가 act()로 알림받을 시점(timepoint)을 직접 명시해 주세요.
@@ -123,10 +114,30 @@ namespace onart {
 		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::set<float>& sig_kp);
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
+
+		struct BoneAnim {
+			std::map<float, vec3> keyPos;
+			std::map<float, Quaternion> keyRot;
+			std::map<float, vec3> keyScale;
+
+			mat4 localTransform;
+			void setTrans(float tp);
+		};
+
+		struct BoneTree {
+			std::string name;
+			mat4 transformation;
+			mat4 global;
+			std::vector<BoneTree> children;
+		};
+
 		Animation3D(aiAnimation*, float duration, int tps, bool loop, const std::set<float>& sig_kp);
 		std::set<float> sigKp;
 		std::map<std::string, BoneAnim> keys;
-		// 뼈 트리 추가
+		std::vector<mat4> u;
+		BoneTree btree;
+
+		void setGlobalTrans(BoneTree& t, const mat4& parent = mat4());
 	};
 }
 

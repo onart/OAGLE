@@ -16,6 +16,15 @@
 #include <cstdio>
 #include <cassert>
 
+#if (defined(_M_IX86) || defined(_M_X64)) && !defined (_M_CEE_PURE)
+	#define __OAGLEM_SIMD__
+	#include <xmmintrin.h>
+#endif
+
+
+
+#pragma warning(disable: 6294 6201)
+
 constexpr float PI = 3.14159265358979323846f;
 
 /// <summary>
@@ -42,12 +51,12 @@ namespace onart {
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
-		nvec() { for (int i = 0; i < D; i++) entry[i] = 0; }
+		nvec() :x(0), y(0), z(0), w(0) { for (int i = 4; i < D; i++) entry[i] = 0; }
 
 		/// <summary>
 		/// 벡터의 모든 값을 하나의 값으로 초기화합니다.
 		/// </summary>
-		nvec(T a) { for (int i = 0; i < D; i++) entry[i] = a; }
+		nvec(T a) :x(a), y(a), z(a), w(a) { for (int i = 4; i < D; i++) entry[i] = a; }
 
 		/// <summary>
 		/// 벡터의 값 중 앞 2~4개를 초기화합니다.
@@ -194,7 +203,15 @@ namespace onart {
 	/// <param name="a">선형 보간 대상 1(t=0에 가까울수록 이 벡터에 가깝습니다.)</param>
 	/// <param name="b">선형 보간 대상 2(t=1에 가까울수록 이 벡터에 가깝습니다.)</param>
 	/// <param name="t">선형 보간 값</param>	
-	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, const nvec<D, float>& t) { return a * (1 - t) + b * t; }
+	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, const nvec<D>& t) { return a * (1 - t) + b * t; }
+
+	/// <summary>
+	/// 2개의 벡터를 선형 보간합니다.
+	/// </summary>
+	/// <param name="a">선형 보간 대상 1(t=0에 가까울수록 이 벡터에 가깝습니다.)</param>
+	/// <param name="b">선형 보간 대상 2(t=1에 가까울수록 이 벡터에 가깝습니다.)</param>
+	/// <param name="t">선형 보간 값</param>
+	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, float t) { return a * (1 - t) + b * t; }
 
 	/// <summary>
 	/// 2차원 이미지의 회전연산을 위한 2x2 행렬입니다. 단, 3차원 연산의 z축을 0으로 고정하는 것이 더 일반적인 방법입니다.
@@ -850,7 +867,7 @@ namespace onart {
 		// 곱 36회/합 6회, T*R*S 따로 하는 경우 곱 155회/합 102회
 		mat4 r = rotation.toMat4();
 		r[0] *= scale.x;	r[1] *= scale.y;	r[2] *= scale.z;	r[3] = translation.x;
-		r[4] *= scale.x;	r[5] *= scale.y;	r[6] *= scale.z;	r[4] = translation.y;
+		r[4] *= scale.x;	r[5] *= scale.y;	r[6] *= scale.z;	r[7] = translation.y;
 		r[8] *= scale.x;	r[9] *= scale.y;	r[10] *= scale.z;	r[11] = translation.z;
 		return r;
 	}
