@@ -16,12 +16,7 @@
 #include <cstdio>
 #include <cassert>
 
-#if (defined(_M_IX86) || defined(_M_X64)) && !defined (_M_CEE_PURE)
-	#define __OAGLEM_SIMD__
-	#include <xmmintrin.h>
-#endif
-
-
+#include "oagle_simd.h"
 
 #pragma warning(disable: 6294 6201)
 
@@ -51,12 +46,15 @@ namespace onart {
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
-		nvec() :x(0), y(0), z(0), w(0) { for (int i = 4; i < D; i++) entry[i] = 0; }
+		nvec() {
+			set4<T>(entry, (T)0);
+			for (unsigned i = 4; i < D; i++) entry[i] = 0;
+		}
 
 		/// <summary>
 		/// 벡터의 모든 값을 하나의 값으로 초기화합니다.
 		/// </summary>
-		nvec(T a) :x(a), y(a), z(a), w(a) { for (int i = 4; i < D; i++) entry[i] = a; }
+		nvec(T a) { set4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] = a; }
 
 		/// <summary>
 		/// 벡터의 값 중 앞 2~4개를 초기화합니다.
@@ -66,18 +64,24 @@ namespace onart {
 		/// <summary>
 		/// 복사 생성자입니다.
 		/// </summary>
-		nvec(const nvec& v) { for (int i = 0; i < D; i++) entry[i] = v.entry[i]; }
+		nvec(const nvec& v) { set4<T>(entry, v.entry); for (unsigned i = 4; i < D; i++) entry[i] = v.entry[i]; }
 
 		/// <summary>
 		/// 다른 차원의 벡터를 사용하는 복사 생성자입니다. 가급적 차원 축소에만 사용하는 것이 좋습니다.
 		/// </summary>
-		template <unsigned E> nvec(const nvec<E, T>& v) { unsigned min = D > E ? E : D; int i = 0; for (; i < min; i++) entry[i] = v.entry[i]; for (; i < D; i++) entry[i] = 0; }
+		template <unsigned E> nvec(const nvec<E, T>& v) { unsigned min = D > E ? E : D; unsigned i = 0; for (; i < min; i++) entry[i] = v.entry[i]; for (; i < D; i++) entry[i] = 0; }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. operator=과 동일합니다.
 		/// </summary>
-		inline void set(T a) { for (int i = 0; i < D; i++) entry[i] = a; }
+		inline void set(T a) { set4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] = a; }
 		
+		/// <summary>
+		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
+		/// </summary>
+		/// <param name="v"></param>
+		inline void set(const nvec& v) { set4<T>(entry, v.entry); for (unsigned i = 4; i < D; i++) entry[i] = v.entry[i]; }
+
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
 		/// </summary>
@@ -96,23 +100,28 @@ namespace onart {
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. set()과 동일합니다.
 		/// </summary>
+		inline nvec& operator=(const nvec& v) { set(v); return *this; }
+
+		/// <summary>
+		/// 다른 벡터의 값을 복사해 옵니다. set()과 동일합니다.
+		/// </summary>
 		template <unsigned E> inline nvec& operator=(const nvec<E, T>& v) { set(v); return *this; }
 
 		/// <summary>
 		/// 다른 벡터와 성분별 연산을 차원수가 낮은 쪽을 기준으로 합니다.
 		/// </summary>
-		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] += v[i]; }
-		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] -= v[i]; }
-		template <unsigned E> inline nvec& operator*=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] *= v[i]; }
-		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] /= v[i]; }
+		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] += v[i]; return *this; }
+		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] -= v[i]; return *this; }
+		template <unsigned E> inline nvec& operator*=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] *= v[i]; return *this; }
+		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] /= v[i]; return *this; }
 
 		/// <summary>
 		/// 벡터의 모든 성분에 대하여 주어진 값과 연산합니다.
 		/// </summary>
-		inline nvec& operator+=(T a) { for (int i = 0; i < D; i++) entry[i] += a; return *this; }
-		inline nvec& operator-=(T a) { for (int i = 0; i < D; i++) entry[i] -= a; return *this; }
-		inline nvec& operator*=(T a) { for (int i = 0; i < D; i++) entry[i] *= a; return *this; }
-		inline nvec& operator/=(T a) { for (int i = 0; i < D; i++) entry[i] /= a; return *this; }
+		inline nvec& operator+=(T a) { add4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] += a; return *this; }
+		inline nvec& operator-=(T a) { sub4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] -= a; return *this; }
+		inline nvec& operator*=(T a) { mul4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] *= a; return *this; }
+		inline nvec& operator/=(T a) { div4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] /= a; return *this; }
 		inline nvec operator+(T a) const { auto r(*this); r += a; return r; }
 		inline nvec operator-(T a) const { auto r(*this); r -= a; return r; }
 		inline nvec operator*(T a) const { auto r(*this); r *= a; return r; }
@@ -162,9 +171,14 @@ namespace onart {
 		inline nvec normalize() const { return (*this) / length(); }
 
 		/// <summary>
+		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
+		/// </summary>
+		inline T dot(const nvec& v) const { auto nv = (*this) * v; T s = 0; for (unsigned i = 0; i < D; i++)s += nv[i]; return s; }
+
+		/// <summary>
 		/// 벡터 길이의 제곱을 리턴합니다.
 		/// </summary>
-		inline float length2() const { float s = 0; for (int i = 0; i < D; i++) s += entry[i] * entry[i]; return s; }
+		inline float length2() const { return dot(*this); }
 
 		/// <summary>
 		/// 벡터 길이를 리턴합니다.
@@ -180,11 +194,6 @@ namespace onart {
 		/// 다른 벡터와의 거리를 리턴합니다.
 		/// </summary>
 		inline float distance(const nvec& v) const { return sqrtf(distance(v)); }
-
-		/// <summary>
-		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
-		/// </summary>
-		inline T dot(const nvec& v) const { T s = 0; for (int i = 0; i < D; i++)s += entry[i] * v[i]; return s; }
 	};
 
 	using vec2 = nvec<2>;					using vec3 = nvec<3>;					using vec4 = nvec<4>;
@@ -346,23 +355,35 @@ namespace onart {
 		inline mat3 operator-(const mat3& m) const { auto r = mat3(*this); r -= m; return r; }
 
 		/// <summary>
+		/// n행 벡터를 리턴합니다. 1~3만 입력 가능합니다.
+		/// </summary>
+		/// <param name="i">행 인덱스(1 base)</param>
+		inline vec3 row(int i) const { assert(i <= 3 && i >= 1); int st = 3 * i - 3; return vec3(a[st], a[st + 1], a[st + 2]); }
+
+		/// <summary>
+		/// n열 벡터를 리턴합니다. 1~4만 입력 가능합니다.
+		/// </summary>
+		/// <param name="i">열 인덱스(1 base)</param>
+		inline vec3 col(int i) const { assert(i <= 3 && i >= 1); return vec3(a[i - 1], a[i + 2], a[i + 5]); }
+
+		/// <summary>
 		/// 행렬곱을 수행합니다.
 		/// </summary>
 		inline mat3 operator*(const mat3& m) const {
-			return mat3(
-				_11 * m._11 + _12 * m._21 + _13 * m._31,
-				_11 * m._12 + _12 * m._22 + _13 * m._32,
-				_11 * m._13 + _12 * m._23 + _13 * m._33,
-
-				_21 * m._11 + _22 * m._21 + _23 * m._31,
-				_21 * m._12 + _22 * m._22 + _23 * m._32,
-				_21 * m._13 + _22 * m._23 + _23 * m._33,
-
-				_31 * m._11 + _32 * m._21 + _33 * m._31,
-				_31 * m._12 + _32 * m._22 + _33 * m._32,
-				_31 * m._13 + _32 * m._23 + _33 * m._33
-			);
+			mat3 ret;
+			for (int i = 1, ent = 0; i <= 3; i++) {
+				vec3 r = row(i);
+				for (int j = 1; j <= 3; j++, ent++) {
+					vec3 c = m.col(j);
+					ret[ent] = r.dot(c);
+				}
+			}
+			return ret;
 		}
+
+		/// <summary>
+		/// 행렬곱을 수행합니다.
+		/// </summary>
 		inline mat3& operator*=(const mat3& m) { return *this = operator*(m); }
 
 		/// <summary>
@@ -389,7 +410,11 @@ namespace onart {
 		inline mat3 inverse() const {
 			float d = det();
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
-			return mat3((_22 * _33 - _32 * _23), (_13 * _32 - _12 * _33), (_12 * _23 - _13 * _22), (_23 * _31 - _21 * _33), (_11 * _33 - _13 * _31), (_21 * _13 - _11 * _23), (_21 * _32 - _31 * _22), (_31 * _12 - _11 * _32), (_11 * _22 - _21 * _12)) / d;
+			return mat3(
+				(_22 * _33 - _32 * _23), (_13 * _32 - _12 * _33), (_12 * _23 - _13 * _22),
+				(_23 * _31 - _21 * _33), (_11 * _33 - _13 * _31), (_21 * _13 - _11 * _23),
+				(_21 * _32 - _31 * _22), (_31 * _12 - _11 * _32), (_11 * _22 - _21 * _12)
+			) / d;
 		}
 
 		/// <summary>
@@ -510,37 +535,43 @@ namespace onart {
 		inline mat4 operator-(const mat4& m) const { auto r = mat4(*this); r -= m; return r; }
 
 		/// <summary>
+		/// n행 벡터를 리턴합니다. 1~4만 입력 가능합니다.
+		/// </summary>
+		/// <param name="i">행 인덱스(1 base)</param>
+		inline vec4 row(int i) const { assert(i <= 4 && i >= 1); int st = 4 * i - 4; return vec4(a[st], a[st + 1], a[st + 2], a[st + 3]); }
+
+		/// <summary>
+		/// n열 벡터를 리턴합니다. 1~4만 입력 가능합니다.
+		/// </summary>
+		/// <param name="i">열 인덱스(1 base)</param>
+		inline vec4 col(int i) const { assert(i <= 4 && i >= 1); return vec4(a[i - 1], a[i + 3], a[i + 7], a[i + 11]); }
+
+		/// <summary>
 		/// 행렬곱을 수행합니다.
 		/// </summary>
 		inline mat4 operator*(const mat4& m) const {
-			return mat4(
-				_11 * m._11 + _12 * m._21 + _13 * m._31 + _14 * m._41,
-				_11 * m._12 + _12 * m._22 + _13 * m._32 + _14 * m._42,
-				_11 * m._13 + _12 * m._23 + _13 * m._33 + _14 * m._43,
-				_11 * m._14 + _12 * m._24 + _13 * m._34 + _14 * m._44,
-
-				_21* m._11 + _22 * m._21 + _23 * m._31 + _24 * m._41,
-				_21* m._12 + _22 * m._22 + _23 * m._32 + _24 * m._42,
-				_21* m._13 + _22 * m._23 + _23 * m._33 + _24 * m._43,
-				_21* m._14 + _22 * m._24 + _23 * m._34 + _24 * m._44,
-
-				_31* m._11 + _32 * m._21 + _33 * m._31 + _34 * m._41,
-				_31* m._12 + _32 * m._22 + _33 * m._32 + _34 * m._42,
-				_31* m._13 + _32 * m._23 + _33 * m._33 + _34 * m._43,
-				_31* m._14 + _32 * m._24 + _33 * m._34 + _34 * m._44,
-
-				_41* m._11 + _42 * m._21 + _43 * m._31 + _44 * m._41,
-				_41* m._12 + _42 * m._22 + _43 * m._32 + _44 * m._42,
-				_41* m._13 + _42 * m._23 + _43 * m._33 + _44 * m._43,
-				_41* m._14 + _42 * m._24 + _43 * m._34 + _44 * m._44
-			);
+			mat4 ret;
+			for (int i = 1, ent = 0; i <= 4; i++) {
+				vec4 r = row(i);
+				for (int j = 1; j <= 4; j++, ent++) {
+					vec4 c = m.col(j);
+					ret[ent] = r.dot(c);
+				}
+			}
+			return ret;
 		}
+
+		/// <summary>
+		/// 행렬곱을 수행합니다.
+		/// </summary>
 		inline mat4& operator*=(const mat4& m) { return *this = operator*(m); }
 
 		/// <summary>
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
-		inline vec4 operator*(const vec4& v) const { return vec4(_11 * v.x + _12 * v.y + _13 * v.z + _14 * v.w, _21 * v.x + _22 * v.y + _23 * v.z + _24 * v.w, _31 * v.x + _32 * v.y + _33 * v.z + _34 * v.w, _41 * v.x + _42 * v.y + _43 * v.z + _44 * v.w); }
+		inline vec4 operator*(const vec4& v) const { 
+			return vec4(row(1).dot(v), row(2).dot(v), row(3).dot(v), row(4).dot(v));
+		}
 
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
@@ -725,9 +756,14 @@ namespace onart {
 		Quaternion(float o = 1, float i = 0, float j = 0, float k = 0) :c1(o), ci(i), cj(j), ck(k) {};
 
 		/// <summary>
+		/// 사원수를 복사해서 생성합니다.
+		/// </summary>
+		Quaternion(const Quaternion& q) { set4<float>(&c1, &(q.c1)); }
+
+		/// <summary>
 		/// 사원수 크기의 제곱을 리턴합니다.
 		/// </summary>
-		inline float abs2() const { return c1 * c1 + ci * ci + cj * cj + ck * ck; }
+		inline float abs2() const { return vec4(c1,ci,cj,ck).length2(); }
 
 		/// <summary>
 		/// 사원수 크기를 리턴합니다.
@@ -759,12 +795,12 @@ namespace onart {
 		/// <summary>
 		/// 사원수 간 사칙 연산입니다. 모든 연산은 이 사원수를 기준으로 우측에 적용됩니다.
 		/// </summary>
-		inline Quaternion& operator+=(const Quaternion& q) { c1 += q.c1; ci += q.ci; cj += q.cj; ck += q.ck; return *this; }
-		inline Quaternion& operator-=(const Quaternion& q) { c1 -= q.c1; ci -= q.ci; cj -= q.cj; ck -= q.ck; return *this; }
+		inline Quaternion& operator+=(const Quaternion& q) { add4<float>(&c1, &(q.c1)); return *this; }
+		inline Quaternion& operator-=(const Quaternion& q) { sub4<float>(&c1, &(q.c1)); return *this; }
 		inline Quaternion& operator*=(const Quaternion& q) { *this = *this * q; return *this; }	// multiplying on the left is more commonly used operation
 		inline Quaternion& operator/=(const Quaternion& q) { *this = *this * q.inverse(); return *this; }
-		inline Quaternion operator*(float f) const { return Quaternion(c1 * f, ci * f, cj * f, ck * f); }
-		inline Quaternion operator/(float f) const { return Quaternion(c1 / f, ci / f, cj / f, ck / f); }
+		inline Quaternion operator*(float f) const { Quaternion ret(*this); mul4<float>(&(ret.c1), f); return ret; }
+		inline Quaternion operator/(float f) const { Quaternion ret(*this); div4<float>(&(ret.c1), f); return ret; }
 		inline Quaternion operator+(const Quaternion& q) const { Quaternion r(*this); r += q; return r; }
 		inline Quaternion operator-(const Quaternion& q) const { Quaternion r(*this); r -= q; return r; }
 		inline Quaternion operator/(const Quaternion& q) const { Quaternion r(*this); r /= q; return r; }
@@ -791,10 +827,15 @@ namespace onart {
 		/// 사원수를 회전 행렬로 변형합니다.
 		/// </summary>
 		inline mat4 toMat4() const {
+
+			Quaternion i = (*this) * ci;
+			Quaternion j = (*this) * cj;
+			Quaternion k = (*this) * ck;
+
 			return mat4(
-				1 - 2 * (cj * cj + ck * ck), 2 * (ci * cj - c1 * ck), 2 * (ci * ck + c1 * cj), 0,
-				2 * (ci * cj + c1 * ck), 1 - 2 * (ci * ci + ck * ck), 2 * (cj * ck - c1 * ci), 0,
-				2 * (ci * ck - c1 * cj), 2 * (cj * ck + c1 * ci), 1 - 2 * (ci * ci + cj * cj), 0,
+				1 - 2 * (j.cj + k.ck), 2 * (i.cj - k.c1), 2 * (i.ck + j.c1), 0,
+				2 * (i.cj + k.c1), 1 - 2 * (i.ci + k.ck), 2 * (j.ck - i.c1), 0,
+				2 * (i.ck - j.c1), 2 * (j.ck + i.c1), 1 - 2 * (i.ci + j.cj), 0,
 				0, 0, 0, 1
 			);
 		}
@@ -864,11 +905,16 @@ namespace onart {
 	inline mat4 mat4::rotate(const vec3& axis, float angle) { return Quaternion::rotation(axis, angle).toMat4(); }
 	inline mat4 mat4::rotate(float roll, float pitch, float yaw) { return Quaternion::euler(yaw, pitch, roll).toMat4(); }
 	inline mat4 mat4::TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
-		// 곱 36회/합 6회, T*R*S 따로 하는 경우 곱 155회/합 102회
+		// SIMD 미적용 시 곱 36회/합 6회, T*R*S 따로 하는 경우 곱 155회/합 102회
+		// SIMD 적용 시 곱 15회/합 6회, 따로 하는 경우 곱 44회/합 102회
 		mat4 r = rotation.toMat4();
-		r[0] *= scale.x;	r[1] *= scale.y;	r[2] *= scale.z;	r[3] = translation.x;
-		r[4] *= scale.x;	r[5] *= scale.y;	r[6] *= scale.z;	r[7] = translation.y;
-		r[8] *= scale.x;	r[9] *= scale.y;	r[10] *= scale.z;	r[11] = translation.z;
+		vec4 sc(scale);
+		mul4<float>(r.a, sc);
+		mul4<float>(r.a + 4, sc);
+		mul4<float>(r.a + 8, sc);
+		r[3] = translation.x;
+		r[7] = translation.y;
+		r[11] = translation.z;
 		return r;
 	}
 

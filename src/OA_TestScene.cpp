@@ -2,6 +2,6 @@
 #include <cstdio>
 
 namespace onart {
-	void TestScene::Update() { print(Input::relativeCursorPos(),"cursor"); }
+	void TestScene::Update() { }
 	void TestScene::init() {  }
 }

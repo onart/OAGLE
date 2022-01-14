@@ -188,6 +188,7 @@
     <ClInclude Include="gl\glfw\win64\glfw3.h" />
     <ClInclude Include="oagle.h" />
     <ClInclude Include="oaglem.h" />
+    <ClInclude Include="oagle_simd.h" />
     <ClInclude Include="OA_Anim.h" />
     <ClInclude Include="OA_Entity.h" />
     <ClInclude Include="OA_Input.h" />
