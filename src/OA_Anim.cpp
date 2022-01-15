@@ -38,12 +38,14 @@ namespace onart {
 		return i == ar.begin() ? i : i - 1;
 	}
 
+	inline mat4 oam4(const aiMatrix4x4& m) { return mat4(m.a1, m.a2, m.a3, m.a4, m.b1, m.b2, m.b3, m.b4, m.c1, m.c2, m.c3, m.c4, m.d1, m.d2, m.d3, m.d4); }
+
 	Animation::Animation(bool loop, float duration, int staticTps)
 		:loop(loop), duration(duration), staticTps(staticTps) {
 		
 	}
 
-	Animation* Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {}) {
+	Animation* Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
 		Animation* anim = get(name);
 		if (anim) return anim;
 		anim = new Animation2D(loop, tex, rects, pivots);
@@ -51,7 +53,7 @@ namespace onart {
 		return anim;
 	}
 
-	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {})
+	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots)
 		: tex(tex), rects(rects), pivots(pivots), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!pivots.empty()) {
 		std::sort(this->tex.begin(), this->tex.end());
 		std::sort(this->rects.begin(), this->rects.end());
@@ -80,7 +82,7 @@ namespace onart {
 			else { 
 				l--;
 				program3.uniform("ldwh", l->value);
-				kp = l - rects.begin();
+				kp = int(l - rects.begin());
 				if (e->getAnimKey() != kp) { e->act(kp); }
 			}
 			
@@ -115,7 +117,7 @@ namespace onart {
 		float tp = getTp(elapsed * dynamicTps);
 		auto sub = std::upper_bound(sigKp.begin(), sigKp.end(), tp);
 		if (sub != sigKp.begin()) {
-			int kp = sub - sigKp.begin() - 1;
+			int kp = int(sub - sigKp.begin() - 1);
 			if (e->getAnimKey() != kp)e->act(kp);
 		}
 		
@@ -125,25 +127,53 @@ namespace onart {
 
 		setGlobalTrans(btree);
 		int i = 0;
-		for (mat4& m : u) {
-			program3.uniform(("bones[" + std::to_string(i++) + ']').c_str(), m);
+		for (Bone& m : u) {
+			program3.uniform(("bones[" + std::to_string(i++) + ']').c_str(), m.uni);
 		}
 	}
 
-	Animation3D::Animation3D(aiAnimation* anim, float duration, int tps, bool loop, const std::vector<float>& sig_kp)
+	void Animation3D::readHierarchy(aiNode* root, BoneTree& tree) {
+		if (n2i.find(root->mName.data) != n2i.end()) { tree.id = n2i[root->mName.data]; }
+		else { tree.id = -int(n2i.size()); n2i[root->mName.data] = tree.id; }
+		
+		tree.transformation = oam4(root->mTransformation);
+		for (size_t k = 0; k < root->mNumChildren; k++) {
+			tree.children.push_back(BoneTree());
+			readHierarchy(root->mChildren[k], tree.children[k]);
+		}
+	}
+
+	Animation3D::Animation3D(const aiScene* scn, float duration, int tps, bool loop, const std::vector<float>& sig_kp)
 		:Animation(loop, duration, tps), sigKp(sig_kp) {
-		for (size_t k = 0; k < anim->mNumChannels; k++) {
+		// 정점에 영향을 주는 뼈들
+		for (unsigned k = 0; k < scn->mNumMeshes; k++) {
+			aiMesh* m = scn->mMeshes[k];
+			for (unsigned i = 0; i < m->mNumBones; i++) {
+				aiBone* b = m->mBones[i];
+				if (n2i.find(b->mName.data) == n2i.end()) {
+					n2i[b->mName.C_Str()] = int(n2i.size());
+					u.push_back(Bone(oam4(b->mOffsetMatrix)));
+				}
+			}
+		}
+
+		// 뼈 트리
+		readHierarchy(scn->mRootNode, btree);
+
+		// 애니메이션 키프레임
+		aiAnimation* anim = scn->mAnimations[0];
+		for (unsigned k = 0; k < anim->mNumChannels; k++) {
 			aiNodeAnim* cut = anim->mChannels[k];
-			BoneAnim& ba = keys[cut->mNodeName.C_Str()] = BoneAnim();
-			for (size_t i = 0; i < cut->mNumPositionKeys; i++) {
+			BoneAnim& ba = keys[n2i[cut->mNodeName.C_Str()]] = BoneAnim();
+			for (unsigned i = 0; i < cut->mNumPositionKeys; i++) {
 				aiVectorKey& kpt = cut->mPositionKeys[i];
 				ba.keyPos.push_back({ (float)kpt.mTime, vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z) });
 			}
-			for (size_t i = 0; i < cut->mNumScalingKeys; i++) {
+			for (unsigned i = 0; i < cut->mNumScalingKeys; i++) {
 				aiVectorKey& kpt = cut->mScalingKeys[i];
 				ba.keyScale.push_back({ (float)kpt.mTime, vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z) });
 			}
-			for (size_t i = 0; i < cut->mNumRotationKeys; i++) {
+			for (unsigned i = 0; i < cut->mNumRotationKeys; i++) {
 				aiQuatKey& kpt = cut->mRotationKeys[i];
 				ba.keyRot.push_back({ (float)kpt.mTime, Quaternion(kpt.mValue.w, kpt.mValue.x, kpt.mValue.y, kpt.mValue.z) });
 			}	
@@ -166,7 +196,7 @@ namespace onart {
 			return nullptr;
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
-		Animation* ret = new Animation3D(anim0, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
+		Animation* ret = new Animation3D(scn, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
 		
 		push(name, ret);
 		return ret;
@@ -187,7 +217,7 @@ namespace onart {
 			return nullptr;
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
-		Animation* ret = new Animation3D(anim0, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
+		Animation* ret = new Animation3D(scn, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
 
 		push(name, ret);
 		return ret;
@@ -236,14 +266,15 @@ namespace onart {
 
 	void Animation3D::setGlobalTrans(BoneTree& t, const mat4& parent) {
 		mat4 nodeTransform = t.transformation;
-		bool isMoving = keys.find(t.name) != keys.end();	// 애니메이션 키포인트 안에 있는가?
+		bool isMoving = keys.find(t.id) != keys.end();	// 애니메이션 키포인트 안에 있는가?
 		if (isMoving) {	
-			nodeTransform = keys[t.name].localTransform;
+			nodeTransform = keys[t.id].localTransform;
 		}
 		mat4 global = parent * nodeTransform;
-		bool isBone = true;	// uniform으로 넘어가는가?
+		bool isBone = t.id >= 0;	// 정점에 직접적 연관이 있는가?
 		if (isBone) {
-			
+			Bone b = u[t.id];
+			b.uni = global * b.offset;
 		}
 		for (auto& ch : t.children) {
 			setGlobalTrans(t, global);

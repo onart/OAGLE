@@ -347,11 +347,6 @@ namespace onart {
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
 
 		/// <summary>
-		/// 복사 생성
-		/// </summary>
-		inline mat3(const mat3& m) { for (int i = 0; i < 9; i++) { a[i] = m[i]; } }
-
-		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.
 		/// </summary>
 		inline void toI() { _11 = _22 = _33 = 1; _12 = _13 = _21 = _23 = _31 = _32 = 0; }
@@ -530,11 +525,6 @@ namespace onart {
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
-
-		/// <summary>
-		/// 복사 생성
-		/// </summary>
-		inline mat4(const mat4& m) { for (int i = 0; i < 16; i++) { a[i] = m[i]; } }
 
 		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.

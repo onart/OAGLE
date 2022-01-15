@@ -8,7 +8,8 @@
 #include <set>
 #include <string>
 
-struct aiAnimation;
+struct aiScene;
+struct aiNode;
 
 namespace onart {
 
@@ -134,6 +135,13 @@ namespace onart {
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// /// <param name="sig_kp">act()로 알림받을 시점(float)</param>
 		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp);
+
+		/// <summary>
+		/// 애니메이션의 현재 상태를 렌더링하고, 필요한 경우 개체에서 함수를 호출합니다.
+		/// </summary>
+		/// <param name="elapsed">애니메이션 시작 후 지난 시간</param>
+		/// <param name="e">개체 포인터</param>
+		/// <param name="dynamicTps">애니메이션 속도(기본값=1)</param>
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 
@@ -147,16 +155,26 @@ namespace onart {
 		};
 
 		struct BoneTree {
-			std::string name;
+			int id = -1;
 			mat4 transformation;
 			mat4 global;
 			std::vector<BoneTree> children;
 		};
 
-		Animation3D(aiAnimation*, float duration, int tps, bool loop, const std::vector<float>& sig_kp);
+		struct Bone
+		{
+			mat4 uni;
+			const mat4 offset;
+			inline Bone(const mat4& m) :offset(m) {}
+		};
+
+		void readHierarchy(aiNode* root, Animation3D::BoneTree& tree);
+
+		Animation3D(const aiScene*, float duration, int tps, bool loop, const std::vector<float>& sig_kp);
 		std::vector<float> sigKp;
-		std::map<std::string, BoneAnim> keys;
-		std::vector<mat4> u;
+		std::map<int, BoneAnim> keys;
+		std::vector<Bone> u;
+		std::map<std::string, int> n2i;
 		BoneTree btree;
 
 		void setGlobalTrans(BoneTree& t, const mat4& parent = mat4());
