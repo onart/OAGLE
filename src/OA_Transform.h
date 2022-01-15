@@ -72,10 +72,20 @@ namespace onart {
 		inline void setScale(const vec3& sc) {
 			vec3 v = sc / scale;
 			scale = sc;
-			if (isfinite(v.x) && isfinite(v.y) && isfinite(v.z)) { 
-				model[0] *= v.x;	model[1] *= v.y;	model[2] *= v.z;
-				model[4] *= v.x;	model[5] *= v.y;	model[6] *= v.z;
-				model[8] *= v.x;	model[9] *= v.y;	model[10] *= v.z;
+			if (isfinite(v.x) && isfinite(v.y) && isfinite(v.z)) {
+				float m[4];
+
+				m[0] = model[0]; m[1] = model[4]; m[2] = model[8];
+				mul4<float>(m, v.x);
+				model[0] = m[0];	model[4] = m[1];	model[8] = m[2];
+
+				m[0] = model[1]; m[1] = model[5]; m[2] = model[9];
+				mul4<float>(m, v.y);
+				model[1] = m[0];	model[5] = m[1];	model[9] = m[2];
+
+				m[0] = model[2]; m[1] = model[6]; m[2] = model[10];
+				mul4<float>(m, v.z);
+				model[2] = m[0];	model[6] = m[1];	model[10] = m[2];
 			}
 			else {
 				TRS();
@@ -84,11 +94,11 @@ namespace onart {
 		/// <summary>
 		/// 3D 크기 배율을 설정합니다.
 		/// </summary>
-		inline void dSetScale(float x, float y, float z) { scale.x = x; scale.y = y; scale.z = z; ready = false; }
+		inline void dSetScale(float x, float y, float z) { dSetScale(vec3(x, y, z)); }
 		/// <summary>
 		/// 3D 크기 배율을 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setScale(float x, float y, float z) { setScale({ x,y,z }); }
+		inline void setScale(float x, float y, float z) { setScale(vec3(x, y, z)); }
 		/// <summary>
 		/// 3D 위치를 설정합니다.
 		/// </summary>
@@ -96,7 +106,7 @@ namespace onart {
 		/// <summary>
 		/// 3D 위치를 설정합니다.
 		/// </summary>
-		inline void dSetPosition(float x, float y, float z) { pos.x = x; pos.y = y; pos.z = z; ready = false; }
+		inline void dSetPosition(float x, float y, float z) { dSetPosition(vec3(x, y, z)); }
 		/// <summary>
 		/// 3D 위치를 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -104,7 +114,7 @@ namespace onart {
 		/// <summary>
 		/// 3D 위치를 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setPosition(float x, float y, float z) { pos.x = x; pos.y = y; pos.z = z; model[3] = x; model[7] = y; model[11] = z; }
+		inline void setPosition(float x, float y, float z) { setPosition(vec3(x, y, z)); }
 		/// <summary>
 		/// x좌표만 변경합니다.
 		/// </summary>
@@ -136,15 +146,15 @@ namespace onart {
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동합니다.
 		/// </summary>
-		inline void dAddPosition(float x, float y, float z) { pos.x += x; pos.y += y; pos.z += z; ready = false; }
+		inline void dAddPosition(float x, float y, float z) { dAddPosition(vec3(x, y, z)); }
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addPosition(const vec3& p) { pos = p; model[3] = p.x; model[7] = p.y; model[11] = p.z; }
+		inline void addPosition(const vec3& p) { pos += p; model[3] += p.x; model[7] += p.y; model[11] += p.z; }
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addPosition(float x, float y, float z) { pos.x += x; pos.y += y; pos.z += z; model[3] += x; model[7] += y; model[11] += z; }
+		inline void addPosition(float x, float y, float z) { addPosition(vec3(x, y, z)); }
 		/// <summary>
 		/// x좌표만 누적합니다.
 		/// </summary>

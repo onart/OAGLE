@@ -331,6 +331,11 @@ namespace onart {
 		inline mat3(float _11, float _12, float _13, float _21, float _22, float _23, float _31, float _32, float _33) :_11(_11), _12(_12), _13(_13), _21(_21), _22(_22), _23(_23), _31(_31), _32(_32), _33(_33) { }
 
 		/// <summary>
+		/// 행렬의 성분을 복사해서 생성합니다.
+		/// </summary>
+		inline mat3(const mat3& m) { set4<float>(a, m.a); set4<float>(a + 4, m.a + 4); a[8] = m.a[8]; }
+
+		/// <summary>
 		/// 인덱스 연산자
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
@@ -511,6 +516,11 @@ namespace onart {
 		inline mat4(float _11, float _12, float _13, float _14, float _21, float _22, float _23, float _24, float _31, float _32, float _33, float _34, float _41, float _42, float _43, float _44) :_11(_11), _12(_12), _13(_13), _14(_14), _21(_21), _22(_22), _23(_23), _24(_24), _31(_31), _32(_32), _33(_33), _34(_34), _41(_41), _42(_42), _43(_43), _44(_44) { }
 
 		/// <summary>
+		/// 행렬의 성분을 복사해서 생성합니다.
+		/// </summary>
+		inline mat4(const mat4& m) { set4<float>(a, m.a); set4<float>(a + 4, m.a + 4); set4<float>(a + 8, m.a + 8); set4<float>(a + 12, m.a + 12); }
+
+		/// <summary>
 		/// 인덱스 연산자
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
@@ -529,8 +539,8 @@ namespace onart {
 		/// <summary>
 		/// 다른 행렬과 성분별로 더하거나 뺍니다.
 		/// </summary>
-		inline mat4& operator+=(const mat4& m) { for (int i = 0; i < 16; i++)a[i] += m[i]; return *this; }
-		inline mat4& operator-=(const mat4& m) { for (int i = 0; i < 16; i++)a[i] -= m[i]; return *this; }
+		inline mat4& operator+=(const mat4& m) { add4<float>(a, m.a); add4<float>(a + 4, m.a + 4); add4<float>(a + 8, m.a + 8); add4<float>(a + 12, m.a + 12); return *this; }
+		inline mat4& operator-=(const mat4& m) { sub4<float>(a, m.a); sub4<float>(a + 4, m.a + 4); sub4<float>(a + 8, m.a + 8); sub4<float>(a + 12, m.a + 12); return *this; }
 		inline mat4 operator+(const mat4& m) const { auto r = mat4(*this); r += m; return r; }
 		inline mat4 operator-(const mat4& m) const { auto r = mat4(*this); r -= m; return r; }
 
@@ -576,9 +586,9 @@ namespace onart {
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
 		/// </summary>
-		inline mat4& operator*=(float f) { for (int i = 0; i < 16; i++) a[i] *= f; }
+		inline mat4& operator*=(float f) { mul4<float>(a, f); mul4<float>(a + 4, f); mul4<float>(a + 8, f); mul4<float>(a + 12, f); return *this; }
 		inline mat4 operator*(float f) const { mat4 r(*this); r *= f; return r; }
-		inline mat4& operator/=(float f) { for (int i = 0; i < 16; i++) a[i] /= f; }
+		inline mat4& operator/=(float f) { div4<float>(a, f); div4<float>(a + 4, f); div4<float>(a + 8, f); div4<float>(a + 12, f); return *this; }
 		inline mat4 operator/(float f) const { mat4 r(*this); r /= f; return r; }
 
 		/// <summary>
@@ -784,12 +794,11 @@ namespace onart {
 		/// 사원수 곱셈 연산자입니다.
 		/// </summary>
 		inline Quaternion operator*(const Quaternion& q) const {
-			return Quaternion(
-				c1 * q.c1 - ci * q.ci - cj * q.cj - ck * q.ck,
-				c1 * q.ci + ci * q.c1 + cj * q.ck - ck * q.cj,
-				c1 * q.cj - ci * q.ck + cj * q.c1 + ck * q.ci,
-				c1 * q.ck + ci * q.cj - cj * q.ci + ck * q.c1
-			);
+			Quaternion q_c1 = q * c1;
+			Quaternion q_ci = Quaternion(-q.ci, q.c1, -q.ck, q.cj) * ci;
+			Quaternion q_cj = Quaternion(-q.cj, q.ck, q.c1, -q.ci) * cj;
+			Quaternion q_ck = Quaternion(-q.ck, -q.cj, q.ci, q.c1) * ck;
+			return q_c1 + q_ci + q_cj + q_ck;
 		}
 
 		/// <summary>
@@ -859,6 +868,7 @@ namespace onart {
 		/// <param name="pitch">pitch(Y축 방향 회전)</param>
 		/// <param name="roll">roll(X축 방향 회전)</param>
 		inline static Quaternion euler(float yaw, float pitch, float roll) {
+			vec3 cypr(yaw, pitch, roll), sypr(cypr);
 			float cy = cosf(yaw / 2);	float sy = sinf(yaw / 2);
 			float cp = cosf(pitch / 2);	float sp = sinf(pitch / 2);
 			float cr = cosf(roll / 2);	float sr = sinf(roll / 2);
@@ -917,6 +927,12 @@ namespace onart {
 		r[11] = translation.z;
 		return r;
 	}
+
+	// 연산자 추가 오버로딩
+	template<unsigned D, class T>inline nvec<D, T> operator+(float f, const nvec<D, T>& v) { return v + f; }
+	template<unsigned D, class T>inline nvec<D, T> operator*(float f, const nvec<D, T>& v) { return v * f; }
+	inline mat4 operator*(float f, const mat4& m) { return m * f; }
+	inline Quaternion operator*(float f, const Quaternion& q) { return q * f; }
 
 	/// <summary>
 	/// 편리한 디버그를 위한 값 출력 함수입니다.
