@@ -42,7 +42,12 @@ namespace onart {
 		struct { T x, y, z, w; };
 		struct { T r, g, b, a; };
 		struct { T s, t, p, q; };
-
+#ifdef OAGELM_USE_GLSL_LIKE
+		struct { T xy[2]; T zw[2]; };
+		struct { T xyz[3]; };
+		struct { T _x; T yz[2]; };
+		struct { T __x; T yzw[3]; };
+#endif
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
@@ -508,7 +513,7 @@ namespace onart {
 		/// <summary>
 		/// 단위행렬을 생성합니다.
 		/// </summary>
-		inline mat4() { _11 = _22 = _33 = _44 = 1; _12 = _13 = _14 = _21 = _23 = _24 = _31 = _32 = _34 = _41 = _42 = _43 = 0; }
+		inline mat4() { set4<float>(a, 0.0f); set4<float>(a + 4, 0.0f); set4<float>(a + 8, 0.0f); set4<float>(a + 12, 0.0f); _11 = _22 = _33 = _44 = 1; }
 
 		/// <summary>
 		/// 행 우선 순서로 매개변수를 주어 행렬을 생성합니다.
@@ -534,7 +539,7 @@ namespace onart {
 		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.
 		/// </summary>
-		inline void toI() { _11 = _22 = _33 = _44 = 1; _12 = _13 = _14 = _21 = _23 = _24 = _31 = _32 = _34 = _41 = _42 = _43 = 0; }
+		inline void toI() { set4<float>(a, 0.0f); set4<float>(a + 4, 0.0f); set4<float>(a + 8, 0.0f); set4<float>(a + 12, 0.0f); _11 = _22 = _33 = _44 = 1; }
 
 		/// <summary>
 		/// 다른 행렬과 성분별로 더하거나 뺍니다.
@@ -915,7 +920,7 @@ namespace onart {
 	inline mat4 mat4::rotate(const vec3& axis, float angle) { return Quaternion::rotation(axis, angle).toMat4(); }
 	inline mat4 mat4::rotate(float roll, float pitch, float yaw) { return Quaternion::euler(yaw, pitch, roll).toMat4(); }
 	inline mat4 mat4::TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
-		// SIMD 미적용 시 곱 36회/합 6회, T*R*S 따로 하는 경우 곱 155회/합 102회
+		// SIMD 미적용 시 곱 30회/합 6회, T*R*S 따로 하는 경우 곱 149회/합 102회
 		// SIMD 적용 시 곱 15회/합 6회, 따로 하는 경우 곱 44회/합 102회
 		mat4 r = rotation.toMat4();
 		vec4 sc(scale);

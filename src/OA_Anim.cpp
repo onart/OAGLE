@@ -16,17 +16,34 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
+#include <algorithm>
+
 extern onart::Shader program3;
 
 namespace onart {
 	std::map<std::string, Animation*> Animation::animations;
+
+	/// <summary>
+	/// 정렬된 벡터에 대하여 현재 키포인트를 가리키는 반복자를 리턴합니다.
+	/// <para>* 현재 시각이 첫 키포인트보다 작은 경우(정상적 상황이라면 있어서는 안 될 일) 첫 키포인트를 리턴합니다.</para>
+	/// <para>* 3D 애니메이션의 경우 리턴값은 보간 대상 중 앞쪽을 뜻합니다.</para>
+	/// <para>* (루프가 있는 애니메이션에 대하여 마지막, 즉 end-1 반복자가 리턴되는 경우는 정상적 상황이라면 있어서는 안 됨)</para>
+	/// </summary>
+	/// <param name="ar">정렬된 키포인트 벡터</param>
+	/// <param name="tp">현재 시점</param>
+	/// <returns></returns>
+	template <class T>
+	inline auto kpNow(const std::vector<Keypoint<T>>& ar, float tp) {
+		auto i = std::upper_bound(ar.begin(), ar.end(), tp);
+		return i == ar.begin() ? i : i - 1;
+	}
 
 	Animation::Animation(bool loop, float duration, int staticTps)
 		:loop(loop), duration(duration), staticTps(staticTps) {
 		
 	}
 
-	Animation* Animation2D::make(const std::string& name, bool loop, const std::map<float, unsigned>& tex, const std::map<float, vec4>& rects, const std::map<float, vec2>& pivots) {
+	Animation* Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {}) {
 		Animation* anim = get(name);
 		if (anim) return anim;
 		anim = new Animation2D(loop, tex, rects, pivots);
@@ -34,57 +51,61 @@ namespace onart {
 		return anim;
 	}
 
-	Animation2D::Animation2D(bool loop, const std::map<float, unsigned>& tex, const std::map<float, vec4>& rects, const std::map<float, vec2>& pivots)
-		: tex(tex), rects(rects), pivots(pivots), Animation(loop, rects.empty() ? 0 : rects.rbegin()->first) {
-		hasPivot = pivots.size();
+	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {})
+		: tex(tex), rects(rects), pivots(pivots), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!pivots.empty()) {
+		std::sort(this->tex.begin(), this->tex.end());
+		std::sort(this->rects.begin(), this->rects.end());
 		assert(!hasPivot || pivots.size() == rects.size() && "피벗을 설정하는 경우에는 각 rect에 대하여 피벗이 하나씩 대응해야 합니다.");
-		assert(tex.empty() || tex.begin()->first == 0 && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
-		assert(rects.empty() || rects.begin()->first == 0 && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
-		assert(pivots.empty() || pivots.begin()->first == 0 && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
 	}
 
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
 		static Mesh** rect = nullptr;
 		if (!rect || !(*rect))rect = Mesh::get("rect");
-
+		
 		float tp = getTp(elapsed * dynamicTps);
-		if (tex.empty()) {
+
+		if (hasTex) {
+			program3.uniform("oneColor", false);
+			program3.texture(kpNow(tex, tp)->value);
+		}
+		else {
 			program3.uniform("oneColor", true);
 		}
-		else {
-			program3.uniform("oneColor", false);
-			program3.texture(std::prev(tex.upper_bound(tp))->second);
-		}
-		
-		if (rects.empty()) {
-			program3.uniform("useFull", true);
-		}
-		else {
-			program3.uniform("useFull", false);
-			auto rub = std::prev(rects.upper_bound(tp));
-			program3.uniform("ldwh", rub->second);
-			int i = (int)std::distance(rects.begin(), rub);
-			if (e->getAnimKey() != i)e->act(i);
-			if (hasPivot) {
-				auto pub = std::prev(pivots.upper_bound(tp));
-				// 베이스 직사각형 중심: (0,0), 양극단: +-0.5
-				vec2 pivv = -(pub->second); pivv += 0.5f;
-				vec2 xy(rub->second.z, rub->second.w);
 
+		if (hasRect) {
+			program3.uniform("useFull", false);
+			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
+			int kp = 0;
+			if (l == rects.begin()) { program3.uniform("ldwh", rects[0].value); }
+			else { 
+				l--;
+				program3.uniform("ldwh", l->value);
+				kp = l - rects.begin();
+				if (e->getAnimKey() != kp) { e->act(kp); }
+			}
+			
+			if (hasPiv) {
+				program3.uniform("nopiv", false);
+				// 베이스 직사각형 중심: (0,0), 양극단: +-0.5
+				vec2 pivv = vec2(0.5f) - pivots[kp];
+				vec2 xy(l->value.z, l->value.w);
+				
 				/// 중심이동 후 크기변환
 				mat4 pivMat(
 					xy.x, 0, 0, xy.x * pivv.x,
 					0, xy.y, 0, xy.y * pivv.y,
 					0, 0, 1, 0,
-					0, 0, 0, 1
-				);
-				program3.uniform("nopiv", false);
-				program3.uniform("piv", pivMat);
+					0, 0, 0, 1);
+			}
+			else {
+				program3.uniform("nopiv", true);
 			}
 		}
-		if (!hasPivot) {
+		else {
+			program3.uniform("useFull", true);
 			program3.uniform("nopiv", true);
 		}
+
 		program3.bind(**rect);
 		program3.draw();
 	}
@@ -92,11 +113,10 @@ namespace onart {
 	void Animation3D::go(float elapsed, Entity* e, float dynamicTps) {
 		program3.use();
 		float tp = getTp(elapsed * dynamicTps);
-
-		auto slb = std::prev(sigKp.lower_bound(tp));
-		if (slb != sigKp.end()) {
-			int i = (int)std::distance(sigKp.begin(), slb);
-			if (e->getAnimKey() != i)e->act(i);
+		auto sub = std::upper_bound(sigKp.begin(), sigKp.end(), tp);
+		if (sub != sigKp.begin()) {
+			int kp = sub - sigKp.begin() - 1;
+			if (e->getAnimKey() != kp)e->act(kp);
 		}
 		
 		for (auto& bone : keys) {
@@ -110,31 +130,28 @@ namespace onart {
 		}
 	}
 
-	Animation3D::Animation3D(aiAnimation* anim, float duration, int tps, bool loop, const std::set<float>& sig_kp)
+	Animation3D::Animation3D(aiAnimation* anim, float duration, int tps, bool loop, const std::vector<float>& sig_kp)
 		:Animation(loop, duration, tps), sigKp(sig_kp) {
 		for (size_t k = 0; k < anim->mNumChannels; k++) {
 			aiNodeAnim* cut = anim->mChannels[k];
 			BoneAnim& ba = keys[cut->mNodeName.C_Str()] = BoneAnim();
 			for (size_t i = 0; i < cut->mNumPositionKeys; i++) {
 				aiVectorKey& kpt = cut->mPositionKeys[i];
-				ba.keyPos[(float)kpt.mTime] = vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z);
+				ba.keyPos.push_back({ (float)kpt.mTime, vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z) });
 			}
-			assert((cut->mNumPositionKeys == 0 || ba.keyPos.begin()->first == 0) && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
 			for (size_t i = 0; i < cut->mNumScalingKeys; i++) {
 				aiVectorKey& kpt = cut->mScalingKeys[i];
-				ba.keyScale[(float)kpt.mTime] = vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z);
+				ba.keyScale.push_back({ (float)kpt.mTime, vec3(kpt.mValue.x, kpt.mValue.y, kpt.mValue.z) });
 			}
-			assert((cut->mNumScalingKeys == 0 || ba.keyScale.begin()->first == 0) && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
 			for (size_t i = 0; i < cut->mNumRotationKeys; i++) {
 				aiQuatKey& kpt = cut->mRotationKeys[i];
-				ba.keyRot[(float)kpt.mTime] = Quaternion(kpt.mValue.w, kpt.mValue.x, kpt.mValue.y, kpt.mValue.z);
-			}
-			assert((cut->mRotationKeys == 0 || ba.keyRot.begin()->first == 0) && "첫 번째 키포인트의 시점은 반드시 0이어야 합니다.");
+				ba.keyRot.push_back({ (float)kpt.mTime, Quaternion(kpt.mValue.w, kpt.mValue.x, kpt.mValue.y, kpt.mValue.z) });
+			}	
 		}
-
+		std::sort(sigKp.begin(), sigKp.end());
 	}
 
-	Animation* Animation3D::load(const std::string& name, const std::string& file, bool loop, const std::set<float>& sig_kp) {
+	Animation* Animation3D::load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp) {
 		Animation* anim = get(name);
 		if (anim) return anim;
 
@@ -146,18 +163,16 @@ namespace onart {
 		}
 		if (!scn->HasAnimations()) {
 			printf("\n파일에 애니메이션이 없습니다.\n");
-			delete scn;
 			return nullptr;
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
 		Animation* ret = new Animation3D(anim0, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
 		
-		delete scn;
 		push(name, ret);
 		return ret;
 	}
 
-	Animation* Animation3D::load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::set<float>& sig_kp) {
+	Animation* Animation3D::load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp) {
 		Animation* anim = get(name);
 		if (anim) return anim;
 		Assimp::Importer importer;
@@ -169,50 +184,51 @@ namespace onart {
 		}
 		if (!scn->HasAnimations()) {
 			printf("\n파일에 애니메이션이 없습니다\n");
-			delete scn;
 			return nullptr;
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
 		Animation* ret = new Animation3D(anim0, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
 
-		delete scn;
 		push(name, ret);
 		return ret;
 	}
 
 	void Animation3D::BoneAnim::setTrans(float tp) {
-		vec3 pos; vec3 scale(1);	Quaternion rotation;
+		vec3 pos; vec3 scale(1); Quaternion rotation;
 		if (!keyPos.empty()) {
-			auto p2 = keyPos.upper_bound(tp);
-			if (p2 == keyPos.end()) {
-				pos = std::prev(p2)->second;
+			auto p1 = kpNow(keyPos, tp);
+			if (p1 == keyPos.end() - 1 || keyPos.size() == 1) {
+				pos = p1->value;
 			}
 			else {
-				auto p1 = std::prev(p2);
-				float interp = (tp - p1->first) / (p2->first - p1->first);
-				pos = lerp(p1->second, p2->second, interp);
+				auto p2 = p1 + 1;
+				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
+				if (interp < 0) { pos = p1->value; /* 애니메이션 키포인트가 잘못 지정된 (0부터 시작하지 않는) 케이스 */ }
+				else { pos = lerp(p1->value, p2->value, interp); }
 			}
 		}
 		if (!keyRot.empty()) {
-			auto p2 = keyRot.upper_bound(tp);
-			if (p2 == keyRot.end()) {
-				rotation = std::prev(p2)->second;
+			auto p1 = kpNow(keyRot, tp);
+			if (p1 == keyRot.end() - 1 || keyRot.size() == 1) {
+				rotation = p1->value;
 			}
 			else {
-				auto p1 = std::prev(p2);
-				float interp = (tp - p1->first) / (p2->first - p1->first);
-				rotation = slerp(p1->second, p2->second, interp);
+				auto p2 = p1 + 1;
+				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
+				if (interp < 0) { rotation = p1->value; /* 애니메이션 키포인트가 잘못 지정된 (0부터 시작하지 않는) 케이스 */ }
+				else { rotation = slerp(p1->value, p2->value, interp); }
 			}
 		}
 		if (!keyScale.empty()) {
-			auto p2 = keyScale.upper_bound(tp);
-			if (p2 == keyScale.end()) {
-				scale = std::prev(p2)->second;
+			auto p1 = kpNow(keyScale, tp);
+			if (p1 == keyScale.end() - 1 || keyScale.size() == 1) {
+				pos = p1->value;
 			}
 			else {
-				auto p1 = std::prev(p2);
-				float interp = (tp - p1->first) / (p2->first - p1->first);
-				scale = lerp(p1->second, p2->second, interp);
+				auto p2 = p1 + 1;
+				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
+				if (interp < 0) { scale = p1->value; /* 애니메이션 키포인트가 잘못 지정된 (0부터 시작하지 않는) 케이스 */ }
+				else { scale = lerp(p1->value, p2->value, interp); }
 			}
 		}
 		localTransform = mat4::TRS(pos, rotation, scale);
@@ -220,11 +236,12 @@ namespace onart {
 
 	void Animation3D::setGlobalTrans(BoneTree& t, const mat4& parent) {
 		mat4 nodeTransform = t.transformation;
-		bool isBone = keys.find(t.name) != keys.end();
-		if (isBone) {
+		bool isMoving = keys.find(t.name) != keys.end();	// 애니메이션 키포인트 안에 있는가?
+		if (isMoving) {	
 			nodeTransform = keys[t.name].localTransform;
 		}
 		mat4 global = parent * nodeTransform;
+		bool isBone = true;	// uniform으로 넘어가는가?
 		if (isBone) {
 			
 		}

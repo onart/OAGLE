@@ -12,6 +12,28 @@ struct aiAnimation;
 
 namespace onart {
 
+	template <class T>
+	struct Keypoint {
+		float tp;
+		T value;
+
+		inline operator float() const { return tp; }
+
+		/// <summary>
+		/// 정렬을 위한 LESS 함수입니다. 편의를 위해 동봉했습니다.
+		/// </summary>
+		inline bool operator<(const Keypoint& k2) const {
+			return tp < k2.tp;
+		}
+
+		/// <summary>
+		/// 정렬을 위한 LESS 함수입니다. 편의를 위해 동봉했습니다.
+		/// </summary>
+		inline bool operator<(float k2) const {
+			return tp < k2;
+		}
+	};
+
 	class Entity;
 
 	/// <summary>
@@ -38,7 +60,7 @@ namespace onart {
 		inline static void drop(const std::string& s) { if (animations.find(s) != animations.end()) { delete animations[s]; animations.erase(s); } }
 	protected:
 		Animation(bool loop, float duration, int staticTps = 1);
-		inline float getTp(float elapsed) { if (duration == 0)return 0; elapsed *= staticTps; return loop ? fmodf(elapsed, duration) : elapsed; }
+		inline float getTp(float elapsed) { if (duration <= 0)return 0; elapsed *= staticTps; return loop ? fmodf(elapsed, duration) : elapsed; }
 		/// <summary>
 		/// map에 애니메이션을 추가합니다.
 		/// </summary>
@@ -76,14 +98,14 @@ namespace onart {
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
 		/// <param name="rects">시점과 직사각형 영역의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
 		/// <param name="pivots">피벗과 직사각형 영역의 순서쌍 집합입니다.</param>
-		static Animation* make(const std::string& name, bool loop, const std::map<float, unsigned>& tex, const std::map<float, vec4>& rects, const std::map<float, vec2>& pivots = {});
+		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
-		Animation2D(bool loop, const std::map<float, unsigned>& tex, const std::map<float, vec4>& rects, const std::map<float, vec2>& pivots = {});
-		std::map<float, unsigned> tex;
-		std::map<float, vec4> rects;
-		std::map<float, vec2> pivots;
-		bool hasPivot;
+		Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		std::vector<Keypoint<unsigned>> tex;
+		std::vector<Keypoint<vec4>> rects;
+		std::vector<vec2> pivots;
+		const bool hasTex, hasRect, hasPiv;
 	};
 
 	/// <summary>
@@ -102,7 +124,7 @@ namespace onart {
 		/// <param name="file">파일 이름을 입력해주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
-		static Animation* load(const std::string& name, const std::string& file, bool loop, const std::set<float>& sig_kp);
+		static Animation* load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp);
 		/// <summary>
 		/// .dae 파일 형식의 배열 변수에서 3D 관절 애니메이션을 로드합니다.
 		/// </summary>
@@ -111,14 +133,14 @@ namespace onart {
 		/// <param name="len">배열 변수의 길이를 입력해 주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// /// <param name="sig_kp">act()로 알림받을 시점(float)</param>
-		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::set<float>& sig_kp);
+		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp);
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 
 		struct BoneAnim {
-			std::map<float, vec3> keyPos;
-			std::map<float, Quaternion> keyRot;
-			std::map<float, vec3> keyScale;
+			std::vector<Keypoint<vec3>> keyPos;
+			std::vector<Keypoint<Quaternion>> keyRot;
+			std::vector<Keypoint<vec3>> keyScale;
 
 			mat4 localTransform;
 			void setTrans(float tp);
@@ -131,8 +153,8 @@ namespace onart {
 			std::vector<BoneTree> children;
 		};
 
-		Animation3D(aiAnimation*, float duration, int tps, bool loop, const std::set<float>& sig_kp);
-		std::set<float> sigKp;
+		Animation3D(aiAnimation*, float duration, int tps, bool loop, const std::vector<float>& sig_kp);
+		std::vector<float> sigKp;
 		std::map<std::string, BoneAnim> keys;
 		std::vector<mat4> u;
 		BoneTree btree;
