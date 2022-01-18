@@ -258,8 +258,9 @@ namespace onart {
 		recentLen = m.getLength();
 	}
 
-	void Shader::draw() const {
-		glDrawElements(GL_TRIANGLES, recentLen, GL_UNSIGNED_INT, nullptr);
+	void Shader::draw(unsigned begin, unsigned count) const {
+		if (count == unsigned(-1)) { count = recentLen - begin; }
+		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(begin * sizeof(unsigned)));
 	}
 
 	/* //예정: 정점 데이터=메시, 메시+메터리얼+애니메이션=모델, 모델+기능=개체. 이때 name은 모델을 기준으로 검색됨

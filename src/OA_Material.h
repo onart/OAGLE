@@ -21,7 +21,10 @@ namespace onart {
 		inline void setAmbient(const vec4& ambient) { this->ambient = ambient; }
 		inline void setDiffuse(const vec4& diffuse) { this->diffuse = diffuse; }
 		inline void setSpecular(const vec4& specular) { this->specular = specular; }
-		inline void setEmmisive(const vec4& emmisive) { this->emmisive = emmisive; }
+		inline void setEmissive(const vec4& emissive) { this->emissive = emissive; }
+		inline void setShininess(float shininess) { this->shininess = shininess; }
+		inline void setAlpha(float alpha) { this->alpha = alpha; }
+		inline void setRefractiveIndex(float refr) { refractIdx = refr; }
 
 		inline unsigned getAmbientTex() const { return textures.ambient; }
 		inline unsigned getDiffuseTex() const { return textures.diffuse; }
@@ -30,8 +33,10 @@ namespace onart {
 		inline const vec4& getAmbient() const { return ambient; }
 		inline const vec4& getDiffuse() const { return diffuse; }
 		inline const vec4& getSpecular() const { return specular; }
-		inline const vec4& getEmmisive() const { return emmisive; }
+		inline const vec4& getEmissive() const { return emissive; }
 		inline float getShininess() const { return shininess; }
+		inline float getAlpha() const { return alpha; }
+		inline float getRefractiveIndex() const { return refractIdx; }
 
 		/// <summary>
 		/// 이미지 파일로부터 2D 텍스처를 생성합니다.
@@ -60,7 +65,7 @@ namespace onart {
 		vec4 ambient;
 		vec4 diffuse;
 		vec4 specular;
-		vec4 emmisive;
+		vec4 emissive;
 
 		struct {
 			unsigned ambient = 0;
@@ -71,6 +76,7 @@ namespace onart {
 
 		float shininess;
 		float alpha;
+		float refractIdx;
 	};
 }
 

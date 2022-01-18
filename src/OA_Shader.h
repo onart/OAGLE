@@ -125,9 +125,11 @@ namespace onart {
 			void bind(Mesh& m);
 
 			/// <summary>
-			/// 정점 배열 객체를 그립니다.
+			/// 바인드한 정점 배열 객체를 그립니다. end가 begin보다 작은 경우 아무것도 그려지지 않습니다.
 			/// </summary>
-			void draw() const;
+			/// <param name="begin">배열 인덱스의 시작점입니다. 0부터 시작합니다.</param>
+			/// <param name="count">배열 인덱스의 개수입니다. 입력하지 않는 경우 마지막점까지로 간주됩니다.</param>
+			void draw(unsigned begin = 0, unsigned count = -1) const;
 
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.
@@ -138,7 +140,7 @@ namespace onart {
 		private:
 			static Shader* usingShader;
 			unsigned id;
-			int recentLen;
+			unsigned recentLen;
 
 			unsigned compileScript(const char* script, unsigned type);
 			bool validateShaderProgram();
