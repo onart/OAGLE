@@ -172,6 +172,7 @@
     <ClCompile Include="gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
+    <ClCompile Include="OA_Camera.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
     <ClCompile Include="OA_Input.cpp" />
     <ClCompile Include="OA_Material.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="oaglem.h" />
     <ClInclude Include="oagle_simd.h" />
     <ClInclude Include="OA_Anim.h" />
+    <ClInclude Include="OA_Camera.h" />
     <ClInclude Include="OA_Entity.h" />
     <ClInclude Include="OA_Input.h" />
     <ClInclude Include="OA_Material.h" />
