@@ -8,50 +8,16 @@
 #include "OA_Vertex.h"
 #include "OA_TestScene.h"
 #include "OA_Input.h"
+#include "OA_Camera.h"
 
 // 창 관련
 GLFWwindow* window = nullptr;
 onart::ivec2 windowSize;
 onart::ivec4 vp_ldwh;	// 좌측 하단이 (0,0)
-
-namespace onart {
-	/// <summary>
-	/// 뷰포트의 비율을 결정합니다.
-	/// </summary>
-	struct Ratio {
-	private:
-		unsigned R_WIDTH = 16, R_HEIGHT = 9;
-		float ratio = 16.0f / 9;
-	public:
-		/// <summary>
-		/// 종횡비를 설정합니다.
-		/// </summary>
-		/// <param name="rw">가로의 상대적 길이</param>
-		/// <param name="rh">세로의 상대적 길이</param>
-		inline void setRatio(unsigned rw, unsigned rh) {
-			R_WIDTH = rw;
-			R_HEIGHT = rh;
-			ratio = (float)rw / rh;
-		}
-		/// <summary>
-		/// 설정된 종횡비를 리턴합니다.
-		/// </summary>
-		inline float getRatio() {
-			return ratio;
-		}
-		inline mat4 getAspectMatrix() {
-			return mat4{
-				1/ratio,0,0,0,
-				0,1,0,0,
-				0,0,1,0,
-				0,0,0,1
-			};
-		}
-	} vp;
-}
+onart::Camera mainCamera;
 
 void setRatio(unsigned rw, unsigned rh) {
-	onart::vp.setRatio(rw, rh);
+	mainCamera.ratio.setRatio(rw, rh);
 }
 
 // 프레임/시간
@@ -121,7 +87,7 @@ void mouseMoved(GLFWwindow* window, double x, double y) {
 }
 
 void reshape(GLFWwindow* window, int width, int height) {
-	float r = onart::vp.getRatio();
+	float r = mainCamera.ratio.getRatio();
 	float dpir = onart::dpiRatio();
 	windowSize.x = width = int(width * dpir);
 	windowSize.y = height = int(height * dpir);
@@ -147,7 +113,7 @@ void reshape(GLFWwindow* window, int width, int height) {
 void scroll(GLFWwindow* window, double xoffset, double yoffset)
 {
 	if (yoffset > 0) {
-		pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 1] = frame;;
+		pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 1] = frame;
 	}
 	else if (yoffset < 0) {
 		pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 2] = frame;

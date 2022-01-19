@@ -8,6 +8,12 @@
 #include <set>
 
 namespace onart {
+	class Camera;
+}
+
+extern onart::Camera mainCamera;
+
+namespace onart {
 
 	class Entity;
 #ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY 매크로를 정의한 경우 정수 키를 사용할 수 있습니다.
@@ -56,6 +62,15 @@ namespace onart {
 		/// 씬을 초기화합니다. 주로 새 개체를 생성합니다.
 		/// </summary>
 		virtual void init() = 0;
+		/// <summary>
+		/// 카메라의 이동을 제한합니다. 카메라의 이전 프레임 위치와 현재 프레임에 새로 자리하려는 위치를 입력받아 카메라가 실제로 있어야 할 위치를 리턴합니다.
+		/// 오버라이딩하지 않는 경우, 무제한으로 간주됩니다.
+		/// </summary>
+		/// <param name="currentCameraPos">이전 프레임의 카메라 위치</param>
+		/// <param name="desiredCameraPos">현재 프레임에 카메라가 자리하려는 위치</param>
+		/// <returns>현재 씬에서의 제한이 적용된 이후 현재 프레임에 카메라가 자리하는 위치</returns>
+		virtual vec3 constrainCamera(const vec3& currentCameraPos, const vec3& desiredCameraPos);
+
 		virtual ~Scene() {};
 	protected:
 		std::vector<Entity*> entities;

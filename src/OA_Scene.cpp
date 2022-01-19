@@ -47,4 +47,8 @@ namespace onart {
 	void Scene::actEvent(int idx) {
 
 	}
+
+	vec3 Scene::constrainCamera(const vec3& currentCameraPos, const vec3& desiredCameraPos) {
+		return desiredCameraPos;
+	}
 }
