@@ -1,5 +1,5 @@
 #include "OA_Vertex.h"
-#include "gl/glad/glad.h"
+#include "externals/gl/glad/glad.h"
 
 namespace onart {
 

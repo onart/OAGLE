@@ -1,4 +1,4 @@
-#include "gl/glad/glad.h"
+#include "externals/gl/glad/glad.h"
 
 #include "OA_Shader.h"
 #include "OA_Vertex.h"

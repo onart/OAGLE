@@ -1,7 +1,7 @@
 #include <cstdio>
 
 #include "OA_Material.h"
-#include "gl/glad/glad.h"
+#include "externals/gl/glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 

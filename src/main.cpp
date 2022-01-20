@@ -9,6 +9,7 @@
 #include "OA_TestScene.h"
 #include "OA_Input.h"
 #include "OA_Camera.h"
+#include "OA_Audio.h"
 
 // Ã¢ °ü·Ã
 GLFWwindow* window = nullptr;
@@ -165,6 +166,7 @@ bool init() {
 	onart::Mesh::circleModel();
 	onart::Mesh::sphereModel();
 	onart::Mesh::cuboidModel();
+	onart::Mesh::iCuboidModel();
 
 	onart::Scene::currentScene = new onart::TestScene();
 #ifdef _DEBUG
@@ -172,6 +174,9 @@ bool init() {
 	glDebugMessageCallback(glErrCallback, 0);
 #endif
 	reshape(window, 1280, 720);
+
+	onart::Audio::init();
+
 	return true;
 }
 
