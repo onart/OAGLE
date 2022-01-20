@@ -12,9 +12,9 @@
 	#pragma warning(disable: 26495 26812)
 #endif
 
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
+#include "externals/assimp/Importer.hpp"
+#include "externals/assimp/scene.h"
+#include "externals/assimp/postprocess.h"
 
 #include <algorithm>
 

@@ -17,9 +17,6 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="gl\glad\glad.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="OA_Shader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -53,18 +50,18 @@
     <ClCompile Include="OA_Camera.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="externals\gl\glad\glad.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Audio.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="oagle.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="gl\glfw\win64\glfw3.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="gl\glad\glad.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="oaglem.h">
@@ -116,6 +113,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Camera.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\gl\glad\glad.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\gl\glfw\win64\glfw3.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Audio.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

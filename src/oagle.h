@@ -1,15 +1,15 @@
 #ifndef __OAGLE_H__
 #define __OAGLE_H__
 
-#include "gl/glad/glad.h"
+#include "externals/gl/glad/glad.h"
 
 #ifdef _WIN32
 	#ifdef _WIN64
-		#include "gl/glfw/win64/glfw3.h"
-		#pragma comment(lib, "win64/glfw3_mt.lib")
+		#include "externals/gl/glfw/win64/glfw3.h"
+		#pragma comment(lib, "externals/gl/glfw/win64/glfw3_mt.lib")
 	#else
-		#include "gl/glfw/win32/glfw3.h"
-		#pragma comment(lib, "win32/glfw3_mt.lib")
+		#include "externals/gl/glfw/win32/glfw3.h"
+		#pragma comment(lib, "externals/gl/glfw/win32/glfw3_mt.lib")
 	#endif // _WIN64
 #endif // _WIN32
 

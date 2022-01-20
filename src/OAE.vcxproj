@@ -106,7 +106,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>gl\;gl\glfw\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>externals\;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,7 +127,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>gl\;gl\glfw\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>externals\;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -144,7 +144,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>gl\;gl\glfw\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>externals\;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -165,13 +165,14 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>gl\;gl\glfw\;assimp\;</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>externals\;</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="gl\glad\glad.c" />
+    <ClCompile Include="externals\gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
+    <ClCompile Include="OA_Audio.cpp" />
     <ClCompile Include="OA_Camera.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
     <ClCompile Include="OA_Input.cpp" />
@@ -185,12 +186,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
-    <ClInclude Include="gl\glad\glad.h" />
-    <ClInclude Include="gl\glfw\win64\glfw3.h" />
+    <ClInclude Include="externals\gl\glad\glad.h" />
+    <ClInclude Include="externals\gl\glfw\win64\glfw3.h" />
     <ClInclude Include="oagle.h" />
     <ClInclude Include="oaglem.h" />
     <ClInclude Include="oagle_simd.h" />
     <ClInclude Include="OA_Anim.h" />
+    <ClInclude Include="OA_Audio.h" />
     <ClInclude Include="OA_Camera.h" />
     <ClInclude Include="OA_Entity.h" />
     <ClInclude Include="OA_Input.h" />
