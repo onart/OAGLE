@@ -23,3 +23,5 @@ OA's GL Engine\
 (zlib/libpng 라이센스: 원본 배포 시 라이센스와 함께 / 변경 시 그 사실을 명시 / 원본을 자신이 작성했다는 명시 금지 / acknowledgement 선택사항)
 * GLAD - https://glad.dav1d.de/ \
 (GLAD 소스: MIT 라이센스, Khronos 스펙: Apache(파일 내 출처 표기), EGL 스펙 등: 원저작자 책임 없음)
+* PortAudio - http://www.portaudio.com/ \
+(라이센스: 자유 사용, 원저자 책임 없음, 코드에 저작권자 표시 유지)
