@@ -181,7 +181,7 @@ bool init() {
 }
 
 void finalize() {
-
+	onart::Audio::terminate();
 }
 
 int main(int argc, char* argv[]) {
