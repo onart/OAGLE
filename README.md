@@ -1,6 +1,6 @@
 # OAGLE
 OA's GL Engine\
-쓰라고 만든 건 아니지만 전체 혹은 일부를 얼마든지 사용/수정/배포할 수 있습니다. 출처 표기 필수 (Apache license)
+쓰라고 만든 건 아니지만 전체 혹은 일부를 얼마든지 사용/수정/배포할 수 있습니다. 출처 표기 필수 (MIT license)
 
 ## GL Reference
 * 오픈GL 공식 위키 https://www.khronos.org/opengl/wiki/
@@ -26,7 +26,7 @@ OA's GL Engine\
 * PortAudio - http://www.portaudio.com/ \
 (라이센스: 자유 사용, 원저자 책임 없음, 코드에 저작권자 표시 유지)
 * FFmpeg - https://www.ffmpeg.org/ \
-(라이센스: LGPL 2.1+: ffmpeg의 코드를 수정하지 않은 경우 직접 만든 코드 공개 의무 없음, 바이너리(dll과 lib) 재배포 시 다음 내용을 포함)
-** ffmpeg에서 배포하는 소스를 가지고 있는 상태에서 x64(또는 x86) native tools command prompt for VS 2022에서 MSYS2 실행(use-full-path), cl을 이용해 다음과 같이 구성. \
+(라이센스: LGPL 2.1+: ffmpeg의 코드를 수정하지 않은 경우 직접 만든 코드 공개 의무 없음, 바이너리(dll과 lib) 재배포 시 다음 내용을 포함) \
+ffmpeg에서 배포하는 소스를 가지고 있는 상태에서 x64(또는 x86) native tools command prompt for VS 2022에서 MSYS2 실행(use-full-path), cl을 이용해 다음과 같이 구성. \
 configure(실제 configure 경로) --toolchain=msvc --arch=x86 --disable-programs --disalbe-static --enable-shared \
 ffmpeg 원본 소스 공개의 의무도 있는데 링크로 대체 (실제 사용 버전: 2022.1.21 13:12) https://github.com/FFmpeg/FFmpeg/tree/7247a6fed8de9c2162ed408682e095f0b7f19350
