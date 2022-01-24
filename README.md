@@ -2,18 +2,6 @@
 OA's GL Engine\
 쓰라고 만든 건 아니지만 전체 혹은 일부를 얼마든지 사용/수정/배포할 수 있습니다. 출처 표기 필수 (Apache license)
 
-## GL Reference
-* 오픈GL 공식 위키 https://www.khronos.org/opengl/wiki/
-* 튜토리얼 https://open.gl/
-* 셰이더 언어 GLSL https://thebookofshaders.com/00/?lan=en
-* 명세 https://www.khronos.org/registry/OpenGL/specs/gl/ | https://www.khronos.org/registry/OpenGL/specs/es/3.2/
-
-
-* https://www.khronos.org/registry/OpenGL-Refpages/gl4/ (GL 4.5)
-* https://www.khronos.org/registry/OpenGL-Refpages/es3/ (GL ES 3.2)
-* https://www.khronos.org/files/opengl46-quick-reference-card.pdf (퀵 카드 GL 4.6)
-* https://www.khronos.org/files/opengles32-quick-reference-card.pdf (퀵 카드 GL ES 3.2)
-
 ## related source
 * ASSIMP - https://assimp.org/ \
 (수정 BSD 라이센스: 제품 안에 ASSIMP - you may use the library for free, in commercial or non-commercial applications, but you must include our license with your product and you may not advertise with us. 명시)

@@ -196,7 +196,7 @@ int main(int argc, char* argv[]) {
 	if (!init()) {
 		return 3;
 	}
-
+	
 	glfwSetWindowSizeCallback(window, reshape);
 	glfwSetKeyCallback(window, keyboard);
 	glfwSetMouseButtonCallback(window, mouse);

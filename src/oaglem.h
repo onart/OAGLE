@@ -15,6 +15,7 @@
 #include <cfloat>
 #include <cstdio>
 #include <cassert>
+#include <cstring>
 
 #include "oagle_simd.h"
 
@@ -52,8 +53,7 @@ namespace onart {
 		/// 영벡터를 생성합니다.
 		/// </summary>
 		nvec() {
-			set4<T>(entry, (T)0);
-			for (unsigned i = 4; i < D; i++) entry[i] = 0;
+			memset(entry, 0, sizeof(entry));
 		}
 
 		/// <summary>
@@ -69,12 +69,12 @@ namespace onart {
 		/// <summary>
 		/// 복사 생성자입니다.
 		/// </summary>
-		nvec(const nvec& v) { set4<T>(entry, v.entry); for (unsigned i = 4; i < D; i++) entry[i] = v.entry[i]; }
+		nvec(const nvec& v) { memcpy(entry, v.entry, sizeof(entry)); }
 
 		/// <summary>
 		/// 다른 차원의 벡터를 사용하는 복사 생성자입니다. 가급적 차원 축소에만 사용하는 것이 좋습니다.
 		/// </summary>
-		template <unsigned E> nvec(const nvec<E, T>& v) { unsigned min = D > E ? E : D; unsigned i = 0; for (; i < min; i++) entry[i] = v.entry[i]; for (; i < D; i++) entry[i] = 0; }
+		template <unsigned E> nvec(const nvec<E, T>& v) { unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. operator=과 동일합니다.
@@ -85,17 +85,12 @@ namespace onart {
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
 		/// </summary>
 		/// <param name="v"></param>
-		inline void set(const nvec& v) { set4<T>(entry, v.entry); for (unsigned i = 4; i < D; i++) entry[i] = v.entry[i]; }
+		inline void set(const nvec& v) { memcpy(entry, v.entry, sizeof(entry));; }
 
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
 		/// </summary>
-		template <unsigned E> inline void set(const nvec<E, T>& v) {
-			unsigned min = D > E ? E : D;
-			for (unsigned i = 0; i < min; i++) {
-				entry[i] = v.entry[i];
-			}
-		}
+		template <unsigned E> inline void set(const nvec<E, T>& v) { unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. set()과 동일합니다.
@@ -328,7 +323,7 @@ namespace onart {
 		/// <summary>
 		/// 단위행렬을 생성합니다.
 		/// </summary>
-		inline mat3() { _11 = _22 = _33 = 1; _12 = _13 = _21 = _23 = _31 = _32 = 0; }
+		inline mat3() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = 1; }
 
 		/// <summary>
 		/// 행 우선 순서로 매개변수를 주어 행렬을 생성합니다.
@@ -338,7 +333,7 @@ namespace onart {
 		/// <summary>
 		/// 행렬의 성분을 복사해서 생성합니다.
 		/// </summary>
-		inline mat3(const mat3& m) { set4<float>(a, m.a); set4<float>(a + 4, m.a + 4); a[8] = m.a[8]; }
+		inline mat3(const mat3& m) { memcpy(a, m.a, sizeof(a)); }
 
 		/// <summary>
 		/// 인덱스 연산자
@@ -349,7 +344,7 @@ namespace onart {
 		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.
 		/// </summary>
-		inline void toI() { _11 = _22 = _33 = 1; _12 = _13 = _21 = _23 = _31 = _32 = 0; }
+		inline void toI() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = 1; }
 
 		/// <summary>
 		/// 다른 행렬과 성분별로 더하거나 뺍니다.
@@ -363,7 +358,7 @@ namespace onart {
 		/// n행 벡터를 리턴합니다. 1~3만 입력 가능합니다.
 		/// </summary>
 		/// <param name="i">행 인덱스(1 base)</param>
-		inline vec3 row(int i) const { assert(i <= 3 && i >= 1); int st = 3 * i - 3; return vec3(a[st], a[st + 1], a[st + 2]); }
+		inline vec3 row(int i) const { assert(i <= 3 && i >= 1); int st = 3 * i - 3; vec3 ret; memcpy(ret.entry, a + st, sizeof(ret.entry)); return ret; }
 
 		/// <summary>
 		/// n열 벡터를 리턴합니다. 1~4만 입력 가능합니다.
@@ -394,7 +389,7 @@ namespace onart {
 		/// <summary>
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
-		inline vec3 operator*(const vec3& v) const { return vec3(_11 * v.x + _12 * v.y + _13 * v.z, _21 * v.x + _22 * v.y + _23 * v.z, _31 * v.x + _32 * v.y + _33 * v.z); }
+		inline vec3 operator*(const vec3& v) const { return vec3(row(1).dot(v), row(2).dot(v), row(3).dot(v)); }
 
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
@@ -508,7 +503,7 @@ namespace onart {
 		/// <summary>
 		/// 단위행렬을 생성합니다.
 		/// </summary>
-		inline mat4() { set4<float>(a, 0.0f); set4<float>(a + 4, 0.0f); set4<float>(a + 8, 0.0f); set4<float>(a + 12, 0.0f); _11 = _22 = _33 = _44 = 1; }
+		inline mat4() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = _44 = 1; }
 
 		/// <summary>
 		/// 행 우선 순서로 매개변수를 주어 행렬을 생성합니다.
@@ -518,7 +513,7 @@ namespace onart {
 		/// <summary>
 		/// 행렬의 성분을 복사해서 생성합니다.
 		/// </summary>
-		inline mat4(const mat4& m) { set4<float>(a, m.a); set4<float>(a + 4, m.a + 4); set4<float>(a + 8, m.a + 8); set4<float>(a + 12, m.a + 12); }
+		inline mat4(const mat4& m) { memcpy(a, m.a, sizeof(a)); }
 
 		/// <summary>
 		/// 인덱스 연산자
@@ -529,7 +524,7 @@ namespace onart {
 		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.
 		/// </summary>
-		inline void toI() { set4<float>(a, 0.0f); set4<float>(a + 4, 0.0f); set4<float>(a + 8, 0.0f); set4<float>(a + 12, 0.0f); _11 = _22 = _33 = _44 = 1; }
+		inline void toI() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = _44 = 1; }
 
 		/// <summary>
 		/// 다른 행렬과 성분별로 더하거나 뺍니다.
@@ -543,7 +538,7 @@ namespace onart {
 		/// n행 벡터를 리턴합니다. 1~4만 입력 가능합니다.
 		/// </summary>
 		/// <param name="i">행 인덱스(1 base)</param>
-		inline vec4 row(int i) const { assert(i <= 4 && i >= 1); int st = 4 * i - 4; return vec4(a[st], a[st + 1], a[st + 2], a[st + 3]); }
+		inline vec4 row(int i) const { assert(i <= 4 && i >= 1); int st = 4 * i - 4; vec4 ret; memcpy(ret.entry, a + st, sizeof(ret.entry)); return ret; }
 
 		/// <summary>
 		/// n열 벡터를 리턴합니다. 1~4만 입력 가능합니다.
@@ -768,7 +763,7 @@ namespace onart {
 		/// <summary>
 		/// 사원수 크기의 제곱을 리턴합니다.
 		/// </summary>
-		inline float abs2() const { return vec4(c1,ci,cj,ck).length2(); }
+		inline float abs2() const { return reinterpret_cast<const vec4*>(this)->length2(); }
 
 		/// <summary>
 		/// 사원수 크기를 리턴합니다.
@@ -892,12 +887,14 @@ namespace onart {
 	/// <param name="t">선형 보간 값</param>
 	inline Quaternion slerp(const Quaternion& q1, const Quaternion& q2, float t) {
 		float Wa, Wb;
-		float costh = (q1.c1 * q2.c1 + q1.ci * q2.ci + q1.cj * q2.cj + q1.ck * q2.ck) / q1.abs() / q2.abs();
+		float costh = reinterpret_cast<const vec4*>(&q1)->dot(*reinterpret_cast<const vec4*>(&q2)) / q1.abs() / q2.abs();
+		// 정밀도 오차로 인한 nan 방지
 		if (costh > 1) costh = 1;
 		else if (costh < -1) costh = -1;
 		float theta = acos(costh);
 		float sn = sin(theta);
 
+		// q1=q2이거나 180도 차이인 경우
 		if (sn <= FLT_EPSILON) return q1;
 		Wa = sin((1 - t) * theta) / sn;
 		Wb = sin(t * theta) / sn;
