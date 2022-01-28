@@ -177,6 +177,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
     <ClCompile Include="OA_Audio.cpp" />
+    <ClCompile Include="OA_CQueue.cpp" />
     <ClCompile Include="OA_Camera.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
     <ClCompile Include="OA_Input.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="oagle_simd.h" />
     <ClInclude Include="OA_Anim.h" />
     <ClInclude Include="OA_Audio.h" />
+    <ClInclude Include="OA_CQueue.h" />
     <ClInclude Include="OA_Camera.h" />
     <ClInclude Include="OA_Entity.h" />
     <ClInclude Include="OA_Input.h" />

@@ -56,6 +56,9 @@
     <ClCompile Include="OA_Audio.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OA_CQueue.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources.h">
@@ -122,6 +125,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Audio.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_CQueue.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

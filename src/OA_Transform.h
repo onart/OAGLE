@@ -37,7 +37,7 @@ namespace onart {
 		/// <summary>
 		/// 인게임 모델 4x4 행렬을 리턴합니다.
 		/// </summary>
-		inline const mat4& getModel() { 
+		inline const mat4 getModel() { 
 			if (!ready) { TRS(); }
 			if (parent) {
 				return parent->getModel() * model;

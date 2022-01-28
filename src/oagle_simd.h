@@ -106,13 +106,23 @@ namespace onart {
 		vec[0] /= val[0]; vec[1] /= val[1]; vec[2] /= val[2]; vec[3] /= val[3];
 	}
 
+	/// <summary>
+	/// 특정 타입의 배열의 4개의 값을 자릅니다.
+	/// </summary>
+	template <class T>
+	inline void clamp4(T* vec, T min, T max) {
+		vec[0] = vec[0] > min ? vec[0] : min; vec[0] = vec[0] > max ? max : vec[0];
+		vec[1] = vec[1] > min ? vec[1] : min; vec[1] = vec[1] > max ? max : vec[1];
+		vec[2] = vec[2] > min ? vec[2] : min; vec[2] = vec[2] > max ? max : vec[2];
+		vec[3] = vec[3] > min ? vec[3] : min; vec[3] = vec[3] > max ? max : vec[3];
+	}
 }
 
 #if (defined(_M_IX86) || defined(_M_X64)) && !defined (_M_CEE_PURE) && !defined(OAGLE_NOSIMD)
 	#include <emmintrin.h>
 	#include <cstdint>
 namespace onart {
-
+	
 	/// <summary>
 	/// 실수 배열에서 4개를 원하는 값으로 초기화합니다.
 	/// </summary>
@@ -221,6 +231,17 @@ namespace onart {
 	inline void div4<float>(float* vec, const float* val) {
 		__m128 b = _mm_div_ps(_mm_loadu_ps(vec), _mm_loadu_ps(val));
 		_mm_storeu_ps(vec, b);
+	}
+
+	/// <summary>
+	/// 실수 배열에서 앞 4개를 원하는 값으로 자릅니다.
+	/// </summary>
+	template<>
+	inline void clamp4<float>(float* vec, float min, float max) {
+		__m128 m = _mm_set_ps1(min); __m128 M = _mm_set_ps1(max);
+		__m128 v = _mm_loadu_ps(vec);
+		v = _mm_min_ps(_mm_max_ps(v, m), M);
+		_mm_storeu_ps(vec, v);
 	}
 
 	/// <summary>
