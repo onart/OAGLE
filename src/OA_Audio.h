@@ -52,6 +52,10 @@ namespace onart {
 			friend class Audio;
 		public:
 			/// <summary>
+			/// 불러온 음성을 이름으로 찾습니다.
+			/// </summary>
+			static Source* get(const std::string& name);
+			/// <summary>
 			/// 소리 파일에서 음성을 불러옵니다. 별명이 겹치는 경우 기존에 이미 로드한 것을 리턴합니다.
 			/// </summary>
 			/// <param name="file">불러올 음성 파일 이름(경로)입니다.</param>

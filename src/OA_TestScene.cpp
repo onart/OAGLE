@@ -1,7 +1,8 @@
 #include "OA_TestScene.h"
+#include "OA_Audio.h"
 #include <cstdio>
 
 namespace onart {
 	void TestScene::Update() {  }
-	void TestScene::init() {  }
+	void TestScene::init() { auto s = Audio::Source::load("lt2.mp3"); s->play(true); }
 }

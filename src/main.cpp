@@ -156,6 +156,7 @@ bool init() {
 
 	//program2.initWithMemory();
 	program3.initWithMemory(p3vert, p3frag);
+	onart::Audio::init();
 	glClearColor(39 / 255.0f, 40 / 255.0f, 34 / 255.0f, 1.0f);
 
 	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glEnable.xhtml
@@ -172,13 +173,12 @@ bool init() {
 	onart::Mesh::iCuboidModel();
 
 	onart::Scene::currentScene = new onart::TestScene();
+	onart::Scene::currentScene->init();
 #ifdef _DEBUG
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageCallback(glErrCallback, 0);
 #endif
 	reshape(window, 1280, 720);
-
-	onart::Audio::init();
 
 	return true;
 }

@@ -46,12 +46,12 @@ namespace onart {
 	static class RingBuffer {
 	public:
 		unsigned long writable();
-		int add(float* in, int max);
+		void add(float* in);
 		void addComplete();
 		void read(void* out, unsigned long count);
 	private:
 		float body[RINGBUFFER_SIZE] = { 0, };	// 약 6프레임 분량
-		unsigned long readIndex = 0;
+		unsigned long readIndex = 1000;
 		unsigned long writeIndex = 0;
 	} ringBuffer;
 
@@ -90,15 +90,24 @@ namespace onart {
 		}
 	}
 
-	int RingBuffer::add(float* in, int max) {
-		int added = 4;
-		for (; added < max; added += 4) {
-			add4<float>(body + added - 4 + writeIndex, in + added - 4);
+	void RingBuffer::add(float* in) {
+		unsigned long outIndex = writeIndex;
+		int inIndex = 0;
+		if (writeIndex > readIndex) {
+			for (inIndex += 4; inIndex < (int)RINGBUFFER_SIZE - (int)writeIndex; inIndex += 4) {
+				add4<float>(body + inIndex - 4 + writeIndex, in + inIndex - 4);
+			}
+			for (inIndex -= 4; inIndex < (int)RINGBUFFER_SIZE - (int)writeIndex; inIndex++) {
+				body[inIndex + writeIndex] += in[inIndex];
+			}
+			outIndex = 0;
 		}
-		for (added -= 4; added < max; added++) {
-			body[added + writeIndex] += in[added];
+		for (; outIndex + 4 < readIndex; outIndex += 4, inIndex += 4) {
+			add4<float>(body + outIndex, in + inIndex);
 		}
-		return added;
+		for (outIndex -= 4; outIndex < readIndex; outIndex++, inIndex++) {
+			body[outIndex] += in[inIndex];
+		}
 	}
 
 	/// <summary>
@@ -136,13 +145,16 @@ namespace onart {
 		err = Pa_OpenDefaultStream(&masterStream, 0, 2, PA_SAMPLE_FORMAT, STD_SAMPLE_RATE, paFramesPerBufferUnspecified, Audio::playCallback, &ringBuffer);
 		if (err != PaErrorCode::paNoError) {
 			printf("\n오디오 스트림 초기화에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
+			return;
 		}
 		
 		err = Pa_StartStream(masterStream);
 		if (err != PaErrorCode::paNoError) {
 			printf("\n오디오 스트림 시작에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
+			return;
 		}
 		master = 1;
+		system("cls");
 	}
 
 	void Audio::terminate() {
@@ -163,13 +175,14 @@ namespace onart {
 		if (Audio::source.find(memName) != Audio::source.end()) { return Audio::source[memName]; }
 		// 확장자가 wav인 경우 따로 로드
 		AVFormatContext* fmt = avformat_alloc_context();
-		
+
 		if (avformat_open_input(&fmt, file.c_str(), nullptr, nullptr) < 0) {
 			printf("음성 파일이 없거나 로드에 실패했습니다.\n");
 			if (fmt)avformat_close_input(&fmt);
 			return nullptr;
 		}
 		avformat_find_stream_info(fmt, nullptr);
+		
 		if (fmt->nb_streams <= 0) {
 			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
 			avformat_close_input(&fmt);
@@ -229,6 +242,7 @@ namespace onart {
 		av_seek_frame(fmt, -1, 0, AVSEEK_FLAG_FRAME);
 		avcodec_close(cctx);
 		av_frame_free(&tempF);
+
 		return Audio::source[memName] = new Source(fmt, resampler, frameCount);
 	}
 
@@ -244,8 +258,17 @@ namespace onart {
 		if (frameNumber >= frameCount || frameNumber < 0) {
 			return -1;	// 반복이면 첫 프레임(0번)을 요청, 아니면 종료. 음의 값을 받아 객체의 제거를 유도하기도 함
 		}
-		av_seek_frame(ctx, -1, frameNumber, AVSEEK_FLAG_FRAME);
+		// seek을 프레임 넘버로 하자 결과가 이상해서 임시방편으로 성능 나쁜 코드 추가. 더 알아보고 수정할 것
 		AVPacket pkt;
+		static int recentFrame = 0;
+		if (frameNumber != recentFrame + 1) {
+			av_seek_frame(ctx, -1, 0, AVSEEK_FLAG_FRAME);
+			for (int i = 0; i < frameNumber; i++) {
+				av_read_frame(ctx, &pkt);
+				av_packet_unref(&pkt);
+			}
+		}
+		// seek을 프레임 넘버로 하자 결과가 이상해서 임시방편으로 성능 나쁜 코드 추가. 더 알아보고 수정할 것
 		AVFrame* frm = av_frame_alloc();
 		if (av_read_frame(ctx, &pkt) == 0) {
 			int i = avcodec_send_packet(cdc, &pkt);
@@ -253,20 +276,25 @@ namespace onart {
 				avcodec_receive_frame(cdc, frm);
 				if (resampler) {
 					AVFrame* frm2 = av_frame_alloc();
-					swr_convert_frame(resampler, frm2, frm);
+					frm2->channel_layout = AV_CH_LAYOUT_STEREO;
+					frm2->format = AV_SAMPLE_FMT_FLT;
+					frm2->sample_rate = 44100;
+					auto err=swr_convert_frame(resampler, frm2, frm);
 					*dst = (float*)malloc(frm2->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 					memcpy(*dst, frm2->data[0], frm2->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
+					int ret = frm2->nb_samples;
 					av_packet_unref(&pkt);
 					av_frame_free(&frm);
 					av_frame_free(&frm2);
-					return frm2->nb_samples;
+					return ret;
 				}
 				else {
+					int ret = frm->nb_samples;
 					*dst = (float*)malloc(frm->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 					memcpy(*dst, frm->data[0], frm->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 					av_packet_unref(&pkt);
 					av_frame_free(&frm);
-					return frm->nb_samples;
+					return ret;
 				}
 			}
 			else {
@@ -302,8 +330,7 @@ namespace onart {
 		const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData) {
 
 		RingBuffer* rb = (RingBuffer*)userData;
-		rb->read(output, frameCount * STD_CHANNEL_COUNT);
-
+		rb->read(output, frameCount);
 		return PaStreamCallbackResult::paContinue;	// 정지 신호 외에 정지하지 않음
 	}
 	/// <summary>
@@ -326,40 +353,50 @@ namespace onart {
 		for (auto& s : source) {
 			s.second->update();
 		}
+		ringBuffer.addComplete();
+	}
+
+	Audio::Source* Audio::Source::get(const std::string& name) {
+		if (source.find(name) != source.end())return source[name];
+		else return nullptr;
 	}
 
 	void Audio::Source::update() {
+		bool reap = false;
 		for (Stream*& s : playing) {
 			if (s->update()) {
 				delete s;
 				s = nullptr;
+				reap = true;
 			}
 		}
-		playing.erase(std::remove(playing.begin(), playing.end(), nullptr), playing.end());
+		if (reap) playing.erase(std::remove(playing.begin(), playing.end(), nullptr), playing.end());
 	}
 
 	void RingBuffer::read(void* out, unsigned long count) {
 		unsigned long r1 = readIndex + count > RINGBUFFER_SIZE ? RINGBUFFER_SIZE - readIndex : count;
-		memcpy(out, body + readIndex, r1 * sizeof(STD_SAMPLE_FORMAT));
-		memset(body + readIndex, 0, r1 * sizeof(STD_SAMPLE_FORMAT));
+		memcpy(out, body + readIndex, r1 * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
+		memset(body + readIndex, 0, r1 * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 		readIndex += count;
 		if (readIndex >= RINGBUFFER_SIZE) {
 			readIndex = count - r1;
-			memcpy(out, body, readIndex);
-			memset(body, 0, readIndex);
+			memcpy(out, body, readIndex * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
+			memset(body, 0, readIndex * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
 		}
 	}
 
 	bool Audio::Stream::update() {	// 리턴값: true 리턴 시 메모리 수거됨(소멸)
 		if (stopped) return false;
 		unsigned long need = ringBuffer.writable();
+		
 		while (restSamples < need) {
 			float* temp;
-			int count = src->getFrame(nextFrame, &temp);
+			int count = src->getFrame(nextFrame++, &temp);
 			if (count == -1) {	// 음원 끝까지 재생함
 				if (loop) nextFrame = 0;
 				else {
 					stopped = true;
+					break;
 				}
 			}
 			else if (count > 0) {
@@ -374,9 +411,9 @@ namespace onart {
 				free(temp);
 			}
 		}
-		int added = ringBuffer.add(buffer, restSamples);
-		memmove(buffer, buffer + added, restSamples - added);
-		restSamples -= added;
+		ringBuffer.add(buffer);
+		memmove(buffer, buffer + need * STD_CHANNEL_COUNT, (restSamples - need) * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
+		restSamples -= need;
 		if (stopped) {
 			return true;
 		}
@@ -397,4 +434,5 @@ namespace onart {
 		playing.push_back(nw);
 		return nw;
 	}
+
 }
