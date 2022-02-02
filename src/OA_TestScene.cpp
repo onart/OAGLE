@@ -5,5 +5,5 @@
 
 namespace onart {
 	void TestScene::Update() {  }
-	void TestScene::init() { auto s = Audio::Source::load("lt2.mp3"); s->play(true); }
+	void TestScene::init() { auto s = Audio::Source::load("lt2.mp3"); s->play(false); }
 }

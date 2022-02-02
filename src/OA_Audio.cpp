@@ -281,8 +281,8 @@ namespace onart {
 				av_read_frame(ctx, &pkt);
 				av_packet_unref(&pkt);
 			}
-			recentFrame = frameNumber;
 		}
+		recentFrame = frameNumber;
 		// seek을 프레임 넘버로 하자 결과가 이상해서 임시방편으로 성능 나쁜 코드 추가. 더 알아보고 수정할 것
 		AVFrame* frm = av_frame_alloc();
 		if (av_read_frame(ctx, &pkt) == 0) {
@@ -379,7 +379,7 @@ namespace onart {
 				reap = true;
 			}
 		}
-		if (reap) playing.erase(std::remove(playing.begin(), playing.end(), nullptr), playing.end());
+		if (reap) { playing.erase(std::remove(playing.begin(), playing.end(), nullptr), playing.end()); }
 	}
 
 	void RingBuffer::read(void* out, unsigned long count) {
@@ -421,12 +421,12 @@ namespace onart {
 				free(temp);
 			}
 		}
-		ringBuffer.add(buffer, restSamples);
-		memmove(buffer, buffer + need, (restSamples - need) * sizeof(STD_SAMPLE_FORMAT));
-		restSamples -= need;
 		if (stopped) {
 			return true;
 		}
+		ringBuffer.add(buffer, restSamples);
+		memmove(buffer, buffer + need, (restSamples - need) * sizeof(STD_SAMPLE_FORMAT));
+		restSamples -= need;
 		return false;
 	}
 
