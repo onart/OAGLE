@@ -4,6 +4,8 @@
 // 벡터와 행렬 연산 아래에서 작동하기 위한 SIMD 라이브러리입니다. 컴파일 시 사용하지 않으려면 OAGLE_NOSIMD를 정의해 주세요.
 // 이 함수들은 경계 검사를 하지 않습니다. 인덱스 [3]까지 사용하므로, Segmentation fault 발생에 유의해 주세요.
 
+#include <cstring>
+
 namespace onart {
 
 	/// <summary>
@@ -27,6 +29,28 @@ namespace onart {
 	}
 
 	/// <summary>
+	/// 특정 타입의 배열에서 원하는 만큼 원하는 값으로 초기화합니다.
+	/// </summary>
+	template<class T>
+	inline void setAll(T* vec, T val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			set4<T>(vec + (i - 4), val);
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] = val;
+		}
+	}
+
+	/// <summary>
+	/// 특정 타입의 배열에서 원하는 만큼 원하는 값으로 초기화합니다. memcpy()를 그대로 사용합니다. 매개변수 size는 바이트 단위가 아닌 원소의 수임에 주의하세요.
+	/// </summary>
+	template<class T>
+	inline void setAll(T* vec, const T* val, size_t size) {
+		memcpy(vec, val, size * sizeof(T));
+	}
+
+	/// <summary>
 	/// 특정 타입의 배열에 4개에 원하는 값을 누적합니다.
 	/// </summary>
 	/// <param name="vec">배열</param>
@@ -47,6 +71,37 @@ namespace onart {
 	}
 
 	/// <summary>
+	/// 특정 타입의 배열에 원하는 만큼 원하는 값을 더합니다.
+	/// </summary>
+	template<class T>
+	inline void addAll(T* vec, T val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			add4<T>(vec + (i - 4), val);
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] += val;
+		}
+	}
+
+	/// <summary>
+	/// 특정 타입의 배열에 다른 배열을 누적합니다.
+	/// </summary>
+	/// <param name="vec">배열</param>
+	/// <param name="val">누적할 값들</param>
+	/// <param name="size">배열 크기</param>
+	template<class T>
+	inline void addAll(T* vec, const T* val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			add4<T>(vec + (i - 4), val + (i - 4));
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] += val[i];
+		}
+	}	
+
+	/// <summary>
 	/// 특정 타입의 배열에서 4개에서 원하는 값을 뺍니다.
 	/// </summary>
 	/// <param name="vec"> 배열</param>
@@ -64,6 +119,37 @@ namespace onart {
 	template <class T>
 	inline void sub4(T* vec, const T* val) {
 		vec[0] -= val[0]; vec[1] -= val[1]; vec[2] -= val[2]; vec[3] -= val[3];
+	}
+
+	/// <summary>
+	/// 특정 타입의 배열에서 원하는 만큼 원하는 값을 뺍니다.
+	/// </summary>
+	template<class T>
+	inline void subAll(T* vec, T val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			sub4<T>(vec + (i - 4), val);
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] -= val;
+		}
+	}
+
+	/// <summary>
+	/// 특정 타입의 배열에서 다른 배열을 뺍니다.
+	/// </summary>
+	/// <param name="vec">배열</param>
+	/// <param name="val">뺄 값들</param>
+	/// <param name="size">배열 크기</param>
+	template<class T>
+	inline void subAll(T* vec, const T* val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			sub4<T>(vec + (i - 4), val + (i - 4));
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] -= val[i];
+		}
 	}
 
 	/// <summary>
@@ -87,6 +173,37 @@ namespace onart {
 	}
 
 	/// <summary>
+	/// 특정 타입의 배열에 원하는 만큼 원하는 값을 곱합니다.
+	/// </summary>
+	template<class T>
+	inline void mulAll(T* vec, T val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			mul4<T>(vec + (i - 4), val);
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] *= val;
+		}
+	}
+
+	/// <summary>
+	/// 특정 타입의 배열에 다른 배열을 성분별로 곱합니다.
+	/// </summary>
+	/// <param name="vec">배열</param>
+	/// <param name="val">곱할 값들</param>
+	/// <param name="size">배열 크기</param>
+	template<class T>
+	inline void mulAll(T* vec, const T* val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			mul4<T>(vec + (i - 4), val + (i - 4));
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] *= val[i];
+		}
+	}
+
+	/// <summary>
 	/// 특정 타입의 배열의 4개를 원하는 값으로 나눕니다.
 	/// </summary>
 	/// <param name="vec">배열</param>
@@ -107,6 +224,37 @@ namespace onart {
 	}
 
 	/// <summary>
+	/// 특정 타입의 배열을 원하는 만큼 원하는 값으로 나눕니다.
+	/// </summary>
+	template<class T>
+	inline void divAll(T* vec, T val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			div4<T>(vec + (i - 4), val);
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] /= val;
+		}
+	}
+
+	/// <summary>
+	/// 특정 타입의 배열을 다른 배열의 성분별로 나눕니다.
+	/// </summary>
+	/// <param name="vec">배열</param>
+	/// <param name="val">나누는 값들</param>
+	/// <param name="size">배열 크기</param>
+	template<class T>
+	inline void divAll(T* vec, const T* val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			div4<T>(vec + (i - 4), val + (i - 4));
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] /= val[i];
+		}
+	}
+
+	/// <summary>
 	/// 특정 타입의 배열의 4개의 값을 자릅니다.
 	/// </summary>
 	template <class T>
@@ -116,13 +264,25 @@ namespace onart {
 		vec[2] = vec[2] > min ? vec[2] : min; vec[2] = vec[2] > max ? max : vec[2];
 		vec[3] = vec[3] > min ? vec[3] : min; vec[3] = vec[3] > max ? max : vec[3];
 	}
+
+	template<class T>
+	inline void clampAll(T* vec, T min, T max, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			clamp4<T>(vec + (i - 4), min, max);
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] = vec[i] > min ? vec[i] : min;
+			vec[i] = vec[i] < max ? vec[i] : max;
+		}
+	}
+
 }
 
 #if (defined(_M_IX86) || defined(_M_X64)) && !defined (_M_CEE_PURE) && !defined(OAGLE_NOSIMD)
 	#include <emmintrin.h>
 	#include <cstdint>
 namespace onart {
-	
 	/// <summary>
 	/// 실수 배열에서 4개를 원하는 값으로 초기화합니다.
 	/// </summary>
@@ -143,6 +303,20 @@ namespace onart {
 	inline void set4<float>(float* vec, const float* val) {
 		__m128 b = _mm_loadu_ps(val);
 		_mm_storeu_ps(vec, b);
+	}
+
+	/// <summary>
+	/// 실수 배열을 원하는 값으로 초기화합니다.
+	/// </summary>
+	template<>
+	inline void setAll<float>(float* vec, float val, size_t size) {
+		size_t i = 4;
+		for (; i <= size; i += 4) {
+			set4<float>(vec + (i - 4), val);
+		}
+		for (i -= 4; i < size; i++) {
+			vec[i] = val;
+		}
 	}
 
 	/// <summary>
@@ -371,6 +545,20 @@ namespace onart {
 		_mm_storeu_pd(vec, b);
 		b = _mm_div_pd(_mm_loadu_pd(vec + 2), _mm_loadu_pd(val + 2));
 		_mm_storeu_pd(vec + 2, b);
+	}
+
+	/// <summary>
+	/// 이중 정밀도 실수 배열에서 앞 4개를 원하는 값으로 자릅니다.
+	/// </summary>
+	template<>
+	inline void clamp4<double>(double* vec, double min, double max) {
+		__m128d m = _mm_set1_pd(min); __m128d M = _mm_set1_pd(max);
+		__m128d v1 = _mm_loadu_pd(vec);
+		__m128d v2 = _mm_loadu_pd(vec + 2);
+		v1 = _mm_min_pd(_mm_max_pd(v1, m), M);
+		v2 = _mm_min_pd(_mm_max_pd(v2, m), M);
+		_mm_storeu_pd(vec, v1);
+		_mm_storeu_pd(vec + 2, v2);
 	}
 
 	/// <summary>

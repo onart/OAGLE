@@ -46,68 +46,82 @@ namespace onart {
 	static class RingBuffer {
 	public:
 		unsigned long writable();
-		void add(float* in);
+		void add(float* in, unsigned long max);
 		void addComplete();
 		void read(void* out, unsigned long count);
 	private:
 		float body[RINGBUFFER_SIZE] = { 0, };	// 약 6프레임 분량
-		unsigned long readIndex = 1000;
-		unsigned long writeIndex = 0;
+		unsigned long readIndex = 0;	// 콜백에서 읽는 기준
+		unsigned long limitIndex = 0;	// 쓰기 제한 기준
+		unsigned long writeIndex = 0;	// 쓰기 시작점
+		bool isFirst = true;
 	} ringBuffer;
 
 	unsigned long RingBuffer::writable() {
-		if (readIndex < writeIndex) {
-			return RINGBUFFER_SIZE - writeIndex + readIndex;
+		if (isFirst) { limitIndex = readIndex; }
+		if (writeIndex > limitIndex) {
+			return RINGBUFFER_SIZE - writeIndex + limitIndex;
 		}
 		else {
-			return readIndex - writeIndex;
+			return limitIndex - writeIndex;
 		}
 	}
 
 	void RingBuffer::addComplete() {	// +-1로 자르고 인덱스 맞춤
-		if (readIndex == writeIndex) return;
-		if (writeIndex < readIndex) {
-			BEGINFROMZERO:
-			for (; writeIndex < readIndex - 4; writeIndex += 4) {
-				clamp4<float>(body + writeIndex, -1, 1);
-			}
-			for (; writeIndex < readIndex; writeIndex++) {
-				body[writeIndex] = body[writeIndex] < -1 ? -1 : body[writeIndex];
-				body[writeIndex] = body[writeIndex] > 1 ? 1 : body[writeIndex];
-			}
-			writeIndex = readIndex;
+		isFirst = true;
+		if (limitIndex == writeIndex) return;
+		if (limitIndex > writeIndex) {
+			clampAll(body + writeIndex, -1.0f, 1.0f, limitIndex - writeIndex);
+			writeIndex = limitIndex;
 		}
 		else {
-			for (; writeIndex < RINGBUFFER_SIZE - 4; writeIndex += 4) {
-				clamp4<float>(body + writeIndex, -1, 1);
-			}
-			for (; writeIndex < RINGBUFFER_SIZE; writeIndex++) {
-				body[writeIndex] = body[writeIndex] < -1 ? -1 : body[writeIndex];
-				body[writeIndex] = body[writeIndex] > 1 ? 1 : body[writeIndex];
-			}
-			writeIndex = 0;
-			goto BEGINFROMZERO;
+			clampAll(body + writeIndex, -1.0f, 1.0f, RINGBUFFER_SIZE - writeIndex);
+			clampAll(body, -1.0f, 1.0f, limitIndex);
+			writeIndex = limitIndex;
 		}
 	}
 
-	void RingBuffer::add(float* in) {
-		unsigned long outIndex = writeIndex;
-		int inIndex = 0;
-		if (writeIndex > readIndex) {
-			for (inIndex += 4; inIndex < (int)RINGBUFFER_SIZE - (int)writeIndex; inIndex += 4) {
-				add4<float>(body + inIndex - 4 + writeIndex, in + inIndex - 4);
+	void RingBuffer::add(float* in, unsigned long max) {
+		// 현 단계에서 문제: 원래보다 약간 빠름, 불규칙하게 삑소리가 들어감. 하지만 출력 파일은 계속 지직거리진 않음
+		if (isFirst) {
+			if (limitIndex >= writeIndex) {
+				unsigned long w = limitIndex - writeIndex;
+				w = w > max ? max : w;
+				memcpy(body + writeIndex, in, w * sizeof(STD_SAMPLE_FORMAT));
 			}
-			for (inIndex -= 4; inIndex < (int)RINGBUFFER_SIZE - (int)writeIndex; inIndex++) {
-				body[inIndex + writeIndex] += in[inIndex];
+			else {
+				unsigned long w = RINGBUFFER_SIZE - writeIndex;
+				w = w > max ? max : w;
+				memcpy(body + writeIndex, in, w * sizeof(STD_SAMPLE_FORMAT));
+				if (max > w) {
+					in += w;
+					max -= w;
+					w = limitIndex > max ? max : limitIndex;
+					memcpy(body, in, w * sizeof(STD_SAMPLE_FORMAT));
+				}
 			}
-			outIndex = 0;
+			isFirst = false;
+			return;
 		}
-		for (; outIndex + 4 < readIndex; outIndex += 4, inIndex += 4) {
-			add4<float>(body + outIndex, in + inIndex);
+		else {
+			if (limitIndex >= writeIndex) {
+				unsigned long w = limitIndex - writeIndex;
+				w = w > max ? max : w;
+				addAll(body + writeIndex, in, w);
+			}
+			else {
+				unsigned long w = RINGBUFFER_SIZE - writeIndex;
+				w = w > max ? max : w;
+				addAll(body + writeIndex, in, w);
+				if (max > w) {
+					in += w;
+					max -= w;
+					w = limitIndex > max ? max : limitIndex;
+					addAll(body, in, w);
+				}
+			}
 		}
-		for (outIndex -= 4; outIndex < readIndex; outIndex++, inIndex++) {
-			body[outIndex] += in[inIndex];
-		}
+		
 	}
 
 	/// <summary>
@@ -229,7 +243,7 @@ namespace onart {
 
 		if (
 			!(inputFormat == AVSampleFormat::AV_SAMPLE_FMT_FLT &&
-			sampleRate == 44100 &&
+			sampleRate == STD_SAMPLE_RATE &&
 			cctx->channel_layout==AV_CH_LAYOUT_STEREO)
 			) {
 			resampler = swr_alloc_set_opts(nullptr, AV_CH_LAYOUT_STEREO, (AVSampleFormat)FF_RESAMPLE_FORMAT, STD_SAMPLE_RATE, cctx->channel_layout, inputFormat, sampleRate, 0, nullptr);
@@ -267,6 +281,7 @@ namespace onart {
 				av_read_frame(ctx, &pkt);
 				av_packet_unref(&pkt);
 			}
+			recentFrame = frameNumber;
 		}
 		// seek을 프레임 넘버로 하자 결과가 이상해서 임시방편으로 성능 나쁜 코드 추가. 더 알아보고 수정할 것
 		AVFrame* frm = av_frame_alloc();
@@ -282,14 +297,14 @@ namespace onart {
 					auto err=swr_convert_frame(resampler, frm2, frm);
 					*dst = (float*)malloc(frm2->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 					memcpy(*dst, frm2->data[0], frm2->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
-					int ret = frm2->nb_samples;
+					int ret = frm2->nb_samples * STD_CHANNEL_COUNT;
 					av_packet_unref(&pkt);
 					av_frame_free(&frm);
 					av_frame_free(&frm2);
 					return ret;
 				}
 				else {
-					int ret = frm->nb_samples;
+					int ret = frm->nb_samples * STD_CHANNEL_COUNT;
 					*dst = (float*)malloc(frm->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 					memcpy(*dst, frm->data[0], frm->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 					av_packet_unref(&pkt);
@@ -330,14 +345,8 @@ namespace onart {
 		const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData) {
 
 		RingBuffer* rb = (RingBuffer*)userData;
-		rb->read(output, frameCount);
+		rb->read(output, frameCount * STD_CHANNEL_COUNT);
 		return PaStreamCallbackResult::paContinue;	// 정지 신호 외에 정지하지 않음
-	}
-	/// <summary>
-	/// 콜백 이후 
-	/// </summary>
-	static void finishCallback(void* data) {
-		
 	}
 
 	Audio::Stream::Stream(Source* src, bool loop)
@@ -375,14 +384,15 @@ namespace onart {
 
 	void RingBuffer::read(void* out, unsigned long count) {
 		unsigned long r1 = readIndex + count > RINGBUFFER_SIZE ? RINGBUFFER_SIZE - readIndex : count;
-		memcpy(out, body + readIndex, r1 * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
-		memset(body + readIndex, 0, r1 * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
+		memcpy(out, body + readIndex, r1 * sizeof(STD_SAMPLE_FORMAT));
+		memset(body + readIndex, 0, r1 * sizeof(STD_SAMPLE_FORMAT));
 		readIndex += count;
 		if (readIndex >= RINGBUFFER_SIZE) {
 			readIndex = count - r1;
-			memcpy(out, body, readIndex * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
-			memset(body, 0, readIndex * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
+			memcpy(out, body, readIndex * sizeof(STD_SAMPLE_FORMAT));
+			memset(body, 0, readIndex * sizeof(STD_SAMPLE_FORMAT));
 		}
+		//printf("read: %d ~ %d\n", readIndex, readIndex + count);
 	}
 
 	bool Audio::Stream::update() {	// 리턴값: true 리턴 시 메모리 수거됨(소멸)
@@ -401,18 +411,18 @@ namespace onart {
 			}
 			else if (count > 0) {
 				restSamples += count;
-				void* tmp2 = realloc(buffer, restSamples * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
+				float* tmp2 = (float*)realloc(buffer, restSamples * sizeof(STD_SAMPLE_FORMAT));
 				if (!tmp2) { 
 					perror("stream update - realloc()");
-					return false;
+					return true;
 				}
-				buffer = (float*)tmp2;
-				memcpy(buffer + restSamples - count, temp, count * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
+				buffer = tmp2;
+				memcpy(buffer + (restSamples - count), temp, count * sizeof(STD_SAMPLE_FORMAT));
 				free(temp);
 			}
 		}
-		ringBuffer.add(buffer);
-		memmove(buffer, buffer + need * STD_CHANNEL_COUNT, (restSamples - need) * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT));
+		ringBuffer.add(buffer, restSamples);
+		memmove(buffer, buffer + need, (restSamples - need) * sizeof(STD_SAMPLE_FORMAT));
 		restSamples -= need;
 		if (stopped) {
 			return true;
