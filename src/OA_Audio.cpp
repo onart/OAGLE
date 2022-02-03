@@ -42,7 +42,10 @@ namespace onart {
 
 	std::map<std::string, Audio::Source*> Audio::source;
 	void* Audio::masterStream;
-	float Audio::master;
+	float Audio::master = 1;
+	int Audio::Stream::activeStreamCount = 0;
+	const int& Audio::Stream::activeCount = Audio::Stream::activeStreamCount;
+
 	static class RingBuffer {
 	public:
 		unsigned long writable();
@@ -167,7 +170,6 @@ namespace onart {
 			printf("\n오디오 스트림 시작에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
-		master = 1;
 		system("cls");
 	}
 
@@ -180,7 +182,6 @@ namespace onart {
 		if (v > 1)v = 1;
 		else if (v < 0)v = 0;
 		master = v;
-		
 	}
 
 	Audio::Source* Audio::Source::load(const std::string& file, const std::string& name) {
@@ -209,6 +210,9 @@ namespace onart {
 			return nullptr;
 		}
 		const AVCodec* codec = avcodec_find_decoder(cid);
+		int audioStreamIndex = -1;
+		audioStreamIndex = av_find_best_stream(fmt, AVMEDIA_TYPE_AUDIO, -1, -1, &codec, 0);
+		
 		fmt->audio_codec = codec;
 		if (!codec) {
 			printf("지원하지 않는 형식인 것 같습니다. 다른 형식으로 시도해 주세요.\n");
@@ -216,7 +220,11 @@ namespace onart {
 			return nullptr;
 		}
 		AVCodecContext* cctx = avcodec_alloc_context3(codec);
-		avcodec_open2(cctx, nullptr, nullptr);
+		avcodec_parameters_to_context(cctx, fmt->streams[audioStreamIndex]->codecpar);
+		int er=avcodec_open2(cctx, nullptr, nullptr);
+		char errstr[64];
+		av_make_error_string(errstr, 64, er);
+		printf("err: %s\n",errstr);
 		SwrContext* resampler = nullptr;
 
 		AVSampleFormat inputFormat = cctx->sample_fmt;
@@ -239,7 +247,8 @@ namespace onart {
 			}
 			av_packet_unref(&tempP);
 		}
-		int sampleRate = cctx->sample_rate;
+
+		int sampleRate = cctx->sample_rate;			
 
 		if (
 			!(inputFormat == AVSampleFormat::AV_SAMPLE_FMT_FLT &&
@@ -254,10 +263,9 @@ namespace onart {
 			}
 		}
 		av_seek_frame(fmt, -1, 0, AVSEEK_FLAG_FRAME);
-		avcodec_close(cctx);
 		av_frame_free(&tempF);
 
-		return Audio::source[memName] = new Source(fmt, resampler, frameCount);
+		return Audio::source[memName] = new Source(fmt, cctx, resampler, frameCount);
 	}
 
 	void Audio::Source::drop(const std::string& name) {
@@ -288,7 +296,7 @@ namespace onart {
 		if (av_read_frame(ctx, &pkt) == 0) {
 			int i = avcodec_send_packet(cdc, &pkt);
 			if (i == 0) {
-				avcodec_receive_frame(cdc, frm);
+				int err = avcodec_receive_frame(cdc, frm);
 				if (resampler) {
 					AVFrame* frm2 = av_frame_alloc();
 					frm2->channel_layout = AV_CH_LAYOUT_STEREO;
@@ -321,10 +329,9 @@ namespace onart {
 		return 0;
 	}
 
-	Audio::Source::Source(AVFormatContext* ctx, SwrContext* resampler, int frameCount)
-		:ctx(ctx), resampler(resampler), frameCount(frameCount) {
-		cdc = avcodec_alloc_context3(ctx->audio_codec);
-		avcodec_open2(cdc, nullptr, nullptr);
+	Audio::Source::Source(AVFormatContext* ctx, AVCodecContext* cdc, SwrContext* resampler, int frameCount)
+		:ctx(ctx), cdc(cdc), resampler(resampler), frameCount(frameCount) {
+
 	}
 
 	Audio::Source::~Source() {
@@ -351,11 +358,12 @@ namespace onart {
 
 	Audio::Stream::Stream(Source* src, bool loop)
 		:src(src), loop(loop) {
-		
+		activeStreamCount++;
 	}
 
 	Audio::Stream::~Stream() {
 		free(buffer);
+		if (!stopped) activeStreamCount--;
 	}
 
 	void Audio::update() {
@@ -385,14 +393,13 @@ namespace onart {
 	void RingBuffer::read(void* out, unsigned long count) {
 		unsigned long r1 = readIndex + count > RINGBUFFER_SIZE ? RINGBUFFER_SIZE - readIndex : count;
 		memcpy(out, body + readIndex, r1 * sizeof(STD_SAMPLE_FORMAT));
-		memset(body + readIndex, 0, r1 * sizeof(STD_SAMPLE_FORMAT));
+		if (Audio::Stream::activeCount == 0) memset(body + readIndex, 0, r1 * sizeof(STD_SAMPLE_FORMAT));
 		readIndex += count;
 		if (readIndex >= RINGBUFFER_SIZE) {
 			readIndex = count - r1;
 			memcpy(out, body, readIndex * sizeof(STD_SAMPLE_FORMAT));
-			memset(body, 0, readIndex * sizeof(STD_SAMPLE_FORMAT));
+			if (Audio::Stream::activeCount == 0) memset(body, 0, readIndex * sizeof(STD_SAMPLE_FORMAT));
 		}
-		//printf("read: %d ~ %d\n", readIndex, readIndex + count);
 	}
 
 	bool Audio::Stream::update() {	// 리턴값: true 리턴 시 메모리 수거됨(소멸)
@@ -406,6 +413,7 @@ namespace onart {
 				if (loop) nextFrame = 0;
 				else {
 					stopped = true;
+					activeStreamCount--;
 					break;
 				}
 			}
@@ -428,6 +436,20 @@ namespace onart {
 		memmove(buffer, buffer + need, (restSamples - need) * sizeof(STD_SAMPLE_FORMAT));
 		restSamples -= need;
 		return false;
+	}
+
+	void Audio::Stream::pause() {
+		if (!stopped) {
+			stopped = true;
+			activeStreamCount--;
+		}
+	}
+
+	void Audio::Stream::resume() {
+		if (stopped) {
+			stopped = false;
+			activeStreamCount++;
+		}
 	}
 
 	void Audio::Stream::restart() {

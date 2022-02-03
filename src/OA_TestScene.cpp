@@ -4,6 +4,6 @@
 #include <cstdio>
 
 namespace onart {
-	void TestScene::Update() {  }
-	void TestScene::init() { auto s = Audio::Source::load("lt2.mp3"); s->play(false); }
+	void TestScene::Update() { static int x = 0; if (x++ == 200) { Audio::Source::load("000.ogg")->play(false); } }
+	void TestScene::init() { auto s = Audio::Source::load("lt2.mp3"); s->play(true); }
 }

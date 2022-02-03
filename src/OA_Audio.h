@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <cstdint>
 
 struct AVFormatContext;
 struct AVCodecContext;
@@ -75,11 +76,12 @@ namespace onart {
 			Stream* play(bool loop = false);
 
 		private:
-			Source(AVFormatContext*, SwrContext*, int);
+			Source(AVFormatContext*, AVCodecContext*, SwrContext*, int);
 			int getFrame(int frameNumber, float** dst);
 			AVFormatContext* ctx;
 			AVCodecContext* cdc;
 			SwrContext* resampler = nullptr;
+			float volume = 1;
 			int frameCount;
 			std::vector<Stream*> playing;
 			void update();
@@ -88,19 +90,23 @@ namespace onart {
 		/// <summary>
 		/// 현재 재생되고 있는 소리입니다.
 		/// 중단/재개/정지를 할 수 있습니다.
-		/// 최대 0.1초의 딜레이가 있을 수 있습니다.
+		/// 최대 0.1초의 딜레이가 있을 수 있습니다. 딜레이가 훨씬 짧았으면 좋겠다면, RINGBUFFER_SIZE를 더 작게 조절해 주세요.
 		/// </summary>
 		class Stream {
 			friend class Source;
 		public:
 			/// <summary>
+			/// 현재 재생되고 있는 스트림 수입니다.
+			/// </summary>
+			static const int& activeCount;
+			/// <summary>
 			/// 재생되고 있는 소리를 일시적으로 멈춥니다. 멈춰 있는 경우 아무것도 하지 않습니다.
 			/// </summary>
-			inline void pause() { stopped = true; }
+			void pause();
 			/// <summary>
 			/// 멈춰 있는 소리를 다시 재생합니다. 멈춰 있지 않은 경우 아무것도 하지 않습니다.
 			/// </summary>
-			inline void resume() { stopped = false; }
+			void resume();
 			/// <summary>
 			/// 소리를 정지합니다.
 			/// </summary>
@@ -117,6 +123,7 @@ namespace onart {
 			Source* src;
 			float* buffer = nullptr;
 			unsigned long restSamples = 0;
+			static int activeStreamCount;
 			bool stopped = false;
 			bool loop;
 		};
