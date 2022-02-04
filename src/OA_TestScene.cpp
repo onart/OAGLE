@@ -5,5 +5,5 @@
 
 namespace onart {
 	void TestScene::Update() { static int x = 0; if (x++ == 200) { Audio::Source::load("000.ogg")->play(false); } }
-	void TestScene::init() { auto s = Audio::Source::load("lt2.mp3"); s->play(true); }
+	void TestScene::init() { auto s = Audio::Source::load("arb.wav"); s->play(true); }
 }

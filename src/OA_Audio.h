@@ -74,7 +74,6 @@ namespace onart {
 			/// 루프 음성이 아닌 경우 자동으로 메모리가 해제됩니다.
 			/// </summary>
 			Stream* play(bool loop = false);
-
 		private:
 			Source(AVFormatContext*, AVCodecContext*, SwrContext*, int);
 			int getFrame(int frameNumber, float** dst);
@@ -87,6 +86,7 @@ namespace onart {
 			void update();
 			~Source();
 		};
+
 		/// <summary>
 		/// 현재 재생되고 있는 소리입니다.
 		/// 중단/재개/정지를 할 수 있습니다.

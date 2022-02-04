@@ -29,6 +29,8 @@ extern "C" {
 #endif
 
 #include <cstdlib>
+#include <cstring>
+#include <filesystem>
 
 /// 이쪽 상수들은 portaudio 라이브러리에서 단일 스트림을 사용하기 위해 리샘플할 기준이 됩니다. 타입을 바꾸는 경우 버퍼링 시 연산도 바꿔야 합니다. (생각보다 복잡)
 constexpr int STD_SAMPLE_RATE = 44100;
@@ -133,24 +135,26 @@ namespace onart {
 	union WavFile {
 		char header[44];
 		struct {
-			unsigned char chunkId[4];
-			unsigned int chunkSize;
-			unsigned char format[4];
-		} RIFF;
-		struct {
-			unsigned char chunkId[4];
-			unsigned int chunkSize;
-			unsigned short audioFormat;
-			unsigned short numChannels;
-			unsigned int sampleRate;
-			unsigned int avgByteRate;
-			unsigned short blockAlign;
-			unsigned short bitsPerSample;
-		} FMT;
-		struct {
-			char chunkID[4];
-			unsigned int chunkSize;
-		} DATA;
+			struct {
+				unsigned char chunkId[4];
+				unsigned int chunkSize;
+				unsigned char format[4];
+			} RIFF;
+			struct {
+				unsigned char chunkId[4];
+				unsigned int chunkSize;
+				unsigned short audioFormat;
+				unsigned short numChannels;
+				unsigned int sampleRate;
+				unsigned int avgByteRate;
+				unsigned short blockAlign;
+				unsigned short bitsPerSample;
+			} FMT;
+			struct {
+				char chunkID[4];
+				unsigned int chunkSize;
+			} DATA;
+		};
 	};
 
 	void Audio::init() {
@@ -188,7 +192,7 @@ namespace onart {
 		std::string memName(name);
 		if (memName.size() == 0) { memName = file; }
 		if (Audio::source.find(memName) != Audio::source.end()) { return Audio::source[memName]; }
-		// 확장자가 wav인 경우 따로 로드
+
 		AVFormatContext* fmt = avformat_alloc_context();
 
 		if (avformat_open_input(&fmt, file.c_str(), nullptr, nullptr) < 0) {
@@ -204,7 +208,7 @@ namespace onart {
 			return nullptr;
 		}
 		AVCodecID cid = fmt->streams[0]->codecpar->codec_id;
-		if (cid < AVCodecID::AV_CODEC_ID_MP2 && cid>AVCodecID::AV_CODEC_ID_MSNSIREN) {
+		if (cid < AVCodecID::AV_CODEC_ID_FIRST_AUDIO || cid>AVCodecID::AV_CODEC_ID_MSNSIREN) {
 			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
 			avformat_close_input(&fmt);
 			return nullptr;
@@ -222,9 +226,6 @@ namespace onart {
 		AVCodecContext* cctx = avcodec_alloc_context3(codec);
 		avcodec_parameters_to_context(cctx, fmt->streams[audioStreamIndex]->codecpar);
 		int er=avcodec_open2(cctx, nullptr, nullptr);
-		char errstr[64];
-		av_make_error_string(errstr, 64, er);
-		printf("err: %s\n",errstr);
 		SwrContext* resampler = nullptr;
 
 		AVSampleFormat inputFormat = cctx->sample_fmt;
@@ -248,7 +249,41 @@ namespace onart {
 			av_packet_unref(&tempP);
 		}
 
-		int sampleRate = cctx->sample_rate;			
+		int sampleRate = cctx->sample_rate;
+		std::filesystem::path p(file);
+		if (p.extension() == ".wav") {
+			FILE* fp;
+			fopen_s(&fp, file.c_str(), "rb");
+			if (fp) {
+				WavFile wf;
+				fread(&wf, sizeof(wf), 1, fp);
+				switch (wf.FMT.numChannels)
+				{
+				case 1:
+					cctx->channel_layout = AV_CH_LAYOUT_MONO;
+					break;
+				case 2:
+					cctx->channel_layout = AV_CH_LAYOUT_STEREO;
+					break;
+				case 3:
+					cctx->channel_layout = AV_CH_LAYOUT_SURROUND;
+					break;
+				case 4:
+					cctx->channel_layout = AV_CH_LAYOUT_QUAD;
+					break;
+				case 5:
+					cctx->channel_layout = AV_CH_LAYOUT_4POINT0;
+					break;
+				case 6:
+					cctx->channel_layout = AV_CH_LAYOUT_6POINT0;
+					break;
+				default:
+					break;
+				}
+				fclose(fp);
+			}
+			
+		}
 
 		if (
 			!(inputFormat == AVSampleFormat::AV_SAMPLE_FMT_FLT &&
@@ -466,5 +501,4 @@ namespace onart {
 		playing.push_back(nw);
 		return nw;
 	}
-
 }
