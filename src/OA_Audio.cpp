@@ -45,17 +45,18 @@ namespace onart {
 	std::map<std::string, Audio::Source*> Audio::source;
 	void* Audio::masterStream;
 	float Audio::master = 1;
+	const float& Audio::masterVolume = Audio::master;
 	int Audio::Stream::activeStreamCount = 0;
 	const int& Audio::Stream::activeCount = Audio::Stream::activeStreamCount;
 
 	static class RingBuffer {
 	public:
 		unsigned long writable();
-		void add(float* in, unsigned long max);
+		void add(STD_SAMPLE_FORMAT* in, unsigned long max);
 		void addComplete();
 		void read(void* out, unsigned long count);
 	private:
-		float body[RINGBUFFER_SIZE] = { 0, };	// 약 6프레임 분량
+		STD_SAMPLE_FORMAT body[RINGBUFFER_SIZE] = { 0, };	// 약 6프레임 분량
 		unsigned long readIndex = 0;	// 콜백에서 읽는 기준
 		unsigned long limitIndex = 0;	// 쓰기 제한 기준
 		unsigned long writeIndex = 0;	// 쓰기 시작점
@@ -76,17 +77,24 @@ namespace onart {
 		isFirst = true;
 		if (limitIndex == writeIndex) return;
 		if (limitIndex > writeIndex) {
+			if (Audio::masterVolume != 1) { 
+				mulAll(body + writeIndex, Audio::masterVolume, limitIndex - writeIndex); 
+			}
 			clampAll(body + writeIndex, -1.0f, 1.0f, limitIndex - writeIndex);
 			writeIndex = limitIndex;
 		}
 		else {
+			if (Audio::masterVolume != 1) {
+				mulAll(body + writeIndex, Audio::masterVolume, RINGBUFFER_SIZE - writeIndex);
+				mulAll(body, Audio::masterVolume, limitIndex);
+			}
 			clampAll(body + writeIndex, -1.0f, 1.0f, RINGBUFFER_SIZE - writeIndex);
 			clampAll(body, -1.0f, 1.0f, limitIndex);
 			writeIndex = limitIndex;
 		}
 	}
 
-	void RingBuffer::add(float* in, unsigned long max) {
+	void RingBuffer::add(STD_SAMPLE_FORMAT* in, unsigned long max) {
 		// 현 단계에서 문제: 원래보다 약간 빠름, 불규칙하게 삑소리가 들어감. 하지만 출력 파일은 계속 지직거리진 않음
 		if (isFirst) {
 			if (limitIndex >= writeIndex) {
@@ -186,6 +194,12 @@ namespace onart {
 		if (v > 1)v = 1;
 		else if (v < 0)v = 0;
 		master = v;
+	}
+
+	void Audio::Source::setVolume(float v) {
+		if (v > 1)v = 1;
+		else if (v < 0)v = 0;
+		volume = v;
 	}
 
 	Audio::Source* Audio::Source::load(const std::string& file, const std::string& name) {
@@ -442,7 +456,7 @@ namespace onart {
 		unsigned long need = ringBuffer.writable();
 		
 		while (restSamples < need) {
-			float* temp;
+			STD_SAMPLE_FORMAT* temp;
 			int count = src->getFrame(nextFrame++, &temp);
 			if (count == -1) {	// 음원 끝까지 재생함
 				if (loop) nextFrame = 0;
@@ -453,8 +467,9 @@ namespace onart {
 				}
 			}
 			else if (count > 0) {
+				if (src->volume != 1) { mulAll(temp, src->volume, count); }
 				restSamples += count;
-				float* tmp2 = (float*)realloc(buffer, restSamples * sizeof(STD_SAMPLE_FORMAT));
+				STD_SAMPLE_FORMAT* tmp2 = (STD_SAMPLE_FORMAT*)realloc(buffer, restSamples * sizeof(STD_SAMPLE_FORMAT));
 				if (!tmp2) { 
 					perror("stream update - realloc()");
 					return true;

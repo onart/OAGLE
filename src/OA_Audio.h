@@ -24,6 +24,10 @@ namespace onart {
 	{
 	public:
 		/// <summary>
+		/// 읽기 전용 마스터 볼륨입니다.
+		/// </summary>
+		static const float& masterVolume;
+		/// <summary>
 		/// 응용 단계에서 호출할 일이 없습니다.
 		/// </summary>
 		static void update();
@@ -52,6 +56,12 @@ namespace onart {
 			friend class Stream;
 			friend class Audio;
 		public:
+			/// <summary>
+			/// 소스의 볼륨을 조절합니다. 소스 자체의 볼륨을 조정하는 것이 성능상 좋지만, 사용자가 원하는 대로 조절할 수 있게 하려면 이 함수를 사용해야 합니다.
+			/// 배경음악/효과음악 등의 분류로 일괄 조정하는 것은 응용 계층 몫입니다.
+			/// </summary>
+			/// <param name="v">0과 1 사이의 값만 가능하며 그 외의 값 입력 시 강제로 맞춰집니다.</param>
+			void setVolume(float v);
 			/// <summary>
 			/// 불러온 음성을 이름으로 찾습니다.
 			/// </summary>
