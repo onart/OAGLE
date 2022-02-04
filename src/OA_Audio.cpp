@@ -95,7 +95,6 @@ namespace onart {
 	}
 
 	void RingBuffer::add(STD_SAMPLE_FORMAT* in, unsigned long max) {
-		// 현 단계에서 문제: 원래보다 약간 빠름, 불규칙하게 삑소리가 들어감. 하지만 출력 파일은 계속 지직거리진 않음
 		if (isFirst) {
 			if (limitIndex >= writeIndex) {
 				unsigned long w = limitIndex - writeIndex;
@@ -171,7 +170,7 @@ namespace onart {
 			printf("\n오디오 초기화에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
-		err = Pa_OpenDefaultStream(&masterStream, 0, 2, PA_SAMPLE_FORMAT, STD_SAMPLE_RATE, paFramesPerBufferUnspecified, Audio::playCallback, &ringBuffer);
+		err = Pa_OpenDefaultStream(&masterStream, 0, 2, PA_SAMPLE_FORMAT, STD_SAMPLE_RATE, paFramesPerBufferUnspecified, Audio::playCallback, nullptr);
 		if (err != PaErrorCode::paNoError) {
 			printf("\n오디오 스트림 초기화에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
 			return;
@@ -329,7 +328,7 @@ namespace onart {
 		if (frameNumber >= frameCount || frameNumber < 0) {
 			return -1;	// 반복이면 첫 프레임(0번)을 요청, 아니면 종료. 음의 값을 받아 객체의 제거를 유도하기도 함
 		}
-		// seek을 프레임 넘버로 하자 결과가 이상해서 임시방편으로 성능 나쁜 코드 추가. 더 알아보고 수정할 것
+		// [언젠가 단일 seek로 수정. timestamp 필요]
 		AVPacket pkt;
 		static int recentFrame = 0;
 		if (frameNumber != recentFrame + 1) {
@@ -340,7 +339,7 @@ namespace onart {
 			}
 		}
 		recentFrame = frameNumber;
-		// seek을 프레임 넘버로 하자 결과가 이상해서 임시방편으로 성능 나쁜 코드 추가. 더 알아보고 수정할 것
+		// [언젠가 단일 seek로 수정]
 		AVFrame* frm = av_frame_alloc();
 		if (av_read_frame(ctx, &pkt) == 0) {
 			int i = avcodec_send_packet(cdc, &pkt);
@@ -399,9 +398,7 @@ namespace onart {
 	/// "PCM"을 재생하도록 하는 콜백 함수
 	int Audio::playCallback(const void* input, void* output, unsigned long frameCount,
 		const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData) {
-
-		RingBuffer* rb = (RingBuffer*)userData;
-		rb->read(output, frameCount * STD_CHANNEL_COUNT);
+		ringBuffer.read(output, frameCount * STD_CHANNEL_COUNT);
 		return PaStreamCallbackResult::paContinue;	// 정지 신호 외에 정지하지 않음
 	}
 
@@ -446,7 +443,7 @@ namespace onart {
 		readIndex += count;
 		if (readIndex >= RINGBUFFER_SIZE) {
 			readIndex = count - r1;
-			memcpy(out, body, readIndex * sizeof(STD_SAMPLE_FORMAT));
+			memcpy((STD_SAMPLE_FORMAT*)out + r1, body, readIndex * sizeof(STD_SAMPLE_FORMAT));
 			if (Audio::Stream::activeCount == 0) memset(body, 0, readIndex * sizeof(STD_SAMPLE_FORMAT));
 		}
 	}
@@ -483,6 +480,7 @@ namespace onart {
 			return true;
 		}
 		ringBuffer.add(buffer, restSamples);
+		
 		memmove(buffer, buffer + need, (restSamples - need) * sizeof(STD_SAMPLE_FORMAT));
 		restSamples -= need;
 		return false;
