@@ -32,13 +32,13 @@ extern "C" {
 #include <cstring>
 #include <filesystem>
 
-/// 이쪽 상수들은 portaudio 라이브러리에서 단일 스트림을 사용하기 위해 리샘플할 기준이 됩니다. 타입을 바꾸는 경우 버퍼링 시 연산도 바꿔야 합니다. (생각보다 복잡)
-constexpr int STD_SAMPLE_RATE = 44100;
+/// 이쪽 상수들은 portaudio 라이브러리에서 단일 스트림을 사용하기 위해 리샘플할 기준이 됩니다. 여기 있는 인자들을 바꾸는 경우 버퍼링 시 연산도 바꿔야 합니다. (생각보다 복잡)
 constexpr int FF_RESAMPLE_FORMAT = AVSampleFormat::AV_SAMPLE_FMT_FLT;
 constexpr int PA_SAMPLE_FORMAT = paFloat32;
 constexpr int STD_CHANNEL_COUNT = 2;
 using STD_SAMPLE_FORMAT = float;
 /// =====================================================
+constexpr size_t MEMBUFFER_SIZE = 8192;
 
 namespace onart {
 
@@ -48,6 +48,10 @@ namespace onart {
 	const float& Audio::masterVolume = Audio::master;
 	int Audio::Stream::activeStreamCount = 0;
 	const int& Audio::Stream::activeCount = Audio::Stream::activeStreamCount;
+
+#ifdef OA_AUDIO_WAIT_ON_DRAG
+	bool Audio::wait = false;
+#endif
 
 	static class RingBuffer {
 	public:
@@ -201,42 +205,190 @@ namespace onart {
 		volume = v;
 	}
 
+	int Audio::Source::MemorySource::request(int req, unsigned char* buf) {
+		if (size <= cursor) return AVERROR_EOF;
+		uint64_t nextCursor = cursor + (uint64_t)req;
+		if (nextCursor < cursor) {	// 오버플로
+			return -1;
+		}
+		else if (nextCursor > size) {
+			nextCursor = size;
+		}
+		uint64_t cpsize = nextCursor - cursor;
+		memcpy(buf, dat + cursor, cpsize);
+		cursor = nextCursor;
+		return (int)cpsize;
+	}
+
+	int64_t Audio::Source::MemorySource::seek(int64_t pos, int origin) {
+		switch (origin)
+		{
+		case SEEK_SET:
+			cursor = (uint64_t)pos;
+			break;
+		case SEEK_CUR:
+			cursor += (uint64_t)pos;	// int와 uint는 표현 및 더하는 방식이 같음
+			break;
+		case SEEK_END:
+			cursor = size + (uint64_t)pos;
+			break;
+		case AVSEEK_SIZE:
+			return (int64_t)size;
+		default:
+			cursor = (uint64_t)pos;
+		}
+		if (cursor > size) { return -1; }
+		return (int64_t)cursor;
+	}
+
+	int Audio::Source::readMem(void* ptr, uint8_t* buf, int len) {
+		MemorySource* src = (MemorySource*)ptr;
+		return src->request(len, buf);
+	}
+
+	int64_t Audio::Source::seekMem(void* ptr, int64_t pos, int origin) {
+		MemorySource* src = (MemorySource*)ptr;
+		return src->seek(pos, origin);
+	}
+
+	Audio::Source::MemorySource::MemorySource(const void* dat, uint64_t size) :dat((const unsigned char*)dat), size(size), buf((unsigned char*)av_malloc(MEMBUFFER_SIZE)) {	}
+	Audio::Source::MemorySource::~MemorySource() { av_free(buf); }
+
+	Audio::Source* Audio::Source::load(const void* mem, size_t size, const std::string& name) {
+		if (Audio::source.find(name) != Audio::source.end()) { return Audio::source[name]; }
+		AVFormatContext* fmt = avformat_alloc_context();
+		MemorySource* msrc = new MemorySource(mem, size);
+		AVIOContext* ioContext = avio_alloc_context(msrc->buf, MEMBUFFER_SIZE, 0, msrc, readMem, nullptr, seekMem);		
+		fmt->pb = ioContext;
+		fmt->flags |= AVFMT_FLAG_CUSTOM_IO;
+		if (avformat_open_input(&fmt, "", nullptr, nullptr) < 0) {
+			printf("디멀티플렉싱에 실패했습니다.\n");
+			delete msrc;
+			return nullptr;
+		}
+		if (!initDemux(fmt)) { 
+			avformat_close_input(&fmt);
+			return nullptr;
+		}
+		int audioStreamIndex = -1;
+		audioStreamIndex = av_find_best_stream(fmt, AVMEDIA_TYPE_AUDIO, -1, -1, &fmt->audio_codec, 0);
+		AVCodecContext* cctx = avcodec_alloc_context3(fmt->audio_codec);
+		avcodec_parameters_to_context(cctx, fmt->streams[audioStreamIndex]->codecpar);
+		int er = avcodec_open2(cctx, nullptr, nullptr);
+		SwrContext* resampler = nullptr;
+
+		AVSampleFormat inputFormat = cctx->sample_fmt;
+		if (inputFormat < AVSampleFormat::AV_SAMPLE_FMT_U8 || inputFormat > AVSampleFormat::AV_SAMPLE_FMT_S64P) {
+			printf("지원하지 않는 샘플 형식입니다. 파일을 변환하는 것을 고려해 주세요.\n");
+			avformat_close_input(&fmt);
+			return nullptr;
+		}
+
+		AVPacket tempP;
+		AVFrame* tempF = av_frame_alloc();
+
+		int frameCount = 0;
+		while (av_read_frame(fmt, &tempP) == 0) {
+			int i = avcodec_send_packet(cctx, &tempP);
+			if (i == 0) {
+				avcodec_receive_frame(cctx, tempF);
+				frameCount++;
+			}
+			av_packet_unref(&tempP);
+		}
+		int sampleRate = cctx->sample_rate;
+		if (cctx->channel_layout == 0) {
+			const WavFile& wvhd = reinterpret_cast<const WavFile*>(mem)[0];
+			if (memcmp(wvhd.RIFF.chunkId, "RIFF", 4) == 0 &&
+				memcmp(wvhd.RIFF.format, "WAVE", 4) == 0 &&
+				memcmp(wvhd.FMT.chunkId, "fmt ", 4) == 0
+				) {
+				switch (wvhd.FMT.numChannels)
+				{
+				case 1:
+					cctx->channel_layout = AV_CH_LAYOUT_MONO;
+					break;
+				case 2:
+					cctx->channel_layout = AV_CH_LAYOUT_STEREO;
+					break;
+				case 3:
+					cctx->channel_layout = AV_CH_LAYOUT_SURROUND;
+					break;
+				case 4:
+					cctx->channel_layout = AV_CH_LAYOUT_QUAD;
+					break;
+				case 5:
+					cctx->channel_layout = AV_CH_LAYOUT_4POINT0;
+					break;
+				case 6:
+					cctx->channel_layout = AV_CH_LAYOUT_6POINT0;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+		if (
+			!(inputFormat == AVSampleFormat::AV_SAMPLE_FMT_FLT &&
+				sampleRate == STD_SAMPLE_RATE &&
+				cctx->channel_layout == AV_CH_LAYOUT_STEREO)
+			) {
+			resampler = swr_alloc_set_opts(nullptr, AV_CH_LAYOUT_STEREO, (AVSampleFormat)FF_RESAMPLE_FORMAT, STD_SAMPLE_RATE, cctx->channel_layout, inputFormat, sampleRate, 0, nullptr);
+			if (swr_init(resampler) < 0) {
+				printf("리샘플러 초기화에 실패했습니다. 소스가 로드되지 않습니다.\n");
+				avformat_close_input(&fmt);
+				return nullptr;
+			}
+		}
+		av_seek_frame(fmt, -1, 0, AVSEEK_FLAG_FRAME);
+		av_frame_free(&tempF);
+
+		return Audio::source[name] = new Source(fmt, cctx, resampler, frameCount, ioContext, msrc);
+	}
+
+	bool Audio::Source::initDemux(AVFormatContext* fmt) {
+		if (avformat_find_stream_info(fmt, nullptr) < 0) {
+			printf("스트림 정보를 얻지 못했습니다.\n");
+			return false;
+		}
+		if (fmt->nb_streams <= 0) {
+			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
+			return false;
+		}
+		AVCodecID cid = fmt->streams[0]->codecpar->codec_id;
+		if (cid < AVCodecID::AV_CODEC_ID_FIRST_AUDIO || cid>AVCodecID::AV_CODEC_ID_MSNSIREN) {
+			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
+			return false;
+		}
+		const AVCodec* codec = avcodec_find_decoder(cid);
+		if (!codec) {
+			printf("지원하지 않는 형식인 것 같습니다. 다른 형식으로 변환해 주세요.\n");
+			return false;
+		}
+		fmt->audio_codec = codec;
+		return true;
+	}
+
 	Audio::Source* Audio::Source::load(const std::string& file, const std::string& name) {
 		std::string memName(name);
 		if (memName.size() == 0) { memName = file; }
 		if (Audio::source.find(memName) != Audio::source.end()) { return Audio::source[memName]; }
 
 		AVFormatContext* fmt = avformat_alloc_context();
-
 		if (avformat_open_input(&fmt, file.c_str(), nullptr, nullptr) < 0) {
 			printf("음성 파일이 없거나 로드에 실패했습니다.\n");
 			if (fmt)avformat_close_input(&fmt);
 			return nullptr;
 		}
-		avformat_find_stream_info(fmt, nullptr);
-		
-		if (fmt->nb_streams <= 0) {
-			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
+		if (!initDemux(fmt)) {
 			avformat_close_input(&fmt);
 			return nullptr;
 		}
-		AVCodecID cid = fmt->streams[0]->codecpar->codec_id;
-		if (cid < AVCodecID::AV_CODEC_ID_FIRST_AUDIO || cid>AVCodecID::AV_CODEC_ID_MSNSIREN) {
-			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
-			avformat_close_input(&fmt);
-			return nullptr;
-		}
-		const AVCodec* codec = avcodec_find_decoder(cid);
+
 		int audioStreamIndex = -1;
-		audioStreamIndex = av_find_best_stream(fmt, AVMEDIA_TYPE_AUDIO, -1, -1, &codec, 0);
+		audioStreamIndex = av_find_best_stream(fmt, AVMEDIA_TYPE_AUDIO, -1, -1, &fmt->audio_codec, 0);
 		
-		fmt->audio_codec = codec;
-		if (!codec) {
-			printf("지원하지 않는 형식인 것 같습니다. 다른 형식으로 시도해 주세요.\n");
-			avformat_close_input(&fmt);
-			return nullptr;
-		}
-		AVCodecContext* cctx = avcodec_alloc_context3(codec);
+		AVCodecContext* cctx = avcodec_alloc_context3(fmt->audio_codec);
 		avcodec_parameters_to_context(cctx, fmt->streams[audioStreamIndex]->codecpar);
 		int er=avcodec_open2(cctx, nullptr, nullptr);
 		SwrContext* resampler = nullptr;
@@ -349,7 +501,7 @@ namespace onart {
 					AVFrame* frm2 = av_frame_alloc();
 					frm2->channel_layout = AV_CH_LAYOUT_STEREO;
 					frm2->format = AV_SAMPLE_FMT_FLT;
-					frm2->sample_rate = 44100;
+					frm2->sample_rate = STD_SAMPLE_RATE;
 					auto err=swr_convert_frame(resampler, frm2, frm);
 					*dst = (float*)malloc(frm2->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
 					memcpy(*dst, frm2->data[0], frm2->nb_samples * sizeof(STD_SAMPLE_FORMAT) * STD_CHANNEL_COUNT);
@@ -377,10 +529,11 @@ namespace onart {
 		return 0;
 	}
 
-	Audio::Source::Source(AVFormatContext* ctx, AVCodecContext* cdc, SwrContext* resampler, int frameCount)
-		:ctx(ctx), cdc(cdc), resampler(resampler), frameCount(frameCount) {
+	Audio::Source::Source(AVFormatContext* ctx, AVCodecContext* cdc, SwrContext* resampler, int frameCount, AVIOContext* ioctx, MemorySource* ms)
+		: ctx(ctx), cdc(cdc), resampler(resampler), frameCount(frameCount), ioctx(ioctx), memsrc(ms) {
 
 	}
+
 
 	Audio::Source::~Source() {
 		for (auto p : playing) {
@@ -393,11 +546,18 @@ namespace onart {
 			swr_free(&resampler);
 		}
 		avformat_close_input(&ctx);
+		if (ioctx) { 
+			av_free(ioctx);
+			delete memsrc;
+		}
 	}
 
 	/// "PCM"을 재생하도록 하는 콜백 함수
 	int Audio::playCallback(const void* input, void* output, unsigned long frameCount,
 		const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData) {
+#ifdef OA_AUDIO_WAIT_ON_DRAG
+		if (wait) { memset(output, 0, frameCount * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT)); return PaStreamCallbackResult::paContinue; }	// 문제점: 가끔 소리가 약간 체감될 정도로 딜레이됨
+#endif
 		ringBuffer.read(output, frameCount * STD_CHANNEL_COUNT);
 		return PaStreamCallbackResult::paContinue;	// 정지 신호 외에 정지하지 않음
 	}

@@ -210,8 +210,14 @@ int main(int argc, char* argv[]) {
 
 	for (frame = 0; !glfwWindowShouldClose(window); frame++) {
 		glfwPollEvents();
+#ifdef OA_AUDIO_WAIT_ON_DRAG
+		onart::Audio::wait = false;
+#endif
 		update();
 		render();
+#ifdef OA_AUDIO_WAIT_ON_DRAG
+		onart::Audio::wait = true;
+#endif
 	}
 
 	finalize();

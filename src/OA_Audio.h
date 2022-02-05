@@ -8,10 +8,12 @@
 
 struct AVFormatContext;
 struct AVCodecContext;
+struct AVIOContext;
 struct SwrContext;
 struct PaStreamCallbackTimeInfo;
 
-constexpr unsigned long RINGBUFFER_SIZE = 8820;
+constexpr unsigned long RINGBUFFER_SIZE = 8820;	// 사운드 재생/정지 반영의 딜레이와 관련되어 있습니다. 단독 수정이 가능합니다.
+constexpr int STD_SAMPLE_RATE = 44100;	// 음질과 프로그램 성능에 관련되어 있습니다. 단독 수정이 가능합니다.
 
 namespace onart {
 	/// <summary>
@@ -19,10 +21,19 @@ namespace onart {
 	/// 이 모듈은 이 엔진에(OAGLE) 대하여 종속적입니다. (단, 엔진 및 기타 컴포넌트는 오디오 모듈에 종속적이지 않습니다.)
 	/// 이 모듈을 다른 곳에 활용하는 방법은 Source의 프레임당 쓰기 부분을 다른 쓰레드로 돌리는 것이며,
 	/// 상업적 활용을 하지 않을 경우 irrKlang 라이브러리를 추천합니다.
+	/// 소스 파일에 OA_AUDIO_WAIT_ON_DRAG 매크로를 정의할 경우, 창을 드래그할 때 소리가 멈추지만 가끔 소리가 아주 잠깐씩 끊깁니다. 둘 모두를 원하지 않는다면 위에서 나온 것과 같이
+	/// main.cpp의 onart::Audio::update() 부분을 다른 쓰레드로 돌리면 됩니다.
 	/// </summary>
 	class Audio
 	{
 	public:
+#ifdef OA_AUDIO_WAIT_ON_DRAG
+		/// <summary>
+		/// 이 엔진의 오디오 모듈은 스레드를 사용하지 않으므로, 창을 드래그할 때 소리를 멈추기 위한 변수입니다. 응용 계층에서 사용하지 마시기 바랍니다.
+		/// 전체 소리를 멈추기 위해 이를 사용할 경우, 프레임 시작과 동시에 정지가 풀리게 됩니다.
+		/// </summary>
+		static bool wait;
+#endif
 		/// <summary>
 		/// 읽기 전용 마스터 볼륨입니다.
 		/// </summary>
@@ -45,12 +56,11 @@ namespace onart {
 		static void setMasterVolume(float v);
 
 		class Stream;
+
 		/// <summary>
 		/// 오디오 데이터를 불러오는 오디오 소스입니다. 재생할 경우 Stream 객체가 생성됩니다.
-		/// 로드/언로드/재생을 할 수 있습니다.
-		/// 2채널, 초당 44100샘플 인코딩된 파일을 사용하는 것을 강력히 권장합니다.
-		/// 그러지 않는 경우, 런타임에 별도의 리샘플링 과정을 매번 거치게 되어 더 낮은 성능을 보일 것입니다.
-		/// 파일 변환은 제공하는 웹 서비스도 많으므로 어렵지 않게 할 수 있습니다.
+		/// 로드, 언로드, 재생을 할 수 있습니다.
+		/// 32비트 부동소수점, 초당 44100샘플, 스테레오로 자동으로 맞춰집니다. 특히 여러 음원을 동시 재생하는 경우, STD_SAMPLE_RATE를 내림으로써 성능 향상을 도모할 수 있습니다.
 		/// </summary>
 		class Source {
 			friend class Stream;
@@ -62,10 +72,12 @@ namespace onart {
 			/// </summary>
 			/// <param name="v">0과 1 사이의 값만 가능하며 그 외의 값 입력 시 강제로 맞춰집니다.</param>
 			void setVolume(float v);
+
 			/// <summary>
-			/// 불러온 음성을 이름으로 찾습니다.
+			/// 불러온 음원의 포인터를 획득합니다. 잘못된 이름을 입력한 경우 nullptr를 리턴합니다.
 			/// </summary>
 			static Source* get(const std::string& name);
+
 			/// <summary>
 			/// 소리 파일에서 음성을 불러옵니다. 별명이 겹치는 경우 기존에 이미 로드한 것을 리턴합니다.
 			/// </summary>
@@ -73,6 +85,14 @@ namespace onart {
 			/// <param name="name">프로그램 내에서 사용할 별명입니다. 입력하지 않는 경우 파일 이름 그대로 들어갑니다.</param>
 			/// <returns>불러온 소스의 포인터를 리턴합니다.</returns>
 			static Source* load(const std::string& file, const std::string& name = "");
+
+			/// <summary>
+			/// 메모리에서 음성을 불러옵니다. 별명이 겹치는 경우 기존에 이미 로드한 것을 리턴합니다.
+			/// </summary>
+			/// <param name="mem">파일에 해당하는 메모리의 시작 주소입니다.</param>
+			/// <param name="size">파일의 크기(바이트)입니다.</param>
+			/// <param name="name">프로그램 내에서 사용할 별명이며, 필수적으로 지정해야 합니다.</param>
+			static Source* load(const void* mem, size_t size, const std::string& name);
 
 			/// <summary>
 			/// 불러온 음성을 메모리에서 제거합니다.
@@ -85,11 +105,28 @@ namespace onart {
 			/// </summary>
 			Stream* play(bool loop = false);
 		private:
-			Source(AVFormatContext*, AVCodecContext*, SwrContext*, int);
+			struct MemorySource {
+				const unsigned char* dat;
+				unsigned char* buf = nullptr;
+				uint64_t cursor = 0;
+				uint64_t size;
+				MemorySource(const void* dat, uint64_t size);
+				~MemorySource();
+				int request(int req, unsigned char* buf);
+				int64_t seek(int64_t pos, int origin);
+			}*memsrc;
+
+			static bool initDemux(AVFormatContext*);
+			static int readMem(void* ptr, uint8_t* buf, int len);
+			static int64_t seekMem(void* ptr, int64_t pos, int origin);
+
+			Source(AVFormatContext*, AVCodecContext*, SwrContext*, int, AVIOContext* io = nullptr, MemorySource* ms = nullptr);
 			int getFrame(int frameNumber, float** dst);
 			AVFormatContext* ctx;
 			AVCodecContext* cdc;
+			AVIOContext* ioctx = nullptr;
 			SwrContext* resampler = nullptr;
+			
 			float volume = 1;
 			int frameCount;
 			std::vector<Stream*> playing;
