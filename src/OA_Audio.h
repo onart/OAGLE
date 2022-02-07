@@ -15,27 +15,26 @@ struct PaStreamCallbackTimeInfo;
 constexpr unsigned long RINGBUFFER_SIZE = 8820;	// 사운드 재생/정지 반영의 딜레이와 관련되어 있습니다. 단독 수정이 가능합니다.
 constexpr int STD_SAMPLE_RATE = 44100;	// 음질과 프로그램 성능에 관련되어 있습니다. 단독 수정이 가능합니다.
 
-constexpr bool OA_AUDIO_NOTHREAD = false;
+constexpr bool OA_AUDIO_NOTHREAD = false;	// 어떤 이유든 오디오 모듈이 스레드를 생성하기 원하지 않는 경우 true로 설정해 주세요. 그러면 스레드 대신 프레임 타임에 오디오 내용을 읽습니다.
+constexpr bool OA_AUDIO_WAIT_ON_DRAG = false;	// NOTHREAD 상수가 true이며 이것도 true인 경우, 창을 잡고 있는 등의 윈도우 메시지 입력이 오래 지속될 경우 소리가 정지합니다.
 
 namespace onart {
 	/// <summary>
 	/// 음성을 재생하는 모듈입니다.
 	/// 이 모듈은 이 엔진에(OAGLE) 대하여 종속적입니다. (단, 엔진 및 기타 컴포넌트는 오디오 모듈에 종속적이지 않습니다.)
-	/// 이 모듈을 다른 곳에 활용하는 방법은 Source의 프레임당 쓰기 부분을 다른 쓰레드로 돌리는 것이며,
+	/// 이 모듈을 다른 곳에 활용하려면 main.cpp의 init(), finalize()와 메인 for루프 부분을 잘 참고해 주세요.
 	/// 상업적 활용을 하지 않을 경우 irrKlang 라이브러리를 추천합니다.
-	/// 소스 파일에 OA_AUDIO_WAIT_ON_DRAG 매크로를 정의할 경우, 창을 드래그할 때 소리가 멈추지만 가끔 소리가 아주 잠깐씩 끊깁니다. 둘 모두를 원하지 않는다면 위에서 나온 것과 같이
-	/// main.cpp의 onart::Audio::update() 부분을 다른 쓰레드로 돌리면 됩니다.
+	/// 이 클래스는 init()호출 시 1개의 스레드를 생성합니다. 헤더의 상수 OA_AUDIO_NOTHREAD를 사용하는 경우 별도의 스레드를 생성하지 않지만 프레임 타임 증가 우려가 있으며,
+	/// (창 끌기 시 버퍼의 내용이 그대로 반복재생되는 문제, 가끔 소리가 끊기는 문제) 중 하나를 선택해야 합니다.
 	/// </summary>
 	class Audio
 	{
 	public:
-#ifdef OA_AUDIO_WAIT_ON_DRAG
 		/// <summary>
-		/// 이 엔진의 오디오 모듈은 스레드를 사용하지 않으므로, 창을 드래그할 때 소리를 멈추기 위한 변수입니다. 응용 계층에서 사용하지 마시기 바랍니다.
+		/// 창을 드래그할 때 소리를 멈추기 위한 변수입니다. 응용 계층에서 사용하지 마시기 바랍니다.
 		/// 전체 소리를 멈추기 위해 이를 사용할 경우, 프레임 시작과 동시에 정지가 풀리게 됩니다.
 		/// </summary>
 		static bool wait;
-#endif
 		/// <summary>
 		/// 읽기 전용 마스터 볼륨입니다.
 		/// </summary>
@@ -59,11 +58,8 @@ namespace onart {
 		/// <summary>
 		/// 응용 단계에서 호출할 일이 없습니다.
 		/// </summary>
-		static void allow();
-		/// <summary>
-		/// 응용 단계에서 호출할 일이 없습니다.
-		/// </summary>
-		static void acquire();
+		static void allow(bool);
+
 		class Stream;
 
 		/// <summary>

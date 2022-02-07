@@ -53,13 +53,9 @@ namespace onart {
 	const int& Audio::Stream::activeCount = Audio::Stream::activeStreamCount;
 	bool Audio::noup = true;
 
-#ifndef OA_AUDIO_NOTHREAD
 	static std::condition_variable aCV;
 	static std::mutex audioMutex;
-	static std::unique_lock<std::mutex> aLock;
-#elif defined(OA_AUDIO_WAIT_ON_DRAG)
 	bool Audio::wait = false;
-#endif
 
 	static class RingBuffer {
 	public:
@@ -211,13 +207,16 @@ namespace onart {
 		master = v;
 	}
 
-	void Audio::allow() {
-		//if constexpr (!OA_AUDIO_NOTHREAD) aCV.notify_one();
-		noup = false;
-	}
-
-	void Audio::acquire() {
-		//if constexpr (!OA_AUDIO_NOTHREAD) audioMutex.lock();
+	void Audio::allow(bool go) {
+		if constexpr (!OA_AUDIO_NOTHREAD) { 
+			if (go) {
+				aCV.notify_one();
+				noup = false;
+			}
+			else {
+				noup = true;
+			}
+		}
 	}
 
 	void Audio::Source::setVolume(float v) {
@@ -578,9 +577,8 @@ namespace onart {
 	/// "PCM"을 재생하도록 하는 콜백 함수
 	int Audio::playCallback(const void* input, void* output, unsigned long frameCount,
 		const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData) {
-#ifdef OA_AUDIO_WAIT_ON_DRAG
+		if constexpr(OA_AUDIO_WAIT_ON_DRAG)
 		if (wait) { memset(output, 0, frameCount * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT)); return PaStreamCallbackResult::paContinue; }	// 문제점: 가끔 소리가 약간 체감될 정도로 딜레이됨
-#endif
 		ringBuffer.read(output, frameCount * STD_CHANNEL_COUNT);
 		return PaStreamCallbackResult::paContinue;	// 정지 신호 외에 정지하지 않음
 	}
@@ -700,9 +698,12 @@ namespace onart {
 
 	void Audio::audioThread() {
 		while (true) {
-			while (noup) { printf(""); }
-			noup = true;
+			std::unique_lock ul(audioMutex);
+			if (noup) {
+				aCV.wait(ul);
+			}
 			update();
+			ul.unlock();
 		}
 	}
 }

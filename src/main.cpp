@@ -1,7 +1,5 @@
 #include <cstdio>
 #include <cstdlib>
-#include <mutex>
-#include <condition_variable>
 
 #include "resources.h"
 #include "oagle.h"
@@ -49,19 +47,12 @@ void update() {
 	float cur = (float)glfwGetTime();
 	dt = cur - tp;
 	tp = cur;
-	onart::Audio::acquire();
 	onart::Scene::currentScene->update();
 }
 
 void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	onart::Scene::currentScene->render();
-	if constexpr (OA_AUDIO_NOTHREAD) {
-		onart::Audio::update();
-	}
-	else {
-		onart::Audio::allow();
-	}
 	glfwSwapBuffers(window);
 }
 
@@ -217,18 +208,15 @@ int main(int argc, char* argv[]) {
 
 	for (frame = 0; !glfwWindowShouldClose(window); frame++) {
 		glfwPollEvents();
-#ifndef OA_AUDIO_NOTHREAD
-#ifdef OA_AUDIO_WAIT_ON_DRAG
-		onart::Audio::wait = false;
-#endif
-#endif // !OA_AUDIO_NOTHREAD
+		if constexpr (!OA_AUDIO_NOTHREAD) onart::Audio::allow(false);
+		else if constexpr (OA_AUDIO_WAIT_ON_DRAG) onart::Audio::wait = false;
 		update();
 		render();
-#ifndef OA_AUDIO_NOTHREAD
-#ifdef OA_AUDIO_WAIT_ON_DRAG
-		onart::Audio::wait = true;
-#endif
-#endif // !OA_AUDIO_NOTHREAD
+		if constexpr (OA_AUDIO_NOTHREAD) { 
+			onart::Audio::update(); 
+			if constexpr (OA_AUDIO_WAIT_ON_DRAG) onart::Audio::wait = true;
+		}
+		else { onart::Audio::allow(true); }
 	}
 
 	finalize();
