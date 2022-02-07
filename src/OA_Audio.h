@@ -15,6 +15,8 @@ struct PaStreamCallbackTimeInfo;
 constexpr unsigned long RINGBUFFER_SIZE = 8820;	// 사운드 재생/정지 반영의 딜레이와 관련되어 있습니다. 단독 수정이 가능합니다.
 constexpr int STD_SAMPLE_RATE = 44100;	// 음질과 프로그램 성능에 관련되어 있습니다. 단독 수정이 가능합니다.
 
+constexpr bool OA_AUDIO_NOTHREAD = false;
+
 namespace onart {
 	/// <summary>
 	/// 음성을 재생하는 모듈입니다.
@@ -43,18 +45,25 @@ namespace onart {
 		/// </summary>
 		static void update();
 		/// <summary>
-		/// 기반 오디오 라이브러리(PortAudio)를 초기화합니다.
+		/// 오디오 사용을 시작합니다. 호출되지 않으면 소리 관련 기능을 사용할 수 없습니다. 응용 단계에서 호출할 일이 없습니다.
 		/// </summary>
 		static void init();
 		/// <summary>
-		/// 기반 오디오 라이브러리(PortAudio)의 사용을 끝냅니다.
+		/// 오디오 사용을 종료합니다. 응용 단계에서 호출할 일이 없습니다.
 		/// </summary>
 		static void terminate();
 		/// <summary>
 		/// 마스터 볼륨을 조정합니다. 범위는 0~1입니다.
 		/// </summary>
 		static void setMasterVolume(float v);
-
+		/// <summary>
+		/// 응용 단계에서 호출할 일이 없습니다.
+		/// </summary>
+		static void allow();
+		/// <summary>
+		/// 응용 단계에서 호출할 일이 없습니다.
+		/// </summary>
+		static void acquire();
 		class Stream;
 
 		/// <summary>
@@ -175,7 +184,8 @@ namespace onart {
 			bool loop;
 		};
 	private:
-		static int sampleRate;
+		static bool noup;
+		static void audioThread();
 		static std::map<std::string, Source*> source;
 		static float master;
 		static void* masterStream;

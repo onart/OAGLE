@@ -1,5 +1,7 @@
 #include <cstdio>
 #include <cstdlib>
+#include <mutex>
+#include <condition_variable>
 
 #include "resources.h"
 #include "oagle.h"
@@ -42,19 +44,24 @@ int keyCount = 0;
 
 onart::ivec2 mousePos;	// 마우스의 위치를 저장합니다.
 
-
 // 주기 호출 함수 (게임 루프)
 void update() {
 	float cur = (float)glfwGetTime();
 	dt = cur - tp;
 	tp = cur;
+	onart::Audio::acquire();
 	onart::Scene::currentScene->update();
 }
 
 void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	onart::Scene::currentScene->render();
-	onart::Audio::update();
+	if constexpr (OA_AUDIO_NOTHREAD) {
+		onart::Audio::update();
+	}
+	else {
+		onart::Audio::allow();
+	}
 	glfwSwapBuffers(window);
 }
 
@@ -210,14 +217,18 @@ int main(int argc, char* argv[]) {
 
 	for (frame = 0; !glfwWindowShouldClose(window); frame++) {
 		glfwPollEvents();
+#ifndef OA_AUDIO_NOTHREAD
 #ifdef OA_AUDIO_WAIT_ON_DRAG
 		onart::Audio::wait = false;
 #endif
+#endif // !OA_AUDIO_NOTHREAD
 		update();
 		render();
+#ifndef OA_AUDIO_NOTHREAD
 #ifdef OA_AUDIO_WAIT_ON_DRAG
 		onart::Audio::wait = true;
 #endif
+#endif // !OA_AUDIO_NOTHREAD
 	}
 
 	finalize();

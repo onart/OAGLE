@@ -31,6 +31,9 @@ extern "C" {
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 /// 이쪽 상수들은 portaudio 라이브러리에서 단일 스트림을 사용하기 위해 리샘플할 기준이 됩니다. 여기 있는 인자들을 바꾸는 경우 버퍼링 시 연산도 바꿔야 합니다. (생각보다 복잡)
 constexpr int FF_RESAMPLE_FORMAT = AVSampleFormat::AV_SAMPLE_FMT_FLT;
@@ -48,8 +51,13 @@ namespace onart {
 	const float& Audio::masterVolume = Audio::master;
 	int Audio::Stream::activeStreamCount = 0;
 	const int& Audio::Stream::activeCount = Audio::Stream::activeStreamCount;
+	bool Audio::noup = true;
 
-#ifdef OA_AUDIO_WAIT_ON_DRAG
+#ifndef OA_AUDIO_NOTHREAD
+	static std::condition_variable aCV;
+	static std::mutex audioMutex;
+	static std::unique_lock<std::mutex> aLock;
+#elif defined(OA_AUDIO_WAIT_ON_DRAG)
 	bool Audio::wait = false;
 #endif
 
@@ -185,6 +193,10 @@ namespace onart {
 			printf("\n오디오 스트림 시작에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
+		if constexpr (!OA_AUDIO_NOTHREAD) {
+			std::thread aud(audioThread);
+			aud.detach();	// 데몬스레드
+		}
 		system("cls");
 	}
 
@@ -197,6 +209,15 @@ namespace onart {
 		if (v > 1)v = 1;
 		else if (v < 0)v = 0;
 		master = v;
+	}
+
+	void Audio::allow() {
+		//if constexpr (!OA_AUDIO_NOTHREAD) aCV.notify_one();
+		noup = false;
+	}
+
+	void Audio::acquire() {
+		//if constexpr (!OA_AUDIO_NOTHREAD) audioMutex.lock();
 	}
 
 	void Audio::Source::setVolume(float v) {
@@ -262,8 +283,10 @@ namespace onart {
 		fmt->pb = ioContext;
 		fmt->flags |= AVFMT_FLAG_CUSTOM_IO;
 		if (avformat_open_input(&fmt, "", nullptr, nullptr) < 0) {
-			printf("디멀티플렉싱에 실패했습니다.\n");
+			printf("디멀티플렉싱에 실패했습니다. 파일을 다시 점검해 주세요.\n");
+			av_free(ioContext);
 			delete msrc;
+			
 			return nullptr;
 		}
 		if (!initDemux(fmt)) { 
@@ -673,5 +696,13 @@ namespace onart {
 		Stream* nw = new Stream(this, loop);
 		playing.push_back(nw);
 		return nw;
+	}
+
+	void Audio::audioThread() {
+		while (true) {
+			while (noup) { printf(""); }
+			noup = true;
+			update();
+		}
 	}
 }
