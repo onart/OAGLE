@@ -8,6 +8,7 @@ extern "C" {
 	#include "externals/ffmpeg/libavformat/avformat.h"
 	#include "externals/ffmpeg/libswresample/swresample.h"
 	#include "externals/ffmpeg/libavutil/opt.h"
+	#include "externals/ffmpeg/libavutil/log.h"
 }
 
 
@@ -175,20 +176,23 @@ namespace onart {
 	void Audio::init() {
 		PaError err = Pa_Initialize();
 		if (err != PaErrorCode::paNoError) {
-			printf("\n오디오 초기화에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
+			fprintf(stderr, "\n오디오 초기화에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
 		err = Pa_OpenDefaultStream(&masterStream, 0, 2, PA_SAMPLE_FORMAT, STD_SAMPLE_RATE, paFramesPerBufferUnspecified, Audio::playCallback, nullptr);
 		if (err != PaErrorCode::paNoError) {
-			printf("\n오디오 스트림 초기화에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
+			fprintf(stderr, "\n오디오 스트림 초기화에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
 		
 		err = Pa_StartStream(masterStream);
 		if (err != PaErrorCode::paNoError) {
-			printf("\n오디오 스트림 시작에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
+			fprintf(stderr, "\n오디오 스트림 시작에 실패했습니다.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
+#ifndef _DEBUG
+		av_log_set_level(AV_LOG_QUIET);	// 어떤 이유든 ffmpeg 라이브러리의 로그를 보려면 디버그 모드로 컴파일하거나, 이 줄을 주석처리하면 됩니다.
+#endif // !_DEBUG
 		if constexpr (!OA_AUDIO_NOTHREAD) {
 			std::thread aud(audioThread);
 			aud.detach();	// 데몬스레드
@@ -282,7 +286,7 @@ namespace onart {
 		fmt->pb = ioContext;
 		fmt->flags |= AVFMT_FLAG_CUSTOM_IO;
 		if (avformat_open_input(&fmt, "", nullptr, nullptr) < 0) {
-			printf("디멀티플렉싱에 실패했습니다. 파일을 다시 점검해 주세요.\n");
+			fprintf(stderr, "디멀티플렉싱에 실패했습니다. 파일을 다시 점검해 주세요.\n");
 			av_free(ioContext);
 			delete msrc;
 			
@@ -301,7 +305,7 @@ namespace onart {
 
 		AVSampleFormat inputFormat = cctx->sample_fmt;
 		if (inputFormat < AVSampleFormat::AV_SAMPLE_FMT_U8 || inputFormat > AVSampleFormat::AV_SAMPLE_FMT_S64P) {
-			printf("지원하지 않는 샘플 형식입니다. 파일을 변환하는 것을 고려해 주세요.\n");
+			fprintf(stderr, "지원하지 않는 샘플 형식입니다. 파일을 변환하는 것을 고려해 주세요.\n");
 			avformat_close_input(&fmt);
 			return nullptr;
 		}
@@ -357,7 +361,7 @@ namespace onart {
 			) {
 			resampler = swr_alloc_set_opts(nullptr, AV_CH_LAYOUT_STEREO, (AVSampleFormat)FF_RESAMPLE_FORMAT, STD_SAMPLE_RATE, cctx->channel_layout, inputFormat, sampleRate, 0, nullptr);
 			if (swr_init(resampler) < 0) {
-				printf("리샘플러 초기화에 실패했습니다. 소스가 로드되지 않습니다.\n");
+				fprintf(stderr, "리샘플러 초기화에 실패했습니다. 소스가 로드되지 않습니다.\n");
 				avformat_close_input(&fmt);
 				return nullptr;
 			}
@@ -370,21 +374,21 @@ namespace onart {
 
 	bool Audio::Source::initDemux(AVFormatContext* fmt) {
 		if (avformat_find_stream_info(fmt, nullptr) < 0) {
-			printf("스트림 정보를 얻지 못했습니다.\n");
+			fprintf(stderr, "스트림 정보를 얻지 못했습니다.\n");
 			return false;
 		}
 		if (fmt->nb_streams <= 0) {
-			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
+			fprintf(stderr, "음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
 			return false;
 		}
 		AVCodecID cid = fmt->streams[0]->codecpar->codec_id;
 		if (cid < AVCodecID::AV_CODEC_ID_FIRST_AUDIO || cid>AVCodecID::AV_CODEC_ID_MSNSIREN) {
-			printf("음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
+			fprintf(stderr, "음성 파일이 유효하지 않은 것 같습니다. 다시 한 번 확인해 주세요.\n");
 			return false;
 		}
 		const AVCodec* codec = avcodec_find_decoder(cid);
 		if (!codec) {
-			printf("지원하지 않는 형식인 것 같습니다. 다른 형식으로 변환해 주세요.\n");
+			fprintf(stderr, "지원하지 않는 형식인 것 같습니다. 다른 형식으로 변환해 주세요.\n");
 			return false;
 		}
 		fmt->audio_codec = codec;
@@ -398,7 +402,7 @@ namespace onart {
 
 		AVFormatContext* fmt = avformat_alloc_context();
 		if (avformat_open_input(&fmt, file.c_str(), nullptr, nullptr) < 0) {
-			printf("음성 파일이 없거나 로드에 실패했습니다.\n");
+			fprintf(stderr, "음성 파일이 없거나 로드에 실패했습니다.\n");
 			if (fmt)avformat_close_input(&fmt);
 			return nullptr;
 		}
@@ -418,7 +422,7 @@ namespace onart {
 		AVSampleFormat inputFormat = cctx->sample_fmt;
 
 		if (inputFormat < AVSampleFormat::AV_SAMPLE_FMT_U8 || inputFormat > AVSampleFormat::AV_SAMPLE_FMT_S64P) {
-			printf("지원하지 않는 샘플 형식입니다. 파일을 변환하는 것을 고려해 주세요.\n");
+			fprintf(stderr, "지원하지 않는 샘플 형식입니다. 파일을 변환하는 것을 고려해 주세요.\n");
 			avformat_close_input(&fmt);
 			return nullptr;
 		}
@@ -479,7 +483,7 @@ namespace onart {
 			) {
 			resampler = swr_alloc_set_opts(nullptr, AV_CH_LAYOUT_STEREO, (AVSampleFormat)FF_RESAMPLE_FORMAT, STD_SAMPLE_RATE, cctx->channel_layout, inputFormat, sampleRate, 0, nullptr);
 			if (swr_init(resampler) < 0) {
-				printf("리샘플러 초기화에 실패했습니다. 소스가 로드되지 않습니다.\n");
+				fprintf(stderr, "리샘플러 초기화에 실패했습니다. 소스가 로드되지 않습니다.\n");
 				avformat_close_input(&fmt);
 				return nullptr;
 			}

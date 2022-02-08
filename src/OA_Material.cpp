@@ -3,7 +3,7 @@
 #include "OA_Material.h"
 #include "externals/gl/glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "externals/stb_image.h"
 
 namespace onart {
 	std::map<void*, unsigned> Material::texFromMemory;
@@ -18,7 +18,7 @@ namespace onart {
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 		if (!data) {
-			printf("텍스처 로드에 실패했습니다.\n");
+			fprintf(stderr, "텍스처 로드에 실패했습니다.\n");
 			return 0;
 		}
 		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
@@ -44,7 +44,7 @@ namespace onart {
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load_from_memory(bts, len, &width, &height, &nrChannels, hasAlpha ? 4 : 3);
 		if (!data) {
-			printf("텍스처 로드에 실패했습니다.\n");
+			fprintf(stderr, "텍스처 로드에 실패했습니다.\n");
 			return 0;
 		}
 		unsigned tex;

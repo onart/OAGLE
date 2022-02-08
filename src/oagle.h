@@ -59,10 +59,8 @@ namespace onart {
 	/// <summary>
 	/// GLFW 오류 발생 시 내용을 출력하는 콜백입니다.
 	/// </summary>
-	/// <param name="code"></param>
-	/// <param name="desc"></param>
 	inline void printError(int code, const char* desc) {
-		printf("GLFW ERROR %d: %s\n", code, desc);
+		fprintf(stderr, "GLFW ERROR %d: %s\n", code, desc);
 	}
 	
 	/// <summary>
@@ -165,9 +163,9 @@ namespace onart {
 		// 주어진 창에 대한 것
 		glfwMakeContextCurrent(window);
 #ifdef GL_ES_VERSION_2_0
-	if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) { printf("init_extensions(): gladLoadGLES2Loader() 오류\n"); glfwTerminate(); return false; }
+		if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) { fprintf(stderr, "init_extensions(): gladLoadGLES2Loader() 오류\n"); glfwTerminate(); return false; }
 #else
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { printf("init_extensions(): gladLoadGLLoader() 오류\n"); glfwTerminate(); return false; }
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { fprintf(stderr, "init_extensions(): gladLoadGLLoader() 오류\n"); glfwTerminate(); return false; }
 #endif // GL_ES_VERSION_2_0
 		
 		glGetIntegerv(GL_MAJOR_VERSION, &VMAJOR);
@@ -175,7 +173,7 @@ namespace onart {
 		while (VMINOR > 10) VMINOR /= 10;
 		
 		if (VMAJOR <= 2) {
-			printf("경고: 이 프로그램은 OpenGL 3 미만 버전과 호환이 잘 되지 못할 수 있습니다.\n");
+			fprintf(stderr, "경고: 이 프로그램은 OpenGL 3 미만 버전과 호환이 잘 되지 못할 수 있습니다.\n");
 		}
 		char* slv = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 		char* p = slv;
@@ -204,11 +202,11 @@ namespace onart {
 #else
 		int next; glGetIntegerv(GL_NUM_EXTENSIONS, &next);
 		for (int k = 0; k < next; k++) ext.insert((const char*)glGetStringi(GL_EXTENSIONS, k));
-		if (ext.find("GL_ARB_vertex_buffer_object") == ext.end()) printf("VBO가 지원되지 않습니다.\n");
-		if (ext.find("GL_ARB_vertex_array_object") == ext.end()) printf("VAO가 지원되지 않습니다.\n");
-		if (ext.find("GL_ARB_vertex_shader") == ext.end()) printf("정점 셰이더가 지원되지 않습니다.\n");
-		if (ext.find("GL_ARB_fragment_shader") == ext.end()) printf("조각 셰이더가 지원되지 않습니다.\n");
-		if (ext.find("GL_ARB_shader_objects") == ext.end()) printf("셰이더 오브젝트가 지원되지 않습니다.\n");
+		if (ext.find("GL_ARB_vertex_buffer_object") == ext.end()) fprintf(stderr, "VBO가 지원되지 않습니다.\n");
+		if (ext.find("GL_ARB_vertex_array_object") == ext.end()) fprintf(stderr, "VAO가 지원되지 않습니다.\n");
+		if (ext.find("GL_ARB_vertex_shader") == ext.end()) fprintf(stderr, "정점 셰이더가 지원되지 않습니다.\n");
+		if (ext.find("GL_ARB_fragment_shader") == ext.end()) fprintf(stderr, "조각 셰이더가 지원되지 않습니다.\n");
+		if (ext.find("GL_ARB_shader_objects") == ext.end()) fprintf(stderr, "셰이더 오브젝트가 지원되지 않습니다.\n");
 		
 #endif	// GL_ES_VERSION_2_0
 		return true;
