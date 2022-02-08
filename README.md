@@ -24,6 +24,9 @@ Blinn-Phong\
 단일광원\
 노말매핑(예정)
 
+* 문서\
+PDF파일, Github Wiki를 준비중입니다.
+
 
 ## related source
 * ASSIMP - https://assimp.org/ \
