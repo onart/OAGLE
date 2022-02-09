@@ -21,7 +21,7 @@ namespace onart {
 		else if (way > 0) {
 			wantedPos = lerp(currentPos, desiredEye, way);
 		}
-		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);
+		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);		
 		if (fixdir) program3.uniform("view", mat4::lookAt(currentPos, currentPos - relativePos, up));
 		else program3.uniform("view", mat4::lookAt(currentPos, *desiredAt, up));
 		
@@ -38,8 +38,8 @@ namespace onart {
 
 	mat4 Camera::Ratio::getAspectMatrix() {
 		mat4 ret;
-		ret[0] = ratio > 1 ? ratio : 1;
-		ret[5] = ratio < 1 ? 1 / ratio : 1;
+		ret[0] = ratio < 1 ? 1 / ratio : 1;
+		ret[5] = ratio > 1 ? ratio : 1;
 		return ret;
 	}
 

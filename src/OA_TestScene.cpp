@@ -1,10 +1,7 @@
 #include "OA_TestScene.h"
-#include "OA_Audio.h"
-#include "oagle_simd.h"
-#include <cstdio>
-#include <filesystem>
+#include "OA_TestEntity.h"
 
 namespace onart {
 	void TestScene::Update() {  }
-	void TestScene::init() {  }
+	void TestScene::init() { entities.push_back(new TestEntity()); }
 }

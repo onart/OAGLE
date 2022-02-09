@@ -3,7 +3,6 @@
 #include "OA_Model.h"
 #include "OA_Anim.h"
 
-extern float tp, dt;
 extern onart::Shader program3;
 
 namespace onart {
@@ -46,8 +45,6 @@ namespace onart {
 		program3.uniform("model", transform.getModel());
 		if (as >= 0)anims[as]->go(lt - animStartTimepoint, this, animTps);
 		if (model)model->render(program3);
-		
-		//program3.draw(model);
 	}
 
 	void Entity::update() {
@@ -72,6 +69,6 @@ namespace onart {
 
 	void Entity::addAnim(const std::string& name) {
 		Animation* anim = Animation::get(name);
-		if (anim) { anims.push_back(anim); }
+		if (anim) { anims.push_back(anim); if (as < 0) { as = 0; } }
 	}
 }

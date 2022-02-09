@@ -65,6 +65,7 @@ namespace onart {
 		uniform("alphaMask", 1);
 		uniform("bumpMap", 2);
 		uniform("surface2", 3);
+		uniform("view", mat4());
 	}
 
 	unsigned Shader::compileScript(const char* script, unsigned type) {

@@ -22,16 +22,18 @@ namespace onart {
 			return 0;
 		}
 		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
+
 		unsigned tex;
 		glGenTextures(1, &tex);
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, format, 0, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
 		texFromFile[file] = tex;
+		glBindTexture(GL_TEXTURE_2D, 0);
 		return tex;
 	}
 
@@ -53,10 +55,11 @@ namespace onart {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, hasAlpha ? GL_RGBA : GL_RGB, 0, width, height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? GL_RGBA : GL_RGB, width, height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
 		texFromMemory[bts] = tex;
+		glBindTexture(GL_TEXTURE_2D, 0);
 		return tex;
 	}
 

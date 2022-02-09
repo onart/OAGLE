@@ -186,13 +186,17 @@
     <ClCompile Include="OA_Random.cpp" />
     <ClCompile Include="OA_Scene.cpp" />
     <ClCompile Include="OA_Shader.cpp" />
+    <ClCompile Include="OA_TestEntity.cpp" />
     <ClCompile Include="OA_TestScene.cpp" />
+    <ClCompile Include="OA_Text.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
     <ClInclude Include="externals\gl\glad\glad.h" />
     <ClInclude Include="externals\gl\glfw\win64\glfw3.h" />
+    <ClInclude Include="externals\stb_image.h" />
+    <ClInclude Include="externals\stb_truetype.h" />
     <ClInclude Include="oagle.h" />
     <ClInclude Include="oaglem.h" />
     <ClInclude Include="oagle_simd.h" />
@@ -206,18 +210,22 @@
     <ClInclude Include="OA_Model.h" />
     <ClInclude Include="OA_Random.h" />
     <ClInclude Include="OA_Scene.h" />
+    <ClInclude Include="OA_TestEntity.h" />
     <ClInclude Include="OA_TestScene.h" />
+    <ClInclude Include="OA_Text.h" />
     <ClInclude Include="OA_Transform.h" />
     <ClInclude Include="OA_Vertex.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="OA_Shader.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="stb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
     <None Include="resources\p3f.txt" />
     <None Include="resources\p3v.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\p2f.txt" />
+    <Text Include="resources\p2v.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

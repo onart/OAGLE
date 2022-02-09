@@ -97,8 +97,8 @@ namespace onart {
 		/// <param name="name">애니메이션 이름입니다. 이름이 겹치는 경우 내용에 관계없이 생성하지 않고 기존에 있던 것을 리턴합니다.</param>
 		/// <param name="loop">루프 여부를 선택합니다. false인 경우 애니메이션이 끝나면 마지막 상태를 유지합니다.</param>
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
-		/// <param name="rects">시점과 직사각형 영역의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
-		/// <param name="pivots">피벗과 직사각형 영역의 순서쌍 집합입니다.</param>
+		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이의 상대값(전체가 1))의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
+		/// <param name="pivots">피벗과 직사각형 영역의 순서쌍 집합입니다. 좌측 하단이 0, 우측 하단이 1인 실수입니다.</param>
 		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:

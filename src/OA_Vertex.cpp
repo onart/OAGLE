@@ -58,7 +58,7 @@ namespace onart {
 
 		VAO = createVAO(rect, indices, &VB, &IB);
 		if (list.find("rect") != list.end()) { delete list["rect"]; }
-		list["rect"] = new Mesh(VB, IB, VAO, 36);
+		list["rect"] = new Mesh(VB, IB, VAO, 6);
 	}
 
 	void Mesh::circleModel() {

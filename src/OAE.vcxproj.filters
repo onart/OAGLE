@@ -59,6 +59,12 @@
     <ClCompile Include="OA_CQueue.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OA_Text.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_TestEntity.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources.h">
@@ -83,12 +89,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Material.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_truetype.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Random.h">
@@ -130,6 +130,18 @@
     <ClInclude Include="OA_CQueue.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="externals\stb_image.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\stb_truetype.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Text.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_TestEntity.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\p3f.txt">
@@ -139,5 +151,13 @@
       <Filter>셰이더</Filter>
     </None>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\p2f.txt">
+      <Filter>셰이더</Filter>
+    </Text>
+    <Text Include="resources\p2v.txt">
+      <Filter>셰이더</Filter>
+    </Text>
   </ItemGroup>
 </Project>

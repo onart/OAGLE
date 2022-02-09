@@ -63,9 +63,8 @@ namespace onart {
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
 		static Mesh** rect = nullptr;
 		if (!rect || !(*rect))rect = Mesh::get("rect");
-		
-		float tp = getTp(elapsed * dynamicTps);
 
+		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
 			program3.uniform("oneColor", false);
 			program3.texture(kpNow(tex, tp)->value);
@@ -98,6 +97,7 @@ namespace onart {
 					0, xy.y, 0, xy.y * pivv.y,
 					0, 0, 1, 0,
 					0, 0, 0, 1);
+				program3.uniform("piv", pivMat);
 			}
 			else {
 				program3.uniform("nopiv", true);
@@ -107,7 +107,7 @@ namespace onart {
 			program3.uniform("useFull", true);
 			program3.uniform("nopiv", true);
 		}
-
+		program3.uniform("has_bones", false);
 		program3.bind(**rect);
 		program3.draw();
 	}

@@ -136,7 +136,7 @@ namespace onart::Input {
 		backslash = GLFW_KEY_BACKSLASH,
 		left_br = GLFW_KEY_LEFT_BRACKET,
 		right_br = GLFW_KEY_RIGHT_BRACKET,
-
+		space=GLFW_KEY_SPACE
 	};
 
 	/// <summary>

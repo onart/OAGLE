@@ -10,6 +10,7 @@
 #include "OA_Input.h"
 #include "OA_Camera.h"
 #include "OA_Audio.h"
+#include "externals/stb_image.h"
 
 // 창 관련
 GLFWwindow* window = nullptr;
@@ -152,8 +153,8 @@ glErrCallback(GLenum source,
 // 초기화 함수
 bool init() {
 
-	//program2.initWithMemory();
-	program3.initWithMemory(p3vert, p3frag);
+	stbi_set_flip_vertically_on_load(true);
+
 	onart::Audio::init();
 	glClearColor(39 / 255.0f, 40 / 255.0f, 34 / 255.0f, 1.0f);
 
@@ -161,8 +162,10 @@ bool init() {
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	program3.initWithMemory(p3vert, p3frag);
+	//program2.initWithMemory();
 
 	onart::Mesh::rectModel();
 	onart::Mesh::circleModel();
@@ -177,6 +180,7 @@ bool init() {
 	glDebugMessageCallback(glErrCallback, 0);
 #endif
 	reshape(window, 1280, 720);
+	mainCamera.ratio.setProjMatrix2D();
 
 	return true;
 }
