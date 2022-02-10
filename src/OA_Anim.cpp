@@ -45,19 +45,50 @@ namespace onart {
 		
 	}
 
-	Animation* Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
+	Animation* Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
 		Animation* anim = get(name);
 		if (anim) return anim;
-		anim = new Animation2D(loop, tex, rects, pivots);
+		if (!pivots.empty() && pivots.size() != rects.size()) {
+			fprintf(stderr,"pivots가 비어 있지 않은 경우 rects와 pivots의 길이는 같아야 합니다.\n");
+			return nullptr;
+		}
+		// 시점순으로 정렬
+		auto tx(tex);	auto rcts(rects);
+		std::sort(tx.begin(), tx.end());
+		std::sort(rcts.begin(), rcts.end());
+		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
+			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
+			return nullptr;
+		}
+		// 텍스처 id만 시점순 저장
+		size_t sz = tx.size(); std::vector<Keypoint<unsigned>> texz(sz);
+		for (size_t i = 0; i < sz; i++) { texz[i] = { tx[i].tp,tx[i].value.id}; }
+		
+		// rect를 상대값으로 변형하여 저장
+		const bool pv = !pivots.empty();
+		sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
+		std::vector<vec4> sctrz(pivots.size());
+		for (size_t i = 0; i < sz; i++) { 
+			float timepoint = rcts[i].tp;
+			const ivec2& wh = kpNow(tx, timepoint)->value.size;
+			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y) };
+			if (pv) {
+				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
+				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value.z, rects[i].value.w);
+				vec2 xy(rctz[i].value.z, rctz[i].value.w);
+				xy *= vec2((float)wh.x, (float)wh.y) / 1024.0f;
+				pivv *= xy;
+				sctrz[i] = vec4(xy.x, xy.y, pivv.x, pivv.y);
+			}
+		}
+		anim = new Animation2D(loop, texz, rctz, sctrz);
 		push(name, anim);
 		return anim;
 	}
 
-	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots)
-		: tex(tex), rects(rects), pivots(pivots), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!pivots.empty()) {
-		std::sort(this->tex.begin(), this->tex.end());
-		std::sort(this->rects.begin(), this->rects.end());
-		assert(!hasPivot || pivots.size() == rects.size() && "피벗을 설정하는 경우에는 각 rect에 대하여 피벗이 하나씩 대응해야 합니다.");
+	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
+		: tex(tex), rects(rects), sctrs(sctrs), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!sctrs.empty()) {
+
 	}
 
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
@@ -87,14 +118,10 @@ namespace onart {
 			
 			if (hasPiv) {
 				program3.uniform("nopiv", false);
-				// 베이스 직사각형 중심: (0,0), 양극단: +-0.5
-				vec2 pivv = vec2(0.5f) - pivots[kp];
-				vec2 xy(l->value.z, l->value.w);
-				
-				/// 중심이동 후 크기변환
+				vec4 sctr = sctrs[kp];
 				mat4 pivMat(
-					xy.x, 0, 0, xy.x * pivv.x,
-					0, xy.y, 0, xy.y * pivv.y,
+					sctr.x, 0, 0, sctr.z,
+					0, sctr.y, 0, sctr.w,
 					0, 0, 1, 0,
 					0, 0, 0, 1);
 				program3.uniform("piv", pivMat);

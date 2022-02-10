@@ -191,7 +191,7 @@ void finalize() {
 
 int main(int argc, char* argv[]) {
 	if (!(window = onart::createWindow("OAGLE", 1280, 720))) { 
-		glfwTerminate(); 
+		glfwTerminate();
 		return 1;
 	}
 	if (!onart::initExtensions(window)) {

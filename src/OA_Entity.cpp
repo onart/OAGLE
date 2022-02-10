@@ -4,10 +4,13 @@
 #include "OA_Anim.h"
 
 extern onart::Shader program3;
+extern float tp, dt;
 
 namespace onart {
 
 	const float& Entity::tp = ::tp;
+	const float& Entity::dt = ::dt;
+
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
 	Entity::Entity(const EntityKey& k, const Transform& transform) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt) {

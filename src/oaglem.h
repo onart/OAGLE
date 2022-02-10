@@ -69,7 +69,7 @@ namespace onart {
 		/// <summary>
 		/// 복사 생성자입니다.
 		/// </summary>
-		nvec(const nvec& v) { memcpy(entry, v.entry, sizeof(entry)); }
+		nvec(const nvec<D,T>& v) { memcpy(entry, v.entry, sizeof(entry)); }
 
 		/// <summary>
 		/// 다른 차원의 벡터를 사용하는 복사 생성자입니다. 가급적 차원 축소에만 사용하는 것이 좋습니다.

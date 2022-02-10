@@ -2,6 +2,7 @@
 #define	__OA_ANIM_H__
 
 #include "oaglem.h"
+#include "OA_Material.h"
 
 #include <vector>
 #include <map>
@@ -78,11 +79,10 @@ namespace onart {
 	/// 2D 개체의 컷 애니메이션입니다.
 	/// 2D 개체의 시각적 키포인트는 2종류로, (텍스처,시점), (텍스처 내 직사각형과 피벗, 시점)입니다. (텍스처,시점)의 경우 개체로 보낼 키포인트 넘버와는 무관합니다.
 	/// 즉 act()는 텍스처 내 직사각형 키포인트만을 기준으로 호출됩니다.
-	/// <para>직사각형: LDWH(왼쪽/아래/가로/세로) 순서로 정의되는 vec4입니다. 원본 텍스처 이미지의 좌측 하단이 (0,0), 우측 상단이 (1,1)입니다.</para>
-	/// 피벗이 설정된 경우 피벗을 기준으로 2D 텍스처가 그려지는 직사각형 크기가 해당 시점의 rect를 기준으로 자동 조절되고 피벗이 회전/크기 변환의 중심이 됩니다. 이에 따라
-	/// 별개의 이미지에서 하나의 애니메이션으로 끌어올 경우 이미지가 차지하는 비율을 같게 맞추거나 개체의 모델을 따로 조절할 필요가 있습니다.
+	/// <para>직사각형: LDWH(왼쪽/아래/가로/세로) 순서로 정의되는 vec4입니다. 원본 텍스처 이미지의 좌측 하단을 (0,0)으로 하는 픽셀 단위입니다.</para>
+	/// 피벗이 설정된 경우 피벗을 기준으로 2D 텍스처가 그려지는 직사각형 크기가 해당 시점의 rect를 기준으로 자동 조절되고 피벗이 회전/크기 변환의 중심이 됩니다.
 	/// 설정되지 않은 경우 직사각형 크기는 변하지 않으며 변환의 중심은 그대로 프레임 직사각형의 중심이 됩니다.
-	/// 피벗은 애니메이션의 각 프레임의 크기(rects)가 같지 않게 그려진 경우에 명시하는 것이 좋습니다. 피벗은 텍스처 내 직사각형의 좌측 하단을 (0,0), 우측 상단을 (1,1)으로 합니다.
+	/// 피벗은 애니메이션의 각 프레임의 크기(rects)가 같지 않게 그려진 경우에 명시하는 것이 좋습니다. 피벗은 텍스처 내 직사각형의 좌측 하단을 (0,0)으로 하는 픽셀 단위입니다.
 	/// 
 	/// 모든 애니메이션의 시작 시점은 반드시 0이어야 합니다.
 	/// 
@@ -97,15 +97,15 @@ namespace onart {
 		/// <param name="name">애니메이션 이름입니다. 이름이 겹치는 경우 내용에 관계없이 생성하지 않고 기존에 있던 것을 리턴합니다.</param>
 		/// <param name="loop">루프 여부를 선택합니다. false인 경우 애니메이션이 끝나면 마지막 상태를 유지합니다.</param>
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
-		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이의 상대값(전체가 1))의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
-		/// <param name="pivots">피벗과 직사각형 영역의 순서쌍 집합입니다. 좌측 하단이 0, 우측 하단이 1인 실수입니다.</param>
-		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
+		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
+		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
-		Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
 		std::vector<Keypoint<unsigned>> tex;
 		std::vector<Keypoint<vec4>> rects;
-		std::vector<vec2> pivots;
+		std::vector<vec4> sctrs;
 		const bool hasTex, hasRect, hasPiv;
 	};
 

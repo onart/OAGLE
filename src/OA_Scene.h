@@ -75,7 +75,14 @@ namespace onart {
 	protected:
 		std::vector<Entity*> entities;
 		int id;
-		static const float& deltaTime;
+		/// <summary>
+		/// 게임 실행 이후 흐른 시간(초)입니다.
+		/// </summary>
+		static const float& tp;
+		/// <summary>
+		/// 이전 프레임과 현재 프레임 간의 시간 간격(초)입니다.
+		/// </summary>
+		static const float& dt;
 		/// <summary>
 		/// 다른 씬으로 전환합니다.
 		/// </summary>

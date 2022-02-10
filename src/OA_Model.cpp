@@ -42,7 +42,7 @@ namespace onart {
 				return 0;
 			}
 			else {
-				return Material::genTextureFromFile(p.string().c_str());
+				return Material::genTextureFromFile(p.string().c_str()).id;
 			}
 		}
 		return 0;

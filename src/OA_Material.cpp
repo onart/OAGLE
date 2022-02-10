@@ -6,20 +6,20 @@
 #include "externals/stb_image.h"
 
 namespace onart {
-	std::map<void*, unsigned> Material::texFromMemory;
-	std::map<std::string, unsigned> Material::texFromFile;
+	std::map<void*, Texture> Material::texFromMemory;
+	std::map<std::string, Texture> Material::texFromFile;
 
-	unsigned Material::genTextureFromFile(const char* file, bool reset) {
+	Texture Material::genTextureFromFile(const char* file, bool reset) {
 		auto t = texFromFile.find(file);
 		if (t != texFromFile.end()) { 
 			if (reset) return t->second;
-			else texFromFile.erase(t);
+			else drop(file);
 		}
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 		if (!data) {
 			fprintf(stderr, "텍스처 로드에 실패했습니다.\n");
-			return 0;
+			return Texture();
 		}
 		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
 
@@ -32,22 +32,22 @@ namespace onart {
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
-		texFromFile[file] = tex;
+		texFromFile.insert({ file,Texture(tex,ivec2(width,height)) });
 		glBindTexture(GL_TEXTURE_2D, 0);
-		return tex;
+		return texFromFile[file];
 	}
 
-	unsigned Material::genTextureFromMemory(unsigned char* bts, unsigned len, bool hasAlpha, bool reset) {
+	Texture Material::genTextureFromMemory(unsigned char* bts, unsigned len, bool hasAlpha, bool reset) {
 		auto t = texFromMemory.find(bts);
 		if (t != texFromMemory.end()) { 
 			if (reset) return t->second;
-			else texFromMemory.erase(t);
+			else drop(bts);
 		}
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load_from_memory(bts, len, &width, &height, &nrChannels, hasAlpha ? 4 : 3);
 		if (!data) {
 			fprintf(stderr, "텍스처 로드에 실패했습니다.\n");
-			return 0;
+			return Texture();
 		}
 		unsigned tex;
 		glGenTextures(1, &tex);
@@ -58,15 +58,15 @@ namespace onart {
 		glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? GL_RGBA : GL_RGB, width, height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
-		texFromMemory[bts] = tex;
+		texFromMemory.insert({ bts,Texture(tex,ivec2(width,height)) });
 		glBindTexture(GL_TEXTURE_2D, 0);
-		return tex;
+		return texFromMemory[bts];
 	}
 
 	void Material::drop(void* var) {
 		auto t = texFromMemory.find(var);
 		if (t != texFromMemory.end()) {
-			glDeleteTextures(1, &(t->second));
+			glDeleteTextures(1, &(t->second.id));
 			texFromMemory.erase(t);
 		}
 	}
@@ -74,7 +74,7 @@ namespace onart {
 	void Material::drop(const char* file) {
 		auto t = texFromFile.find(file);
 		if (t != texFromFile.end()) {
-			glDeleteTextures(1, &(t->second));
+			glDeleteTextures(1, &(t->second.id));
 			texFromFile.erase(t);
 		}
 	}

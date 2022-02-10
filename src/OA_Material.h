@@ -6,7 +6,11 @@
 #include <string>
 
 namespace onart {
-
+	struct Texture {
+		unsigned id;
+		ivec2 size;
+		inline Texture(unsigned id = 0, const ivec2& size = 0) : id(id), size(size) {}
+	};
 	/// <summary>
 	/// 텍스처와 표면 광택에 대한 클래스입니다.
 	/// </summary>
@@ -42,14 +46,14 @@ namespace onart {
 		/// 이미지 파일로부터 2D 텍스처를 생성합니다.
 		/// </summary>
 		/// <param name="file">파일 이름</param>
-		static unsigned genTextureFromFile(const char* file, bool reset = false);
+		static Texture genTextureFromFile(const char* file, bool reset = false);
 		/// <summary>
 		/// 메모리의 변수(이미지)로부터 2D 텍스처를 생성합니다.
 		/// </summary>
 		/// <param name="bts">이미지의 내용물(바이트 스트림)입니다.</param>
 		/// <param name="len">내용물의 길이입니다.</param>
 		/// <param name="hasAlpha">투명도가 이미지 자체에 있는 경우 true입니다. 그 외의 경우 24비트 RGB로 간주됩니다.</param>
-		static unsigned genTextureFromMemory(unsigned char* bts, unsigned len, bool hasAlpha = false, bool reset = false);
+		static Texture genTextureFromMemory(unsigned char* bts, unsigned len, bool hasAlpha = false, bool reset = false);
 		/// <summary>
 		/// 해당 변수로부터 불러온 텍스처를 제거합니다.
 		/// </summary>
@@ -59,8 +63,8 @@ namespace onart {
 		/// </summary>
 		static void drop(const char* file);
 	private:
-		static std::map<void*, unsigned> texFromMemory;
-		static std::map<std::string, unsigned> texFromFile;
+		static std::map<void*, Texture> texFromMemory;
+		static std::map<std::string, Texture> texFromFile;
 
 		vec4 ambient;
 		vec4 diffuse;

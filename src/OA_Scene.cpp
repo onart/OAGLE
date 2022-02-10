@@ -7,7 +7,8 @@ namespace onart {
 	
 	Scene* Scene::currentScene;
 	std::set<EntityKey> Scene::nonstop;
-	const float& Scene::deltaTime = dt;
+	const float& Scene::dt = ::dt;
+	const float& Scene::tp = ::tp;
 
 	void Scene::update() {
 		if (isPaused) {

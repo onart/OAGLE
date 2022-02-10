@@ -8,8 +8,6 @@
 #include "OA_Transform.h"
 #include "OA_Input.h"
 
-extern float tp, dt;
-
 namespace onart {
 	class Model;
 	class Animation;
@@ -98,6 +96,10 @@ namespace onart {
 		/// 게임이 실행된 후 현재 프레임에 들어오기까지 흐른 시간(초)입니다.
 		/// </summary>
 		static const float& tp;
+		/// <summary>
+		/// 이전 프레임과 현재 프레임 간의 시간 간격(초)입니다.
+		/// </summary>
+		static const float& dt;
 	private:
 		float lt = 0;
 		EntityKey key;
