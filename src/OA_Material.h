@@ -43,28 +43,26 @@ namespace onart {
 		inline float getRefractiveIndex() const { return refractIdx; }
 
 		/// <summary>
-		/// 이미지 파일로부터 2D 텍스처를 생성합니다.
+		/// 이미지 파일로부터 2D 텍스처를 생성합니다. 24비트/32비트(알파채널) 이미지만 가능합니다.
 		/// </summary>
 		/// <param name="file">파일 이름</param>
-		static Texture genTextureFromFile(const char* file, bool reset = false);
+		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다.</param>
+		/// <param name="name">프로그램 내에서 사용할 텍스처 이름(입력하지 않는 경우 파일 이름을 그대로 사용)</param>
+		static Texture genTextureFromFile(const char* file, bool reset = false, const char* name = nullptr);
 		/// <summary>
-		/// 메모리의 변수(이미지)로부터 2D 텍스처를 생성합니다.
+		/// 메모리의 변수(이미지)로부터 2D 텍스처를 생성합니다. 24비트/32비트(알파채널) 이미지만 가능합니다.
 		/// </summary>
-		/// <param name="bts">이미지의 내용물(바이트 스트림)입니다.</param>
-		/// <param name="len">내용물의 길이입니다.</param>
-		/// <param name="hasAlpha">투명도가 이미지 자체에 있는 경우 true입니다. 그 외의 경우 24비트 RGB로 간주됩니다.</param>
-		static Texture genTextureFromMemory(unsigned char* bts, unsigned len, bool hasAlpha = false, bool reset = false);
+		/// <param name="bts">이미지 데이터입니다.</param>
+		/// <param name="len">데이터 길이입니다.</param>
+		/// <param name="name">프로그램 내에서 사용할 텍스처 이름</param>
+		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다.</param>
+		static Texture genTextureFromMemory(unsigned char* bts, unsigned len, const std::string& name, bool reset = false);
 		/// <summary>
-		/// 해당 변수로부터 불러온 텍스처를 제거합니다.
+		/// 해당 이름의 텍스처를 제거합니다.
 		/// </summary>
-		static void drop(void* var);
-		/// <summary>
-		/// 해당 파일에서 온 텍스처를 제거합니다.
-		/// </summary>
-		static void drop(const char* file);
+		static void drop(const std::string& name);
 	private:
-		static std::map<void*, Texture> texFromMemory;
-		static std::map<std::string, Texture> texFromFile;
+		static std::map<std::string, Texture> texList;
 
 		vec4 ambient;
 		vec4 diffuse;

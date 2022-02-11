@@ -4,16 +4,15 @@
 #include "externals/gl/glad/glad.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "externals/stb_image.h"
-
 namespace onart {
-	std::map<void*, Texture> Material::texFromMemory;
-	std::map<std::string, Texture> Material::texFromFile;
+	std::map<std::string, Texture> Material::texList;
 
-	Texture Material::genTextureFromFile(const char* file, bool reset) {
-		auto t = texFromFile.find(file);
-		if (t != texFromFile.end()) { 
-			if (reset) return t->second;
-			else drop(file);
+	Texture Material::genTextureFromFile(const char* file, bool reset, const char* name) {
+		std::string texName(name ? name : file);
+		auto t = texList.find(texName);
+		if (t != texList.end()) { 
+			if (!reset) return t->second;
+			else drop(texName);
 		}
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
@@ -32,50 +31,43 @@ namespace onart {
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
-		texFromFile.insert({ file,Texture(tex,ivec2(width,height)) });
+		texList[texName] = Texture(tex, ivec2(width, height));;
 		glBindTexture(GL_TEXTURE_2D, 0);
-		return texFromFile[file];
+		return texList[texName];
 	}
 
-	Texture Material::genTextureFromMemory(unsigned char* bts, unsigned len, bool hasAlpha, bool reset) {
-		auto t = texFromMemory.find(bts);
-		if (t != texFromMemory.end()) { 
-			if (reset) return t->second;
-			else drop(bts);
+	Texture Material::genTextureFromMemory(unsigned char* bts, unsigned len, const std::string& name, bool reset) {
+		auto t = texList.find(name);
+		if (t != texList.end()) { 
+			if (!reset) return t->second;
+			else drop(name);
 		}
 		int width, height, nrChannels;
-		unsigned char* data = stbi_load_from_memory(bts, len, &width, &height, &nrChannels, hasAlpha ? 4 : 3);
+		unsigned char* data = stbi_load_from_memory(bts, len, &width, &height, &nrChannels, 0);
 		if (!data) {
 			fprintf(stderr, "텍스처 로드에 실패했습니다.\n");
 			return Texture();
 		}
+		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
 		unsigned tex;
 		glGenTextures(1, &tex);
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, hasAlpha ? GL_RGBA : GL_RGB, width, height, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		stbi_image_free(data);
-		texFromMemory.insert({ bts,Texture(tex,ivec2(width,height)) });
+		texList[name] = Texture(tex, ivec2(width, height));
 		glBindTexture(GL_TEXTURE_2D, 0);
-		return texFromMemory[bts];
+		return texList[name];
 	}
 
-	void Material::drop(void* var) {
-		auto t = texFromMemory.find(var);
-		if (t != texFromMemory.end()) {
+	void Material::drop(const std::string& name) {
+		auto t = texList.find(name);
+		if (t != texList.end()) {
 			glDeleteTextures(1, &(t->second.id));
-			texFromMemory.erase(t);
-		}
-	}
-
-	void Material::drop(const char* file) {
-		auto t = texFromFile.find(file);
-		if (t != texFromFile.end()) {
-			glDeleteTextures(1, &(t->second.id));
-			texFromFile.erase(t);
+			texList.erase(t);
 		}
 	}
 }

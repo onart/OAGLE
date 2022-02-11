@@ -176,7 +176,7 @@ namespace onart {
 		std::vector<Bone> u;
 		std::map<std::string, int> n2i;
 		BoneTree btree;
-
+		mat4 globalInverse;
 		void setGlobalTrans(BoneTree& t, const mat4& parent = mat4());
 	};
 }

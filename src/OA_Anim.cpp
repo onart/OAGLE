@@ -118,7 +118,7 @@ namespace onart {
 			
 			if (hasPiv) {
 				program3.uniform("nopiv", false);
-				vec4 sctr = sctrs[kp];
+				vec4& sctr = sctrs[kp];
 				mat4 pivMat(
 					sctr.x, 0, 0, sctr.z,
 					0, sctr.y, 0, sctr.w,
@@ -185,6 +185,7 @@ namespace onart {
 		}
 
 		// 뼈 트리
+		globalInverse = oam4(scn->mRootNode->mTransformation.Inverse());
 		readHierarchy(scn->mRootNode, btree);
 
 		// 애니메이션 키프레임
@@ -301,7 +302,7 @@ namespace onart {
 		bool isBone = t.id >= 0;	// 정점에 직접적 연관이 있는가?
 		if (isBone) {
 			Bone b = u[t.id];
-			b.uni = global * b.offset;
+			b.uni = globalInverse * global * b.offset;
 		}
 		for (auto& ch : t.children) {
 			setGlobalTrans(t, global);
