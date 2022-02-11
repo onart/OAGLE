@@ -43,8 +43,8 @@ namespace onart {
 
 	void Shader::initWithMemory(const char* vert, const char* frag) {
 		id = glCreateProgram();
-		glUseProgram(id);
-
+		//glUseProgram(id);
+		
 		unsigned vs = compileScript(vert, GL_VERTEX_SHADER);
 		unsigned fs = compileScript(frag, GL_FRAGMENT_SHADER);
 
@@ -55,10 +55,10 @@ namespace onart {
 
 		glAttachShader(id, vs);
 		glAttachShader(id, fs);
-
+		
 		glLinkProgram(id);
 		validateShaderProgram();
-
+		
 		// fixed sampler2d
 		use();
 		uniform("surface", 0);
@@ -259,16 +259,9 @@ namespace onart {
 		recentLen = m.getLength();
 	}
 
-	void Shader::draw(unsigned begin, unsigned count) const {
+	void Shader::draw(unsigned begin, unsigned count, unsigned ib) const {
 		if (count == unsigned(-1)) { count = recentLen - begin; }
+		if (ib) { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib); }
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(begin * sizeof(unsigned)));
 	}
-
-	/* //예정: 정점 데이터=메시, 메시+메터리얼+애니메이션=모델, 모델+기능=개체. 이때 name은 모델을 기준으로 검색됨
-	void Shader::draw(const char* name) {
-		Mesh* m = list[name];
-		glBindVertexArray(m.getID());
-		glDrawElements(GL_TRIANGLES, m.getLength(), GL_UNSIGNED_INT, nullptr);
-	}
-	*/
 }

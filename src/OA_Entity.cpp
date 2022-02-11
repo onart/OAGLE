@@ -46,7 +46,13 @@ namespace onart {
 	void Entity::render() {
 		program3.use();
 		program3.uniform("model", transform.getModel());
-		if (as >= 0)anims[as]->go(lt - animStartTimepoint, this, animTps);
+		
+		if (as >= 0) { 
+			anims[as]->go(lt - animStartTimepoint, this, animTps); 
+		}
+		else {
+			program3.uniform("has_bones", false);
+		}
 		if (model)model->render(program3);
 	}
 

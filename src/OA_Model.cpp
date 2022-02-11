@@ -63,12 +63,12 @@ namespace onart {
 		Assimp::Importer importer;
 		const aiScene* scn = importer.ReadFile(fullPath, importFlags);
 		if (!scn) { printf("Assimp 오류: %s\n", importer.GetErrorString()); return nullptr; }
-		list[fullPath] = new Model(scn, fullPath);
-		return list[fullPath];
+		return list[file] = new Model(scn, fullPath);
 	}
 
 	Model::Model(const aiScene* scn, const std::string& name) {
 		size_t vCount = 0, iCount = 0;
+		
 		for (unsigned mid = 0; mid < scn->mNumMeshes; mid++) {
 			const aiMesh* m = scn->mMeshes[mid];
 			vCount += m->mNumVertices;
@@ -78,7 +78,7 @@ namespace onart {
 				}
 			}
 		}
-
+		
 		std::vector<Vertex> vList;
 		std::vector<unsigned> iList;
 		std::map<std::string, int> bList;
@@ -89,7 +89,7 @@ namespace onart {
 		for (unsigned mid = 0; mid < scn->mNumMeshes; mid++) {
 			const aiMesh* m = scn->mMeshes[mid];
 			if (m->mPrimitiveTypes != aiPrimitiveType::aiPrimitiveType_TRIANGLE) continue;
-
+			
 			const size_t v0 = vList.size();
 			const size_t i0 = iList.size();
 			// 인덱스 저장
@@ -99,12 +99,13 @@ namespace onart {
 				const auto& ed = iList.end();
 				for (; ind < ed; ind++) *ind += (unsigned)v0;
 			}
+			
 			// 정점 데이터 저장
 			if (m->HasTextureCoords(0)) {
 				for (size_t vid = 0; vid < m->mNumVertices; vid++) {
 					const aiVector3D& pos = m->mVertices[vid];
 					const aiVector3D& norm = m->mNormals[vid];
-					const aiVector3D& tc = m->mTextureCoords[vid][0];
+					const aiVector3D& tc = m->mTextureCoords[0][vid];
 					vList.push_back(std::move(Vertex{ vec3(pos.x,pos.y,pos.z),vec3(norm.x,norm.y,norm.z),vec2(tc.x,tc.y) }));
 				}
 			}
@@ -115,7 +116,6 @@ namespace onart {
 					vList.push_back(std::move(Vertex{ vec3(pos.x,pos.y,pos.z),vec3(norm.x,norm.y,norm.z) }));
 				}
 			}
-
 #ifdef USE_BUMP
 			if (m->HasTangentsAndBitangents()) {
 				for (size_t vid = 0; vid < m->mNumVertices; vid++) {
@@ -170,9 +170,9 @@ namespace onart {
 				mtl->Get(AI_MATKEY_SHININESS, fbu);	material->setShininess(fbu);
 				mtl->Get(AI_MATKEY_OPACITY, fbu);	material->setAlpha(fbu);
 				mtl->Get(AI_MATKEY_REFRACTI, fbu);	material->setRefractiveIndex(fbu);
-
-				unsigned difftex = assimpReadTex(mtl, name, aiTextureType::aiTextureType_DIFFUSE);
-				unsigned normtex = assimpReadTex(mtl, name, aiTextureType::aiTextureType_NORMALS);
+				auto dir = std::filesystem::path(name).parent_path();
+				unsigned difftex = assimpReadTex(mtl, dir, aiTextureType::aiTextureType_DIFFUSE);
+				unsigned normtex = assimpReadTex(mtl, dir, aiTextureType::aiTextureType_NORMALS);
 				material->setDiffuseTex(difftex);
 				material->setBumpTex(normtex);
 #ifdef _DEBUG
@@ -186,7 +186,6 @@ namespace onart {
 			}
 			geom.push_back(Geometry{ (unsigned)i0,unsigned(iList.size() - i0),m->mMaterialIndex });
 		}
-
 		Mesh::add(name, vList, iList);
 		mesh = Mesh::get(name);
 	}
@@ -219,10 +218,12 @@ namespace onart {
 		}
 	}
 
-	void Model::render(Shader& shader, const int material, const vec4& color) {
-		size_t sz = materials.size();	// 당장 1임을 가정
+	void Model::render(Shader& shader, const int material, const vec4& color) const {
 		shader.use();
 		shader.bind(**mesh);
+		shader.uniform("nopiv", true);
+		shader.uniform("useFull", true);
+		shader.uniform("is2d", false);
 		shader.uniform("color", color);
 		for (auto& g : geom) {
 			Material* mtl = materials[g.material];
@@ -231,6 +232,7 @@ namespace onart {
 				shader.uniform("Kd", mtl->getDiffuse());
 				shader.uniform("Ks", mtl->getSpecular());
 				shader.uniform("shininess", mtl->getShininess());
+
 				unsigned df = mtl->getDiffuseTex();
 				if (df) {
 					shader.texture(df);
@@ -243,8 +245,7 @@ namespace onart {
 			else {
 				shader.uniform("oneColor", true);
 			}
-
-			shader.draw(g.start, g.count);
+			shader.draw(g.start, g.count, (**mesh).getIB());
 		}
 	}
 }

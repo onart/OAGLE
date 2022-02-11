@@ -16,7 +16,6 @@ namespace onart {
 			this->relativePos = relativePos; 
 			if (!at) {
 				fixedAt = *(this->at);
-				fixedEye = fixedAt + relativePos;
 			}
 			this->at = at; 
 		}
@@ -25,7 +24,7 @@ namespace onart {
 		/// </summary>
 		/// <param name="relativePos">카메라가 볼 지점을 기준(0,0,0)으로 한 카메라의 위치입니다.</param>
 		/// <param name="fixedAt">카메라가 볼 지점입니다.</param>
-		inline void fix(const vec3& relativePos, const vec3& fixedAt) { at = nullptr; this->fixedAt = fixedAt; fixedEye = fixedAt + relativePos; }
+		inline void fix(const vec3& relativePos, const vec3& fixedAt) { at = nullptr; this->fixedAt = fixedAt; this->relativePos = relativePos; }
 
 		/// <summary>
 		/// 카메라의 움직임 딜레이를 설정합니다.
@@ -103,8 +102,8 @@ namespace onart {
 			void setFar(float far);
 		} ratio;
 	private:
-		vec3 fixedEye, fixedAt, up;
-		vec3 relativePos;
+		vec3 fixedAt = { 0,0,-1 }, up = { 0,1,0 };
+		vec3 relativePos = { 0,0,1 };
 		vec3 currentPos;
 		
 		bool fixdir = false;

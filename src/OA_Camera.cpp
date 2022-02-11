@@ -21,7 +21,10 @@ namespace onart {
 		else if (way > 0) {
 			wantedPos = lerp(currentPos, desiredEye, way);
 		}
-		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);		
+		else {
+			wantedPos = desiredEye;
+		}
+		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);
 		if (fixdir) program3.uniform("view", mat4::lookAt(currentPos, currentPos - relativePos, up));
 		else program3.uniform("view", mat4::lookAt(currentPos, *desiredAt, up));
 		

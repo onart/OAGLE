@@ -78,6 +78,8 @@ namespace onart {
 			/// 정점 배열 오브젝트의 id를 얻습니다.
 			/// </summary>
 			inline unsigned getID() const { return vao; }
+			inline unsigned getVB() const { return vb; }
+			inline unsigned getIB() const { return ib; }
 			/// <summary>
 			/// 정점 배열의 길이를 얻습니다.
 			/// </summary>			

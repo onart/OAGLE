@@ -94,7 +94,7 @@ namespace onart {
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
 		static Mesh** rect = nullptr;
 		if (!rect || !(*rect))rect = Mesh::get("rect");
-
+		
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
 			program3.uniform("oneColor", false);
@@ -214,7 +214,7 @@ namespace onart {
 		if (anim) return anim;
 
 		Assimp::Importer importer;
-		const aiScene* scn = importer.ReadFile(name, 0);
+		const aiScene* scn = importer.ReadFile(file, 0);
 		if (!scn) {
 			printf("\nAssimp ¿À·ù: %s\n", importer.GetErrorString());
 			return nullptr;
@@ -225,7 +225,7 @@ namespace onart {
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
 		Animation* ret = new Animation3D(scn, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
-		
+
 		push(name, ret);
 		return ret;
 	}

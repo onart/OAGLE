@@ -53,7 +53,10 @@ void update() {
 
 void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	onart::Scene::currentScene->render();
+	mainCamera.viewUpdate();
+	//onart::Scene::currentScene->render();
+	glBindVertexArray(6);
+	glDrawElements(GL_TRIANGLES, 53057, GL_UNSIGNED_INT, nullptr);
 	glfwSwapBuffers(window);
 }
 
@@ -166,13 +169,13 @@ bool init() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	program3.initWithMemory(p3vert, p3frag);
 	//program2.initWithMemory();
-
+	
 	onart::Mesh::rectModel();
 	onart::Mesh::circleModel();
 	onart::Mesh::sphereModel();
 	onart::Mesh::cuboidModel();
 	onart::Mesh::iCuboidModel();
-
+	mainCamera.ratio.setProjMatrix2D();
 	onart::Scene::currentScene = new onart::TestScene();
 	onart::Scene::currentScene->init();
 #ifdef _DEBUG
@@ -180,8 +183,6 @@ bool init() {
 	glDebugMessageCallback(glErrCallback, 0);
 #endif
 	reshape(window, 1280, 720);
-	mainCamera.ratio.setProjMatrix2D();
-
 	return true;
 }
 

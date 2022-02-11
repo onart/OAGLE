@@ -129,7 +129,8 @@ namespace onart {
 			/// </summary>
 			/// <param name="begin">배열 인덱스의 시작점입니다. 0부터 시작합니다.</param>
 			/// <param name="count">배열 인덱스의 개수입니다. 입력하지 않는 경우 마지막점까지로 간주됩니다.</param>
-			void draw(unsigned begin = 0, unsigned count = -1) const;
+			/// <param name="ib">인덱스 버퍼입니다. 다수의 지오메트리로 구성된 모델을 그릴 때 입력합니다.</param>
+			void draw(unsigned begin = 0, unsigned count = -1, unsigned ib = 0) const;
 
 			/// <summary>
 			/// 정점 배열 객체를 그립니다. 엔진 구조상 uniform 전달보다 나중에 호출합니다.

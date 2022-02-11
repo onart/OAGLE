@@ -125,7 +125,7 @@ namespace onart {
 		/// <param name="file">파일 이름을 입력해주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
-		static Animation* load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp);
+		static Animation* load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp = {});
 		/// <summary>
 		/// .dae 파일 형식의 배열 변수에서 3D 관절 애니메이션을 로드합니다.
 		/// </summary>
@@ -134,7 +134,7 @@ namespace onart {
 		/// <param name="len">배열 변수의 길이를 입력해 주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// /// <param name="sig_kp">act()로 알림받을 시점(float)</param>
-		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp);
+		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp = {});
 
 		/// <summary>
 		/// 애니메이션의 현재 상태를 렌더링하고, 필요한 경우 개체에서 함수를 호출합니다.

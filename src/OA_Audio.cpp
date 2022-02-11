@@ -25,6 +25,7 @@ extern "C" {
 		#pragma comment(lib, "externals/ffmpeg/libx86/avcodec.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx86/avutil.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx86/swresample.lib")
+		#pragma warning(disable: 4244)
 	#endif // _WIN64
 	#pragma warning(disable: 26812 26819)
 #endif

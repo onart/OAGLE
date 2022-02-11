@@ -84,6 +84,7 @@ namespace onart {
 		/// 개체의 현재 애니메이션 상태입니다.
 		/// </summary>
 		const int& animState;
+		inline void setModel(Model* model) { this->model = model; }
 		/// <summary>
 		/// 애니메이션 상태를 변경합니다. 현재 적용 중인 번호를 고르면 그 애니메이션은 처음부터 다시 시작합니다.
 		/// </summary>

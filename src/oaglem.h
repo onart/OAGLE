@@ -730,9 +730,9 @@ namespace onart {
 		/// <param name="dfar">뿔대에서 가장 먼 거리입니다. 이 이상의 거리는 보이지 않습니다.</param>
 		inline static mat4 perspective(float fovy, float aspect, float dnear, float dfar) {
 			mat4 r(
-				1, 0,					0, 0,
-				0, 1 / tanf(fovy / 2),	0, 0,
-				0, 0,	(dnear + dfar) / (dnear - dfar), 0,
+				1, 0, 0, 0,
+				0, 1 / tanf(fovy / 2), 0, 0,
+				0, 0, (dnear + dfar) / (dnear - dfar), (2 * dnear * dfar) / (dnear - dfar) ,
 				0, 0,					-1, 0
 			);
 			r._11 = r._22 / aspect;
