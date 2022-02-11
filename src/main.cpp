@@ -54,9 +54,15 @@ void update() {
 void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mainCamera.viewUpdate();
-	//onart::Scene::currentScene->render();
-	glBindVertexArray(6);
-	glDrawElements(GL_TRIANGLES, 53057, GL_UNSIGNED_INT, nullptr);
+	onart::Scene::currentScene->render();
+	
+	//glBindVertexArray(6);
+	//program3.uniform("model", onart::mat4());
+	//program3.uniform("nopiv", true);
+	//program3.uniform("has_bones", false);
+	//program3.uniform("zoom", 1.0f);
+	//program3.uniform("is2d", false);
+	//glDrawElements(GL_TRIANGLES, 53057, GL_UNSIGNED_INT, nullptr);
 	glfwSwapBuffers(window);
 }
 
