@@ -53,7 +53,11 @@ namespace onart {
 		else {
 			program3.uniform("has_bones", false);
 		}
-		if (model)model->render(program3);
+		if (model) { 
+			program3.uniform("nopiv", true);
+			program3.uniform("useFull", true);
+			model->render(program3); 
+		}
 	}
 
 	void Entity::update() {

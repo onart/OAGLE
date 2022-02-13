@@ -147,16 +147,15 @@ namespace onart {
 			int kp = int(sub - sigKp.begin() - 1);
 			if (e->getAnimKey() != kp)e->act(kp);
 		}
-		
 		for (auto& bone : keys) {
 			bone.second.setTrans(tp);
 		}
-
 		setGlobalTrans(btree);
 		int i = 0;
 		for (Bone& m : u) {
 			program3.uniform(("bones[" + std::to_string(i++) + ']').c_str(), m.uni);
 		}
+		program3.uniform("has_bones", true);
 	}
 
 	void Animation3D::readHierarchy(aiNode* root, BoneTree& tree) {
@@ -253,6 +252,7 @@ namespace onart {
 
 	void Animation3D::BoneAnim::setTrans(float tp) {
 		vec3 pos; vec3 scale(1); Quaternion rotation;
+
 		if (!keyPos.empty()) {
 			auto p1 = kpNow(keyPos, tp);
 			if (p1 == keyPos.end() - 1 || keyPos.size() == 1) {
@@ -261,6 +261,7 @@ namespace onart {
 			else {
 				auto p2 = p1 + 1;
 				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
+
 				if (interp < 0) { pos = p1->value; /* 애니메이션 키포인트가 잘못 지정된 (0부터 시작하지 않는) 케이스 */ }
 				else { pos = lerp(p1->value, p2->value, interp); }
 			}
@@ -301,11 +302,11 @@ namespace onart {
 		mat4 global = parent * nodeTransform;
 		bool isBone = t.id >= 0;	// 정점에 직접적 연관이 있는가?
 		if (isBone) {
-			Bone b = u[t.id];
+			Bone& b = u[t.id];
 			b.uni = globalInverse * global * b.offset;
 		}
 		for (auto& ch : t.children) {
-			setGlobalTrans(t, global);
+			setGlobalTrans(ch, global);
 		}
 	}
 }
