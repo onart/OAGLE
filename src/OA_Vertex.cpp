@@ -54,11 +54,11 @@ namespace onart {
 			Vertex{vec3(-0.5f,0.5f,0.0f),vec3(1,1,1),vec2(0,1)},
 		};
 
-		std::vector<unsigned> indices = { 0,3,1,1,3,2 };
+		std::vector<unsigned> indices = { 0,3,1,1,3,2,0,1,3,1,2,3 };
 
 		VAO = createVAO(rect, indices, &VB, &IB);
 		if (list.find("rect") != list.end()) { delete list["rect"]; }
-		list["rect"] = new Mesh(VB, IB, VAO, 6);
+		list["rect"] = new Mesh(VB, IB, VAO, 12);
 	}
 
 	void Mesh::circleModel() {

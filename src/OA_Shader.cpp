@@ -259,9 +259,8 @@ namespace onart {
 		recentLen = m.getLength();
 	}
 
-	void Shader::draw(unsigned begin, unsigned count, unsigned ib) const {
+	void Shader::draw(unsigned begin, unsigned count) const {
 		if (count == unsigned(-1)) { count = recentLen - begin; }
-		if (ib) { glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib); }
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(begin * sizeof(unsigned)));
 	}
 }

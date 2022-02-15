@@ -9,6 +9,12 @@
 #include "OA_Input.h"
 
 namespace onart {
+	class Camera;
+}
+
+extern onart::Camera mainCamera;
+
+namespace onart {
 	class Model;
 	class Animation;
 	/// <summary>

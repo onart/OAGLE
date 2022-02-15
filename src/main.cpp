@@ -45,9 +45,15 @@ onart::ivec2 mousePos;	// 마우스의 위치를 저장합니다.
 
 // 주기 호출 함수 (게임 루프)
 void update() {
-	float cur = (float)glfwGetTime();
-	dt = cur - tp;
-	tp = cur;
+	if constexpr (onart::OA_FIX_TIMESCALE) {
+		dt = 1.0f / 60;
+		tp += dt;
+	}
+	else {
+		float cur = (float)glfwGetTime();
+		dt = cur - tp;
+		tp = cur;
+	}
 	onart::Scene::currentScene->update();
 }
 

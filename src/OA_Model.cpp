@@ -245,7 +245,7 @@ namespace onart {
 			else {
 				shader.uniform("oneColor", true);
 			}
-			shader.draw(g.start, g.count, (**mesh).getIB());
+			shader.draw(g.start, g.count);
 		}
 	}
 }

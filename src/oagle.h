@@ -35,6 +35,8 @@ namespace onart {
 	constexpr int R_HEIGHT = 9;
 	constexpr float LRPOL = R_WIDTH > R_HEIGHT ? (float)R_WIDTH / R_HEIGHT : 1;
 	constexpr float UDPOL = R_WIDTH > R_HEIGHT ? 1 : (float)R_HEIGHT / R_WIDTH;
+	constexpr bool OA_FIX_TIMESCALE = false;	// true인 경우 프레임 타임이 느려져도 dt값은 1/60으로 고정되게 합니다.
+	constexpr float OA_DEFAULT_VSYNC_FPS = 60;	// 기본 프레임 타임을 조절하는 상수로 만들 계획입니다. (성공하는 경우 변수도 추가됩니다.)
 
 	/// <summary>
 	/// GLFW 초기화 함수를 단 한 번만 호출합니다.
