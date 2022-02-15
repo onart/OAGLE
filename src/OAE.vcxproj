@@ -219,7 +219,6 @@
     <ClInclude Include="OA_Shader.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cpp.hint" />
     <None Include="resources\p3f.txt" />
     <None Include="resources\p3v.txt" />
   </ItemGroup>

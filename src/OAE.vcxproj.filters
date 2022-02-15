@@ -150,7 +150,6 @@
     <None Include="resources\p3v.txt">
       <Filter>셰이더</Filter>
     </None>
-    <None Include="cpp.hint" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="resources\p2f.txt">
