@@ -51,7 +51,7 @@ namespace onart {
 	}
 
 	void Entity::render() {
-		program3.use();
+		program3.use();	// 이 부분 수정 필요
 		program3.uniform("model", transform.getModel());
 		
 		if (as >= 0) { 

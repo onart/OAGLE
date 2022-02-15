@@ -25,7 +25,7 @@
 
 #include <algorithm>
 
-extern onart::Shader program3;
+extern onart::Shader program2, program3;
 
 namespace onart {
 	std::map<std::string, Animation*> Animation::animations;
@@ -95,7 +95,7 @@ namespace onart {
 
 	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
 		: tex(tex), rects(rects), sctrs(sctrs), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!sctrs.empty()) {
-
+		
 	}
 
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
@@ -315,5 +315,97 @@ namespace onart {
 		for (auto& ch : t.children) {
 			setGlobalTrans(ch, global);
 		}
+	}
+
+	void UIAnimation::go(float elapsed, Entity* e, float dynamicTps) {
+		static Mesh** rect = nullptr;
+		if (!rect || !(*rect))rect = Mesh::get("rect");
+
+		float tp = getTp(elapsed * dynamicTps);
+		if (hasTex) {
+			program2.uniform("oneColor", false);
+			program2.texture(kpNow(tex, tp)->value);
+		}
+		else {
+			program2.uniform("oneColor", true);
+		}
+
+		if (hasRect) {
+			program2.uniform("useFull", false);
+			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
+			int kp = 0;
+			if (l == rects.begin()) { program2.uniform("ldwh", rects[0].value); }
+			else {
+				l--;
+				program2.uniform("ldwh", l->value);
+				kp = int(l - rects.begin());
+				if (e->getAnimKey() != kp) { e->act(kp); }
+			}
+
+			if (hasPiv) {
+				program2.uniform("nopiv", false);
+				vec4& sctr = sctrs[kp];
+				mat4 pivMat(
+					sctr.x, 0, 0, sctr.z,
+					0, sctr.y, 0, sctr.w,
+					0, 0, 1, 0,
+					0, 0, 0, 1);
+				program2.uniform("piv", pivMat);
+			}
+			else {
+				program2.uniform("nopiv", true);
+			}
+		}
+		else {
+			program2.uniform("useFull", true);
+			program2.uniform("nopiv", true);
+		}
+		program2.bind(**rect);
+		program2.draw();
+	}
+
+	UIAnimation::UIAnimation(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs) : Animation2D(loop, tex, rects, sctrs) {
+
+	}
+
+	Animation* UIAnimation::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
+		Animation* anim = get(name);
+		if (anim) return anim;
+		if (!pivots.empty() && pivots.size() != rects.size()) {
+			fprintf(stderr, "pivots가 비어 있지 않은 경우 rects와 pivots의 길이는 같아야 합니다.\n");
+			return nullptr;
+		}
+		// 시점순으로 정렬
+		auto tx(tex);	auto rcts(rects);
+		std::sort(tx.begin(), tx.end());
+		std::sort(rcts.begin(), rcts.end());
+		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
+			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
+			return nullptr;
+		}
+		// 텍스처 id만 시점순 저장
+		size_t sz = tx.size(); std::vector<Keypoint<unsigned>> texz(sz);
+		for (size_t i = 0; i < sz; i++) { texz[i] = { tx[i].tp,tx[i].value.id }; }
+
+		// rect를 상대값으로 변형하여 저장
+		const bool pv = !pivots.empty();
+		sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
+		std::vector<vec4> sctrz(pivots.size());
+		for (size_t i = 0; i < sz; i++) {
+			float timepoint = rcts[i].tp;
+			const ivec2& wh = kpNow(tx, timepoint)->value.size;
+			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y) };
+			if (pv) {
+				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
+				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value.z, rects[i].value.w);
+				vec2 xy(rctz[i].value.z, rctz[i].value.w);
+				xy *= vec2((float)wh.x, (float)wh.y) / 1024.0f;
+				pivv *= xy;
+				sctrz[i] = vec4(xy.x, xy.y, pivv.x, pivv.y);
+			}
+		}
+		anim = new UIAnimation(loop, texz, rctz, sctrz);
+		push(name, anim);
+		return anim;
 	}
 }

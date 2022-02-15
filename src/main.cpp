@@ -178,9 +178,9 @@ bool init() {
 	glEnable(GL_BLEND);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	program2.initWithMemory(p2vert, p2frag);
 	program3.initWithMemory(p3vert, p3frag);
-	//program2.initWithMemory();
-	
+
 	onart::Mesh::rectModel();
 	onart::Mesh::circleModel();
 	onart::Mesh::sphereModel();

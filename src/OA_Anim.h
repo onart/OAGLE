@@ -108,12 +108,12 @@ namespace onart {
 		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
 		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
-	private:
-		Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
+	protected:
 		std::vector<Keypoint<unsigned>> tex;
 		std::vector<Keypoint<vec4>> rects;
 		std::vector<vec4> sctrs;
 		const bool hasTex, hasRect, hasPiv;
+		Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
 	};
 
 	/// <summary>
@@ -185,6 +185,25 @@ namespace onart {
 		BoneTree btree;
 		mat4 globalInverse;
 		void setGlobalTrans(BoneTree& t, const mat4& parent = mat4());
+	};
+
+	/// <summary>
+	/// 이것은 2D 애니메이션의 일종인데, 2D 개체와 다르게 카메라 및 셰이딩의 영향을 받지 않습니다.
+	/// </summary>
+	class UIAnimation : public Animation2D {
+	public:
+		/// <summary>
+		/// 애니메이션을 생성하고 리턴합니다. Animation2D의 make와 완전히 동일하게 사용하면 됩니다.
+		/// </summary>
+		/// <param name="name">애니메이션 이름입니다. 이름이 겹치는 경우 내용에 관계없이 생성하지 않고 기존에 있던 것을 리턴합니다.</param>
+		/// <param name="loop">루프 여부를 선택합니다. false인 경우 애니메이션이 끝나면 마지막 상태를 유지합니다.</param>
+		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
+		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
+		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
+		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		void go(float elapsed, Entity* e, float dynamicTps = 1);
+	private:
+		UIAnimation(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
 	};
 }
 
