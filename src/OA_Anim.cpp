@@ -104,44 +104,44 @@ namespace onart {
 		
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
-			program3.uniform("oneColor", false);
+			program3["oneColor"] = false;
 			program3.texture(kpNow(tex, tp)->value);
 		}
 		else {
-			program3.uniform("oneColor", true);
+			program3["oneColor"] = true;
 		}
 
 		if (hasRect) {
-			program3.uniform("useFull", false);
+			program3["useFull"] = false;
 			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
 			int kp = 0;
-			if (l == rects.begin()) { program3.uniform("ldwh", rects[0].value); }
+			if (l == rects.begin()) { program3["ldwh"] = rects[0].value; }
 			else { 
 				l--;
-				program3.uniform("ldwh", l->value);
+				program3["ldwh"] = l->value;
 				kp = int(l - rects.begin());
 				if (e->getAnimKey() != kp) { e->act(kp); }
 			}
 			
 			if (hasPiv) {
-				program3.uniform("nopiv", false);
+				program3["nopiv"] = false;
 				vec4& sctr = sctrs[kp];
 				mat4 pivMat(
 					sctr.x, 0, 0, sctr.z,
 					0, sctr.y, 0, sctr.w,
 					0, 0, 1, 0,
 					0, 0, 0, 1);
-				program3.uniform("piv", pivMat);
+				program3["piv"] = pivMat;
 			}
 			else {
-				program3.uniform("nopiv", true);
+				program3["nopiv"] = true;
 			}
 		}
 		else {
-			program3.uniform("useFull", true);
-			program3.uniform("nopiv", true);
+			program3["useFull"] = true;
+			program3["nopiv"] = true;
 		}
-		program3.uniform("has_bones", false);
+		program3["has_bones"] = false;
 		program3.bind(**rect);
 		program3.draw();
 	}
@@ -160,9 +160,9 @@ namespace onart {
 		setGlobalTrans(btree);
 		int i = 0;
 		for (Bone& m : u) {
-			program3.uniform(("bones[" + std::to_string(i++) + ']').c_str(), m.uni);
+			program3["bones"][i++] = m.uni;
 		}
-		program3.uniform("has_bones", true);
+		program3["has_bones"] = true;
 	}
 
 	void Animation3D::readHierarchy(aiNode* root, BoneTree& tree) {
@@ -323,42 +323,42 @@ namespace onart {
 
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
-			program2.uniform("oneColor", false);
+			program2["oneColor"] = false;
 			program2.texture(kpNow(tex, tp)->value);
 		}
 		else {
-			program2.uniform("oneColor", true);
+			program2["oneColor"] = true;
 		}
 
 		if (hasRect) {
-			program2.uniform("useFull", false);
+			program2["useFull"] = false;
 			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
 			int kp = 0;
-			if (l == rects.begin()) { program2.uniform("ldwh", rects[0].value); }
+			if (l == rects.begin()) { program2["ldwh"] = rects[0].value; }
 			else {
 				l--;
-				program2.uniform("ldwh", l->value);
+				program2["ldwh"] = l->value;
 				kp = int(l - rects.begin());
 				if (e->getAnimKey() != kp) { e->act(kp); }
 			}
 
 			if (hasPiv) {
-				program2.uniform("nopiv", false);
+				program2["nopiv"] = false;
 				vec4& sctr = sctrs[kp];
 				mat4 pivMat(
 					sctr.x, 0, 0, sctr.z,
 					0, sctr.y, 0, sctr.w,
 					0, 0, 1, 0,
 					0, 0, 0, 1);
-				program2.uniform("piv", pivMat);
+				program2["piv"] = pivMat;
 			}
 			else {
-				program2.uniform("nopiv", true);
+				program2["nopiv"] = true;
 			}
 		}
 		else {
-			program2.uniform("useFull", true);
-			program2.uniform("nopiv", true);
+			program2["useFull"] = true;
+			program2["nopiv"] = true;
 		}
 		program2.bind(**rect);
 		program2.draw();

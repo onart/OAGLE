@@ -24,7 +24,7 @@ namespace onart {
 		FILE* fp;
 		fopen_s(&fp, vert, "rb");
 		if (!fp) {
-			printf("셰이더 파일이 없습니다: %s\n", vert);
+			fprintf(stderr, "셰이더 파일이 없습니다: %s\n", vert);
 			return;
 		}
 		auto size = (size_t)std::filesystem::file_size(vert);
@@ -35,7 +35,7 @@ namespace onart {
 
 		fopen_s(&fp, frag, "rb");
 		if (!fp) {
-			printf("셰이더 파일이 없습니다: %s\n", frag);
+			fprintf(stderr, "셰이더 파일이 없습니다: %s\n", frag);
 			delete[] vertScript;
 			return;
 		}
@@ -50,7 +50,6 @@ namespace onart {
 
 	void Shader::initWithMemory(const char* vert, const char* frag) {
 		id = glCreateProgram();
-		//glUseProgram(id);
 		
 		unsigned vs = compileScript(vert, GL_VERTEX_SHADER);
 		unsigned fs = compileScript(frag, GL_FRAGMENT_SHADER);
@@ -129,117 +128,128 @@ namespace onart {
 		return true;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, int i) const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, int i) {
+		use();
+		int uloc = getUloc(name);
 		glUniform1i(uloc, i);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, float f) const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, float f) {
+		use();
+		int uloc = getUloc(name);
 		glUniform1f(uloc, f);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, bool b) const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, bool b) {
+		use();
+		int uloc = getUloc(name);
 		glUniform1i(uloc, b);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const vec2& v2) const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, const vec2& v2) {
+		use();
+		int uloc = getUloc(name);
 		glUniform2fv(uloc, 1, v2);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const vec3& v3)const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, const vec3& v3) {
+		use();
+		int uloc = getUloc(name);
 		glUniform3fv(uloc, 1, v3);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const vec4& v4)const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, const vec4& v4) {
+		use();
+		int uloc = getUloc(name);
 		glUniform4fv(uloc, 1, v4);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const ivec2& v2)const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, const ivec2& v2) {
+		use();
+		int uloc = getUloc(name);
 		glUniform2iv(uloc, 1, v2);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const ivec3& v3)const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, const ivec3& v3) {
+		use();
+		int uloc = getUloc(name);
 		glUniform3iv(uloc, 1, v3);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const ivec4& v4)const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
+	void Shader::uniform(const char* name, const ivec4& v4) {
+		use();
+		int uloc = getUloc(name);
 		glUniform4iv(uloc, 1, v4);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
 	}
 
-	Shader::UniformCode Shader::uniform(const char* name, const mat4& m4, bool tr)const {
-		assert(usingShader == this);
-		int uloc = glGetUniformLocation(id, name);
-		glUniformMatrix4fv(uloc, 1, tr, m4);
-#ifdef _DEBUG
-		if (uloc <= -1) return UniformCode::NOTFOUND;
-		else if (glGetError() != GL_NO_ERROR) return UniformCode::INVALID;
-#endif
-		return UniformCode::SUCCESS;
+	void Shader::uniform(const char* name, const mat4& m4) {
+		use();
+		int uloc = getUloc(name);
+		glUniformMatrix4fv(uloc, 1, GL_TRUE, m4);
 	}
 
-	void Shader::texture(unsigned tex, TexCode idx) const {
+	void Shader::uniform(const char* name, size_t index, bool b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform1i(uloc, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, int b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform1i(uloc, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, float b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform1f(uloc, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, const vec2& b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform2fv(uloc, 1, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, const vec3& b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform3fv(uloc, 1, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, const vec4& b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform4fv(uloc, 1, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, const ivec2& b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform2iv(uloc, 1, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, const ivec3& b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform3iv(uloc, 1, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, const ivec4& b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniform4iv(uloc, 1, b);
+	}
+
+	void Shader::uniform(const char* name, size_t index, const mat4& b) {
+		use();
+		int uloc = getUloc(name, index);
+		glUniformMatrix4fv(uloc, 1, GL_TRUE, b);
+	}
+
+	void Shader::texture(unsigned tex, TexCode idx) {
+		use();
 		int i = (int)idx;
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, tex);
@@ -247,7 +257,7 @@ namespace onart {
 
 	void Shader::use() {
 		if (id == 0) {
-			printf("%p: 사용할 수 없는 셰이더 프로그램입니다.\n", this);
+			fprintf(stderr, "%p: 사용할 수 없는 셰이더 프로그램입니다.\n", this);
 			return;
 		}
 		if (usingShader != this) { 
@@ -266,8 +276,91 @@ namespace onart {
 		recentLen = m.getLength();
 	}
 
-	void Shader::draw(unsigned begin, unsigned count) const {
+	void Shader::draw(unsigned begin, unsigned count) {
+		use();
 		if (count == unsigned(-1)) { count = recentLen - begin; }
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, (void*)(begin * sizeof(unsigned)));
+	}
+
+	int Shader::getUloc(const char* name) {
+		auto u = uLocs.find(name);
+		if (u != uLocs.end()) return u->second;
+		int uloc = glGetUniformLocation(id, name);
+		if (uloc > -1) return uLocs[name] = uloc;
+		return -1;
+	}
+
+	int Shader::getUloc(const char* name, size_t index) {
+		auto u = uaLocs.find(name);
+		if (u != uaLocs.end()) {
+			if (u->second.size() <= index) return -1;
+			return u->second[index];
+		}
+		int uloc;
+		std::vector<int> v;
+		std::string stName(name);
+		stName += '[';
+		int i = 0;
+		while(true) {
+			uloc = glGetUniformLocation(id, (stName + std::to_string(i++) + ']').c_str());
+			if (uloc > -1) v.push_back(uloc);
+			else break;
+		}
+		if (v.size() <= index) uloc = -1;
+		else uloc = v[index];
+		uaLocs[name] = std::move(v);
+		return uloc;
+	}
+
+	Shader::_uniformSender_& Shader::operator[](const char* name) {
+		use();
+		__uniformSender.loc = getUloc(name);
+		__uniformSender.point = name;
+		return __uniformSender;
+	}
+
+	void Shader::_uniformSender_::operator=(int i) {
+		glUniform1i(loc, i);
+	}
+
+	void Shader::_uniformSender_::operator=(float f) {
+		glUniform1f(loc, f);
+	}
+
+	void Shader::_uniformSender_::operator=(bool i) {
+		glUniform1i(loc, i);
+	}
+
+	void Shader::_uniformSender_::operator=(const vec2& v) {
+		glUniform2fv(loc, 1, v);
+	}
+	
+	void Shader::_uniformSender_::operator=(const vec3& v) {
+		glUniform3fv(loc, 1, v);
+	}
+
+	void Shader::_uniformSender_::operator=(const vec4& v) {
+		glUniform4fv(loc, 1, v);
+	}
+
+	void Shader::_uniformSender_::operator=(const ivec2& v) {
+		glUniform2iv(loc, 1, v);
+	}
+
+	void Shader::_uniformSender_::operator=(const ivec3& v) {
+		glUniform3iv(loc, 1, v);
+	}
+
+	void Shader::_uniformSender_::operator=(const ivec4& v) {
+		glUniform4iv(loc, 1, v);
+	}
+	
+	void Shader::_uniformSender_::operator=(const mat4& m) {
+		glUniformMatrix4fv(loc, 1, GL_TRUE, m);
+	}
+
+	Shader::_uniformSender_& Shader::_uniformSender_::operator[](size_t i) {
+		loc = usingShader->getUloc(point, i);
+		return *this;
 	}
 }
