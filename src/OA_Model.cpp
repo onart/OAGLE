@@ -203,7 +203,7 @@ namespace onart {
 	}
 
 	void Model::addTex(unsigned index, unsigned tex, TexType typ) {
-		if (index >= materials.size()) { printf("%s: 인덱스가 잘못되었습니다.\n", __func__); return; }
+		if (index >= materials.size()) { fprintf(stderr, "%s: 인덱스가 잘못되었습니다.\n", __func__); return; }
 		Material* mtl = materials[index];
 		if (!mtl) { return; }
 		switch (typ)
@@ -226,31 +226,30 @@ namespace onart {
 	}
 
 	void Model::render(Shader& shader, const int material, const vec4& color) const {
-		shader.use();
 		shader.bind(**mesh);
-		shader.uniform("nopiv", true);
-		shader.uniform("useFull", true);
-		shader.uniform("is2d", false);
-		shader.uniform("color", color);
+		shader["nopiv"] = true;
+		shader["is2d"] = false;
+		shader["useFull"] = true;
+		shader["color"] = color;
 		for (auto& g : geom) {
 			Material* mtl = materials[g.material];
 			if (mtl) {
-				shader.uniform("Ka", mtl->getAmbient());
-				shader.uniform("Kd", mtl->getDiffuse());
-				shader.uniform("Ks", mtl->getSpecular());
-				shader.uniform("shininess", mtl->getShininess());
+				shader["Ka"] = mtl->getAmbient();
+				shader["Ks"] = mtl->getSpecular();
+				shader["Kd"] = mtl->getDiffuse();
+				shader["shininess"] = mtl->getShininess();
 
 				unsigned df = mtl->getDiffuseTex();
 				if (df) {
 					shader.texture(df);
-					shader.uniform("oneColor", false);
+					shader["oneColor"] = false;
 				}
 				else {
-					shader.uniform("oneColor", true);
+					shader["oneColor"] = true;
 				}
 			}
 			else {
-				shader.uniform("oneColor", true);
+				shader["oneColor"] = true;
 			}
 			shader.draw(g.start, g.count);
 		}

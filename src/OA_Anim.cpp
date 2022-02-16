@@ -142,6 +142,7 @@ namespace onart {
 			program3["nopiv"] = true;
 		}
 		program3["has_bones"] = false;
+		program3["is2d"] = true;
 		program3.bind(**rect);
 		program3.draw();
 	}

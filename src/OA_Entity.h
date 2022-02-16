@@ -35,7 +35,15 @@ namespace onart {
 		using EntityKey = std::string;
 #endif
 	public:
-		Entity(const EntityKey& k, const Transform& transform);
+		/// <summary>
+		/// 개체를 생성합니다. 특별히 매 프레임 업데이트할 내용이 없는 개체는 상속 없이 그대로 사용할 수 있습니다.
+		/// <para>스프라이트 혹은 모델: addAnim(), setModel()로 정합니다.</para>
+		/// <para>상속할 때: isFixed=true인 경우 카메라의 영향을 받지 않습니다. (이는 [-1,1]^3에 들어갈 정도로 축척을 맞춰야 한다는 의미입니다)</para>
+		/// </summary>
+		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
+		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
+		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
+		Entity(const EntityKey& k, const Transform& transform, bool isFixed = false);
 		~Entity();
 		/// <summary>
 		/// 위치를 얻습니다. 카메라 등과 같이 월드 좌표를 지속적으로 추적하는 것을 위해 만들어졌습니다.
@@ -123,6 +131,8 @@ namespace onart {
 		float animTps = 1;
 		int animKp = 0;
 		std::vector<Animation*> anims;
+		bool isFixed;
+
 		static std::multimap<EntityKey, Entity*> entities;
 	};
 }

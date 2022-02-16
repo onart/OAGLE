@@ -10,7 +10,7 @@
 #include "OA_Model.h"
 #include "OA_Anim.h"
 
-extern onart::Shader program3;
+extern onart::Shader program2, program3;
 extern float tp, dt;
 
 namespace onart {
@@ -20,7 +20,7 @@ namespace onart {
 
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
-	Entity::Entity(const EntityKey& k, const Transform& transform) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt) {
+	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed) {
 
 	}
 
@@ -51,18 +51,29 @@ namespace onart {
 	}
 
 	void Entity::render() {
-		program3.use();	// 이 부분 수정 필요
-		program3.uniform("model", transform.getModel());
-		
+		if (isFixed) {
+			if (model) {
+				program3["fixed"] = true;
+				program3["model"] = transform.getModel();
+			}
+			else {
+				program2["model"] = transform.getModel();
+			}
+		}
+		else {
+			program3["fixed"] = false;
+			program3["model"] = transform.getModel();
+		}
+		if (!model) {
+			program3["is2d"] = true;
+		}
 		if (as >= 0) { 
 			anims[as]->go(lt - animStartTimepoint, this, animTps); 
 		}
 		else {
-			program3.uniform("has_bones", false);
+			program3["has_bones"] = false;
 		}
 		if (model) { 
-			program3.uniform("nopiv", true);
-			program3.uniform("useFull", true);
 			model->render(program3); 
 		}
 	}

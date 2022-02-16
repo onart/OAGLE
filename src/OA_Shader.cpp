@@ -272,6 +272,7 @@ namespace onart {
 	}
 
 	void Shader::bind(Mesh& m) {
+		use();
 		glBindVertexArray(m.getID());
 		recentLen = m.getLength();
 	}
