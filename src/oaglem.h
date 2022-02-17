@@ -16,6 +16,8 @@
 *	namespace onart{
 *		using mat4 =(다른모듈 4x4행렬);
 *	}
+* 참고: mat4의 경우 이 모듈에서는 행 우선 순서입니다. 즉 uniform 전달 시 전치를 전달하도록 설정하는데, 위와 같이 다른 mat4를 사용하는 경우
+* shader 코드에서 mat4를 보낼 때 전치를 전달하지 않도록 해야 합니다.
 */
 
 #include <cmath>
@@ -66,7 +68,7 @@ namespace onart {
 		/// <summary>
 		/// 벡터의 모든 값을 하나의 값으로 초기화합니다.
 		/// </summary>
-		nvec(T a) { set4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] = a; }
+		nvec(T a) { setAll(entry, a, D > 4 ? D : 4); }
 
 		/// <summary>
 		/// 벡터의 값 중 앞 2~4개를 초기화합니다.
@@ -81,12 +83,12 @@ namespace onart {
 		/// <summary>
 		/// 다른 차원의 벡터를 사용하는 복사 생성자입니다. 가급적 차원 축소에만 사용하는 것이 좋습니다.
 		/// </summary>
-		template <unsigned E> nvec(const nvec<E, T>& v) { unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
+		template <unsigned E> nvec(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. operator=과 동일합니다.
 		/// </summary>
-		inline void set(T a) { set4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] = a; }
+		inline void set(T a) { setAll(entry, a, D > 4 ? D : 4); }
 		
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
@@ -97,7 +99,7 @@ namespace onart {
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
 		/// </summary>
-		template <unsigned E> inline void set(const nvec<E, T>& v) { unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
+		template <unsigned E> inline void set(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. set()과 동일합니다.
@@ -117,10 +119,10 @@ namespace onart {
 		/// <summary>
 		/// 다른 벡터와 성분별 연산을 차원수가 낮은 쪽을 기준으로 합니다.
 		/// </summary>
-		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] += v[i]; return *this; }
-		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] -= v[i]; return *this; }
-		template <unsigned E> inline nvec& operator*=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] *= v[i]; return *this; }
-		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] /= v[i]; return *this; }
+		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] += v[i]; return *this; }
+		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] -= v[i]; return *this; }
+		template <unsigned E> inline nvec& operator*=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] *= v[i]; return *this; }
+		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] /= v[i]; return *this; }
 
 		/// <summary>
 		/// 벡터의 모든 성분에 대하여 주어진 값과 연산합니다.
@@ -137,8 +139,8 @@ namespace onart {
 		/// <summary>
 		/// 벡터의 모든 성분이 동일한 경우 참을 리턴합니다. 다른 크기의 벡터와의 비교를 지원하지 않습니다.
 		/// </summary>
-		inline bool operator==(const nvec& v) const { for (int i = 0; i < D; i++)if (entry[i] != v[i]) return false; return true; }
-		inline bool operator!=(const nvec& v) const { for (int i = 0; i < D; i++)if (entry[i] != v[i]) return true; return false; }
+		inline bool operator==(const nvec& v) const { return memcmp(entry, v.entry, sizeof(nvec)) == 0; }
+		inline bool operator!=(const nvec& v) const { return !operator==(v); }
 
 		/// <summary>
 		/// 다른 벡터와 성분별 연산을 차원수가 낮은 쪽을 기준으로 합니다. 리턴 차원수는 항상 좌변값과 동일합니다.
@@ -159,7 +161,7 @@ namespace onart {
 		/// 성분별로 캐스트해서 새로 만드는 것과 비교하여 특별히 성능적 면에서 나을 부분은 없으며
 		/// 유연한 코드만을 위해 추가하였습니다.
 		/// </summary>
-		template <class T2> inline operator nvec<D, T2>() { nvec<D, T2> n; for (unsigned i = 0; i < D; i++) { n[i] = (T2)entry[i]; } return n; }
+		template <class T2> inline operator nvec<D, T2>() const { nvec<D, T2> n; for (unsigned i = 0; i < D; i++) { n[i] = (T2)entry[i]; } return n; }
 
 		/// <summary>
 		/// 부호를 반전시켜 리턴합니다.
@@ -807,6 +809,8 @@ namespace onart {
 		inline Quaternion& operator/=(const Quaternion& q) { *this = *this * q.inverse(); return *this; }
 		inline Quaternion operator*(float f) const { Quaternion ret(*this); mul4<float>(&(ret.c1), f); return ret; }
 		inline Quaternion operator/(float f) const { Quaternion ret(*this); div4<float>(&(ret.c1), f); return ret; }
+		inline Quaternion& operator*=(float f) { *this = *this * f; return *this; }
+		inline Quaternion& operator/=(float f) { *this = *this / f; return *this; }
 		inline Quaternion operator+(const Quaternion& q) const { Quaternion r(*this); r += q; return r; }
 		inline Quaternion operator-(const Quaternion& q) const { Quaternion r(*this); r -= q; return r; }
 		inline Quaternion operator/(const Quaternion& q) const { Quaternion r(*this); r /= q; return r; }
@@ -826,7 +830,7 @@ namespace onart {
 		/// 사원수 회전을 합칩니다. 기존 사원수가 먼저 적용됩니다.
 		/// </summary>
 		/// <param name="axis">회전축</param>
-		/// <param name="angle">회전각</param>
+		/// <param name="angle">회전각(라디안)</param>
 		inline void compound(const vec3& axis, float angle) { auto q = rotation(axis, angle); compound(q); }
 
 		/// <summary>
@@ -844,6 +848,40 @@ namespace onart {
 				2 * (i.ck - j.c1), 2 * (j.ck + i.c1), 1 - 2 * (i.ci + j.cj), 0,
 				0, 0, 0, 1
 			);
+		}
+
+		/// <summary>
+		/// 첫 성분에 회전각(라디안), 나머지 성분에 3차원 회전축을 담아 리턴합니다.
+		/// 부동소수점 정밀도 문제를 고려하여 정규화하여 계산합니다. 회전사원수가 아니라도 nan이 발생하지 않으므로 주의하세요.
+		/// </summary>
+		inline vec4 axis() const {
+			Quaternion ax = *this / abs();
+			float angle = acosf(ax.c1) * 2;
+			float sinha = sqrtf(1 - ax.c1 * ax.c1);
+			ax /= sinha;
+			ax.c1 = angle;
+			return vec4(*(reinterpret_cast<vec4*>(&ax)));
+		}
+		
+		/// <summary>
+		/// 이 회전의 오일러 각 (x,y,z순)의 형태로 리턴합니다.
+		/// 부동소수점 정밀도 문제를 고려하여 정규화하여 계산합니다. 회전사원수가 아니라도 nan이 발생하지 않으므로 주의하세요.
+		/// https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
+		/// </summary>
+		inline vec3 toEuler() const {
+			Quaternion q = *this / abs();
+			vec3 a;
+			float sinrcosp = 2 * (q.c1 * q.ci + q.cj * q.ck);
+			float cosrcosp = 1 - 2 * (q.ci * q.ci + q.cj * q.cj);
+			a.x = atan2f(sinrcosp, cosrcosp);
+			float sinp = 2 * (q.c1 * q.cj - q.ck * q.ci);
+			if (sinp >= 1) a.y = PI / 2;
+			else if (sinp <= -1) a.y = -PI / 2;
+			else a.y = asinf(sinp);
+			float sinycosp = 2 * (q.c1 * q.ck + q.ci * q.cj);
+			float cosycosp = 1 - 2 * (q.cj * q.cj + q.ck * q.ck);
+			a.z = atan2f(sinycosp, cosycosp);
+			return a;
 		}
 
 		/// <summary>
@@ -952,7 +990,8 @@ namespace onart {
 	inline void print(const dvec4& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f %f%c", tag, v.x, v.y, v.z, v.w, end); }
 	inline void print(const Quaternion& q, const char* tag = "", char end = '\n') { printf("%s: %f + %fi + %fj + %fk%c", tag, q.c1, q.ci, q.cj, q.ck, end); }
 	inline void print(const mat4& m, const char* tag = "") { printf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", tag, m._11, m._12, m._13, m._14, m._21, m._22, m._23, m._24, m._31, m._32, m._33, m._34, m._41, m._42, m._43, m._44); }
-	
+	inline void print(int i, const char* tag = "", char end = '\n') { printf("%s: %d%c", tag, i, end); }
+	inline void print(float i, const char* tag = "", char end = '\n') { printf("%s: %f%c", tag, i, end); }
 }
 
 #endif // !__OAGLEM_H__

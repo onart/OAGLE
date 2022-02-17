@@ -122,6 +122,10 @@ namespace onart {
 		/// 이전 프레임과 현재 프레임 간의 시간 간격(초)입니다.
 		/// </summary>
 		static const float& dt;
+		/// <summary>
+		/// 개체의 색상입니다. 섞이는 것이 아니라 성분별 곱하기로 계산되는 점 주의하세요.
+		/// </summary>
+		vec4 color = 1;
 	private:
 		float lt = 0;
 		EntityKey key;

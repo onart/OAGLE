@@ -25,6 +25,8 @@
 
 #include <filesystem>
 
+extern onart::Shader program3;
+
 namespace onart {
 	
 	std::map<std::string, Model*> Model::list;
@@ -225,33 +227,33 @@ namespace onart {
 		}
 	}
 
-	void Model::render(Shader& shader, const int material, const vec4& color) const {
-		shader.bind(**mesh);
-		shader["nopiv"] = true;
-		shader["is2d"] = false;
-		shader["useFull"] = true;
-		shader["color"] = color;
+	void Model::render(const vec4& color) const {
+		program3.bind(**mesh);
+		program3["nopiv"] = true;
+		program3["is2d"] = false;
+		program3["useFull"] = true;
+		program3["color"] = color;
 		for (auto& g : geom) {
 			Material* mtl = materials[g.material];
 			if (mtl) {
-				shader["Ka"] = mtl->getAmbient();
-				shader["Ks"] = mtl->getSpecular();
-				shader["Kd"] = mtl->getDiffuse();
-				shader["shininess"] = mtl->getShininess();
+				program3["Ka"] = mtl->getAmbient();
+				program3["Ks"] = mtl->getSpecular();
+				program3["Kd"] = mtl->getDiffuse();
+				program3["shininess"] = mtl->getShininess();
 
 				unsigned df = mtl->getDiffuseTex();
 				if (df) {
-					shader.texture(df);
-					shader["oneColor"] = false;
+					program3.texture(df);
+					program3["oneColor"] = false;
 				}
 				else {
-					shader["oneColor"] = true;
+					program3["oneColor"] = true;
 				}
 			}
 			else {
-				shader["oneColor"] = true;
+				program3["oneColor"] = true;
 			}
-			shader.draw(g.start, g.count);
+			program3.draw(g.start, g.count);
 		}
 	}
 }

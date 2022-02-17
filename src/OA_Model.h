@@ -50,7 +50,7 @@ namespace onart {
 		/// <param name="shader">셰이더</param>
 		/// <param name="material">메터리얼 번호(이 모델에서 사용하는 것만 따집니다.)</param>
 		/// <param name="color">색상(mix가 아니라 *로 적용됩니다.)</param>
-		void render(Shader& shader, const int material = 0, const vec4& color = 1) const;
+		void render(const vec4& color = 1) const;
 		/// <summary>
 		/// 이미 불러온 모델에 diffuse 텍스처 이미지를 추가합니다.
 		/// </summary>

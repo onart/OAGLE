@@ -74,7 +74,7 @@ namespace onart {
 			program3["has_bones"] = false;
 		}
 		if (model) { 
-			model->render(program3); 
+			model->render(color);
 		}
 	}
 
