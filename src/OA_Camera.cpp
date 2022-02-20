@@ -10,7 +10,7 @@
 #include "OA_Scene.h"
 
 extern float dt;
-extern onart::Shader program3;
+extern onart::Shader program2, program3;
 
 namespace onart {
 
@@ -32,13 +32,13 @@ namespace onart {
 			wantedPos = desiredEye;
 		}
 		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);
-		if (fixdir) program3.uniform("view", mat4::lookAt(currentPos, currentPos - relativePos, up));
-		else program3.uniform("view", mat4::lookAt(currentPos, *desiredAt, up));
+		if (fixdir) program3["view"] = mat4::lookAt(currentPos, currentPos - relativePos, up);
+		else program3["view"] = mat4::lookAt(currentPos, *desiredAt, up);
 		
 	}
 
 	void Camera::setZoom(float zoom) {
-		program3.uniform("zoom", zoom);
+		program3["zoom"] = zoom;
 	}
 
 	void Camera::setDelay(float s) {
@@ -54,26 +54,29 @@ namespace onart {
 	}
 
 	void Camera::Ratio::setProjMatrix2D() {
-		program3.uniform("proj", getAspectMatrix());
+		mat4 aspect = getAspectMatrix();
+		program2["aspect"] = aspect;
+		program3["proj"] = aspect;
 	}
 
 	void Camera::Ratio::setProjMatrix3D(float fovy, float dnear, float dfar) {
 		this->fovy = fovy;	this->dnear = dnear;	this->dfar = dfar;
-		program3.uniform("proj", mat4::perspective(fovy, ratio, dnear, dfar));
+		program2["aspect"] = getAspectMatrix();
+		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setFovy(float fovy) {
 		this->fovy = fovy;
-		program3.uniform("proj", mat4::perspective(fovy, ratio, dnear, dfar));
+		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setNear(float near) {
 		this->dnear = near;
-		program3.uniform("proj", mat4::perspective(fovy, ratio, dnear, dfar));
+		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setFar(float far) {
 		this->dfar = far;
-		program3.uniform("proj", mat4::perspective(fovy, ratio, dnear, dfar));
+		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 }

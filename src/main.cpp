@@ -17,6 +17,7 @@
 #include "OA_Input.h"
 #include "OA_Camera.h"
 #include "OA_Audio.h"
+#include "OA_Text.h"
 #include "externals/stb_image.h"
 
 // 창 관련
@@ -68,6 +69,7 @@ void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mainCamera.viewUpdate();
 	onart::Scene::currentScene->render();
+	onart::Font::get("arial")->draw(u"\bffff00ffab가ba\n가\bff00ffff가가aa", onart::vec4(-0.5f, -0.5f, 1, 1), onart::Font::Align::CENTER, false, 1.0f);
 	glfwSwapBuffers(window);
 }
 
@@ -170,7 +172,7 @@ bool init() {
 	stbi_set_flip_vertically_on_load(true);
 
 	onart::Audio::init();
-	glClearColor(39 / 255.0f, 40 / 255.0f, 34 / 255.0f, 1.0f);
+	glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
 
 	// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glEnable.xhtml
 	glEnable(GL_CULL_FACE);

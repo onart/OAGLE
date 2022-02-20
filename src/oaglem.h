@@ -52,6 +52,7 @@ namespace onart {
 		struct { T x, y, z, w; };
 		struct { T r, g, b, a; };
 		struct { T s, t, p, q; };
+		struct { T left, down, width, height; };
 #ifdef OAGELM_USE_GLSL_LIKE
 		struct { T xy[2]; T zw[2]; };
 		struct { T xyz[3]; };
@@ -747,6 +748,32 @@ namespace onart {
 			r._11 = r._22 / aspect;
 			return r;
 		}
+
+		/// <summary>
+		/// 한 직사각형을 다른 직사각형으로 변환하는 행렬을 계산합니다. 직사각형의 형식은 좌-하-폭-높이입니다. z 좌표는 동일하다고 가정하여 xy 평면에서만 이동합니다.
+		/// </summary>
+		/// <param name="r1">변환 전 직사각형</param>
+		/// <param name="r2">변환 후 직사각형</param>
+		/// <param name="z">직사각형이 위치할 z좌표(-1이 가장 겉)</param>
+		inline static mat4 r2r(const vec4& r1, const vec4& r2, float z = 0) {
+			vec4 sc = r2 / r1;	vec4 tr = r2 - r1 * vec4(sc.z, sc.w);
+			return mat4(
+				sc.z, 0, 0, tr.x,
+				0, sc.w, 0, tr.y,
+				0, 0, 1, z,
+				0, 0, 0, 1
+			);
+		}
+		
+		/// <summary>
+		/// 본 엔진에서 Mesh::get("rect")로 제공되는 단위 직사각형(중심이 0,0이고 한 변의 길이가 1인 정사각형)을 다른 직사각형으로 변환하는 행렬을 계산합니다.
+		/// 직사각형의 형식은 좌-하-폭-높이입니다. z 좌표는 동일하다고 가정하여 xy 평면에서만 이동합니다.
+		/// </summary>
+		/// <param name="r2">변환 후 직사각형</param>
+		/// <param name="z">직사각형이 위치할 z좌표(-1이 가장 겉)</param>
+		inline static mat4 r2r(const vec4& r2, float z = 0) {
+			return r2r(vec4(-0.5f, -0.5f, 1, 1), r2, z);
+		}
 	};
 
 	/// <summary>
@@ -991,6 +1018,9 @@ namespace onart {
 	inline void print(const Quaternion& q, const char* tag = "", char end = '\n') { printf("%s: %f + %fi + %fj + %fk%c", tag, q.c1, q.ci, q.cj, q.ck, end); }
 	inline void print(const mat4& m, const char* tag = "") { printf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", tag, m._11, m._12, m._13, m._14, m._21, m._22, m._23, m._24, m._31, m._32, m._33, m._34, m._41, m._42, m._43, m._44); }
 	inline void print(int i, const char* tag = "", char end = '\n') { printf("%s: %d%c", tag, i, end); }
+	inline void print(int64_t i, const char* tag = "", char end = '\n') { printf("%s: %lld%c", tag, i, end); }
+	inline void print(unsigned i, const char* tag = "", char end = '\n') { printf("%s: %d%c", tag, i, end); }
+	inline void print(uint64_t i, const char* tag = "", char end = '\n') { printf("%s: %lld%c", tag, i, end); }
 	inline void print(float i, const char* tag = "", char end = '\n') { printf("%s: %f%c", tag, i, end); }
 }
 

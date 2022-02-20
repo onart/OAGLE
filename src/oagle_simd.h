@@ -311,7 +311,7 @@ namespace onart {
 		__m128 b = _mm_loadu_ps(val);
 		_mm_storeu_ps(vec, b);
 	}
-
+	
 	/// <summary>
 	/// 실수 배열을 원하는 값으로 초기화합니다.
 	/// </summary>
