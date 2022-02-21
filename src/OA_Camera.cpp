@@ -32,13 +32,29 @@ namespace onart {
 			wantedPos = desiredEye;
 		}
 		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);
-		if (fixdir) program3["view"] = mat4::lookAt(currentPos, currentPos - relativePos, up);
-		else program3["view"] = mat4::lookAt(currentPos, *desiredAt, up);
+		if (fixdir) { 
+			program3["view"] = viewM4 = mat4::lookAt(currentPos, currentPos - relativePos, up);
+		}
+		else { 
+			program3["view"] = viewM4 = mat4::lookAt(currentPos, *desiredAt, up);
+		}
 		
 	}
 
 	void Camera::setZoom(float zoom) {
+		this->zoom = zoom;
 		program3["zoom"] = zoom;
+	}
+
+	vec2 Camera::mouse2screen(const vec2& mousePos)
+	{
+		const float& r = ratio.ratio;
+		if (r > 1) {
+			return vec2((mousePos.x * 2 - 1) * r, -2 * mousePos.y + 1);
+		}
+		else {
+			return vec2(2 * mousePos.x - 1, (-2 * mousePos.y + 1) / r);
+		}
 	}
 
 	void Camera::setDelay(float s) {
@@ -54,29 +70,29 @@ namespace onart {
 	}
 
 	void Camera::Ratio::setProjMatrix2D() {
-		mat4 aspect = getAspectMatrix();
-		program2["aspect"] = aspect;
-		program3["proj"] = aspect;
+		projM4 = getAspectMatrix();
+		program2["aspect"] = projM4;
+		program3["proj"] = projM4;
 	}
 
 	void Camera::Ratio::setProjMatrix3D(float fovy, float dnear, float dfar) {
 		this->fovy = fovy;	this->dnear = dnear;	this->dfar = dfar;
 		program2["aspect"] = getAspectMatrix();
-		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
+		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setFovy(float fovy) {
 		this->fovy = fovy;
-		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
+		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setNear(float near) {
 		this->dnear = near;
-		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
+		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setFar(float far) {
 		this->dfar = far;
-		program3["proj"] = mat4::perspective(fovy, ratio, dnear, dfar);
+		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 }

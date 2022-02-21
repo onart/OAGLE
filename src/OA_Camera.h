@@ -50,19 +50,32 @@ namespace onart {
 		void setZoom(float zoom);
 
 		/// <summary>
+		/// Input::relativeCursorPos()는 뷰포트 좌측 상단이 (0,0), 우측 하단이 (1,1)이 되도록 리턴하는데 이를 프로그램 내에서 통용되는 표준 뷰 좌표(중심이 (0,0)이며 종/횡 중 짧은 쪽의 길이가 2)로 변환합니다.
+		/// 커서가 뷰포트 밖으로 나갔더라도 특별한 결과값을 리턴하지 않습니다.
+		/// </summary>
+		/// <param name="mousePos">Input::relativeCursorPos()에서 받은 값</param>
+		vec2 mouse2screen(const vec2& mousePos);
+
+		/// <summary>
 		/// 카메라가 이동할 때 보는 방향을 고정합니다. 특히 2D 게임에서 카메라 딜레이를 0보다 크게 설정할 경우 필수입니다.
 		/// </summary>
 		/// <param name="fix">고정 여부(false로 정하면 고정을 해제합니다.)</param>
 		inline void fixDirection(bool fix = true) { fixdir = fix; }
 		
 		/// <summary>
+		/// 월드 상 좌표가 화면상에서 어느 위치에 나오는지 알려줍니다. 뷰포트는 중심이 (0,0)이며 종/횡 중 짧은 쪽의 길이가 2입니다.
+		/// </summary>
+		inline vec3 world2screen(const vec3& pos) { return zoom * ratio.projM4 * viewM4 * vec4(pos, 1.0f); }
+		/// <summary>
 		/// 뷰포트의 비율을 결정합니다.
 		/// </summary>
 		struct Ratio {
+			friend class Camera;
 		private:
 			unsigned R_WIDTH = 16, R_HEIGHT = 9;
 			float ratio = 16.0f / 9;
 			float fovy = PI / 6, dnear = -1, dfar = 1;
+			mat4 projM4;
 			mat4 getAspectMatrix();
 		public:
 			/// <summary>
@@ -112,11 +125,11 @@ namespace onart {
 		vec3 fixedAt = { 0,0,-1 }, up = { 0,1,0 };
 		vec3 relativePos = { 0,0,1 };
 		vec3 currentPos;
-		
-		bool fixdir = false;
 		float delay = 0;
-
 		const vec3* at = nullptr;
+		mat4 viewM4;	// UI(program2)와 월드(program3)의 연결점. 카메라는 하나만 있을 것이므로 메모리 문제는 거의 없다고 봐도 무방
+		float zoom = 1;	// //
+		bool fixdir = false;
 	};
 }
 

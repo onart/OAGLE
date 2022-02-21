@@ -77,7 +77,7 @@ namespace onart {
 		/// <param name="color">전체 텍스트의 색상을 결정합니다. 텍스트 자체에서 결정된 색상과는 성분별 곱으로 연산됩니다.</param>
 		void draw(const oastring& content, const mat4& group, const std::vector<vec2>& lineXY, const vec4& color = 1);
 		/// <summary>
-		/// 주어진 위치를 중심으로 고정된 크기의 텍스트를 그립니다. (텍스트의 길이의 관계 없이 각 글자의 크기가 고정됨)
+		/// 주어진 위치를 중심으로 고정된 크기의 텍스트를 그립니다. (텍스트의 길이에 관계 없이 각 글자의 크기가 고정됨)
 		/// <para>크기: 크기는 직사각형에 맞도록 나오는데, 텍스트 안에서 상대적 크기를 다르게 설정하고자 한다면 \a와 늘임축(x 또는 y 또는 a. 대문자는 인정하지 않습니다.), 그리고 정수 부분 1자리 소수 부분 2자리 실수를 입력합니다. 
 		/// 상대적 크기의 범위가 변하더라도 기본값인 1.0의 크기는 변하지 않습니다. 예를 들어,
 		/// u"안녕\ax2.00하세\ay0.40요"라고 입력하면 "안녕"의 각 글자가 크기 1x1이라고 할 때 "하세"의 각 글자 크기는 2x1, "요"의 크기는 2x0.4가 됩니다. \a 뒤 5자리가 유효한 값이 아닌 경우 글자 크기는 변하지 않으며
@@ -90,9 +90,20 @@ namespace onart {
 		/// <param name="group">문장의 기본 크기(직사각형 LDWH)입니다. getRectNLine()에서 자동으로 계산됩니다.</param>
 		/// <param name="lineXY">각 라인의 시작점입니다. getRectNLine()에서 자동으로 계산됩니다.</param>
 		/// <param name="center">중심 좌표입니다.</param>
-		/// <param name="size">글자의 크기입니다.</param>
+		/// <param name="size">글자의 크기입니다. 다른 폰트에 대해서는 이 값이 같다고 하여 같은 크기가 보장되지 않습니다.</param>
 		/// <param name="color">전체 텍스트의 색상을 결정합니다. 텍스트 자체에서 결정된 색상과는 성분별 곱으로 연산됩니다.</param>
 		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const vec2& center = 0, float size = 1, const vec4& color = 1);
+		/// <summary>
+		/// 주어진 위치를 중심으로 고정된 크기의 텍스트를 그리며, 추가적으로 변환을 적용합니다. (텍스트의 길이에 관계 없이 각 글자의 크기가 고정됨)
+		/// </summary>
+		/// <param name="content">표시할 문장입니다.</param>
+		/// <param name="group">문장의 기본 크기(직사각형 LDWH)입니다. getRectNLine()에서 자동으로 계산됩니다.</param>
+		/// <param name="lineXY">각 라인의 시작점입니다. getRectNLine()에서 자동으로 계산됩니다.</param>
+		/// <param name="transform">추가로 적용할 변환입니다. 회전변환이나 크기변환 등을 적용한다면, 중심좌표가 이동하지 않도록 하는 것은 이 함수 밖에서 해야 할 일입니다. (mat4는 아핀 변환만 있는 것이 아니기 때문에 함수 안에서 보정할 수 없음)</param>
+		/// <param name="center">중심 좌표입니다.</param>
+		/// <param name="size">글자의 크기입니다. 다른 폰트에 대해서는 이 값이 같다고 하여 같은 크기가 보장되지 않습니다.</param>
+		/// <param name="color">전체 텍스트의 색상을 결정합니다. 텍스트 자체에서 결정된 색상과는 성분별 곱으로 연산됩니다.</param>
+		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const mat4& transform, const vec2& center = 0, float size = 1, const vec4& color = 1);
 
 		/// <summary>
 		/// 이 불러온 폰트에 대하여 해당 문장이 차지하는 상대적 공간, 그리고 각 행은 어디서 시작할지를 리턴합니다. 이 둘은 draw()에서 사용됩니다.
@@ -120,6 +131,8 @@ namespace onart {
 
 		static float parseSize(const oastring&, int start);
 		static vec4 parseColor(const oastring&, int start);
+
+		void cdraw(const oastring& content, const std::vector<vec2>& lineXY, const vec4& color);
 	};
 
 }

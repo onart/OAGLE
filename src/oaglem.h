@@ -31,6 +31,7 @@
 #pragma warning(disable: 6294 6201)
 
 constexpr float PI = 3.14159265358979323846f;
+constexpr float INF = INFINITY;
 
 /// <summary>
 /// 라디안을 입력하면 도 단위로 변경합니다.
@@ -62,29 +63,34 @@ namespace onart {
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
-		nvec() {
-			memset(entry, 0, sizeof(entry));
-		}
+		inline nvec() { memset(entry, 0, sizeof(entry)); }
 
 		/// <summary>
 		/// 벡터의 모든 값을 하나의 값으로 초기화합니다.
 		/// </summary>
-		nvec(T a) { setAll(entry, a, D > 4 ? D : 4); }
+		inline nvec(T a) { setAll(entry, a, D > 4 ? D : 4); }
 
 		/// <summary>
 		/// 벡터의 값 중 앞 2~4개를 초기화합니다.
 		/// </summary>
-		nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) {  }
+		inline nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) {  }
 
 		/// <summary>
 		/// 복사 생성자입니다.
 		/// </summary>
-		nvec(const nvec<D,T>& v) { memcpy(entry, v.entry, sizeof(entry)); }
+		inline nvec(const nvec<D,T>& v) { memcpy(entry, v.entry, sizeof(entry)); }
+
+		/// <summary>
+		/// 한 차원 낮은 벡터를 이용하여 생성합니다.
+		/// </summary>
+		/// <param name="v">한 차원 낮은 벡터</param>
+		/// <param name="a">나머지 자리에 들어가는 값</param>
+		inline nvec(const nvec<D - 1, T>& v, T a) { memcpy(entry, v.entry, sizeof(entry) - sizeof(T)); entry[D - 1] = a; }
 
 		/// <summary>
 		/// 다른 차원의 벡터를 사용하는 복사 생성자입니다. 가급적 차원 축소에만 사용하는 것이 좋습니다.
 		/// </summary>
-		template <unsigned E> nvec(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
+		template <unsigned E> inline nvec(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. operator=과 동일합니다.
@@ -809,12 +815,12 @@ namespace onart {
 		/// <param name="i">i부분</param>
 		/// <param name="j">j부분</param>
 		/// <param name="k">k부분</param>
-		Quaternion(float o = 1, float i = 0, float j = 0, float k = 0) :c1(o), ci(i), cj(j), ck(k) {};
+		inline Quaternion(float o = 1, float i = 0, float j = 0, float k = 0) :c1(o), ci(i), cj(j), ck(k) {};
 
 		/// <summary>
 		/// 사원수를 복사해서 생성합니다.
 		/// </summary>
-		Quaternion(const Quaternion& q) { set4<float>(&c1, &(q.c1)); }
+		inline Quaternion(const Quaternion& q) { set4<float>(&c1, &(q.c1)); }
 
 		/// <summary>
 		/// 사원수 크기의 제곱을 리턴합니다.

@@ -212,6 +212,7 @@ namespace onart::Input {
 
 	/// <summary>
 	/// 마우스 포인터의 위치를 게임 화면 기준으로 리턴합니다. 좌측 상단이 (0,0), 그리고 우측 하단이 (1,1)입니다.
+	/// cf) Camera::mouse2screen()
 	/// *고 dpi 화면에 대한 보정이 검증되지 않은 상태입니다.
 	/// </summary>
 	vec2 relativeCursorPos();
