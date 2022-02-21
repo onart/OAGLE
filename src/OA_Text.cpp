@@ -99,7 +99,6 @@ namespace onart {
 			float yScale = stbtt_ScaleForPixelHeight(fi, resolution);
 			int width, height, bearingX, bearingY, advance;
 			unsigned char* bitmap = stbtt_GetCodepointBitmap(fi, 0, yScale, c, &width, &height, &bearingX, &bearingY);
-			printf("%d %d %d\n", c, bearingX, height);
 			if (!bitmap) {
 				fprintf(stderr, "경고: 유니코드 0x%x 문자는 폰트에 없어서 로드되지 않습니다.\n", c);
 				continue;
@@ -145,6 +144,7 @@ namespace onart {
 				if (curW > totalLDWH.width)totalLDWH.width = curW;
 				lineXY.push_back(vec2(curW, -totalLDWH.height - curH));
 				totalLDWH.height += rowGap * curH;
+				curH = resolution * cury;
 				curW = 0;
 				regular = false;
 				continue;
@@ -158,14 +158,22 @@ namespace onart {
 						float tempy = parseSize(content, i + 2);
 						if (tempy != -1) { 
 							cury = tempy; 
-							if (!regular || curH < resolution * cury) curH = resolution * cury;
+							if (!regular || (curH < resolution * cury)) curH = resolution * cury;
+						}
+					}
+					else if (content[i + 1] == u'a' || content[i + 1] == u'A') {
+						float tempxy = parseSize(content, i + 2);
+						if (tempxy != -1) {
+							curx = tempxy;
+							cury = tempxy;
+							if (!regular || (curH < resolution * cury)) curH = resolution * cury;
 						}
 					}
 				}
-				i += 6;
+				i += 5;
 				continue;
 			case '\b':
-				i += 9;
+				i += 8;
 				continue;
 			default:
 				auto t = txs.find(c);
@@ -207,7 +215,7 @@ namespace onart {
 			for (vec2& xy : lineXY)xy.x = totalLDWH.width - xy.x;
 			break;
 		}
-		Mesh** rect = Mesh::get("rect");
+		Mesh** rect = Mesh::get("rect");	// 처음부터 여기까지는 매번 할 필요 없음
 		// 그린다
 		int line = 0;
 		curW = lineXY[0].x;
@@ -231,26 +239,30 @@ namespace onart {
 					}
 					else if (content[i + 1] == u'y' || content[i + 1] == u'Y') {
 						float tempy = parseSize(content, i + 2);
-						if (tempy != -1) { 
-							cury = tempy * resolution;
+						if (tempy != -1) cury = tempy;
+					}
+					else if (content[i + 1] == u'a' || content[i + 1] == u'A') {
+						float tempxy = parseSize(content, i + 2);
+						if (tempxy != -1) {
+							curx = tempxy;
+							cury = tempxy;
 						}
 					}
 				}
-				i += 6;
+				i += 5;
 				continue;
 			case '\b':
 				if (i + 8 < charCount) {
 					vec4 r = parseColor(content, i + 1);
 					if (r[0] != -1)program2["color"] = r;
 				}
-				i += 9;
+				i += 8;
 				continue;
 			default:
 				auto t = txs.find(c);
 				if (t == txs.end()) continue;
 				const charTex& ct = t->second;
-				float xsc = ct.size[0];	float ysc = ct.size[1];
-				program2["transform"] = mat4::r2r(vec4(curW, curH + ct.size[1] + ct.bearing[1], ct.size[0], ct.size[1]), -1.0f);
+				program2["transform"] = mat4::r2r(vec4(curW, curH - ct.size[1] - ct.bearing[1], ct.size[0] * curx, ct.size[1] * cury), -1.0f);
 				program2.texture(ct.id);
 				program2.draw();
 				curW += ct.advance * curx;
@@ -276,11 +288,10 @@ namespace onart {
 		delete[] hx;
 		if (*er) return -1;
 		vec4 v;
-		v.r = (float)((clr >> 6) & 0xff);
-		v.g = (float)((clr >> 4) & 0xff);
-		v.b = (float)((clr >> 2) & 0xff);
+		v.r = (float)((clr >> 24) & 0xff);
+		v.g = (float)((clr >> 16) & 0xff);
+		v.b = (float)((clr >> 8) & 0xff);
 		v.a = (float)(clr & 0xff);
-		print(v);
 		return v /= 255;
 	}
 }

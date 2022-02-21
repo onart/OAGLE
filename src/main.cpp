@@ -69,7 +69,7 @@ void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mainCamera.viewUpdate();
 	onart::Scene::currentScene->render();
-	onart::Font::get("arial")->draw(u"\bffff00ffab가ba\n가\bff00ffff가가aa", onart::vec4(-0.5f, -0.5f, 1, 1), onart::Font::Align::CENTER, false, 1.0f);
+	onart::Font::get("arial")->draw(u"ab\aa3.00가\aa1.00ba\n가가가aa\nbbc", onart::vec4(-0.5f, -0.5f, 1, 1), onart::Font::Align::RIGHT, false, 1.0f);
 	glfwSwapBuffers(window);
 }
 
