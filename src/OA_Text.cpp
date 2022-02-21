@@ -122,10 +122,10 @@ namespace onart {
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	}
 
-	void Font::draw(const oastring& content, const mat4& group, const std::vector<vec2>& lineXY, bool fullFit) {
+	void Font::draw(const oastring& content, const mat4& group, const std::vector<vec2>& lineXY, const vec4& color) {
 		program2["isText"] = true;
 		program2["nopiv"] = true;
-		program2["color"] = vec4(1);
+		program2["color"] = color;
 		program2["useFull"] = true;
 		program2["textGroup"] = group;
 		Mesh** rect = Mesh::get("rect");
@@ -147,15 +147,15 @@ namespace onart {
 				continue;
 			case '\a':
 				if (i + 5 < charCount) {
-					if (content[i + 1] == u'x' || content[i + 1] == u'X') {
+					if (content[i + 1] == u'x') {
 						float tempx = parseSize(content, i + 2);
 						if (tempx > -1) curx = tempx;
 					}
-					else if (content[i + 1] == u'y' || content[i + 1] == u'Y') {
+					else if (content[i + 1] == u'y') {
 						float tempy = parseSize(content, i + 2);
 						if (tempy != -1) cury = tempy;
 					}
-					else if (content[i + 1] == u'a' || content[i + 1] == u'A') {
+					else if (content[i + 1] == u'a') {
 						float tempxy = parseSize(content, i + 2);
 						if (tempxy != -1) {
 							curx = tempxy;
@@ -168,7 +168,7 @@ namespace onart {
 			case '\b':
 				if (i + 8 < charCount) {
 					vec4 r = parseColor(content, i + 1);
-					if (r[0] != -1)program2["color"] = r;
+					if (r[0] != -1) program2["color"] = r * color;
 				}
 				i += 8;
 				continue;
@@ -232,18 +232,18 @@ namespace onart {
 				continue;
 			case '\a':
 				if (i + 5 < charCount) {
-					if (content[i + 1] == u'x' || content[i + 1] == u'X') {
+					if (content[i + 1] == u'x') {
 						float tempx = parseSize(content, i + 2);
 						if (tempx != -1) curx = tempx;
 					}
-					else if (content[i + 1] == u'y' || content[i + 1] == u'Y') {
+					else if (content[i + 1] == u'y') {
 						float tempy = parseSize(content, i + 2);
 						if (tempy != -1) {
 							cury = tempy;
 							if (!regular || (curH < resolution * cury)) curH = resolution * cury;
 						}
 					}
-					else if (content[i + 1] == u'a' || content[i + 1] == u'A') {
+					else if (content[i + 1] == u'a') {
 						float tempxy = parseSize(content, i + 2);
 						if (tempxy != -1) {
 							curx = tempxy;
@@ -285,5 +285,72 @@ namespace onart {
 		}
 
 		return totalLDWH;
+	}
+
+	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const vec2& center, float size, const vec4& color) {
+		constexpr float BASE_SIZE = 1.0f / 1024;
+		size *= BASE_SIZE;
+		program2["isText"] = true;
+		program2["nopiv"] = true;
+		program2["color"] = color;
+		program2["useFull"] = true;
+		vec2 thisCenter(group.left + group.width / 2, group.down + group.height / 2);
+		thisCenter *= size;
+		vec3 tl(center - thisCenter); tl.z = -0.5f;
+		program2["textGroup"] = mat4::translate(tl)*mat4::scale(size);
+		Mesh** rect = Mesh::get("rect");
+		// ±×¸°´Ù
+		int line = 0;
+		float curW = lineXY[0].x;
+		float curH = lineXY[0].y;
+		float curx = 1, cury = 1;
+		float curScale = 1;
+		program2.bind(**rect);
+		int charCount = (int)content.size();
+		for (int i = 0; i < charCount; i++) {
+			oachar c = content[i];
+			switch (c)
+			{
+			case '\n':
+				curW = lineXY[++line].x;
+				curH = lineXY[line].y;
+				continue;
+			case '\a':
+				if (i + 5 < charCount) {
+					if (content[i + 1] == u'x') {
+						float tempx = parseSize(content, i + 2);
+						if (tempx > -1) curx = tempx;
+					}
+					else if (content[i + 1] == u'y') {
+						float tempy = parseSize(content, i + 2);
+						if (tempy != -1) cury = tempy;
+					}
+					else if (content[i + 1] == u'a') {
+						float tempxy = parseSize(content, i + 2);
+						if (tempxy != -1) {
+							curx = tempxy;
+							cury = tempxy;
+						}
+					}
+				}
+				i += 5;
+				continue;
+			case '\b':
+				if (i + 8 < charCount) {
+					vec4 r = parseColor(content, i + 1);
+					if (r[0] != -1) program2["color"] = r * color;
+				}
+				i += 8;
+				continue;
+			default:
+				auto t = txs.find(c);
+				if (t == txs.end()) continue;
+				const charTex& ct = t->second;
+				program2["transform"] = mat4::r2r(vec4(curW, curH - ct.size[1] - ct.bearing[1], ct.size[0] * curx, ct.size[1] * cury), -1.0f);
+				program2.texture(ct.id);
+				program2.draw();
+				curW += ct.advance * curx;
+			}
+		}
 	}
 }
