@@ -72,11 +72,9 @@ namespace onart {
 		/// <para>줄바꿈: \n은 줄을 바꿉니다. 그 외 자동 줄바꿈은 현재 버전에서 제공하지 않습니다. 나중에 단위글자 n개 정도의 기준으로 제공될 예정입니다.</para>
 		/// </summary>
 		/// <param name="content">표시할 문장입니다.</param>
-		/// <param name="ldwh">표시할 직사각형 영역(왼쪽-아래-폭-높이)입니다. 기준은 화면 가운데가 (0,0)이며 표시 화면 폭/높이 중 짧은 것의 길이가 2가 됩니다.</param>
-		/// <param name="align">글자의 정렬 상태입니다.</param>
-		/// <param name="fullFit">true로 설정할 경우 글자의 비율을 유지하지 않고 직사각형 영역을 가득 채웁니다. 그 외의 경우 글자의 비율을 유지하면서 최대한 채웁니다.</param>
-		/// <param name="rowGap">행간을 설정합니다. 기본값은 1.6입니다.</param>
-		void draw(const oastring& content, const vec4& ldwh, Align align = Align::CENTER, bool fullFit = false, float rowGap = 1.6f);
+		/// <param name="group">전체 문자열의 위치는 픽셀 단위로 다뤄지는데, 이를 원하는 위치/크기로 변환하는 행렬입니다. getRectNLine()에서 자동으로 계산됩니다.</param>
+		/// <param name="lineXY">각 라인의 시작점입니다. getRectNLine()에서 자동으로 계산됩니다.</param>
+		void draw(const oastring& content, const mat4& group, const std::vector<vec2>& lineXY, bool fullFit = false);
 		/// <summary>
 		/// 주어진 위치를 중심으로 고정된 크기의 텍스트를 그립니다. 텍스트는 반드시 가운데 정렬됩니다.
 		/// <para>크기: 크기는 직사각형에 맞도록 나오는데, 텍스트 안에서 상대적 크기를 다르게 설정하고자 한다면 \a와 늘임축(x 또는 y 또는 a), 그리고 정수 부분 1자리 소수 부분 2자리 실수를 입력합니다. 
@@ -90,8 +88,19 @@ namespace onart {
 		/// <param name="content">표시할 문장입니다.</param>
 		/// <param name="center">중심 좌표입니다.</param>
 		/// <param name="size">글자의 크기입니다.</param>
-		/// <param name="rowGap">행간을 설정합니다. 기본값은 1.6입니다.</param>
-		void draw(const oastring& content, const vec2& center, float size = 1, float rowGap = 1.6f);
+		/// <param name="rowGap">행간을 설정합니다. 기본값은 1.0입니다.</param>
+		void draw(const oastring& content, const vec2& center, float size = 1, float rowGap = 1);
+
+		/// <summary>
+		/// 이 불러온 폰트에 대하여 해당 문장이 차지하는 상대적 공간, 그리고 각 행은 어디서 시작할지를 리턴합니다. 이 둘은 draw()에서 사용됩니다.
+		/// 글자 색 및 크기 변경에 대해서는 draw() 설명에서 참고해 주세요.
+		/// </summary>
+		/// <param name="content">측정될 문장</param>
+		/// <param name="lineXY">각 행의 시작점(가장 왼쪽/아랫선)이 들어갑니다. 비어 있지 않았던 경우 자동으로 비우고 새로 들어갑니다.</param>
+		/// <param name="align">글자 정렬 상태입니다. 가운데/왼쪽/오른쪽이 있습니다.</param>
+		/// <param name="rowGap">행간을 설정합니다. 기본값은 1입니다.</param>
+		/// <returns>문장이 차지하는 직사각형입니다. draw()에서 사용됩니다.</returns>
+		vec4 getRectNLine(const oastring& content, std::vector<vec2>& lineXY, Align align = Align::CENTER, float rowGap = 1);
 	private:
 		struct charTex {
 			unsigned id;

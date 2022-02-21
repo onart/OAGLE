@@ -774,6 +774,26 @@ namespace onart {
 		inline static mat4 r2r(const vec4& r2, float z = 0) {
 			return r2r(vec4(-0.5f, -0.5f, 1, 1), r2, z);
 		}
+
+		/// <summary>
+		/// 한 직사각형(L-D-W-H 형식)을 다른 직사각형의 안쪽에 맞게 변환합니다. 즉 중심을 공유하며, 원본 직사각형의 종횡비는 유지하면서 가장 큰 직사각형이 되도록 리턴합니다.
+		/// </summary>
+		/// <param name="r1">변환 전 직사각형</param>
+		/// <param name="r2">변환 후 직사각형</param>
+		/// <param name="z">직사각형이 위치할 z좌표(-1이 가장 겉)</param>
+		inline static mat4 r2r2(const vec4& r1, const vec4& r2, float z = 0) {
+			float r = r1.width / r1.height;
+			vec4 targ(r2);
+			if (targ.width < targ.height * r) {	// 세로선을 맞출 것
+				targ.down += (targ.height - targ.width / r) / 2;
+				targ.height = targ.width / r;
+			}
+			else {	// 가로선을 맞출 것
+				targ.left += (targ.width - targ.height * r) / 2;
+				targ.width = targ.height * r;
+			}
+			return r2r(r1, targ, z);
+		}
 	};
 
 	/// <summary>
