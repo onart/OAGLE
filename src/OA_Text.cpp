@@ -178,7 +178,7 @@ namespace onart {
 		// 각 라인 길이(px)를 잰다
 		int charCount = (int)content.size();
 		bool regular = false;	// 라인의 첫 글자가 아직 나오지 않은 경우
-		for (int i = 0; i < charCount; i++) {	// 이 부분은 매번 수행할 필요 없음(totalLDWH만 도출되면 됨 -> 텍스트 개체를 만들어서 스트링 혹은 목표 직사각형이 변할 때마다 행렬 변경하도록)
+		for (int i = 0; i < charCount; i++) {
 			oachar c = content[i];
 			switch (c)
 			{
@@ -263,7 +263,6 @@ namespace onart {
 
 	void Font::cdraw(const oastring& content, const std::vector<vec2>& lineXY, const vec4& color) {
 		Mesh** rect = Mesh::get("rect");
-		// 그린다
 		int line = 0;
 		float curW = lineXY[0].x;
 		float curH = lineXY[0].y;
@@ -316,5 +315,49 @@ namespace onart {
 				curW += ct.advance * curx;
 			}
 		}
+	}
+
+	oastring Font::cutLine(const oastring& content, float maxWidth) {
+		oastring ret;
+		float curW = 0, curx = 1;
+		int charCount = (int)content.size();
+		for (int i = 0; i < charCount; i++) {
+			oachar c = content[i];
+			switch (c)
+			{
+			case '\n':
+				curW = 0;
+				ret += c;
+				continue;
+			case '\a':
+				if (i + 5 < charCount) {
+					if (content[i + 1] == u'x' || content[i + 1] == u'a') {
+						float tempx = parseSize(content, i + 2);
+						if (tempx != -1) curx = tempx;
+					}
+					ret += content.substr(i, 6);
+				}
+				i += 5;
+				continue;
+			case '\b':
+				if (i + 8 < charCount) {
+					ret += content.substr(i, 9);
+				}
+				i += 8;
+				continue;
+			default:
+				auto t = txs.find(c);
+				if (t == txs.end()) continue;
+				const charTex& ct = t->second;
+				curW += (ct.bearing[0] + ct.size[0]) * curx;
+				if (curW > maxWidth) {
+					if (ret.size()) ret += u'\n';
+					curW = (ct.bearing[0] + ct.size[0]) * curx;
+				}
+				ret += c;
+				break;
+			}
+		}
+		return ret;
 	}
 }

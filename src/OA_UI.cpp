@@ -21,9 +21,10 @@ namespace onart::UI {
 		return ret;
 	}
 
-	Text::Text(const EntityKey& key, Font* font, const oastring& content, const vec4& targRect, bool fullFit, Align align, float rowGap, const vec4& color)
+	Text::Text(const EntityKey& key, Font* font, const oastring& content, const vec4& targRect, float maxWidth, bool fullFit, Align align, float rowGap, const vec4& color)
 		:Entity(key, Transform(), true), font(font), content(content), color(color), rectFixed(true), align(align), rowGap(rowGap), center(targRect.left + targRect.width / 2, targRect.down + targRect.width / 2) {
-		ldwh = font->getRectNLine(content, linexy, align, rowGap);
+		if (isfinite(maxWidth))	this->content = font->cutLine(content, maxWidth);
+		ldwh = font->getRectNLine(this->content, linexy, align, rowGap);
 		plain = toPlain(content);
 		if (fullFit) { r2r = mat4::r2r(ldwh, targRect); }
 		else { r2r = mat4::r2r2(ldwh, targRect); }

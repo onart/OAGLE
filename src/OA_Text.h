@@ -116,6 +116,14 @@ namespace onart {
 		/// <param name="rowGap">행간을 설정합니다. 이 값은 문서 프로그램에서 제공하는 것과 동일한 비율을 의미하지 않습니다. 폰트에 따라 다를 수 있으므로, 선호하는 만큼 직접 조절해 주시는 것이 좋습니다.</param>
 		/// <returns>문장이 차지하는 직사각형(L-D-W-H)입니다. draw()에서 사용됩니다.</returns>
 		vec4 getRectNLine(const oastring& content, std::vector<vec2>& lineXY, Align align = Align::CENTER, float rowGap = 1);
+
+		/// <summary>
+		/// 자동 줄바꿈을 \n을 삽입하여 적용한 형태로 문자열을 리턴합니다. 제한을 넘어가더라도 한 행에 최소 한 글자는 들어가며, 기존의 개행은 그대로 유지됩니다.
+		/// 어절째로 줄을 바꾸는 기능은 제공할 예정이 없습니다.
+		/// </summary>
+		/// <param name="content">문자열</param>
+		/// <param name="maxwidth">최대 폭입니다. 단위는 px이지만 불러온 resolution, 폰트 종류 등에 따라 그 의미가 달라지므로(하나의 Font 객체에 대하여는 동일) 직접 필요한 만큼 적용하는 것이 맞습니다.</param>
+		oastring cutLine(const oastring& content, float maxwidth);
 	private:
 		struct charTex {
 			unsigned id;

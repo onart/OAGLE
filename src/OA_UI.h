@@ -24,11 +24,12 @@ namespace onart {
 			/// <param name="font">텍스트의 모양입니다. 파일 혹은 메모리에서 불러올 수 있습니다.</param>
 			/// <param name="content">텍스트의 내용 및 글자별 크기/색상입니다. </param>
 			/// <param name="ldwh">텍스트를 이 직사각형(L-D-W-H)에 맞게 출력합니다.</param>
+			/// <param name="maxWidth">최대 폭입니다. 직사각형과 동일한 단위가 아닌, 불러온 폰트에 대한 픽셀 단위입니다. 직접 조절하면서 영역을 맞추는 것이 강하게 권장됩니다.</param>
 			/// <param name="fullFit">true인 경우 주어진 직사각형에 정확히 맞게 출력합니다. 즉, 글자의 원본 비율을 유지하지 않습니다.</param>
 			/// <param name="align">정렬 상태입니다. 가운데/왼쪽/오른쪽 옵션만 가능합니다.</param>
 			/// <param name="rowGap">행 간격입니다. 문서 프로그램들과 동일한 단위로 제공되는 것이 아니므로 직접 조절해 주시기 바랍니다.</param>
 			/// <param name="color">전체의 색입니다.</param>
-			Text(const EntityKey& key, Font* font, const oastring& content, const vec4& ldwh, bool fullFit = false, Align align = Align::CENTER, float rowGap = 1, const vec4& color = 1);
+			Text(const EntityKey& key, Font* font, const oastring& content, const vec4& ldwh, float maxWidth = INF, bool fullFit = false, Align align = Align::CENTER, float rowGap = 1, const vec4& color = 1);
 			/// <summary>
 			/// 텍스트 개체를 생성합니다. 직사각형 범위에 고정되지 않고 특정 지점을 중심으로 합니다. 이를 테면 게임 상 물체에서 텍스트가 생산될 때 사용하기에 적합합니다. 이 경우 Camera::world2screen() 함수를 참고해 주세요.
 			/// </summary>
