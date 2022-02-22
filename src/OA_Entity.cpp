@@ -10,6 +10,9 @@
 #include "OA_Model.h"
 #include "OA_Anim.h"
 
+#include <algorithm>
+#include <iterator>
+
 extern onart::Shader program2, program3;
 extern float tp, dt;
 
@@ -21,7 +24,7 @@ namespace onart {
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
 	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed) {
-
+		entities.insert({ k,this });
 	}
 
 	Entity::~Entity() {
@@ -38,9 +41,7 @@ namespace onart {
 		auto ub = entities.upper_bound(k);
 		std::vector<Entity*> v;
 		v.reserve(entities.count(k));
-		for (auto iter = entities.lower_bound(k); iter != ub; iter++) {
-			v.push_back(iter->second);
-		}
+		std::transform(entities.lower_bound(k), entities.upper_bound(k), std::back_inserter(v), [](std::pair<EntityKey, Entity*> p) {return p.second;});
 		return v;
 	}
 
@@ -51,6 +52,7 @@ namespace onart {
 	}
 
 	void Entity::render() {
+		if (!isRendered) return;
 		if (isFixed) {
 			if (model) {
 				program3["fixed"] = true;

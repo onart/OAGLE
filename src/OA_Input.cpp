@@ -6,9 +6,13 @@
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
 #include "OA_Input.h"
+#include "OA_Camera.h"
 
 extern onart::ivec2 windowSize;
 extern onart::ivec4 vp_ldwh;
+
+extern onart::Camera mainCamera;
+extern int frame;
 
 namespace onart::Input {
 	std::vector<KeyCode> allKeyInputsForNow() {
@@ -30,5 +34,14 @@ namespace onart::Input {
 		rpos.x -= vp_ldwh[0];	rpos.y -= vp_ldwh[1];					// 뷰포트 좌측상단 좌표를 (0,0)으로 하도록 평행이동 (일반적인 화면 크기 범위에서는 절대 오차가 생기지 않음)
 		rpos.x /= vp_ldwh[2];	rpos.y /= vp_ldwh[3];					// 뷰포트 우측하단 좌표를 (1,1)로 하도록 수축
 		return rpos;
+	}
+
+	vec2 cameraCursorPos() {
+		static int fr = 0; static vec2 ret;
+		if (fr != frame) {
+			fr = frame;
+			return ret = mainCamera.mouse2screen(relativeCursorPos());
+		}
+		return ret;
 	}
 }

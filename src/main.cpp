@@ -69,11 +69,6 @@ void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mainCamera.viewUpdate();
 	onart::Scene::currentScene->render();
-	std::vector<onart::vec2> linexy;
-	onart::vec4 rect = onart::Font::get("arial")->getRectNLine(u"AB\nCCCC", linexy,onart::Font::Align::LEFT);
-	//onart::mat4 gr = onart::mat4::r2r2(rect, onart::vec4(-0.5f, -0.5f, 1, 1));
-	//onart::Font::get("arial")->draw(u"AB\nCC", gr, linexy);
-	onart::Font::get("arial")->draw(u"AB\nCCCC", rect, linexy);
 	glfwSwapBuffers(window);
 }
 

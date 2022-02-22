@@ -29,12 +29,12 @@ namespace onart {
 	/// </summary>
 	class Entity
 	{
+	public:
 #ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY 매크로를 정의한 경우 정수 키를 사용할 수 있습니다.
 		using EntityKey = int;
 #else
 		using EntityKey = std::string;
 #endif
-	public:
 		/// <summary>
 		/// 개체를 생성합니다. 특별히 매 프레임 업데이트할 내용이 없는 개체는 상속 없이 그대로 사용할 수 있습니다.
 		/// <para>스프라이트 혹은 모델: addAnim(), setModel()로 정합니다.</para>
@@ -57,6 +57,11 @@ namespace onart {
 		/// true인 경우에만 개체가 화면에 렌더링됩니다.
 		/// </summary>
 		bool isRendered = true;
+		/// <summary>
+		/// 개체의 키를 리턴합니다.
+		/// </summary>
+		/// <returns></returns>
+		inline const EntityKey& name() const { return key; }
 		/// <summary>
 		/// 응용 단계에서 사용하지 않는 것이 좋습니다.
 		/// </summary>
@@ -91,7 +96,12 @@ namespace onart {
 		/// 현존 객체 중에서 해당 키를 가진 것 중 가장 앞의 하나를 찾습니다. 없는 경우 nullptr를 반환합니다. 이 키에 대하여 하나의 개체만 있을 것이 확실한 경우 사용하기에 좋습니다.
 		/// </summary>
 		static Entity* get(const EntityKey& k);
-
+		/// <summary>
+		/// 현존 객체 중에서 해당 키를 가진 것 중 가장 앞의 하나를 찾아 원하는 개체형으로 캐스트하여 반환합니다.
+		/// 없거나 가장 앞의 것이 타입이 일치하지 않는 경우 nullptr를 반환합니다. 이 키에 대하여 하나의 개체만 있을 것이 확실한 경우 사용하기에 좋습니다.
+		/// </summary>
+		template <class T>
+		inline static T* get(const EntityKey& k) { return dynamic_cast<T*>(get(k)); }
 	protected:
 		/// <summary>
 		/// 개체의 위치, 크기, 회전을 나타냅니다.

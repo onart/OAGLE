@@ -36,9 +36,7 @@ namespace onart {
 	void Scene::render() {
 		for (auto e : entities) {
 			// +program3¿¡ ±¤¿ø(ÃÖ´ë ?°³)
-			for (auto e : entities) {
-				if (e) e->render();
-			}
+			if (e) e->render();
 		}
 	}
 

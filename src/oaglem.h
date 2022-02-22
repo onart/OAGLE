@@ -543,6 +543,11 @@ namespace onart {
 		inline void toI() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = _44 = 1; }
 
 		/// <summary>
+		/// 단위행렬이면 true를 리턴합니다.
+		/// </summary>
+		inline bool isI() const { return memcmp(mat4().a, a, sizeof(a)) == 0; }
+
+		/// <summary>
 		/// 다른 행렬과 성분별로 더하거나 뺍니다.
 		/// </summary>
 		inline mat4& operator+=(const mat4& m) { add4<float>(a, m.a); add4<float>(a + 4, m.a + 4); add4<float>(a + 8, m.a + 8); add4<float>(a + 12, m.a + 12); return *this; }
@@ -831,6 +836,11 @@ namespace onart {
 		/// 사원수 크기를 리턴합니다.
 		/// </summary
 		inline float abs() const { return sqrtf(abs2()); }
+
+		/// <summary>
+		/// 사원수가 무회전인지 확인합니다.
+		/// </summary>
+		inline bool is1() const { return c1 == 1 && ci == 0 && cj == 0 && ck == 0; }
 
 		/// <summary>
 		/// 켤레(공액)사원수를 리턴합니다.

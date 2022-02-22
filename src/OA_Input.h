@@ -211,11 +211,17 @@ namespace onart::Input {
 	inline ivec2 cursorPos() { return mousePos; }
 
 	/// <summary>
-	/// 마우스 포인터의 위치를 게임 화면 기준으로 리턴합니다. 좌측 상단이 (0,0), 그리고 우측 하단이 (1,1)입니다.
-	/// cf) Camera::mouse2screen()
+	/// 마우스 포인터의 위치를 게임 화면 기준으로 리턴합니다(창 기준이 아닙니다). 좌측 상단이 (0,0), 그리고 우측 하단이 (1,1)입니다.
+	/// cf) Camera::mouse2screen(), Input::cameraCursorPos()
 	/// *고 dpi 화면에 대한 보정이 검증되지 않은 상태입니다.
 	/// </summary>
 	vec2 relativeCursorPos();
+
+	/// <summary>
+	/// 마우스 포인터의 위치를 뷰포트 기준으로 리턴합니다. 중심이 (0,0)이며 종횡 중 짧은 쪽의 길이가 2입니다.
+	/// 프레임당 여러 번 필요할 경우 이것을 활용하는 것이 훨씬 좋습니다.
+	/// </summary>
+	vec2 cameraCursorPos();
 }
 
 #endif // !__OA_INPUT_H__

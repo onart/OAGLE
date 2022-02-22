@@ -28,13 +28,13 @@ using oachar = char;
 /// OA_NO_UNICODE16 매크로를 정의하면 std::string을 사용할 수 있습니다. 단, 이때 아스키 범위 외 문자가 존재하는 경우 텍스트 출력은 원하는 대로 되지 않을 것입니다.
 /// </summary>
 namespace onart {
+	enum class Align { CENTER, LEFT, RIGHT };
 	/// <summary>
 	/// 트루타입만 사용 가능합니다.
 	/// </summary>
 	class Font
 	{
 	public:
-		enum class Align { CENTER, LEFT, RIGHT };
 		/// <summary>
 		/// 폰트 파일을 불러옵니다. 불러온 파일은 이름을 통해서 접근할 수 있습니다. 이 프로그램에서 사용하는 모듈인 stb_truetype은 파일 길이를 받지 않습니다.
 		/// 따라서, 앞 헤더 부분은 잘 꾸며졌지만 실제로 유효한 트루타입 파일이 아닌 경우 문제가 발생할 수 있으므로 사용하지 마시기 바랍니다.
