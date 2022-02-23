@@ -38,6 +38,8 @@ namespace onart {
 		aiPostProcessSteps::aiProcess_FindInstances |
 		aiPostProcessSteps::aiProcess_SortByPType;
 
+	constexpr int MAX_BONE_COUNT = 64;
+
 	unsigned assimpReadTex(const aiMaterial* mtl, const std::filesystem::path& modelDirectory, const aiTextureType type) {
 		namespace fs = std::filesystem;
 		aiString texpath;
@@ -161,6 +163,9 @@ namespace onart {
 						}
 					}
 				}
+			}
+			for (Vertex& v : vList) {
+				clamp4(v.boneIDs.entry, 0, MAX_BONE_COUNT);	// 셰이더 분기 제거를 위해 (-1에는 weight 0이 대응)
 			}
 #endif
 			// 매터리얼

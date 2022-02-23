@@ -169,7 +169,7 @@ namespace onart {
 		return v /= 255;
 	}
 
-	vec4 Font::getRectNLine(const oastring& content, std::vector<vec2>& lineXY, Align align, float rowGap) {
+	vec4 Font::getRectNLine(const oastring& content, std::vector<vec2>& lineXY, AlignH align, float rowGap) {
 		lineXY.clear();
 		vec4 totalLDWH;	// 최종 직사각형 변환용
 		float curW = 0, curH = resolution;
@@ -233,13 +233,13 @@ namespace onart {
 		// 라인별 첫 글자의 x, y 오프셋을 정한다(전체스케일 제외)
 		switch (align)
 		{
-		case Align::CENTER:
+		case AlignH::CENTER:
 			for (vec2& xy : lineXY) xy.x = (totalLDWH.width - xy.x) / 2;
 			break;
-		case Align::LEFT:
+		case AlignH::LEFT:
 			for (vec2& xy : lineXY) xy.x = 0;
 			break;
-		case Align::RIGHT:
+		case AlignH::RIGHT:
 			for (vec2& xy : lineXY)xy.x = totalLDWH.width - xy.x;
 			break;
 		}
@@ -247,17 +247,46 @@ namespace onart {
 		return totalLDWH;
 	}
 
-	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const vec2& center, float size, const vec4& color) {
+	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, AlignH ha, AlignV va, const vec2& center, float size, const vec4& color) {
 		constexpr float BASE_SIZE = 1.0f / 1024;
 		size *= BASE_SIZE;
 		program2["isText"] = true;
 		program2["nopiv"] = true;
 		program2["color"] = color;
 		program2["useFull"] = true;
-		vec2 thisCenter(group.left + group.width / 2, group.down + group.height / 2);
+		float hf, vf;
+		switch (ha)
+		{
+		case AlignH::CENTER:
+			hf = 0.5f;
+			break;
+		case AlignH::LEFT:
+			hf = 0;
+			break;
+		case AlignH::RIGHT:
+			hf = 1;
+			break;
+		default:
+			hf = 0.5f;
+		}
+		switch (va)
+		{
+		case AlignV::CENTER:
+			vf = 0.5f;
+			break;
+		case AlignV::TOP:
+			vf = 1;
+			break;
+		case AlignV::BOTTOM:
+			vf = 0;
+			break;
+		default:
+			vf = 0.5f;
+		}
+		vec2 thisCenter(group.left + group.width * hf, group.down + group.height * vf);
 		thisCenter *= size;
 		vec3 tl(center - thisCenter); tl.z = 0;
-		program2["textGroup"] = mat4::translate(tl)*mat4::scale(size);
+		program2["textGroup"] = mat4::translate(tl) * mat4::scale(size);
 		cdraw(content, lineXY, color);
 	}
 

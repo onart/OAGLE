@@ -656,6 +656,12 @@ namespace onart {
 		_mm_storeu_si128((__m128i*)vec, b);
 	}
 
+	template<>
+	inline void clamp4<int32_t>(int32_t* vec, int min, int max) {
+		__m128i maxcut = _mm_min_epi16(_mm_set1_epi32(max), _mm_loadu_si128((__m128i*)vec));
+		_mm_storeu_si128((__m128i*)vec, _mm_max_epi16(maxcut, _mm_set1_epi32(min)));
+	}
+
 	/// <summary>
 	/// 32비트 비부호 정수 배열에서 4개를 원하는 값으로 초기화합니다.
 	/// </summary>

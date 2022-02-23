@@ -223,7 +223,7 @@ int main(int argc, char* argv[]) {
 	//glfwSetDropCallback(window, callback);	 // 파일을 드래그하여 창에 드롭할 경우 경로가 전달됩니다. void callback(GLFWwindow* window, int count, const char** paths)
 	//glfwSetWindowCloseCallback(window, callback)	 // 윈도우 종료 신호 발생 시 콜백을 변경합니다. void callback(GLFWwindow* window)
 
-	for (frame = 0; !glfwWindowShouldClose(window); frame++) {
+	for (frame = 1; !glfwWindowShouldClose(window); frame++) {
 		glfwPollEvents();
 		if constexpr (!OA_AUDIO_NOTHREAD) onart::Audio::allow(false);
 		else if constexpr (OA_AUDIO_WAIT_ON_DRAG) onart::Audio::wait = false;
