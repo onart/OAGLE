@@ -502,7 +502,7 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// Z축 기준의 3차원 회전을 리턴합니다.
+		/// 3차원 회전을 리턴합니다.
 		/// </summary>
 		/// <param name="roll">roll(X축 방향 회전)</param>
 		/// <param name="pitch">pitch(Y축 방향 회전)</param>
@@ -962,10 +962,10 @@ namespace onart {
 		/// 오일러 회전에 해당하는 사원수를 생성합니다. cf) 오른손 법칙
 		/// <para>https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles</para>
 		/// </summary>
+		/// <param name="roll">roll(X축 방향 회전)</param>
 		/// <param name="yaw">yaw(Z축 방향 회전)</param>
 		/// <param name="pitch">pitch(Y축 방향 회전)</param>
-		/// <param name="roll">roll(X축 방향 회전)</param>
-		inline static Quaternion euler(float yaw, float pitch, float roll) {
+		inline static Quaternion euler(float roll, float pitch, float yaw) {
 			vec3 cypr(yaw, pitch, roll), sypr(cypr);
 			float cy = cosf(yaw / 2);	float sy = sinf(yaw / 2);
 			float cp = cosf(pitch / 2);	float sp = sinf(pitch / 2);
@@ -1013,7 +1013,7 @@ namespace onart {
 
 	inline mat3 mat3::rotate(float roll, float pitch, float yaw) { return mat3(mat4::rotate(roll, pitch, yaw)); }
 	inline mat4 mat4::rotate(const vec3& axis, float angle) { return Quaternion::rotation(axis, angle).toMat4(); }
-	inline mat4 mat4::rotate(float roll, float pitch, float yaw) { return Quaternion::euler(yaw, pitch, roll).toMat4(); }
+	inline mat4 mat4::rotate(float roll, float pitch, float yaw) { return Quaternion::euler(roll, pitch, yaw).toMat4(); }
 	inline mat4 mat4::TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
 		// SIMD 미적용 시 곱 30회/합 6회, T*R*S 따로 하는 경우 곱 149회/합 102회
 		// SIMD 적용 시 곱 15회/합 6회, 따로 하는 경우 곱 44회/합 102회

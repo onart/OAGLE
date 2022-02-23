@@ -210,14 +210,14 @@ namespace onart {
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void dSetRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll); ready = false; }
+		inline void dSetRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw); ready = false; }
 		/// <summary>
 		/// 3D 회전을 설정하고 모델 행렬을 업데이트합니다. 오른손 법칙을 기억하세요.
 		/// </summary>
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void setRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll); TRS(); }
+		inline void setRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw); TRS(); }
 		/// <summary>
 		/// 3D 회전을 추가로 가합니다.
 		/// </summary>
@@ -244,14 +244,14 @@ namespace onart {
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void dAddRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll) * rotation; ready = false; }
+		inline void dAddRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw) * rotation; ready = false; }
 		/// <summary>
 		/// 3D 회전을 추가로 가하고 모델 행렬을 업데이트합니다. 오른손 법칙을 기억하세요.
 		/// </summary>
 		/// <param name="roll">X축 방향의 회전</param>
 		/// <param name="pitch">Y축 방향의 회전</param>
 		/// <param name="yaw">Z축 방향의 회전</param>
-		inline void addRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(yaw, pitch, roll) * rotation; TRS(); }
+		inline void addRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw) * rotation; TRS(); }
 	};
 }
 
