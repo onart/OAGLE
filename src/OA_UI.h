@@ -1,10 +1,20 @@
+/********************************************************************************
+* 2D/3D OpenGL Game Engine
+* Copyright 2022 onart@github
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*********************************************************************************/
 #ifndef __OA_UI_H__
 #define __OA_UI_H__
 #include "OA_Entity.h"
 #include "OA_Text.h"
+#include "OA_UniversalFunctor.h"
 
 namespace onart {
 	class Font;
+	class UIAnimation;
+	struct Texture;
 	namespace UI {
 		/// <summary>
 		/// 텍스트 개체입니다. 글자별로 크기/색상을 조정할 수 있습니다.
@@ -100,6 +110,81 @@ namespace onart {
 			float size;
 			const float maxWidth;
 			bool rectFixed, fullFit, hasAdditional = false;
+		};
+
+		/// <summary>
+		/// 마우스로 클릭할 수 있는 버튼 개체입니다.
+		/// 기본적으로는 마우스 외에 반응을 하지 않지만 반응 함수(애니메이션 트리거)를 public으로 두어 씬에서 키보드로 접근할 수 있게 구현이 가능합니다.
+		/// </summary>
+		class Button: public Entity
+		{
+		public:
+			/// <summary>
+			/// 버튼을 생성합니다.
+			/// </summary>
+			/// <param name="key">프로그램 내에서 사용될 개체의 이름입니다.</param>
+			/// <param name="ldwh">버튼이 사용할 직사각형 영역(LDWH)입니다. 직사각형이 아닌 영역을 인식 범위로 하고 싶다면 상속하여 Update()를 오버라이드해야 합니다.</param>
+			/// <param name="onClick">버튼 클릭 시 반응 함수입니다. UniversalFunctor 추상 클래스를 상속하여 사용하며, Button 객체는 기본적으로 전달 인자가 없습니다.</param>
+			/// <param name="normal">기본 상태의 애니메이션(이미지)입니다.</param>
+			/// <param name="onOver">마우스 오버 상태의 애니메이션(이미지)입니다.</param>
+			/// <param name="onDown">마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지 상태의 애니메이션(이미지)입니다.</param>
+			Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, UIAnimation* normal = nullptr, UIAnimation* onOver = nullptr, UIAnimation* onDown = nullptr);
+			/// <summary>
+			/// 마우스 커서가 버튼 위에 위치했을 때의 애니메이션이 나옵니다.
+			/// </summary>
+			void onMouseOver();
+			/// <summary>
+			/// 마우스 커서가 버튼으로부터 떠났을 때의 애니메이션이 나옵니다.
+			/// </summary>
+			void onMouseLeft();
+			/// <summary>
+			/// 마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지의 애니메이션이 나옵니다.
+			/// </summary>
+			void onMouseDown();
+			/// <summary>
+			/// 마우스 위치 및 클릭 상태를 파악하여 버튼이 반응합니다. (프레임당 1회 자동 호출됨)
+			/// </summary>
+			void Update();
+			/// <summary>
+			/// onClick 함수를 변경합니다.
+			/// </summary>
+			inline void setOnClick(UniversalFunctor* n) { onClick = n; }
+		protected:
+			int st = 0;
+			vec4 ldwh;
+		private:
+			UniversalFunctor* onClick;
+		};
+
+		/// <summary>
+		/// 마우스로 클릭할 수 있는 버튼 개체입니다.
+		/// 1회 클릭하면 상태가 변하고 다시 클릭하면 이전 상태로 돌아옵니다.
+		/// 기본적으로는 마우스 외에 반응을 하지 않지만 반응 함수(애니메이션 트리거)를 public으로 두어 씬에서 키보드로 접근할 수 있게 구현이 가능합니다.
+		/// </summary>
+		class ToggleButton : public Entity {
+		public:
+			ToggleButton(const EntityKey& key, const vec4& ldwh, UIAnimation* normal1 = nullptr, UIAnimation* normal2 = nullptr, UIAnimation* onOver1 = nullptr, UIAnimation* onOver2 = nullptr, UIAnimation* onDown1 = nullptr, UIAnimation* onDown2 = nullptr);
+			virtual void onClick1();
+			virtual void onClick2();
+			void onMouseOver1();
+			void onMouseOver2();
+			void onMouseDown1();
+			void onMouseDown2();
+		private:
+		};
+
+		/// <summary>
+		/// 마우스로 끌 수 있는 버튼 개체입니다. 1을 단위로 값 양자화가 가능합니다.
+		/// 양자화되지 않은 게이지의 값은 0~1의 float로 제공됩니다.
+		/// </summary>
+		class Gauge : public Entity {
+		public:
+			Gauge(const EntityKey& key, const vec4& ldwh, Texture* handle, Texture* bar, int min, int max);
+		private:
+			union {
+				int q;
+				float c;
+			}value;
 		};
 	}
 }

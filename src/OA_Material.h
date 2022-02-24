@@ -51,6 +51,7 @@ namespace onart {
 
 		/// <summary>
 		/// 이미지 파일로부터 2D 텍스처를 생성합니다. 24비트/32비트(알파채널) 이미지만 가능합니다.
+		/// white1x1이라는 이름은 예약되어 있습니다. 사용하지 마세요.
 		/// </summary>
 		/// <param name="file">파일 이름</param>
 		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다.</param>
@@ -58,6 +59,7 @@ namespace onart {
 		static Texture genTextureFromFile(const char* file, bool reset = false, const char* name = nullptr);
 		/// <summary>
 		/// 메모리의 변수(이미지)로부터 2D 텍스처를 생성합니다. 24비트/32비트(알파채널) 이미지만 가능합니다.
+		/// white1x1이라는 이름은 예약되어 있습니다. 사용하지 마세요.
 		/// </summary>
 		/// <param name="bts">이미지 데이터입니다.</param>
 		/// <param name="len">데이터 길이입니다.</param>
@@ -65,9 +67,17 @@ namespace onart {
 		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다.</param>
 		static Texture genTextureFromMemory(unsigned char* bts, unsigned len, const std::string& name, bool reset = false);
 		/// <summary>
+		/// 백색 1x1 텍스처를 생성합니다.
+		/// </summary>
+		static void genWhite();
+		/// <summary>
 		/// 해당 이름의 텍스처를 제거합니다.
 		/// </summary>
 		static void drop(const std::string& name);
+		/// <summary>
+		/// 해당 이름의 텍스처를 가져옵니다.
+		/// </summary>
+		static Texture get(const std::string& name);
 	private:
 		static std::map<std::string, Texture> texList;
 

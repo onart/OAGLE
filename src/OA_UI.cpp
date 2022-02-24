@@ -1,3 +1,10 @@
+/********************************************************************************
+* 2D/3D OpenGL Game Engine
+* Copyright 2022 onart@github
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*********************************************************************************/
 #include "OA_UI.h"
 
 namespace onart::UI {
@@ -80,5 +87,49 @@ namespace onart::UI {
 			if (hasAdditional)	font->draw(content, ldwh, linexy, additionalTransform, halign, valign, center, size, color);
 			else font->draw(content, ldwh, linexy, halign, valign, center, size, color);
 		}
+	}
+
+	Button::Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, UIAnimation* normal, UIAnimation* onOver, UIAnimation* onDown)
+		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
+
+	}
+
+	void Button::onMouseOver() {
+		st = 1;
+	}
+
+	void Button::onMouseLeft() {
+		st = 0;
+	}
+
+	void Button::onMouseDown() {
+		st = 2;
+	}
+
+	void Button::Update() {
+		vec2 pos = Input::cameraCursorPos();
+		bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
+		switch (st)
+		{
+		case 0:	// 기본
+			if (isOver) onMouseOver();
+			break;
+		case 1:	// 마우스 오버 후
+			if (!isOver) onMouseOver();
+			break;
+		case 2:	// 마우스 다운 후
+			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
+				if (isOver) {
+					(*onClick)();
+				}
+				else {
+					onMouseLeft();
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		
 	}
 }

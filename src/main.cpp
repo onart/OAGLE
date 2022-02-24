@@ -17,7 +17,7 @@
 #include "OA_Input.h"
 #include "OA_Camera.h"
 #include "OA_Audio.h"
-#include "OA_Text.h"
+#include "OA_Material.h"
 #include "externals/stb_image.h"
 
 // Ã¢ °ü·Ã
@@ -187,6 +187,8 @@ bool init() {
 	onart::Mesh::sphereModel();
 	onart::Mesh::cuboidModel();
 	onart::Mesh::iCuboidModel();
+
+	onart::Material::genWhite();
 	mainCamera.ratio.setProjMatrix2D();
 	onart::Scene::currentScene = new onart::TestScene();
 	onart::Scene::currentScene->init();

@@ -216,6 +216,7 @@
     <ClInclude Include="OA_Text.h" />
     <ClInclude Include="OA_Transform.h" />
     <ClInclude Include="OA_UI.h" />
+    <ClInclude Include="OA_UniversalFunctor.h" />
     <ClInclude Include="OA_Vertex.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="OA_Shader.h" />

@@ -70,11 +70,31 @@ namespace onart {
 		return texList[name];
 	}
 
+	void Material::genWhite() {
+		unsigned tex;	unsigned char data[] = { 0xff,0xff,0xff,0xff };
+		glGenTextures(1, &tex);
+		glBindTexture(GL_TEXTURE_2D, tex);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+		texList["white1x1"] = Texture(tex, ivec2(1));
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
 	void Material::drop(const std::string& name) {
 		auto t = texList.find(name);
 		if (t != texList.end()) {
 			glDeleteTextures(1, &(t->second.id));
 			texList.erase(t);
 		}
+	}
+
+	Texture Material::get(const std::string& name) {
+		auto t = texList.find(name);
+		if (t != texList.end()) {
+			return t->second;
+		}
+		return Texture();
 	}
 }
