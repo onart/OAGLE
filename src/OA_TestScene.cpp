@@ -4,7 +4,7 @@
 #include "OA_UI.h"
 
 namespace onart {
-	void TestScene::Update() { auto x = Entity::get<UI::Text>("te2"); static int i = 0; if (Input::isKeyPressedNow(Input::KeyCode::C)) { x->setContent(u"C"); } if (Input::isKeyPressedNow(Input::KeyCode::D)) { x->append(u"°¡"); } }
+	void TestScene::Update() { auto x = Entity::get<UI::Text>("te2"); static int i = 0; if (Input::isKeyPressed(Input::KeyCode::C)) { x->setRotation(Quaternion::rotation(vec3(0, 0, 1), tp)); } }
 	void TestScene::init() {
 		Font::load("ariblk.ttf", { 'A','B','C','l',u'°¡' }, 480, "arial"); 
 		entities.push_back(new TestEntity());

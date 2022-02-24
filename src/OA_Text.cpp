@@ -131,16 +131,77 @@ namespace onart {
 		cdraw(content, lineXY, color);
 	}
 
-	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const mat4& transform, const vec2& center, float size, const vec4& color) {
+	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, AlignH ha, AlignV va, const vec2& center, float size, const vec4& color) {
+		constexpr float BASE_SIZE = 1.0f / 1024;
+		size *= BASE_SIZE;
 		program2["isText"] = true;
 		program2["nopiv"] = true;
 		program2["color"] = color;
 		program2["useFull"] = true;
-		vec2 thisCenter(group.left + group.width / 2, group.down + group.height / 2);
+		float hf, vf;
+		switch (ha)
+		{
+		case AlignH::LEFT:
+			hf = 0;
+			break;
+		case AlignH::RIGHT:
+			hf = 1;
+			break;
+		default:
+			hf = 0.5f;
+		}
+		switch (va)
+		{
+		case AlignV::TOP:
+			vf = 1;
+			break;
+		case AlignV::BOTTOM:
+			vf = 0;
+			break;
+		default:
+			vf = 0.5f;
+		}
+		vec2 thisCenter(group.left + group.width * hf, group.down + group.height * vf);
 		thisCenter *= size;
-		vec3 tl(center - thisCenter);	tl.z = 0;
-		// z좌표가 매우 많이 이상하므로 수정 필요
+		vec3 tl(center - thisCenter); tl.z = 0;
 		program2["textGroup"] = mat4::translate(tl) * mat4::scale(size);
+		cdraw(content, lineXY, color);
+	}
+
+	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const mat4& transform, AlignH ha, AlignV va, const vec2& center, float size, const vec4& color) {
+		constexpr float BASE_SIZE = 1.0f / 1024;
+		size *= BASE_SIZE;
+		program2["isText"] = true;
+		program2["nopiv"] = true;
+		program2["color"] = color;
+		program2["useFull"] = true;
+		float hf, vf;
+		switch (ha)
+		{
+		case AlignH::LEFT:
+			hf = 0;
+			break;
+		case AlignH::RIGHT:
+			hf = 1;
+			break;
+		default:
+			hf = 0.5f;
+		}
+		switch (va)
+		{
+		case AlignV::TOP:
+			vf = 1;
+			break;
+		case AlignV::BOTTOM:
+			vf = 0;
+			break;
+		default:
+			vf = 0.5f;
+		}
+		vec2 thisCenter(group.left + group.width * hf, group.down + group.height * vf);
+		thisCenter *= size;
+		vec3 tl(center - thisCenter); tl.z = 0;
+		program2["textGroup"] = transform * mat4::translate(tl) * mat4::scale(size);
 		cdraw(content, lineXY, color);
 	}
 
@@ -245,49 +306,6 @@ namespace onart {
 		}
 
 		return totalLDWH;
-	}
-
-	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, AlignH ha, AlignV va, const vec2& center, float size, const vec4& color) {
-		constexpr float BASE_SIZE = 1.0f / 1024;
-		size *= BASE_SIZE;
-		program2["isText"] = true;
-		program2["nopiv"] = true;
-		program2["color"] = color;
-		program2["useFull"] = true;
-		float hf, vf;
-		switch (ha)
-		{
-		case AlignH::CENTER:
-			hf = 0.5f;
-			break;
-		case AlignH::LEFT:
-			hf = 0;
-			break;
-		case AlignH::RIGHT:
-			hf = 1;
-			break;
-		default:
-			hf = 0.5f;
-		}
-		switch (va)
-		{
-		case AlignV::CENTER:
-			vf = 0.5f;
-			break;
-		case AlignV::TOP:
-			vf = 1;
-			break;
-		case AlignV::BOTTOM:
-			vf = 0;
-			break;
-		default:
-			vf = 0.5f;
-		}
-		vec2 thisCenter(group.left + group.width * hf, group.down + group.height * vf);
-		thisCenter *= size;
-		vec3 tl(center - thisCenter); tl.z = 0;
-		program2["textGroup"] = mat4::translate(tl) * mat4::scale(size);
-		cdraw(content, lineXY, color);
 	}
 
 	void Font::cdraw(const oastring& content, const std::vector<vec2>& lineXY, const vec4& color) {

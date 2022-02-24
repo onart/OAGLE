@@ -77,7 +77,7 @@ namespace onart::UI {
 			else font->draw(content, r2r, linexy, color);
 		}
 		else {
-			if (hasAdditional)	font->draw(content, ldwh, linexy, additionalTransform, center, size, color);
+			if (hasAdditional)	font->draw(content, ldwh, linexy, additionalTransform, halign, valign, center, size, color);
 			else font->draw(content, ldwh, linexy, halign, valign, center, size, color);
 		}
 	}
