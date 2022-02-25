@@ -1,11 +1,10 @@
 #include "OA_TestEntity.h"
-#include "OA_Anim.h"
 #include "OA_Material.h"
 #include "OA_Camera.h"
 
 namespace onart {
 	TestEntity::TestEntity() :Entity("2danim", Transform()) {
-		Animation* anim1 = Animation2D::make("돌려차기", true,
+		pAnimation anim1 = Animation2D::make("돌려차기", true,
 			{ Keypoint<Texture>{0,Material::genTextureFromFile("2danim.png")} },
 			{
 				Keypoint<vec4>{0,vec4(253,441,223,288) },

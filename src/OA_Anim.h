@@ -15,6 +15,7 @@
 #include <map>
 #include <set>
 #include <string>
+#include <memory>
 
 struct aiScene;
 struct aiNode;
@@ -61,25 +62,31 @@ namespace onart {
 		/// <summary>
 		/// 이름으로 애니메이션을 찾습니다. 없는 경우 nullptr를 리턴합니다.
 		/// </summary>
-		inline static Animation* get(const std::string& s) { auto i = animations.find(s); if (i != animations.end())return i->second; return nullptr; }
+		static std::shared_ptr<Animation> get(const std::string&);
 		/// <summary>
-		/// 이름으로 애니메이션을 내립니다.
+		/// 이름으로 애니메이션을 내립니다. 현재 사용 중인 애니메이션은 내릴 수 없습니다.
+		/// "사용"은 현재 플레이되고 있는 것뿐 아니라 그것을 보유하고 있는 개체가 있는 경우 사용 중인 것에 해당합니다.
+		/// 성공 여부를 리턴합니다.
 		/// </summary>
-		/// <param name="s"></param>
-		inline static void drop(const std::string& s) { if (animations.find(s) != animations.end()) { delete animations[s]; animations.erase(s); } }
+		static bool drop(const std::string& s);
+		/// <summary>
+		/// 현재 사용되고 있지 않은 애니메이션을 모두 내립니다.
+		/// "사용"은 현재 플레이되고 있는 것뿐 아니라 그것을 보유하고 있는 개체가 있는 경우 사용 중인 것에 해당합니다.
+		/// </summary>
+		static void collect();
 	protected:
 		Animation(bool loop, float duration, int staticTps = 1);
 		inline float getTp(float elapsed) { if (duration <= 0)return 0; elapsed *= staticTps; return loop ? fmodf(elapsed, duration) : elapsed; }
 		/// <summary>
 		/// map에 애니메이션을 추가합니다.
 		/// </summary>
-		inline static void push(const std::string& s, Animation* a) { animations[s] = a; }
+		inline static void push(const std::string& s, std::shared_ptr<Animation>& a) { animations[s].reset(); animations[s] = a; }
 		inline ~Animation() { }
 	private:
 		float duration;
 		int staticTps = 1;
 		bool loop;
-		static std::map<std::string, Animation*> animations;
+		static std::map<std::string, std::shared_ptr<Animation>> animations;
 	};
 
 	/// <summary>
@@ -106,7 +113,7 @@ namespace onart {
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
 		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
 		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
-		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	protected:
 		std::vector<Keypoint<unsigned>> tex;
@@ -132,7 +139,7 @@ namespace onart {
 		/// <param name="file">파일 이름을 입력해주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
-		static Animation* load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp = {});
+		static std::shared_ptr<Animation> load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp = {});
 		/// <summary>
 		/// .dae 파일 형식의 배열 변수에서 3D 관절 애니메이션을 로드합니다.
 		/// </summary>
@@ -141,7 +148,7 @@ namespace onart {
 		/// <param name="len">배열 변수의 길이를 입력해 주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// /// <param name="sig_kp">act()로 알림받을 시점(float)</param>
-		static Animation* load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp = {});
+		static std::shared_ptr<Animation> load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp = {});
 
 		/// <summary>
 		/// 애니메이션의 현재 상태를 렌더링하고, 필요한 경우 개체에서 함수를 호출합니다.
@@ -200,11 +207,13 @@ namespace onart {
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
 		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
 		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
-		static Animation* make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 		UIAnimation(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
 	};
+
+	using pAnimation = std::shared_ptr<Animation>;
 }
 
 #endif // !__OA_ANIM_H__

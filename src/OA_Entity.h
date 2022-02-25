@@ -14,6 +14,7 @@
 
 #include "OA_Transform.h"
 #include "OA_Input.h"
+#include "OA_Anim.h"
 
 namespace onart {
 	class Camera;
@@ -23,7 +24,6 @@ extern onart::Camera mainCamera;
 
 namespace onart {
 	class Model;
-	class Animation;
 	/// <summary>
 	/// 게임 속 세상에 존재하는 개체들입니다.
 	/// </summary>
@@ -144,7 +144,7 @@ namespace onart {
 		float animStartTimepoint;
 		float animTps = 1;
 		int animKp = 0;
-		std::vector<Animation*> anims;
+		std::vector<pAnimation> anims;
 		bool isFixed;
 
 		static std::multimap<EntityKey, Entity*> entities;

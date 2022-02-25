@@ -28,7 +28,7 @@
 extern onart::Shader program2, program3;
 
 namespace onart {
-	std::map<std::string, Animation*> Animation::animations;
+	std::map<std::string, pAnimation> Animation::animations;
 
 	/// <summary>
 	/// 정렬된 벡터에 대하여 현재 키포인트를 가리키는 반복자를 리턴합니다.
@@ -52,12 +52,38 @@ namespace onart {
 		
 	}
 
-	Animation* Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
-		Animation* anim = get(name);
+	pAnimation Animation::get(const std::string& name) {
+		auto i = animations.find(name);
+		if (i != animations.end()) return i->second;
+		return pAnimation();
+	}
+
+	bool Animation::drop(const std::string& name) {
+		auto iter = animations.find(name);
+		if (iter != animations.end() && iter->second.use_count() == 1) {
+			animations.erase(iter);
+			return true;
+		}
+		return false;
+	}
+
+	void Animation::collect() {
+		for (auto iter = animations.cbegin(); iter != animations.cend();) {
+			if (iter->second.use_count() == 1) {
+				animations.erase(iter++);
+			}
+			else {
+				++iter;
+			}
+		}
+	}
+
+	pAnimation Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
+		pAnimation anim = get(name);
 		if (anim) return anim;
 		if (!pivots.empty() && pivots.size() != rects.size()) {
 			fprintf(stderr,"pivots가 비어 있지 않은 경우 rects와 pivots의 길이는 같아야 합니다.\n");
-			return nullptr;
+			return pAnimation();
 		}
 		// 시점순으로 정렬
 		auto tx(tex);	auto rcts(rects);
@@ -65,7 +91,7 @@ namespace onart {
 		std::sort(rcts.begin(), rcts.end());
 		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
 			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
-			return nullptr;
+			return pAnimation();
 		}
 		// 텍스처 id만 시점순 저장
 		size_t sz = tx.size(); std::vector<Keypoint<unsigned>> texz(sz);
@@ -88,9 +114,12 @@ namespace onart {
 				sctrz[i] = vec4(xy.x, xy.y, pivv.x, pivv.y);
 			}
 		}
-		anim = new Animation2D(loop, texz, rctz, sctrz);
-		push(name, anim);
-		return anim;
+		struct anim2d :public Animation2D { 
+			anim2d(bool _1, const std::vector<Keypoint<unsigned>>& _2, const std::vector<Keypoint<vec4>>& _3, const std::vector<vec4>& _4):Animation2D(_1,_2,_3,_4) {}
+		};
+		pAnimation a2d = std::make_shared<anim2d>(loop, texz, rctz, sctrz);
+		push(name, a2d);
+		return get(name);
 	}
 
 	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
@@ -216,46 +245,52 @@ namespace onart {
 		std::sort(sigKp.begin(), sigKp.end());
 	}
 
-	Animation* Animation3D::load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp) {
-		Animation* anim = get(name);
+	pAnimation Animation3D::load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp) {
+		pAnimation anim = get(name);
 		if (anim) return anim;
 
 		Assimp::Importer importer;
 		const aiScene* scn = importer.ReadFile(file, 0);
 		if (!scn) {
 			printf("\nAssimp 오류: %s\n", importer.GetErrorString());
-			return nullptr;
+			return pAnimation();
 		}
 		if (!scn->HasAnimations()) {
 			printf("\n파일에 애니메이션이 없습니다.\n");
-			return nullptr;
+			return pAnimation();
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
-		Animation* ret = new Animation3D(scn, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
+		struct anim3d :public Animation3D {
+			anim3d(const aiScene* _1, float _2, int _3, bool _4, const std::vector<float>& _5) :Animation3D(_1, _2, _3, _4, _5) {}
+		};
+		pAnimation ret = std::make_shared<anim3d>(scn, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
 
 		push(name, ret);
-		return ret;
+		return get(name);
 	}
 
-	Animation* Animation3D::load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp) {
-		Animation* anim = get(name);
+	pAnimation Animation3D::load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp) {
+		pAnimation anim = get(name);
 		if (anim) return anim;
 		Assimp::Importer importer;
 
 		const aiScene* scn = importer.ReadFileFromMemory(dat, len, 0, ".dae");
 		if (!scn) {
 			printf("\nAssimp 오류: %s\n", importer.GetErrorString());
-			return nullptr;
+			return pAnimation();
 		}
 		if (!scn->HasAnimations()) {
 			printf("\n파일에 애니메이션이 없습니다\n");
-			return nullptr;
+			return pAnimation();
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
-		Animation* ret = new Animation3D(scn, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
-
+		struct anim3d :public Animation3D {
+			anim3d(const aiScene* _1, float _2, int _3, bool _4, const std::vector<float>& _5) :Animation3D(_1, _2, _3, _4, _5) {}
+		};
+		pAnimation ret = std::make_shared<anim3d>(scn, float(anim0->mDuration), int(anim0->mTicksPerSecond), loop, sig_kp);
+		
 		push(name, ret);
-		return ret;
+		return get(name);
 	}
 
 	void Animation3D::BoneAnim::setTrans(float tp) {
@@ -369,12 +404,12 @@ namespace onart {
 
 	}
 
-	Animation* UIAnimation::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
-		Animation* anim = get(name);
+	pAnimation UIAnimation::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
+		pAnimation anim = get(name);
 		if (anim) return anim;
 		if (!pivots.empty() && pivots.size() != rects.size()) {
 			fprintf(stderr, "pivots가 비어 있지 않은 경우 rects와 pivots의 길이는 같아야 합니다.\n");
-			return nullptr;
+			return pAnimation();
 		}
 		// 시점순으로 정렬
 		auto tx(tex);	auto rcts(rects);
@@ -382,7 +417,7 @@ namespace onart {
 		std::sort(rcts.begin(), rcts.end());
 		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
 			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
-			return nullptr;
+			return pAnimation();
 		}
 		// 텍스처 id만 시점순 저장
 		size_t sz = tx.size(); std::vector<Keypoint<unsigned>> texz(sz);
@@ -405,8 +440,11 @@ namespace onart {
 				sctrz[i] = vec4(xy.x, xy.y, pivv.x, pivv.y);
 			}
 		}
-		anim = new UIAnimation(loop, texz, rctz, sctrz);
-		push(name, anim);
+		struct anim2d :public UIAnimation {
+			anim2d(bool _1, const std::vector<Keypoint<unsigned>>& _2, const std::vector<Keypoint<vec4>>& _3, const std::vector<vec4>& _4) :UIAnimation(_1, _2, _3, _4) {}
+		};
+		pAnimation ua = std::make_shared<anim2d>(loop, texz, rctz, sctrz);
+		push(name, ua);
 		return anim;
 	}
 }
