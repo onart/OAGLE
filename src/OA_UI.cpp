@@ -91,7 +91,7 @@ namespace onart::UI {
 
 	Button::Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, UIAnimation* normal, UIAnimation* onOver, UIAnimation* onDown)
 		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
-
+		
 	}
 
 	void Button::onMouseOver() {
@@ -120,7 +120,7 @@ namespace onart::UI {
 		case 2:	// 마우스 다운 후
 			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
 				if (isOver) {
-					(*onClick)();
+					if (onClick) (*onClick)();
 				}
 				else {
 					onMouseLeft();

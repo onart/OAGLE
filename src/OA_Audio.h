@@ -12,6 +12,7 @@
 #include <map>
 #include <vector>
 #include <cstdint>
+#include <memory>
 
 struct AVFormatContext;
 struct AVCodecContext;
@@ -88,7 +89,7 @@ namespace onart {
 			/// <summary>
 			/// 불러온 음원의 포인터를 획득합니다. 잘못된 이름을 입력한 경우 nullptr를 리턴합니다.
 			/// </summary>
-			static Source* get(const std::string& name);
+			static std::shared_ptr<Source> get(const std::string& name);
 
 			/// <summary>
 			/// 소리 파일에서 음성을 불러옵니다. 별명이 겹치는 경우 기존에 이미 로드한 것을 리턴합니다.
@@ -96,7 +97,7 @@ namespace onart {
 			/// <param name="file">불러올 음성 파일 이름(경로)입니다.</param>
 			/// <param name="name">프로그램 내에서 사용할 별명입니다. 입력하지 않는 경우 파일 이름 그대로 들어갑니다.</param>
 			/// <returns>불러온 소스의 포인터를 리턴합니다.</returns>
-			static Source* load(const std::string& file, const std::string& name = "");
+			static std::shared_ptr<Source> load(const std::string& file, const std::string& name = "");
 
 			/// <summary>
 			/// 메모리에서 음성을 불러옵니다. 별명이 겹치는 경우 기존에 이미 로드한 것을 리턴합니다.
@@ -104,12 +105,23 @@ namespace onart {
 			/// <param name="mem">파일에 해당하는 메모리의 시작 주소입니다.</param>
 			/// <param name="size">파일의 크기(바이트)입니다.</param>
 			/// <param name="name">프로그램 내에서 사용할 별명이며, 필수적으로 지정해야 합니다.</param>
-			static Source* load(const void* mem, size_t size, const std::string& name);
+			static std::shared_ptr<Source> load(const void* mem, size_t size, const std::string& name);
 
 			/// <summary>
-			/// 불러온 음성을 메모리에서 제거합니다.
+			/// 불러온 음성을 메모리에서 제거합니다. 해당 이름의 음원이 없거나 다른 곳에서 사용 중인 경우 제거에 실패합니다.
+			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체를 소멸시키지 않고 음원만 떨어뜨리려면
+			/// 해당 음원 포인터로 reset() 또는 = nullptr를 하고 나서 drop 또는 collect를 호출하면 됩니다.
 			/// </summary>
-			static void drop(const std::string& name);
+			/// <param name="name">제거할 음원 이름</param>
+			/// <returns>제거 성공 여부</returns>
+			static bool drop(const std::string& name);
+
+			/// <summary>
+			/// 불러온 모든 음원 중 현재 사용되고 있지 않은 것을 모두 메모리에서 제거합니다.
+			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체를 소멸시키지 않고 음원만 떨어뜨리려면
+			/// 해당 음원 포인터로 reset() 또는 = nullptr를 하고 나서 drop 또는 collect를 호출하면 됩니다.
+			/// </summary>
+			static void collect();
 
 			/// <summary>
 			/// 불러온 음성을 재생합니다. 재생한 스트림의 포인터가 리턴되며, 이를 이용해 중단/재개/정지를 할 수 있습니다. 루프 여부를 선택할 수 있습니다.
@@ -189,11 +201,13 @@ namespace onart {
 	private:
 		static bool noup;
 		static void audioThread();
-		static std::map<std::string, Source*> source;
+		static std::map<std::string, std::shared_ptr<Source>> source;
 		static float master;
 		static void* masterStream;
 		static int playCallback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData);
 	};
+
+	using pAudioSource = std::shared_ptr<Audio::Source>;	// 음원의 포인터입니다.
 }
 
 #endif // !__OA_AUDIO_H__

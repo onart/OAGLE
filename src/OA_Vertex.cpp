@@ -10,12 +10,20 @@
 
 namespace onart {
 
-	std::map<std::string, Mesh*> Mesh::list;
+	std::map<std::string, ppMesh> Mesh::list;
+	const char* RESERVED[] = { "circ", "clnd", "rect", "cubo", "sphr","icubo", "" };
 
-	Mesh** Mesh::get(const std::string& name) {
+	bool isReserved(const std::string& name) {
+		for (char** p = (char**)RESERVED; (*p)[0]; p++) {
+			if (name == (*p)) return true;
+		}
+		return false;
+	}
+
+	ppMesh Mesh::get(const std::string& name) {
 		auto m = list.find(name);
-		if (m == list.end()) return nullptr;
-		else return &(m->second);
+		if (m == list.end()) return ppMesh();
+		else return m->second;
 	}
 
 	Mesh::~Mesh() {
@@ -25,24 +33,21 @@ namespace onart {
 	}
 
 	bool Mesh::add(const std::string& name, const std::vector<Vertex>& v, const std::vector<unsigned>& i) {
-		if (!unload(name)) return false;
+		if (isReserved(name))return false;
 		unsigned vb, ib, vao;
 		vao = createVAO(v, i, &vb, &ib);
-		list[name] = new Mesh(vb, ib, vao, unsigned(i.size()));
+		list[name].reset(new std::unique_ptr<Mesh>(new Mesh(vb, ib, vao, unsigned(i.size()))));
 		return true;
 	}
 
-	bool Mesh::unload(const std::string& name) {
-		static const char* RESERVED[] = { "circ", "clnd", "rect", "cubo", "sphr","icubo", "" };
-		for (char** p = (char**)RESERVED; (*p)[0]; p++) {
-			if (name == (*p)) return false;
-		}
+	bool Mesh::drop(const std::string& name) {
+		if (isReserved(name))return false;
 		auto m = list.find(name);
-		if (m == list.end()) return true;
-		delete m->second;
-		m->second = nullptr;
-		list.erase(m);
-		return true;
+		if (m != list.end() && m->second.use_count() == 1) {
+			list.erase(m);
+			return true;
+		}
+		return false;
 	}
 
 	void Mesh::rectModel() {
@@ -64,8 +69,7 @@ namespace onart {
 		std::vector<unsigned> indices = { 0,3,1,1,3,2,0,1,3,1,2,3 };
 
 		VAO = createVAO(rect, indices, &VB, &IB);
-		if (list.find("rect") != list.end()) { delete list["rect"]; }
-		list["rect"] = new Mesh(VB, IB, VAO, 12);
+		list["rect"].reset(new std::unique_ptr<Mesh>(new Mesh(VB, IB, VAO, 12)));
 	}
 
 	void Mesh::circleModel() {
@@ -92,8 +96,7 @@ namespace onart {
 			indices[tk + 2] = k + 2;
 		}
 		VAO = createVAO(circ, indices, &VB, &IB);
-		if (list.find("circ") != list.end()) { delete list["circ"]; }
-		list["circ"] = new Mesh(VB, IB, VAO, N * 3);
+		list["circ"].reset(new std::unique_ptr<Mesh>(new Mesh(VB, IB, VAO, N * 3)));
 	}
 
 	void Mesh::sphereModel() {
@@ -130,8 +133,7 @@ namespace onart {
 		}
 #undef rc
 		VAO = createVAO(sphr, indices, &VB, &IB);
-		if (list.find("sphr") != list.end()) { delete list["sphr"]; }
-		list["sphr"] = new Mesh(VB, IB, VAO, N * N * 12);
+		list["sphr"].reset(new std::unique_ptr<Mesh>(new Mesh(VB, IB, VAO, N * N * 12)));
 	}
 
 	void Mesh::cuboidModel() {
@@ -178,8 +180,7 @@ namespace onart {
 		1,16,4,1,13,16
 		};
 		VAO = createVAO(cube, indices, &VB, &IB);
-		if (list.find("cubo") != list.end()) { delete list["cubo"]; }
-		list["cubo"] = new Mesh(VB, IB, VAO, 36);
+		list["cubo"].reset(new std::unique_ptr<Mesh>(new Mesh(VB, IB, VAO, 36)));
 	}
 
 	void Mesh::iCuboidModel() {
@@ -226,8 +227,7 @@ namespace onart {
 		1,4,16,1,16,13
 		};
 		VAO = createVAO(cube, indices, &VB, &IB);
-		if (list.find("icubo") != list.end()) { delete list["icubo"]; }
-		list["icubo"] = new Mesh(VB, IB, VAO, 36);
+		list["icubo"].reset(new std::unique_ptr<Mesh>(new Mesh(VB, IB, VAO, 36)));
 	}
 
 	unsigned Mesh::createVAO(const std::vector<Vertex>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib) {
@@ -267,5 +267,16 @@ namespace onart {
 #endif
 		glBindVertexArray(0);
 		return vao;
+	}
+
+	void Mesh::collect() {
+		for (auto it = list.cbegin(); it != list.cend();) {
+			if (it->second.use_count() == 1) {
+				list.erase(it++);
+			}
+			else {
+				++it;
+			}
+		}
 	}
 }

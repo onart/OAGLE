@@ -99,8 +99,8 @@ namespace onart {
 	}
 
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
-		static Mesh** rect = nullptr;
-		if (!rect || !(*rect))rect = Mesh::get("rect");
+		static ppMesh rect;
+		if (!rect)rect = Mesh::get("rect");
 		
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
@@ -319,8 +319,8 @@ namespace onart {
 	}
 
 	void UIAnimation::go(float elapsed, Entity* e, float dynamicTps) {
-		static Mesh** rect = nullptr;
-		if (!rect || !(*rect))rect = Mesh::get("rect");
+		static ppMesh rect;
+		if (!rect)rect = Mesh::get("rect");
 
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {

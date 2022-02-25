@@ -13,6 +13,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <memory>
 
 #define USE_BUMP
 #define USE_ANIM
@@ -62,25 +63,34 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)의 클래스입니다. 기본적으로 스택 생성이 불가능합니다.
+	/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)의 클래스입니다.
 	/// </summary>
 	class Mesh {
+		friend struct std::default_delete<Mesh>;
 		public:
 			/// <summary>
-			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 이름으로 찾아옵니다. 없는 경우 nullptr를 리턴합니다.
+			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 이름으로 찾아옵니다. 없는 경우 nullptr를 담은 포인터를 리턴합니다.
 			/// </summary>
 			/// <param name="name">불러올 때 직접 정한 이름</param>
 			/// <returns>메시의 위치를 가리키는 포인터의 주소(Mesh**)</returns>
-			static Mesh** get(const std::string& name);
+			static std::shared_ptr<std::unique_ptr<Mesh>> get(const std::string& name);
 			/// <summary>
-			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 새로 추가합니다. 단, 예약된 이름을 사용할 수 없으며 그 외에 이미 있는 이름을 대상으로 시도하면 기존 모델을 덮어씁니다. 성공 여부를 리턴합니다.
+			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 새로 추가합니다.
+			/// 단, 예약된 이름을 사용할 수 없으며 그 외에 이미 있는 이름을 대상으로 시도하면 기존 모델을 덮어씁니다.
+			/// 덮어쓰이면 기존의 그 모델을 사용하고 있던 모든 모델이 새로 추가한 것으로 바뀝니다. 성공 여부를 리턴합니다(메모리 부족 혹은 빌트인 이름을 사용한 것이 아니면 성공).
 			/// <para>예약된 이름: rect, circ, sphr, clnd, cubo, icubo, (빈 문자열)</para>
 			/// </summary>
 			static bool add(const std::string& name, const std::vector<Vertex>& v, const std::vector<unsigned>& i);
 			/// <summary>
-			/// 기초 모델을 메모리에서 제거합니다. 단, 빌트인 모델은 제거할 수 없습니다. 성공 여부를 리턴합니다. 이미 없는 이름을 제거하려고 시도할 경우 성공으로 취급됩니다.
+			/// 기초 모델을 메모리에서 제거합니다. 빌트인 모델과 사용 중인 모델은 제거할 수 없습니다.
 			/// </summary>
-			static bool unload(const std::string& name);
+			/// <param name="name">제거하려는 모델 이름</param>
+			/// <returns>성공 여부</returns>
+			static bool drop(const std::string& name);
+			/// <summary>
+			/// 사용하고 있지 않은 메시를 모두 메모리에서 제거합니다.
+			/// </summary>
+			static void collect();
 			/// <summary>
 			/// 정점 배열 오브젝트의 id를 얻습니다.
 			/// </summary>
@@ -140,8 +150,10 @@ namespace onart {
 			unsigned vb = 0, ib = 0, vao = 0;
 			const unsigned length = 0;
 
-			static std::map<std::string, Mesh*> list;
+			static std::map<std::string, std::shared_ptr<std::unique_ptr<Mesh>>> list;
 	};
+
+	using ppMesh = std::shared_ptr<std::unique_ptr<Mesh>>;	// Mesh 클래스에 대한 이중 포인터입니다.
 }
 
 #endif // !__OA_VERTEX_H__

@@ -309,7 +309,7 @@ namespace onart {
 	}
 
 	void Font::cdraw(const oastring& content, const std::vector<vec2>& lineXY, const vec4& color) {
-		Mesh** rect = Mesh::get("rect");
+		ppMesh rect = Mesh::get("rect");
 		int line = 0;
 		float curW = lineXY[0].x;
 		float curH = lineXY[0].y;

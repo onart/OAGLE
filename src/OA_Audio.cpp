@@ -54,7 +54,7 @@ constexpr size_t MEMBUFFER_SIZE = 8192;
 
 namespace onart {
 
-	std::map<std::string, Audio::Source*> Audio::source;
+	std::map<std::string, pAudioSource> Audio::source;
 	void* Audio::masterStream;
 	float Audio::master = 1;
 	const float& Audio::masterVolume = Audio::master;
@@ -286,7 +286,7 @@ namespace onart {
 	Audio::Source::MemorySource::MemorySource(const void* dat, uint64_t size) :dat((const unsigned char*)dat), size(size), buf((unsigned char*)av_malloc(MEMBUFFER_SIZE)) {	}
 	Audio::Source::MemorySource::~MemorySource() { av_free(buf); }
 
-	Audio::Source* Audio::Source::load(const void* mem, size_t size, const std::string& name) {
+	pAudioSource Audio::Source::load(const void* mem, size_t size, const std::string& name) {
 		if (Audio::source.find(name) != Audio::source.end()) { return Audio::source[name]; }
 		AVFormatContext* fmt = avformat_alloc_context();
 		MemorySource* msrc = new MemorySource(mem, size);
@@ -376,8 +376,8 @@ namespace onart {
 		}
 		av_seek_frame(fmt, -1, 0, AVSEEK_FLAG_FRAME);
 		av_frame_free(&tempF);
-
-		return Audio::source[name] = new Source(fmt, cctx, resampler, frameCount, ioContext, msrc);
+		struct pubSrc :public Source { pubSrc(AVFormatContext* _1, AVCodecContext* _2, SwrContext* _3, int _4, AVIOContext* _5, MemorySource* _6) :Source(_1,_2,_3,_4,_5,_6) {}; };
+		return Audio::source[name] = std::make_shared<pubSrc>(fmt, cctx, resampler, frameCount, ioContext, msrc);
 	}
 
 	bool Audio::Source::initDemux(AVFormatContext* fmt) {
@@ -403,7 +403,7 @@ namespace onart {
 		return true;
 	}
 
-	Audio::Source* Audio::Source::load(const std::string& file, const std::string& name) {
+	pAudioSource Audio::Source::load(const std::string& file, const std::string& name) {
 		std::string memName(name);
 		if (memName.size() == 0) { memName = file; }
 		if (Audio::source.find(memName) != Audio::source.end()) { return Audio::source[memName]; }
@@ -498,15 +498,22 @@ namespace onart {
 		}
 		av_seek_frame(fmt, -1, 0, AVSEEK_FLAG_FRAME);
 		av_frame_free(&tempF);
-
-		return Audio::source[memName] = new Source(fmt, cctx, resampler, frameCount);
+		struct pubSrc :public Source { pubSrc(AVFormatContext* _1, AVCodecContext* _2, SwrContext* _3, int _4) :Source(_1, _2, _3, _4) {}; };
+		return Audio::source[memName] = std::make_shared<pubSrc>(fmt, cctx, resampler, frameCount);
 	}
 
-	void Audio::Source::drop(const std::string& name) {
+	bool Audio::Source::drop(const std::string& name) {
 		auto iter = source.find(name);
 		if (iter != source.end()) {
-			delete iter->second;
-			source.erase(iter);
+			if (iter->second.use_count() == 1) { source.erase(iter); return true; }
+		}
+		return false;
+	}
+
+	void Audio::Source::collect() {
+		for (auto iter = source.cbegin(); iter != source.cend();) {
+			if (iter->second.use_count() == 1) { source.erase(iter++); }
+			else ++iter;
 		}
 	}
 
@@ -590,7 +597,7 @@ namespace onart {
 	int Audio::playCallback(const void* input, void* output, unsigned long frameCount,
 		const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData) {
 		if constexpr(OA_AUDIO_WAIT_ON_DRAG)
-		if (wait) { memset(output, 0, frameCount * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT)); return PaStreamCallbackResult::paContinue; }	// 문제점: 가끔 소리가 약간 체감될 정도로 딜레이됨
+		if (wait) { memset(output, 0, frameCount * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT)); return PaStreamCallbackResult::paContinue; }
 		ringBuffer.read(output, frameCount * STD_CHANNEL_COUNT);
 		return PaStreamCallbackResult::paContinue;	// 정지 신호 외에 정지하지 않음
 	}
@@ -612,9 +619,9 @@ namespace onart {
 		ringBuffer.addComplete();
 	}
 
-	Audio::Source* Audio::Source::get(const std::string& name) {
+	pAudioSource Audio::Source::get(const std::string& name) {
 		if (source.find(name) != source.end())return source[name];
-		else return nullptr;
+		else return pAudioSource();
 	}
 
 	void Audio::Source::update() {

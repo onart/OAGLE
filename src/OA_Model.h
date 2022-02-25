@@ -11,13 +11,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "OA_Vertex.h"
 #include "oaglem.h"
 
 struct aiScene;
 
 namespace onart {
-	
-	class Mesh;
+
 	class Material;
 	class Shader;
 	/// <summary>
@@ -41,10 +41,6 @@ namespace onart {
 		/// </summary>
 		static Model* load(const std::string& file);
 		/// <summary>
-		/// 메시가 갱신된 경우 다시 로드합니다.
-		/// </summary>
-		void reloadMesh();
-		/// <summary>
 		/// 해당 셰이더에 이 모델을 렌더링합니다.
 		/// </summary>
 		/// <param name="shader">셰이더</param>
@@ -65,7 +61,7 @@ namespace onart {
 			unsigned material;
 		};
 		Model(const aiScene*, const std::string& meshName);
-		Mesh** mesh;
+		ppMesh mesh;
 		std::string meshName;
 
 		std::vector<Material*> materials;

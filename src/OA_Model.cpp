@@ -6,7 +6,6 @@
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
 #include "OA_Model.h"
-#include "OA_Vertex.h"
 #include "OA_Shader.h"
 #include "OA_Material.h"
 
@@ -202,11 +201,6 @@ namespace onart {
 		}
 		Mesh::add(name, vList, iList);
 		mesh = Mesh::get(name);
-	}
-
-	void Model::reloadMesh() {
-		if (*mesh != nullptr) return;
-		mesh = Mesh::get(meshName);
 	}
 
 	void Model::addTex(unsigned index, unsigned tex, TexType typ) {
