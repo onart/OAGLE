@@ -28,7 +28,7 @@ extern onart::Shader program3;
 
 namespace onart {
 	
-	std::map<std::string, Model*> Model::list;
+	std::map<std::string, pModel> Model::list;
 	
 	constexpr unsigned int importFlags = aiPostProcessSteps::aiProcess_Triangulate |
 		aiPostProcessSteps::aiProcess_JoinIdenticalVertices |
@@ -39,41 +39,46 @@ namespace onart {
 
 	constexpr int MAX_BONE_COUNT = 64;
 
-	unsigned assimpReadTex(const aiMaterial* mtl, const std::filesystem::path& modelDirectory, const aiTextureType type) {
+	pTexture assimpReadTex(const aiMaterial* mtl, const std::filesystem::path& modelDirectory, const aiTextureType type) {
 		namespace fs = std::filesystem;
 		aiString texpath;
 		if (mtl->GetTextureCount(type) == 1) {
 			if (mtl->GetTexture(type, 0, &texpath) != aiReturn::aiReturn_SUCCESS) {
-				return 0;
+				return pTexture();
 			}
 			fs::path p = fs::absolute(modelDirectory / texpath.C_Str());
 			if (!fs::exists(p)) {
 				printf("텍스처 파일\n%s\n를 찾을 수 없습니다. 메모리에서 불러오려는 경우 이후 나오는 인덱스와 유형을 참고하여 호출해 주세요.\n", p.string().c_str());
-				return 0;
+				return pTexture();
 			}
 			else {
-				return Material::genTextureFromFile(p.string().c_str()).id;
+				return Material::genTextureFromFile(p.string().c_str());
 			}
 		}
 		return 0;
 	}
 
-	Model* Model::load(const unsigned char* data, size_t len, const std::string& meshName, const char* hint) {
+	pModel Model::load(const unsigned char* data, size_t len, const std::string& meshName, const char* hint) {
 		if (Mesh::get(meshName)) return list[meshName];
 		Assimp::Importer importer;
 		const aiScene* scn = importer.ReadFileFromMemory(data, len, importFlags, hint);
-		if (!scn) { printf("Assimp 오류: %s\n", importer.GetErrorString()); return nullptr; }
-		list[meshName] = new Model(scn, meshName);
-		return list[meshName];
+		if (!scn) { printf("Assimp 오류: %s\n", importer.GetErrorString()); return pModel(); }
+		struct mdl :public Model { mdl(const aiScene* _1, const std::string& _2) :Model(_1, _2) {} };
+		pModel& pm = list[meshName];
+		pm.reset(new mdl(scn, meshName));
+		return pm;
 	}
 
-	Model* Model::load(const std::string& file) {
+	pModel Model::load(const std::string& file) {
 		auto fullPath = std::filesystem::absolute(file).string();
 		if (Mesh::get(fullPath)) return list[fullPath];
 		Assimp::Importer importer;
 		const aiScene* scn = importer.ReadFile(fullPath, importFlags);
-		if (!scn) { printf("Assimp 오류: %s\n", importer.GetErrorString()); return nullptr; }
-		return list[file] = new Model(scn, fullPath);
+		if (!scn) { printf("Assimp 오류: %s\n", importer.GetErrorString()); return pModel(); }
+		struct mdl :public Model { mdl(const aiScene* _1, const std::string& _2) :Model(_1, _2) {} };
+		pModel& pm = list[fullPath];
+		pm.reset(new mdl(scn, fullPath));
+		return pm;
 	}
 
 	Model::Model(const aiScene* scn, const std::string& name) {
@@ -168,9 +173,8 @@ namespace onart {
 			}
 #endif
 			// 매터리얼
-			Material* material = nullptr;
 			if (materials[m->mMaterialIndex] == nullptr) {
-				material = materials[m->mMaterialIndex] = new Material();
+				auto& material = materials[m->mMaterialIndex] = std::make_unique<Material>();
 
 				const aiMaterial* mtl = scn->mMaterials[m->mMaterialIndex];
 				
@@ -184,10 +188,10 @@ namespace onart {
 				mtl->Get(AI_MATKEY_OPACITY, fbu);	material->setAlpha(fbu);
 				mtl->Get(AI_MATKEY_REFRACTI, fbu);	material->setRefractiveIndex(fbu);
 				auto dir = std::filesystem::path(name).parent_path();
-				unsigned difftex = assimpReadTex(mtl, dir, aiTextureType::aiTextureType_DIFFUSE);
-				unsigned normtex = assimpReadTex(mtl, dir, aiTextureType::aiTextureType_NORMALS);
-				material->setDiffuseTex(difftex);
-				material->setBumpTex(normtex);
+				pTexture difftex = assimpReadTex(mtl, dir, aiTextureType::aiTextureType_DIFFUSE);
+				pTexture normtex = assimpReadTex(mtl, dir, aiTextureType::aiTextureType_NORMALS);
+				if (difftex) material->setDiffuseTex(difftex);
+				if (normtex) material->setBumpTex(normtex);
 #ifdef _DEBUG
 				if (difftex == 0) {
 					printf("모델 [%s]의 %d번 diffuse 텍스처를 불러올 수 없었습니다. 메모리에서 불러오고자 하는 경우, 생성한 객체에 대하여 addTex() 함수를 호출해 주시기 바랍니다.\n", name.c_str(), m->mMaterialIndex);
@@ -203,9 +207,9 @@ namespace onart {
 		mesh = Mesh::get(name);
 	}
 
-	void Model::addTex(unsigned index, unsigned tex, TexType typ) {
+	void Model::addTex(unsigned index, std::shared_ptr<Texture>& tex, TexType typ) {
 		if (index >= materials.size()) { fprintf(stderr, "%s: 인덱스가 잘못되었습니다.\n", __func__); return; }
-		Material* mtl = materials[index];
+		auto& mtl = materials[index];
 		if (!mtl) { return; }
 		switch (typ)
 		{
@@ -233,7 +237,7 @@ namespace onart {
 		program3["useFull"] = true;
 		program3["color"] = color;
 		for (auto& g : geom) {
-			Material* mtl = materials[g.material];
+			auto& mtl = materials[g.material];
 			if (mtl) {
 				program3["Ka"] = mtl->getAmbient();
 				program3["Ks"] = mtl->getSpecular();

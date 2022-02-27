@@ -78,7 +78,7 @@ namespace onart {
 		}
 	}
 
-	pAnimation Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
+	pAnimation Animation2D::make(const std::string& name, bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
 		pAnimation anim = get(name);
 		if (anim) return anim;
 		if (!pivots.empty() && pivots.size() != rects.size()) {
@@ -93,17 +93,14 @@ namespace onart {
 			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
 			return pAnimation();
 		}
-		// 텍스처 id만 시점순 저장
-		size_t sz = tx.size(); std::vector<Keypoint<unsigned>> texz(sz);
-		for (size_t i = 0; i < sz; i++) { texz[i] = { tx[i].tp,tx[i].value.id}; }
 		
 		// rect를 상대값으로 변형하여 저장
 		const bool pv = !pivots.empty();
-		sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
+		size_t sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
 		std::vector<vec4> sctrz(pivots.size());
 		for (size_t i = 0; i < sz; i++) { 
 			float timepoint = rcts[i].tp;
-			const ivec2& wh = kpNow(tx, timepoint)->value.size;
+			const ivec2& wh = kpNow(tx, timepoint)->value->size;
 			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y) };
 			if (pv) {
 				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
@@ -115,16 +112,15 @@ namespace onart {
 			}
 		}
 		struct anim2d :public Animation2D { 
-			anim2d(bool _1, const std::vector<Keypoint<unsigned>>& _2, const std::vector<Keypoint<vec4>>& _3, const std::vector<vec4>& _4):Animation2D(_1,_2,_3,_4) {}
+			anim2d(bool _1, const std::vector<Keypoint<pTexture>>& _2, const std::vector<Keypoint<vec4>>& _3, const std::vector<vec4>& _4):Animation2D(_1,_2,_3,_4) {}
 		};
-		pAnimation a2d = std::make_shared<anim2d>(loop, texz, rctz, sctrz);
+		pAnimation a2d = std::make_shared<anim2d>(loop, tx, rctz, sctrz);
 		push(name, a2d);
 		return get(name);
 	}
 
-	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
+	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
 		: tex(tex), rects(rects), sctrs(sctrs), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!sctrs.empty()) {
-		
 	}
 
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
@@ -134,7 +130,7 @@ namespace onart {
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
 			program3["oneColor"] = false;
-			program3.texture(kpNow(tex, tp)->value);
+			program3.texture(kpNow(tex, tp)->value->id);
 		}
 		else {
 			program3["oneColor"] = true;
@@ -360,7 +356,7 @@ namespace onart {
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
 			program2["oneColor"] = false;
-			program2.texture(kpNow(tex, tp)->value);
+			program2.texture(kpNow(tex, tp)->value->id);
 		}
 		else {
 			program2["oneColor"] = true;
@@ -400,11 +396,11 @@ namespace onart {
 		program2.draw();
 	}
 
-	UIAnimation::UIAnimation(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs) : Animation2D(loop, tex, rects, sctrs) {
+	UIAnimation::UIAnimation(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs) : Animation2D(loop, tex, rects, sctrs) {
 
 	}
 
-	pAnimation UIAnimation::make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
+	pAnimation UIAnimation::make(const std::string& name, bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots) {
 		pAnimation anim = get(name);
 		if (anim) return anim;
 		if (!pivots.empty() && pivots.size() != rects.size()) {
@@ -419,17 +415,14 @@ namespace onart {
 			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
 			return pAnimation();
 		}
-		// 텍스처 id만 시점순 저장
-		size_t sz = tx.size(); std::vector<Keypoint<unsigned>> texz(sz);
-		for (size_t i = 0; i < sz; i++) { texz[i] = { tx[i].tp,tx[i].value.id }; }
 
 		// rect를 상대값으로 변형하여 저장
 		const bool pv = !pivots.empty();
-		sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
+		size_t sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
 		std::vector<vec4> sctrz(pivots.size());
 		for (size_t i = 0; i < sz; i++) {
 			float timepoint = rcts[i].tp;
-			const ivec2& wh = kpNow(tx, timepoint)->value.size;
+			const ivec2& wh = kpNow(tx, timepoint)->value->size;
 			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y) };
 			if (pv) {
 				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
@@ -441,9 +434,9 @@ namespace onart {
 			}
 		}
 		struct anim2d :public UIAnimation {
-			anim2d(bool _1, const std::vector<Keypoint<unsigned>>& _2, const std::vector<Keypoint<vec4>>& _3, const std::vector<vec4>& _4) :UIAnimation(_1, _2, _3, _4) {}
+			anim2d(bool _1, const std::vector<Keypoint<pTexture>>& _2, const std::vector<Keypoint<vec4>>& _3, const std::vector<vec4>& _4) :UIAnimation(_1, _2, _3, _4) {}
 		};
-		pAnimation ua = std::make_shared<anim2d>(loop, texz, rctz, sctrz);
+		pAnimation ua = std::make_shared<anim2d>(loop, tx, rctz, sctrz);
 		push(name, ua);
 		return anim;
 	}

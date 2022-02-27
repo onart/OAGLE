@@ -11,24 +11,35 @@
 #include "oaglem.h"
 #include <map>
 #include <string>
+#include <memory>
 
 namespace onart {
+	/// <summary>
+	/// 텍스처 클래스입니다. Material::get으로 얻을 수 있습니다.
+	/// </summary>
 	struct Texture {
-		unsigned id;
-		ivec2 size;
+		friend class Material;
+	public:
+		const unsigned id;
+		const ivec2 size;
+	private:
 		inline Texture(unsigned id = 0, const ivec2& size = 0) : id(id), size(size) {}
+		~Texture();
 	};
+
+	using pTexture = std::shared_ptr<Texture>;	// 텍스처 포인터입니다.
+
 	/// <summary>
 	/// 텍스처와 표면 광택에 대한 클래스입니다.
 	/// </summary>
 	class Material
 	{
 	public:
-		inline void setAmbientTex(unsigned ambient) { textures.ambient = ambient; }
-		inline void setTex(unsigned tex) { textures.diffuse = tex; }
-		inline void setDiffuseTex(unsigned diffuse) { textures.diffuse = diffuse; }
-		inline void setSpecularTex(unsigned specular) { textures.specular = specular; }
-		inline void setBumpTex(unsigned bump) { textures.bump = bump; }
+		inline void setAmbientTex(pTexture& ambient) { savedTex[0] = ambient; textures.ambient = ambient->id; }
+		inline void setTex(pTexture& tex) { savedTex[1] = tex; textures.diffuse = tex->id; }
+		inline void setDiffuseTex(pTexture& diffuse) { savedTex[1] = diffuse; textures.diffuse = diffuse->id; }
+		inline void setSpecularTex(pTexture& specular) { savedTex[2] = specular; textures.specular = specular->id; }
+		inline void setBumpTex(pTexture& bump) { savedTex[3] = bump; textures.bump = bump->id; }
 		inline void setAmbient(const vec4& ambient) { this->ambient = ambient; }
 		inline void setDiffuse(const vec4& diffuse) { this->diffuse = diffuse; }
 		inline void setSpecular(const vec4& specular) { this->specular = specular; }
@@ -54,9 +65,9 @@ namespace onart {
 		/// white1x1이라는 이름은 예약되어 있습니다. 사용하지 마세요.
 		/// </summary>
 		/// <param name="file">파일 이름</param>
-		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다.</param>
+		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다. 이미 사용 중인 텍스처인 경우 모든 사용이 종료되면 자동으로 메모리가 회수됩니다.</param>
 		/// <param name="name">프로그램 내에서 사용할 텍스처 이름(입력하지 않는 경우 파일 이름을 그대로 사용)</param>
-		static Texture genTextureFromFile(const char* file, bool reset = false, const char* name = nullptr);
+		static pTexture genTextureFromFile(const char* file, bool reset = false, const char* name = nullptr);
 		/// <summary>
 		/// 메모리의 변수(이미지)로부터 2D 텍스처를 생성합니다. 24비트/32비트(알파채널) 이미지만 가능합니다.
 		/// white1x1이라는 이름은 예약되어 있습니다. 사용하지 마세요.
@@ -64,22 +75,23 @@ namespace onart {
 		/// <param name="bts">이미지 데이터입니다.</param>
 		/// <param name="len">데이터 길이입니다.</param>
 		/// <param name="name">프로그램 내에서 사용할 텍스처 이름</param>
-		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다.</param>
-		static Texture genTextureFromMemory(unsigned char* bts, unsigned len, const std::string& name, bool reset = false);
+		/// <param name="reset">true인 경우 기존의 동일 이름의 텍스처를 지우고 새로 생성합니다. 이미 사용 중인 텍스처인 경우 모든 사용이 종료되면 자동으로 메모리가 회수됩니다.</param>
+		static pTexture genTextureFromMemory(unsigned char* bts, unsigned len, const std::string& name, bool reset = false);
 		/// <summary>
-		/// 백색 1x1 텍스처를 생성합니다.
+		/// 백색 1x1 텍스처를 생성합니다. 이름은 "white1x1"입니다.
 		/// </summary>
 		static void genWhite();
 		/// <summary>
-		/// 해당 이름의 텍스처를 제거합니다.
+		/// 해당 이름의 텍스처를 제거합니다. 현재 애니메이션이나 모델 등에서 사용 중인 텍스처의 경우 해당 애니메이션/모델이 없어질 때 자동으로 없어집니다.
+		/// 사용 중인 텍스처가 남은 경우라도, 해당 이름의 텍스처는 다시 로드하지 않으면 추가로 가져다 사용할 수 없습니다.
 		/// </summary>
 		static void drop(const std::string& name);
 		/// <summary>
 		/// 해당 이름의 텍스처를 가져옵니다.
 		/// </summary>
-		static Texture get(const std::string& name);
+		static pTexture get(const std::string& name);
 	private:
-		static std::map<std::string, Texture> texList;
+		static std::map<std::string, pTexture> texList;
 
 		vec4 ambient;
 		vec4 diffuse;
@@ -93,12 +105,14 @@ namespace onart {
 			unsigned bump = 0;
 		}textures;
 
+		pTexture savedTex[4];
+
 		float shininess;
 		float alpha;
 		float refractIdx;
 	};
 }
 
-#endif // !__OA_MATERAIL_H__
+#endif // !__OA_MATERIAL_H__
 
 

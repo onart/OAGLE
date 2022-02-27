@@ -24,7 +24,7 @@ namespace onart {
 
 	template <class T>
 	struct Keypoint {
-		float tp;
+		float tp = 0;
 		T value;
 
 		inline operator float() const { return tp; }
@@ -113,14 +113,14 @@ namespace onart {
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
 		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
 		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
-		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	protected:
-		std::vector<Keypoint<unsigned>> tex;
+		std::vector<Keypoint<pTexture>> tex;
 		std::vector<Keypoint<vec4>> rects;
 		std::vector<vec4> sctrs;
 		const bool hasTex, hasRect, hasPiv;
-		Animation2D(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
+		Animation2D(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
 	};
 
 	/// <summary>
@@ -207,10 +207,10 @@ namespace onart {
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
 		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
 		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
-		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<Texture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
+		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
-		UIAnimation(bool loop, const std::vector<Keypoint<unsigned>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
+		UIAnimation(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
 	};
 
 	using pAnimation = std::shared_ptr<Animation>;

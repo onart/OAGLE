@@ -11,13 +11,14 @@
 #include <string>
 #include <vector>
 #include <map>
+
 #include "OA_Vertex.h"
 #include "oaglem.h"
 
 struct aiScene;
 
 namespace onart {
-
+	struct Texture;
 	class Material;
 	class Shader;
 	/// <summary>
@@ -29,31 +30,29 @@ namespace onart {
 	public:
 		enum class TexType { AMBIENT, DIFFUSE, SPECULAR, NORMAL };
 		/// <summary>
-		/// 메모리에서 모델을 불러옵니다.
+		/// 메모리에서 모델을 불러옵니다. Mesh 객체는 모델과 동일한 이름을 가집니다.
 		/// </summary>
 		/// <param name="data">변수 주소</param>
 		/// <param name="len">데이터 길이</param>
-		/// <param name="meshName">메시 이름</param>
+		/// <param name="meshName">모델 이름</param>
 		/// <param name="hint">형식 힌트</param>
-		static Model* load(const unsigned char* data, size_t len, const std::string& meshName, const char* hint = "");
+		static std::shared_ptr<Model> load(const unsigned char* data, size_t len, const std::string& meshName, const char* hint = "");
 		/// <summary>
 		/// 파일에서 모델을 불러옵니다. 이때, 메시 이름은 파일 이름과 같게 저장됩니다.
 		/// </summary>
-		static Model* load(const std::string& file);
+		static std::shared_ptr<Model> load(const std::string& file);
 		/// <summary>
-		/// 해당 셰이더에 이 모델을 렌더링합니다.
+		/// 셰이더에 이 모델을 렌더링합니다.
 		/// </summary>
-		/// <param name="shader">셰이더</param>
-		/// <param name="material">메터리얼 번호(이 모델에서 사용하는 것만 따집니다.)</param>
 		/// <param name="color">색상(mix가 아니라 *로 적용됩니다.)</param>
 		void render(const vec4& color = 1) const;
 		/// <summary>
 		/// 이미 불러온 모델에 diffuse 텍스처 이미지를 추가합니다.
 		/// </summary>
 		/// <param name="index">채울 인덱스입니다. 디버그 모드의 오류 메시지에서 어떤 모델에 어떤 인덱스를 채울지 확인해 주세요.</param>
-		/// /// <param name="tex">텍스처입니다. Material::genTextureFrom... 함수들에서 얻어올 수 있습니다.</param>
+		/// <param name="tex">텍스처입니다. Material::genTextureFrom... 함수들에서 얻어올 수 있습니다.</param>
 		/// <param name="typ">텍스처 유형입니다. 현재 엔진은 DIFFUSE, NORMAL만 사용합니다.</param>
-		void addTex(unsigned index, unsigned tex, TexType typ);
+		void addTex(unsigned index, std::shared_ptr<Texture>& tex, TexType typ);
 	private:
 		struct Geometry {
 			unsigned start;
@@ -64,11 +63,13 @@ namespace onart {
 		ppMesh mesh;
 		std::string meshName;
 
-		std::vector<Material*> materials;
+		std::vector<std::unique_ptr<Material>> materials;
 		std::vector<Geometry> geom;
 		
-		static std::map<std::string, Model*> list;
+		static std::map<std::string, std::shared_ptr<Model>> list;
 	};
+
+	using pModel = std::shared_ptr<Model>;
 }
 
 #endif // !__OA_MODEL_H__
