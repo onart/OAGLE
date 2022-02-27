@@ -69,7 +69,7 @@ namespace onart {
 		friend struct std::default_delete<Mesh>;
 		public:
 			/// <summary>
-			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 이름으로 찾아옵니다. 없는 경우 nullptr를 담은 포인터를 리턴합니다.
+			/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)을 이름으로 찾아옵니다. 없는 경우 nullptr를 리턴합니다.
 			/// </summary>
 			/// <param name="name">불러올 때 직접 정한 이름</param>
 			/// <returns>메시의 위치를 가리키는 포인터의 주소(Mesh**)</returns>
@@ -82,15 +82,17 @@ namespace onart {
 			/// </summary>
 			static bool add(const std::string& name, const std::vector<Vertex>& v, const std::vector<unsigned>& i);
 			/// <summary>
-			/// 기초 모델을 메모리에서 제거합니다. 빌트인 모델과 사용 중인 모델은 제거할 수 없습니다.
+			/// 기초 모델을 메모리에서 제거합니다. 빌트인 모델과 사용 중인 모델은 바로 제거되지 않고 사용이 종료되면서 제거됩니다.
+			/// 사용 중이라서 바로 제거되지 않은 모델도 get으로 다시 얻을 수 없습니다.
 			/// </summary>
 			/// <param name="name">제거하려는 모델 이름</param>
-			/// <returns>성공 여부</returns>
-			static bool drop(const std::string& name);
+			static void drop(const std::string& name);
 			/// <summary>
 			/// 사용하고 있지 않은 메시를 모두 메모리에서 제거합니다.
+			/// 사용하고 있는 메시는 사용이 끝나는 즉시 메모리에서 회수할지, 그대로 남겨둘지 선택할 수 있습니다.
 			/// </summary>
-			static void collect();
+			/// <param name="removeUsing">true인 경우 사용 중인 메시도 사용이 끝나면 바로 메모리에서 회수합니다.</param>
+			static void collect(bool removeUsing = false);
 			/// <summary>
 			/// 정점 배열 오브젝트의 id를 얻습니다.
 			/// </summary>

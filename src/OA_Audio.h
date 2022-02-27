@@ -108,20 +108,22 @@ namespace onart {
 			static std::shared_ptr<Source> load(const void* mem, size_t size, const std::string& name);
 
 			/// <summary>
-			/// 불러온 음성을 메모리에서 제거합니다. 해당 이름의 음원이 없거나 다른 곳에서 사용 중인 경우 제거에 실패합니다.
-			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체를 소멸시키지 않고 음원만 떨어뜨리려면
-			/// 해당 음원 포인터로 reset() 또는 = nullptr를 하고 나서 drop 또는 collect를 호출하면 됩니다.
+			/// 불러온 음성을 메모리에서 제거합니다. 해당 이름의 음원이 없거나 다른 곳에서 사용 중인 경우 사용 종료 즉시 메모리가 회수됩니다.
+			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체/포인터를 소멸시키지 않고 사용을 종료하려면
+			/// 해당 음원 포인터로 reset() 또는 swap(pAudioSource()) 등을 호출하면 됩니다.
+			/// 음원의 포인터를 가지고 재생했지만 그 포인터를 따로 멤버 등으로 유지하지 않고 소멸했을 경우, drop으로 음원이 소멸된다면 즉시 스트림도 모두 함께 소멸됩니다.
 			/// </summary>
 			/// <param name="name">제거할 음원 이름</param>
-			/// <returns>제거 성공 여부</returns>
-			static bool drop(const std::string& name);
+			static void drop(const std::string& name);
 
 			/// <summary>
 			/// 불러온 모든 음원 중 현재 사용되고 있지 않은 것을 모두 메모리에서 제거합니다.
-			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체를 소멸시키지 않고 음원만 떨어뜨리려면
-			/// 해당 음원 포인터로 reset() 또는 = nullptr를 하고 나서 drop 또는 collect를 호출하면 됩니다.
+			/// 사용 중인 음원은 사용이 끝나는 즉시 메모리에서 회수할지, 그대로 남겨둘지 선택할 수 있습니다.
+			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체/포인터를 소멸시키지 않고 사용을 종료하려면
+			/// 해당 음원 포인터로 reset() 또는 swap(pAudioSource()) 등을 호출하면 됩니다.
 			/// </summary>
-			static void collect();
+			/// <param name="removeUsing">true인 경우 사용 중인 음원의 모든 사용이 끝나는 즉시 메모리에서 회수됩니다.</param>
+			static void collect(bool removeUsing = false);
 
 			/// <summary>
 			/// 불러온 음성을 재생합니다. 재생한 스트림의 포인터가 리턴되며, 이를 이용해 중단/재개/정지를 할 수 있습니다. 루프 여부를 선택할 수 있습니다.

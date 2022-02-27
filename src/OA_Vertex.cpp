@@ -40,14 +40,12 @@ namespace onart {
 		return true;
 	}
 
-	bool Mesh::drop(const std::string& name) {
-		if (isReserved(name))return false;
+	void Mesh::drop(const std::string& name) {
+		if (isReserved(name)) return;
 		auto m = list.find(name);
-		if (m != list.end() && m->second.use_count() == 1) {
+		if (m != list.end()) {
 			list.erase(m);
-			return true;
 		}
-		return false;
 	}
 
 	void Mesh::rectModel() {
@@ -269,7 +267,8 @@ namespace onart {
 		return vao;
 	}
 
-	void Mesh::collect() {
+	void Mesh::collect(bool removeUsing) {
+		if (removeUsing) { list.clear(); return; }
 		for (auto it = list.cbegin(); it != list.cend();) {
 			if (it->second.use_count() == 1) {
 				list.erase(it++);

@@ -97,7 +97,7 @@ namespace onart {
 		std::vector<Vertex> vList;
 		std::vector<unsigned> iList;
 		std::map<std::string, int> bList;
-		materials.resize(scn->mNumMaterials, nullptr);
+		materials.resize(scn->mNumMaterials);
 		vList.reserve(vCount);
 		iList.reserve(iCount);
 		
@@ -173,9 +173,8 @@ namespace onart {
 			}
 #endif
 			// 매터리얼
-			if (materials[m->mMaterialIndex] == nullptr) {
-				auto& material = materials[m->mMaterialIndex] = std::make_unique<Material>();
-
+			if (!materials[m->mMaterialIndex]) {
+				Material* material = new Material;
 				const aiMaterial* mtl = scn->mMaterials[m->mMaterialIndex];
 				
 				vec4 buf;
@@ -192,11 +191,12 @@ namespace onart {
 				pTexture normtex = assimpReadTex(mtl, dir, aiTextureType::aiTextureType_NORMALS);
 				if (difftex) material->setDiffuseTex(difftex);
 				if (normtex) material->setBumpTex(normtex);
+				materials[m->mMaterialIndex].reset(material);
 #ifdef _DEBUG
-				if (difftex == 0) {
+				if (!difftex) {
 					printf("모델 [%s]의 %d번 diffuse 텍스처를 불러올 수 없었습니다. 메모리에서 불러오고자 하는 경우, 생성한 객체에 대하여 addTex() 함수를 호출해 주시기 바랍니다.\n", name.c_str(), m->mMaterialIndex);
 				}
-				if (normtex == 0) {
+				if (!normtex) {
 					printf("모델 [%s]의 %d번 normal 텍스처를 불러올 수 없었습니다. 메모리에서 불러오고자 하는 경우, 생성한 객체에 대하여 addTex() 함수를 호출해 주시기 바랍니다.\n", name.c_str(), m->mMaterialIndex);
 				}
 #endif

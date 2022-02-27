@@ -502,15 +502,15 @@ namespace onart {
 		return Audio::source[memName] = std::make_shared<pubSrc>(fmt, cctx, resampler, frameCount);
 	}
 
-	bool Audio::Source::drop(const std::string& name) {
+	void Audio::Source::drop(const std::string& name) {
 		auto iter = source.find(name);
 		if (iter != source.end()) {
-			if (iter->second.use_count() == 1) { source.erase(iter); return true; }
+			if (iter->second.use_count() == 1) { source.erase(iter); }
 		}
-		return false;
 	}
 
-	void Audio::Source::collect() {
+	void Audio::Source::collect(bool removeUsing) {
+		if (removeUsing) { source.clear(); return; }
 		for (auto iter = source.cbegin(); iter != source.cend();) {
 			if (iter->second.use_count() == 1) { source.erase(iter++); }
 			else ++iter;
