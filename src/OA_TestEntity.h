@@ -8,6 +8,7 @@ namespace onart {
 	{
 	public:
 		virtual void Update();
+		virtual void Act(int kp, float progress);
 		TestEntity();
 	private:
 	};

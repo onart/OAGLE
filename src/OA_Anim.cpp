@@ -145,7 +145,21 @@ namespace onart {
 				l--;
 				program3["ldwh"] = l->value;
 				kp = int(l - rects.begin());
-				if (e->getAnimKey() != kp) { e->act(kp); }
+				int ak = e->getAnimKey();
+				if (ak != kp) {
+					if (ak < 0) {
+						if (l + 1 != rects.end()) {
+							float nextp = (l + 1)->tp;
+							e->act(kp, (tp - l->tp) / (nextp - l->tp));
+						}
+						else {
+							e->act(kp);
+						}
+					}
+					else {
+						e->act(kp);
+					}
+				}
 			}
 			
 			if (hasPiv) {
@@ -178,7 +192,23 @@ namespace onart {
 		auto sub = std::upper_bound(sigKp.begin(), sigKp.end(), tp);
 		if (sub != sigKp.begin()) {
 			int kp = int(sub - sigKp.begin() - 1);
-			if (e->getAnimKey() != kp)e->act(kp);
+			//if (e->getAnimKey() != kp)e->act(kp);
+			int ak = e->getAnimKey();
+			if (ak != kp) {
+				if (ak < 0) {
+					if (sub + 1 != sigKp.end()) {
+						float nextp = *(sub + 1);
+						e->act(kp, (tp - *sub) / (nextp - *sub));
+					}
+					else {
+						e->act(kp);
+					}
+				}
+				else {
+					e->act(kp);
+				}
+			}
+			//if (e->getAnimKey() != kp)e->act(kp);
 		}
 		for (auto& bone : keys) {
 			bone.second.setTrans(tp);
@@ -371,7 +401,21 @@ namespace onart {
 				l--;
 				program2["ldwh"] = l->value;
 				kp = int(l - rects.begin());
-				if (e->getAnimKey() != kp) { e->act(kp); }
+				int ak = e->getAnimKey();
+				if (ak != kp) {
+					if (ak < 0) {
+						if (l + 1 != rects.end()) {
+							float nextp = (l + 1)->tp;
+							e->act(kp, (tp - l->tp) / (nextp - l->tp));
+						}
+						else {
+							e->act(kp);
+						}
+					}
+					else {
+						e->act(kp);
+					}
+				}
 			}
 
 			if (hasPiv) {

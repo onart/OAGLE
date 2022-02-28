@@ -43,7 +43,8 @@ namespace onart {
 		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
 		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
 		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
-		Entity(const EntityKey& k, const Transform& transform, bool isFixed = false);
+		/// <param name="responseContinuously">애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
+		Entity(const EntityKey& k, const Transform& transform, bool isFixed = false, bool responseContinuously = false);
 		~Entity();
 		/// <summary>
 		/// 위치를 얻습니다. 카메라 등과 같이 월드 좌표를 지속적으로 추적하는 것을 위해 만들어졌습니다.
@@ -65,13 +66,13 @@ namespace onart {
 		/// <summary>
 		/// 응용 단계에서 사용하지 않는 것이 좋습니다.
 		/// </summary>
-		void act(int kp);
+		void act(int kp, float progress=0);
 		/// <summary>
 		/// 애니메이션의 특정 키포인트를 지났을 때 개체가 취할 행동입니다.
 		/// 이벤트를 전달하는 용도로 사용할 수도 있으나 키포인트 번호와 중복되지 않도록 응용 단계에서 통일하는 편이 추천됩니다.
 		/// </summary>
 		/// <param name="kp">이벤트 플래그/키포인트</param>
-		virtual void Act(int kp);
+		virtual void Act(int kp, float progress = 0);
 		/// <summary>
 		/// 기본적으로 응용 계층에서 접근할 일 없는 함수입니다. 꼭 필요한 경우가 아니라면 오버라이딩 및 호출하지 않는 것이 좋습니다.
 		/// </summary>
@@ -87,7 +88,7 @@ namespace onart {
 		/// <summary>
 		/// 현재 애니메이션 키를 읽습니다. 응용 단계에서 사용할 일 없는 함수입니다.
 		/// </summary>
-		inline int getAnimKey() { return animKp; }
+		inline int getAnimKey() { return responseContinuously ? -1 : animKp; }
 		/// <summary>
 		/// 현존 객체 중에서 해당 키를 가진 것들을 찾습니다. 없는 경우 빈 벡터를 반환합니다.
 		/// </summary>
@@ -146,6 +147,7 @@ namespace onart {
 		int animKp = 0;
 		std::vector<pAnimation> anims;
 		bool isFixed;
+		bool responseContinuously;
 
 		static std::multimap<EntityKey, Entity*> entities;
 	};

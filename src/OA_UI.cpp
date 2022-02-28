@@ -89,9 +89,9 @@ namespace onart::UI {
 		}
 	}
 
-	Button::Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, UIAnimation* normal, UIAnimation* onOver, UIAnimation* onDown)
+	Button::Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal, pAnimation onOver, pAnimation onDown)
 		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
-		
+		if (normal) { UIAnimation::make("__defaultbutton", false, { Keypoint<pTexture>{0, Material::get("white1x1")} }, { Keypoint<vec4>{0,vec4(0,0,1,1)} }); }
 	}
 
 	void Button::onMouseOver() {

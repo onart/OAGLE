@@ -47,7 +47,7 @@ namespace onart {
 	class Entity;
 
 	/// <summary>
-	/// 개체의 시각적 상태를 나타내는 Animation 클래스입니다. 시각적 상태 이외의 부분(ex: 판정 변경)은 개체의 act()에서 정의하는 것이 매우 권장됩니다.
+	/// 개체의 시각적 상태를 나타내는 Animation 클래스입니다. 시각적 상태 이외의 부분(ex: 판정 변경)은 개체의 Act()에서 정의하는 것이 매우 권장됩니다.
 	/// 텍스처 및 직사각형 좌표를 넘기는 2d animation, 정점에 영향을 주는 골격의 변환 행렬을 넘기는 3d animation이 파생됩니다.
 	/// </summary>
 	class Animation
@@ -147,7 +147,7 @@ namespace onart {
 		/// <param name="dat">변수 주소를 대입해 주세요.</param>
 		/// <param name="len">배열 변수의 길이를 입력해 주세요.</param>
 		/// <param name="loop">루프 여부를 선택하세요.</param>
-		/// /// <param name="sig_kp">act()로 알림받을 시점(float)</param>
+		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
 		static std::shared_ptr<Animation> load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp = {});
 
 		/// <summary>

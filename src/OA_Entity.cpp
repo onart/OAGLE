@@ -23,7 +23,7 @@ namespace onart {
 
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
-	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed) {
+	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
 		entities.insert({ k,this });
 	}
 
@@ -60,23 +60,25 @@ namespace onart {
 			}
 			else {
 				program2["model"] = transform.getModel();
+				program2["color"] = color;
 			}
 		}
 		else {
 			program3["fixed"] = false;
 			program3["model"] = transform.getModel();
+			program3["color"] = color;
 		}
 		if (!model) {
 			program3["is2d"] = true;
 		}
 		if (as >= 0) { 
-			anims[as]->go(lt - animStartTimepoint, this, animTps); 
+			anims[as]->go(lt - animStartTimepoint, this, animTps);
 		}
 		else {
 			program3["has_bones"] = false;
 		}
 		if (model) { 
-			model->render(color);
+			model->render();
 		}
 	}
 
@@ -91,12 +93,12 @@ namespace onart {
 
 	}
 
-	void Entity::act(int kp) {
+	void Entity::act(int kp, float progress) {
 		animKp = kp;
-		Act(kp);
+		Act(kp, progress);
 	}
 
-	void Entity::Act(int kp) {
+	void Entity::Act(int kp, float progress) {
 
 	}
 

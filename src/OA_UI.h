@@ -128,19 +128,19 @@ namespace onart {
 			/// <param name="normal">기본 상태의 애니메이션(이미지)입니다.</param>
 			/// <param name="onOver">마우스 오버 상태의 애니메이션(이미지)입니다.</param>
 			/// <param name="onDown">마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지 상태의 애니메이션(이미지)입니다.</param>
-			Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, UIAnimation* normal = nullptr, UIAnimation* onOver = nullptr, UIAnimation* onDown = nullptr);
+			Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal = pAnimation(), pAnimation onOver = pAnimation(), pAnimation onDown = pAnimation());
 			/// <summary>
 			/// 마우스 커서가 버튼 위에 위치했을 때의 애니메이션이 나옵니다.
 			/// </summary>
-			void onMouseOver();
+			virtual void onMouseOver();
 			/// <summary>
 			/// 마우스 커서가 버튼으로부터 떠났을 때의 애니메이션이 나옵니다.
 			/// </summary>
-			void onMouseLeft();
+			virtual void onMouseLeft();
 			/// <summary>
 			/// 마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지의 애니메이션이 나옵니다.
 			/// </summary>
-			void onMouseDown();
+			virtual void onMouseDown();
 			/// <summary>
 			/// 마우스 위치 및 클릭 상태를 파악하여 버튼이 반응합니다. (프레임당 1회 자동 호출됨)
 			/// </summary>
@@ -153,7 +153,7 @@ namespace onart {
 			int st = 0;
 			vec4 ldwh;
 		private:
-			UniversalFunctor* onClick;
+			UniversalFunctor* onClick = nullptr;
 		};
 
 		/// <summary>

@@ -230,12 +230,11 @@ namespace onart {
 		}
 	}
 
-	void Model::render(const vec4& color) const {
+	void Model::render() const {
 		program3.bind(**mesh);
 		program3["nopiv"] = true;
 		program3["is2d"] = false;
 		program3["useFull"] = true;
-		program3["color"] = color;
 		for (auto& g : geom) {
 			auto& mtl = materials[g.material];
 			if (mtl) {

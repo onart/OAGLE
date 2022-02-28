@@ -45,7 +45,7 @@ namespace onart {
 		/// 셰이더에 이 모델을 렌더링합니다.
 		/// </summary>
 		/// <param name="color">색상(mix가 아니라 *로 적용됩니다.)</param>
-		void render(const vec4& color = 1) const;
+		void render() const;
 		/// <summary>
 		/// 이미 불러온 모델에 diffuse 텍스처 이미지를 추가합니다.
 		/// </summary>
