@@ -110,16 +110,18 @@ namespace onart {
 
 			/// <summary>
 			/// 불러온 음성을 메모리에서 제거합니다. 해당 이름의 음원이 없거나 다른 곳에서 사용 중인 경우 사용 종료 즉시 메모리가 회수됩니다.
+			/// 음원의 메모리가 회수되기 전이라도, 플레이 중이던 스트림의 소리가 멈추고 새로 재생하더라도 소리가 나지 않습니다.
 			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체/포인터를 소멸시키지 않고 사용을 종료하려면
 			/// 해당 음원 포인터로 reset() 또는 swap(pAudioSource()) 등을 호출하면 됩니다.
-			/// 음원의 포인터를 가지고 재생했지만 그 포인터를 따로 멤버 등으로 유지하지 않고 소멸했을 경우, drop으로 음원이 소멸된다면 즉시 스트림도 모두 함께 소멸됩니다.
+			/// 음원의 포인터를 가지고 재생했지만 그 포인터를 따로 멤버 등으로 유지하지 않고 소멸했을 경우, 스트림은 더이상 소리가 나지 않으며 drop으로 음원이 소멸되는 즉시 메모리가 회수됩니다.
 			/// </summary>
 			/// <param name="name">제거할 음원 이름</param>
 			static void drop(const std::string& name);
 
 			/// <summary>
 			/// 불러온 모든 음원 중 현재 사용되고 있지 않은 것을 모두 메모리에서 제거합니다.
-			/// 사용 중인 음원은 사용이 끝나는 즉시 메모리에서 회수할지, 그대로 남겨둘지 선택할 수 있습니다.
+			/// 사용 중인 음원은 [즉시 멈추고 사용이 끝나는 즉시 메모리에서 회수]할지, [그대로 남겨둘]지 선택할 수 있습니다.
+			/// 음원의 메모리가 회수되기 전이라도, 플레이 중이던 스트림의 소리가 멈추고 새로 재생하더라도 소리가 나지 않습니다.
 			/// "사용"은 "재생"과는 무관하게 음원 포인터를 보유하고 있는 객체가 있으면 사용하는 것으로 칩니다. 객체/포인터를 소멸시키지 않고 사용을 종료하려면
 			/// 해당 음원 포인터로 reset() 또는 swap(pAudioSource()) 등을 호출하면 됩니다.
 			/// </summary>
@@ -213,7 +215,7 @@ namespace onart {
 		class SafeStreamPointer {
 			friend class Source;
 		public:
-			inline constexpr SafeStreamPointer() {}
+			inline SafeStreamPointer() = default;
 			inline void pause() { auto sp = wp.lock(); if (sp)sp->pause(); }
 			inline void resume() { auto sp = wp.lock(); if (sp)sp->resume(); }
 			inline void end() { auto sp = wp.lock(); if (sp)sp->end(); }
@@ -225,14 +227,15 @@ namespace onart {
 	private:
 		static bool noup;
 		static void audioThread();
-		static std::map<std::string, std::shared_ptr<Source>> source;
+		static std::vector<std::shared_ptr<Source>> src;
+		static std::map<std::string, size_t> n2i;
 		static float master;
 		static void* masterStream;
 		static int playCallback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData);
 	};
 
 	using pAudioSource = std::shared_ptr<Audio::Source>;	// 음원의 포인터입니다.
-	using pSafeAudioStream = Audio::SafeStreamPointer;
+	using pSafeAudioStream = Audio::SafeStreamPointer;		// 스트림의 안전 포인터입니다. 루프와 같이 자동으로 소멸하지 않는 스트림에 대해서는 안전 포인터가 특별히 필요하지 않습니다.
 }
 
 #endif // !__OA_AUDIO_H__

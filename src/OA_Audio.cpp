@@ -54,7 +54,8 @@ constexpr size_t MEMBUFFER_SIZE = 8192;
 
 namespace onart {
 
-	std::map<std::string, pAudioSource> Audio::source;
+	std::vector<pAudioSource> Audio::src;
+	std::map<std::string, size_t> Audio::n2i;
 	void* Audio::masterStream;
 	float Audio::master = 1;
 	const float& Audio::masterVolume = Audio::master;
@@ -62,8 +63,8 @@ namespace onart {
 	const int& Audio::Stream::activeCount = Audio::Stream::activeStreamCount;
 	bool Audio::noup = true;
 
-	static std::condition_variable aCV;
-	static std::mutex audioMutex;
+	static std::condition_variable aCV, iCV;	// aCV: 오디오 업데이트 조건변수, iCV: 오디오 인터럽트 조건변수
+	static std::mutex audioMutex, interMutex;	// audioMutex: 오디오 업데이트 뮤텍스, interMutex: 오디오 인터럽트 뮤텍스
 	bool Audio::wait = false;
 
 	static class RingBuffer {
@@ -287,7 +288,7 @@ namespace onart {
 	Audio::Source::MemorySource::~MemorySource() { av_free(buf); }
 
 	pAudioSource Audio::Source::load(const void* mem, size_t size, const std::string& name) {
-		if (Audio::source.find(name) != Audio::source.end()) { return Audio::source[name]; }
+		if (Audio::n2i.find(name) != Audio::n2i.end()) { return Audio::src[Audio::n2i[name]]; }
 		AVFormatContext* fmt = avformat_alloc_context();
 		MemorySource* msrc = new MemorySource(mem, size);
 		AVIOContext* ioContext = avio_alloc_context(msrc->buf, MEMBUFFER_SIZE, 0, msrc, readMem, nullptr, seekMem);		
@@ -377,7 +378,9 @@ namespace onart {
 		av_seek_frame(fmt, -1, 0, AVSEEK_FLAG_FRAME);
 		av_frame_free(&tempF);
 		struct pubSrc :public Source { pubSrc(AVFormatContext* _1, AVCodecContext* _2, SwrContext* _3, int _4, AVIOContext* _5, MemorySource* _6) :Source(_1,_2,_3,_4,_5,_6) {}; };
-		return Audio::source[name] = std::make_shared<pubSrc>(fmt, cctx, resampler, frameCount, ioContext, msrc);
+		Audio::n2i[name] = src.size();
+		src.push_back(std::make_shared<pubSrc>(fmt, cctx, resampler, frameCount, ioContext, msrc));
+		return *src.rbegin();
 	}
 
 	bool Audio::Source::initDemux(AVFormatContext* fmt) {
@@ -406,7 +409,7 @@ namespace onart {
 	pAudioSource Audio::Source::load(const std::string& file, const std::string& name) {
 		std::string memName(name);
 		if (memName.size() == 0) { memName = file; }
-		if (Audio::source.find(memName) != Audio::source.end()) { return Audio::source[memName]; }
+		if (Audio::n2i.find(memName) != Audio::n2i.end()) { return Audio::src[Audio::n2i[memName]]; }
 
 		AVFormatContext* fmt = avformat_alloc_context();
 		if (avformat_open_input(&fmt, file.c_str(), nullptr, nullptr) < 0) {
@@ -499,20 +502,30 @@ namespace onart {
 		av_seek_frame(fmt, -1, 0, AVSEEK_FLAG_FRAME);
 		av_frame_free(&tempF);
 		struct pubSrc :public Source { pubSrc(AVFormatContext* _1, AVCodecContext* _2, SwrContext* _3, int _4) :Source(_1, _2, _3, _4) {}; };
-		return Audio::source[memName] = std::make_shared<pubSrc>(fmt, cctx, resampler, frameCount);
+		n2i[memName] = src.size();
+		src.push_back(std::make_shared<pubSrc>(fmt, cctx, resampler, frameCount));
+		return *src.rbegin();
 	}
 
 	void Audio::Source::drop(const std::string& name) {
-		auto iter = source.find(name);
-		if (iter != source.end()) {
-			if (iter->second.use_count() == 1) { source.erase(iter); }
+		auto iter = n2i.find(name);
+		if (iter != n2i.end()) {
+			n2i.erase(iter);
 		}
 	}
 
 	void Audio::Source::collect(bool removeUsing) {
-		if (removeUsing) { source.clear(); return; }
-		for (auto iter = source.cbegin(); iter != source.cend();) {
-			if (iter->second.use_count() == 1) { source.erase(iter++); }
+		if (removeUsing) { 
+			n2i.clear();
+			for (auto& p : src) { p.reset(); }
+			return;
+		}
+		for (auto iter = n2i.cbegin(); iter != n2i.cend();) {
+			auto& p = src[iter->second];
+			if (p.use_count() == 1) {
+				n2i.erase(iter++);
+				p.reset();
+			}
 			else ++iter;
 		}
 	}
@@ -596,6 +609,7 @@ namespace onart {
 		if constexpr(OA_AUDIO_WAIT_ON_DRAG)
 		if (wait) { memset(output, 0, frameCount * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT)); return PaStreamCallbackResult::paContinue; }
 		ringBuffer.read(output, frameCount * STD_CHANNEL_COUNT);
+		iCV.notify_one();
 		return PaStreamCallbackResult::paContinue;	// 정지 신호 외에 정지하지 않음
 	}
 
@@ -605,28 +619,34 @@ namespace onart {
 	}
 
 	Audio::Stream::~Stream() {
-		printf("=====================%d\n",restSamples);
 		free(buffer);
 		if (!stopped) activeStreamCount--;
 	}
 
 	void Audio::update() {
-		for (auto& s : source) {
-			s.second->update();
+		std::unique_lock ul(interMutex);
+		iCV.wait(ul);
+		bool reap = false;
+		for (auto& s : src) {
+			if (s)s->update();
+			else reap = true;
 		}
 		ringBuffer.addComplete();
+		if (reap) { src.erase(std::remove_if(src.begin(), src.end(), [](std::shared_ptr<Source>& x) { return !bool(x); }), src.end()); }
 	}
 
 	pAudioSource Audio::Source::get(const std::string& name) {
-		if (source.find(name) != source.end())return source[name];
+		if (n2i.find(name) != n2i.end())return src[n2i[name]];
 		else return pAudioSource();
 	}
 
 	void Audio::Source::update() {
 		bool reap = false;
-		for (auto& s : playing) {
-			if (s->update()) {
-				s.reset();
+		size_t sz = playing.size();	// 중간 삽입된 것은 다음 업데이트에 적용 (타이밍상 그럴 가능성은 희박)
+		for (size_t i = 0; i < sz; i++) {
+			auto& strm = playing[i];
+			if (strm->update()) {
+				strm.reset();
 				reap = true;
 			}
 		}
@@ -648,13 +668,14 @@ namespace onart {
 	bool Audio::Stream::update() {	// 리턴값: true 리턴 시 메모리 수거됨(소멸)
 		if (stopped) return false;
 		unsigned long need = ringBuffer.writable();
-		
+		bool isOver = false;
 		while (restSamples < need) {
 			STD_SAMPLE_FORMAT* temp;
 			int count = src->getFrame(nextFrame++, &temp);
 			if (count == -1) {	// 음원 끝까지 재생함
 				if (loop) nextFrame = 0;
 				else {
+					isOver = true;
 					stopped = true;
 					activeStreamCount--;
 					break;
@@ -674,8 +695,7 @@ namespace onart {
 			}
 		}
 		ringBuffer.add(buffer, restSamples);
-		if (stopped) {
-			printf("1 yes???\n");
+		if (isOver) {
 			return true;
 		}
 		
