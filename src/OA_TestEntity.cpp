@@ -3,7 +3,7 @@
 #include "OA_Camera.h"
 
 namespace onart {
-	TestEntity::TestEntity() :Entity("2danim", Transform(), false, true) {
+	TestEntity::TestEntity() :Entity("2danim", Transform(), false, false) {
 		pAnimation anim1 = Animation2D::make("돌려차기", true,
 			{ Keypoint<pTexture>{0,Material::genTextureFromFile("2danim.png")} },
 			{
@@ -25,5 +25,5 @@ namespace onart {
 	}
 	void TestEntity::Update() { if (Input::isKeyPressed(Input::KeyCode::space)) { transform.addRotation(vec3(0, 1, 0), dt); } }
 
-	void TestEntity::Act(int kp, float progress) { printf("%d %f\n", kp, progress); }
+	void TestEntity::Act(int kp, float progress) {  }
 }

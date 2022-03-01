@@ -577,9 +577,6 @@ namespace onart {
 
 
 	Audio::Source::~Source() {
-		for (auto p : playing) {
-			delete p;
-		}
 		avcodec_close(cdc);
 		avcodec_free_context(&cdc);
 		if (resampler) { 
@@ -608,6 +605,7 @@ namespace onart {
 	}
 
 	Audio::Stream::~Stream() {
+		printf("=====================%d\n",restSamples);
 		free(buffer);
 		if (!stopped) activeStreamCount--;
 	}
@@ -626,14 +624,13 @@ namespace onart {
 
 	void Audio::Source::update() {
 		bool reap = false;
-		for (Stream*& s : playing) {
+		for (auto& s : playing) {
 			if (s->update()) {
-				delete s;
-				s = nullptr;
+				s.reset();
 				reap = true;
 			}
 		}
-		if (reap) { playing.erase(std::remove(playing.begin(), playing.end(), nullptr), playing.end()); }
+		if (reap) { playing.erase(std::remove_if(playing.begin(), playing.end(), [](std::shared_ptr<Stream>& x) { return !bool(x); }), playing.end()); }
 	}
 
 	void RingBuffer::read(void* out, unsigned long count) {
@@ -676,10 +673,11 @@ namespace onart {
 				free(temp);
 			}
 		}
+		ringBuffer.add(buffer, restSamples);
 		if (stopped) {
+			printf("1 yes???\n");
 			return true;
 		}
-		ringBuffer.add(buffer, restSamples);
 		
 		memmove(buffer, buffer + need, (restSamples - need) * sizeof(STD_SAMPLE_FORMAT));
 		restSamples -= need;
@@ -710,9 +708,17 @@ namespace onart {
 	}
 
 	Audio::Stream* Audio::Source::play(bool loop) {
-		Stream* nw = new Stream(this, loop);
-		playing.push_back(nw);
+		struct strm :public Stream { strm(Source* _1, bool _2) :Stream(_1,_2) {} };
+		strm* nw = new strm(this, loop);
+		playing.push_back(std::shared_ptr<strm>(nw));
 		return nw;
+	}
+
+	Audio::SafeStreamPointer Audio::Source::playSafe(bool loop) {
+		struct strm :public Stream { strm(Source* _1, bool _2) :Stream(_1, _2) {} };
+		auto sm = std::shared_ptr<strm>(new strm(this, loop));
+		playing.push_back(sm);
+		return SafeStreamPointer(reinterpret_cast<std::shared_ptr<Stream>&>(sm));
 	}
 
 	void Audio::audioThread() {
@@ -724,5 +730,8 @@ namespace onart {
 			update();
 			ul.unlock();
 		}
+	}
+
+	Audio::SafeStreamPointer::SafeStreamPointer(std::shared_ptr<Stream>& strm) :wp(strm) {
 	}
 }

@@ -69,6 +69,7 @@ namespace onart {
 		static void allow(bool);
 
 		class Stream;
+		class SafeStreamPointer;
 
 		/// <summary>
 		/// 오디오 데이터를 불러오는 오디오 소스입니다. 재생할 경우 Stream 객체가 생성됩니다.
@@ -130,6 +131,12 @@ namespace onart {
 			/// 루프 음성이 아닌 경우 자동으로 메모리가 해제됩니다.
 			/// </summary>
 			Stream* play(bool loop = false);
+
+			/// <summary>
+			/// 불러온 음성을 재생합니다. 재생한 스트림의 안전 포인터가 리턴되며, 이를 이용해 중단/재개/정지를 할 수 있습니다. 루프 여부를 선택할 수 있습니다.
+			/// 루프 음성이 아닌 경우 자동으로 메모리가 해제됩니다. 안전 포인터는 메모리가 해제된 이후에도 함수를 호출할 수 있으며 이때 함수는 표면상 아무 동작도 하지 않습니다.
+			/// </summary>
+			SafeStreamPointer playSafe(bool loop = false);
 		private:
 			struct MemorySource {
 				const unsigned char* dat;
@@ -155,7 +162,7 @@ namespace onart {
 			
 			float volume = 1;
 			int frameCount;
-			std::vector<Stream*> playing;
+			std::vector<std::shared_ptr<Stream>> playing;
 			void update();
 			~Source();
 		};
@@ -200,6 +207,21 @@ namespace onart {
 			bool stopped = false;
 			bool loop;
 		};
+		/// <summary>
+		/// 현재 재생되고 있는 소리입니다. 원본 스트림이 해제된 경우에도 사용할 수 있으며 해제된 스트림에 대하여 함수를 호출할 경우 아무런 동작을 하지 않습니다.
+		/// </summary>
+		class SafeStreamPointer {
+			friend class Source;
+		public:
+			inline constexpr SafeStreamPointer() {}
+			inline void pause() { auto sp = wp.lock(); if (sp)sp->pause(); }
+			inline void resume() { auto sp = wp.lock(); if (sp)sp->resume(); }
+			inline void end() { auto sp = wp.lock(); if (sp)sp->end(); }
+			inline void restart() { auto sp = wp.lock(); if (sp)sp->restart(); }
+		private:
+			SafeStreamPointer(std::shared_ptr<Stream>&);
+			std::weak_ptr<Stream> wp;
+		};
 	private:
 		static bool noup;
 		static void audioThread();
@@ -210,6 +232,7 @@ namespace onart {
 	};
 
 	using pAudioSource = std::shared_ptr<Audio::Source>;	// 음원의 포인터입니다.
+	using pSafeAudioStream = Audio::SafeStreamPointer;
 }
 
 #endif // !__OA_AUDIO_H__
