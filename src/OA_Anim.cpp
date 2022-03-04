@@ -116,7 +116,30 @@ namespace onart {
 		};
 		pAnimation a2d = std::make_shared<anim2d>(loop, tx, rctz, sctrz);
 		push(name, a2d);
-		return get(name);
+		return a2d;
+	}
+
+	pAnimation Sprite::make(const std::string& name, const pTexture& tex, vec4 rect, vec2 pivot) {
+		pAnimation anim = get(name);
+		if (anim) return anim;
+		vec4 ldwh;
+		const ivec2& wh = tex->size;
+		if (rect == vec4()) { ldwh = vec4(0, 0, 1, 1); rect = vec4(0, 0, (float)wh.x, (float)wh.y); }
+		else { ldwh = rect / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y); }
+		if (isnan(pivot.x)) {
+			pivot = vec2((float)wh.x, (float)wh.y) / 2;
+		}
+		vec2 pivv = vec2(0.5f) - pivot / vec2(rect.width, rect.height);
+		vec2 xy(ldwh.width, ldwh.height);
+		xy *= vec2((float)wh.x, (float)wh.y) / 1024;
+		pivv *= xy;
+		vec4 sctr(xy.x, xy.y, pivv.x, pivv.y);
+		struct spr :public Sprite {
+			spr(const pTexture& _1, const vec4& _2, const vec4& _3) :Sprite(_1, _2, _3) {}
+		};
+		pAnimation a2d = std::make_shared<spr>(tex, ldwh, sctr);
+		push(name, a2d);
+		return a2d;
 	}
 
 	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
@@ -180,6 +203,35 @@ namespace onart {
 			program3["useFull"] = true;
 			program3["nopiv"] = true;
 		}
+		program3["has_bones"] = false;
+		program3["is2d"] = true;
+		program3.bind(**rect);
+		program3.draw();
+	}
+
+	Sprite::Sprite(const pTexture& tex, const vec4& rect, const vec4& sctr) :tex(tex), ldwh(rect), sctr(sctr), Animation(false, 0) {
+
+	}
+
+	void Sprite::go(float, Entity*, float) {
+		static ppMesh rect;
+		if (!rect)rect = Mesh::get("rect");
+		if (tex) { 
+			program3["oneColor"] = false;
+			program3.texture(tex->id);
+		}
+		else {
+			program3["oneColor"] = true;
+		}
+		program3["useFull"] = false;
+		program3["ldwh"] = ldwh;
+		program3["nopiv"] = false;
+		mat4 pivMat(
+			sctr.x, 0, 0, sctr.z,
+			0, sctr.y, 0, sctr.w,
+			0, 0, 1, 0,
+			0, 0, 0, 1);
+		program3["piv"] = pivMat;
 		program3["has_bones"] = false;
 		program3["is2d"] = true;
 		program3.bind(**rect);

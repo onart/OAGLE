@@ -198,7 +198,7 @@ namespace onart {
 		private:
 			static Shader* usingShader;
 			unsigned id;
-			unsigned recentLen;
+			unsigned recentLen = 0;
 			std::map<const char*, int> uLocs;
 			std::map<const char*, std::vector<int>> uaLocs;
 

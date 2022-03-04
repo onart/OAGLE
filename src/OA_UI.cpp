@@ -95,7 +95,7 @@ namespace onart::UI {
 	}
 
 	void Button::onMouseOver() {
-		st = 1;
+		st = 1;		
 	}
 
 	void Button::onMouseLeft() {

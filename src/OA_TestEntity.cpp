@@ -4,6 +4,7 @@
 
 namespace onart {
 	TestEntity::TestEntity() :Entity("2danim", Transform(), false, false) {
+		pAnimation anim2 = Sprite::make("전체",Material::genTextureFromFile("2danim.png"));
 		pAnimation anim1 = Animation2D::make("돌려차기", true,
 			{ Keypoint<pTexture>{0,Material::genTextureFromFile("2danim.png")} },
 			{
@@ -21,7 +22,7 @@ namespace onart {
 				vec2(112,8),
 				vec2(110,16),
 			});
-		addAnim("돌려차기");
+		addAnim("전체");
 	}
 	void TestEntity::Update() { if (Input::isKeyPressed(Input::KeyCode::space)) { transform.addRotation(vec3(0, 1, 0), dt); } }
 

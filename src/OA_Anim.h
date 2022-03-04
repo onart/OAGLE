@@ -112,15 +112,35 @@ namespace onart {
 		/// <param name="loop">루프 여부를 선택합니다. false인 경우 애니메이션이 끝나면 마지막 상태를 유지합니다.</param>
 		/// <param name="tex">시점과 텍스처의 순서쌍 집합입니다.</param>
 		/// <param name="rects">시점과 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)의 순서쌍 집합입니다. 비어 있으면 안 됩니다.</param>
-		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
+		/// <param name="pivots">rects에 일대일로 대응하는 피벗 좌표입니다. 대응 직사각형 영역의 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 입력하지 않는 경우 애니메이션의 각 프레임은 단위 정사각형에 들어가며 정사각형의 중심이 곧 피벗이 됩니다.</param>
 		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	protected:
 		std::vector<Keypoint<pTexture>> tex;
 		std::vector<Keypoint<vec4>> rects;
-		std::vector<vec4> sctrs;
+		std::vector<vec4> sctrs;	// 이름 뜻: scale/translate의 머릿글자
 		const bool hasTex, hasRect, hasPiv;
 		Animation2D(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
+	};
+
+	/// <summary>
+	/// 1컷 구성임을 제외하면 Animation2D와 동일합니다(카메라 등의 영향을 받습니다). 특성상 루프 여부, 타임포인트를 입력받지 않으며 개체의 act()는 호출되지 않습니다.
+	/// </summary>
+	class Sprite: public Animation {
+	public:
+		/// <summary>
+		/// 스프라이트를 생성하고 리턴합니다.
+		/// </summary>
+		/// <param name="name">애니메이션 이름입니다. 이름이 겹치는 경우 내용에 관계없이 생성하지 않고 기존에 있던 것을 리턴합니다.</param>
+		/// <param name="tex">스프라이트를 포함한 텍스처입니다.</param>
+		/// <param name="rect">텍스처 내의 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)입니다. 입력하지 않거나 영벡터를 입력하는 경우 이미지 전체를 사용합니다.</param>
+		/// <param name="pivot">피벗 좌표입니다. 선택한 직사각형 영역의 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 회전/크기/병진 변환의 중심입니다. 입력하지 않는 경우 이미지의 중심이 피벗이 됩니다.</param>
+		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0, vec2 pivot = _NAN);
+		void go(float elapsed, Entity* e, float dynamicTps = 1);
+	private:
+		Sprite(const pTexture& tex, const vec4& rect, const vec4& sctr);
+		pTexture tex;
+		vec4 ldwh, sctr;
 	};
 
 	/// <summary>

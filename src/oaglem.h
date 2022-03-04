@@ -32,6 +32,7 @@
 
 constexpr float PI = 3.14159265358979323846f;
 constexpr float INF = INFINITY;
+constexpr float _NAN = NAN;
 
 /// <summary>
 /// 라디안을 입력하면 도 단위로 변경합니다.
