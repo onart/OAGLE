@@ -30,6 +30,8 @@ extern onart::Shader program2, program3;
 namespace onart {
 	std::map<std::string, pAnimation> Animation::animations;
 
+	static ppMesh mRect;
+
 	/// <summary>
 	/// 정렬된 벡터에 대하여 현재 키포인트를 가리키는 반복자를 리턴합니다.
 	/// <para>* 현재 시각이 첫 키포인트보다 작은 경우(정상적 상황이라면 있어서는 안 될 일) 첫 키포인트를 리턴합니다.</para>
@@ -119,36 +121,12 @@ namespace onart {
 		return a2d;
 	}
 
-	pAnimation Sprite::make(const std::string& name, const pTexture& tex, vec4 rect, vec2 pivot) {
-		pAnimation anim = get(name);
-		if (anim) return anim;
-		vec4 ldwh;
-		const ivec2& wh = tex->size;
-		if (rect == vec4()) { ldwh = vec4(0, 0, 1, 1); rect = vec4(0, 0, (float)wh.x, (float)wh.y); }
-		else { ldwh = rect / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y); }
-		if (isnan(pivot.x)) {
-			pivot = vec2((float)wh.x, (float)wh.y) / 2;
-		}
-		vec2 pivv = vec2(0.5f) - pivot / vec2(rect.width, rect.height);
-		vec2 xy(ldwh.width, ldwh.height);
-		xy *= vec2((float)wh.x, (float)wh.y) / 1024;
-		pivv *= xy;
-		vec4 sctr(xy.x, xy.y, pivv.x, pivv.y);
-		struct spr :public Sprite {
-			spr(const pTexture& _1, const vec4& _2, const vec4& _3) :Sprite(_1, _2, _3) {}
-		};
-		pAnimation a2d = std::make_shared<spr>(tex, ldwh, sctr);
-		push(name, a2d);
-		return a2d;
-	}
-
 	Animation2D::Animation2D(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
 		: tex(tex), rects(rects), sctrs(sctrs), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!sctrs.empty()) {
 	}
 
 	void Animation2D::go(float elapsed, Entity* e, float dynamicTps) {
-		static ppMesh rect;
-		if (!rect)rect = Mesh::get("rect");
+		if (!mRect)mRect = Mesh::get("rect");
 		
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
@@ -186,7 +164,6 @@ namespace onart {
 			}
 			
 			if (hasPiv) {
-				program3["nopiv"] = false;
 				vec4& sctr = sctrs[kp];
 				mat4 pivMat(
 					sctr.x, 0, 0, sctr.z,
@@ -196,17 +173,40 @@ namespace onart {
 				program3["piv"] = pivMat;
 			}
 			else {
-				program3["nopiv"] = true;
+				program3["piv"] = mat4();
 			}
 		}
 		else {
 			program3["useFull"] = true;
-			program3["nopiv"] = true;
+			program3["piv"] = mat4();
 		}
 		program3["has_bones"] = false;
 		program3["is2d"] = true;
-		program3.bind(**rect);
+		program3.bind(**mRect);
 		program3.draw();
+	}
+
+	pAnimation Sprite::make(const std::string& name, const pTexture& tex, vec4 rect, vec2 pivot) {
+		pAnimation anim = get(name);
+		if (anim) return anim;
+		vec4 ldwh;
+		const ivec2& wh = tex->size;
+		if (rect == vec4()) { ldwh = vec4(0, 0, 1, 1); rect = vec4(0, 0, (float)wh.x, (float)wh.y); }
+		else { ldwh = rect / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y); }
+		if (isnan(pivot.x)) {
+			pivot = vec2((float)wh.x, (float)wh.y) / 2;
+		}
+		vec2 pivv = vec2(0.5f) - pivot / vec2(rect.width, rect.height);
+		vec2 xy(ldwh.width, ldwh.height);
+		xy *= vec2((float)wh.x, (float)wh.y) / 1024;
+		pivv *= xy;
+		vec4 sctr(xy.x, xy.y, pivv.x, pivv.y);
+		struct spr :public Sprite {
+			spr(const pTexture& _1, const vec4& _2, const vec4& _3) :Sprite(_1, _2, _3) {}
+		};
+		pAnimation a2d = std::make_shared<spr>(tex, ldwh, sctr);
+		push(name, a2d);
+		return a2d;
 	}
 
 	Sprite::Sprite(const pTexture& tex, const vec4& rect, const vec4& sctr) :tex(tex), ldwh(rect), sctr(sctr), Animation(false, 0) {
@@ -214,8 +214,7 @@ namespace onart {
 	}
 
 	void Sprite::go(float, Entity*, float) {
-		static ppMesh rect;
-		if (!rect)rect = Mesh::get("rect");
+		if (!mRect)mRect = Mesh::get("rect");
 		if (tex) { 
 			program3["oneColor"] = false;
 			program3.texture(tex->id);
@@ -225,7 +224,6 @@ namespace onart {
 		}
 		program3["useFull"] = false;
 		program3["ldwh"] = ldwh;
-		program3["nopiv"] = false;
 		mat4 pivMat(
 			sctr.x, 0, 0, sctr.z,
 			0, sctr.y, 0, sctr.w,
@@ -234,8 +232,57 @@ namespace onart {
 		program3["piv"] = pivMat;
 		program3["has_bones"] = false;
 		program3["is2d"] = true;
-		program3.bind(**rect);
+		program3.bind(**mRect);
 		program3.draw();
+	}
+
+	pAnimation FixedSprite::make(const std::string& name, const pTexture& tex, vec4 rect, vec2 pivot) {
+		pAnimation anim = get(name);
+		if (anim) return anim;
+		vec4 ldwh;
+		const ivec2& wh = tex->size;
+		if (rect == vec4()) { ldwh = vec4(0, 0, 1, 1); rect = vec4(0, 0, (float)wh.x, (float)wh.y); }
+		else { ldwh = rect / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y); }
+		if (isnan(pivot.x)) {
+			pivot = vec2((float)wh.x, (float)wh.y) / 2;
+		}
+		vec2 pivv = vec2(0.5f) - pivot / vec2(rect.width, rect.height);
+		vec2 xy(ldwh.width, ldwh.height);
+		xy *= vec2((float)wh.x, (float)wh.y) / 1024;
+		pivv *= xy;
+		vec4 sctr(xy.x, xy.y, pivv.x, pivv.y);
+		struct spr :public FixedSprite {
+			spr(const pTexture& _1, const vec4& _2, const vec4& _3) :FixedSprite(_1, _2, _3) { }
+		};
+		pAnimation a2d = std::make_shared<spr>(tex, ldwh, sctr);
+		push(name, a2d);
+		return a2d;
+	}
+
+	FixedSprite::FixedSprite(const pTexture& tex, const vec4& rect, const vec4& sctr) :tex(tex), ldwh(rect), sctr(sctr), Animation(false, 0) {
+
+	}
+
+	void FixedSprite::go(float, Entity*, float) {
+		if (!mRect)mRect = Mesh::get("rect");
+		if (tex) {
+			program2["oneColor"] = false;
+			program2.texture(tex->id);
+		}
+		else {
+			program2["oneColor"] = true;
+		}
+		program2["useFull"] = false;
+		program2["ldwh"] = ldwh;
+		program2["isText"] = false;
+		mat4 pivMat(
+			sctr.x, 0, 0, sctr.z,
+			0, sctr.y, 0, sctr.w,
+			0, 0, 1, 0,
+			0, 0, 0, 1);
+		program2["piv"] = pivMat;
+		program2.bind(**mRect);
+		program2.draw();
 	}
 
 	void Animation3D::go(float elapsed, Entity* e, float dynamicTps) {
@@ -431,9 +478,8 @@ namespace onart {
 		}
 	}
 
-	void UIAnimation::go(float elapsed, Entity* e, float dynamicTps) {
-		static ppMesh rect;
-		if (!rect)rect = Mesh::get("rect");
+	void UIAnimation::go(float elapsed, Entity* e, float dynamicTps) {		
+		if (!mRect)mRect = Mesh::get("rect");
 
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
@@ -471,7 +517,6 @@ namespace onart {
 			}
 
 			if (hasPiv) {
-				program2["nopiv"] = false;
 				vec4& sctr = sctrs[kp];
 				mat4 pivMat(
 					sctr.x, 0, 0, sctr.z,
@@ -481,14 +526,14 @@ namespace onart {
 				program2["piv"] = pivMat;
 			}
 			else {
-				program2["nopiv"] = true;
+				program2["piv"] = mat4();
 			}
 		}
 		else {
 			program2["useFull"] = true;
-			program2["nopiv"] = true;
+			program2["piv"] = mat4();
 		}
-		program2.bind(**rect);
+		program2.bind(**mRect);
 		program2.draw();
 	}
 

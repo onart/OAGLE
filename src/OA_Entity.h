@@ -126,6 +126,10 @@ namespace onart {
 		/// </summary>
 		void addAnim(const std::string& name);
 		/// <summary>
+		/// 애니메이션을 저장 배열의 끝에 추가합니다. 첫 애니메이션을 추가할 때 animState는 0이 됩니다. nullptr를 전달할 경우 저장되지 않습니다.
+		/// </summary>
+		void addAnim(pAnimation&);
+		/// <summary>
 		/// 게임이 실행된 후 현재 프레임에 들어오기까지 흐른 시간(초)입니다.
 		/// </summary>
 		static const float& tp;

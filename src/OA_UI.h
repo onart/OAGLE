@@ -154,6 +154,7 @@ namespace onart {
 			vec4 ldwh;
 		private:
 			UniversalFunctor* onClick = nullptr;
+			bool hasNormal, hasOver, hasDown;
 		};
 
 		/// <summary>

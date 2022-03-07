@@ -90,20 +90,29 @@ namespace onart::UI {
 	}
 
 	Button::Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal, pAnimation onOver, pAnimation onDown)
-		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
-		if (normal) { UIAnimation::make("__defaultbutton", false, { Keypoint<pTexture>{0, Material::get("white1x1")} }, { Keypoint<vec4>{0,vec4(0,0,1,1)} }); }
+		:Entity(key, Transform(vec3(0, 0, -0.8f)), true), ldwh(ldwh), onClick(onClick) {
+		FixedSprite::make("__defaultbutton", Material::get("white1x1"));
+		if (hasNormal = (bool)normal) { addAnim(normal); } else { addAnim("__defaultbutton"); }
+		if (hasOver = (bool)onOver) { addAnim(onOver); } else { addAnim("__defaultbutton"); }
+		if (hasDown = (bool)onDown) { addAnim(onDown); } else { addAnim("__defaultbutton"); }
 	}
 
 	void Button::onMouseOver() {
-		st = 1;		
+		st = 1;
+		if (hasOver) { color = 1; setAnim(1); }
+		else { color = vec4(vec3(0.8f), 1); setAnim(0); }
 	}
 
 	void Button::onMouseLeft() {
 		st = 0;
+		setAnim(0);
+		color = 1;
 	}
 
 	void Button::onMouseDown() {
 		st = 2;
+		if (hasDown) { color = 1; setAnim(2); }
+		else { color = vec4(vec3(0.5f), 1); setAnim(0); }		
 	}
 
 	void Button::Update() {
@@ -115,15 +124,15 @@ namespace onart::UI {
 			if (isOver) onMouseOver();
 			break;
 		case 1:	// 마우스 오버 후
-			if (!isOver) onMouseOver();
+			if (!isOver) onMouseLeft();
+			else if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) onMouseDown();
 			break;
 		case 2:	// 마우스 다운 후
 			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
+				onMouseLeft();
 				if (isOver) {
 					if (onClick) (*onClick)();
-				}
-				else {
-					onMouseLeft();
+					onMouseOver();
 				}
 			}
 			break;

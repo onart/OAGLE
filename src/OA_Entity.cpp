@@ -59,7 +59,7 @@ namespace onart {
 				program3["model"] = transform.getModel();
 			}
 			else {
-				program2["model"] = transform.getModel();
+				program2["transform"] = transform.getModel();
 				program2["color"] = color;
 			}
 		}
@@ -105,5 +105,9 @@ namespace onart {
 	void Entity::addAnim(const std::string& name) {
 		pAnimation anim = Animation::get(name);
 		if (anim) { anims.push_back(anim); if (as < 0) { as = 0; } }
+	}
+
+	void Entity::addAnim(pAnimation& p) {
+		if (p) { anims.push_back(p); if (as < 0) { as = 0; } }
 	}
 }

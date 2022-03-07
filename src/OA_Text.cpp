@@ -124,7 +124,7 @@ namespace onart {
 
 	void Font::draw(const oastring& content, const mat4& group, const std::vector<vec2>& lineXY, const vec4& color) {
 		program2["isText"] = true;
-		program2["nopiv"] = true;
+		program2["piv"] = mat4();
 		program2["color"] = color;
 		program2["useFull"] = true;
 		program2["textGroup"] = group;
@@ -135,7 +135,7 @@ namespace onart {
 		constexpr float BASE_SIZE = 1.0f / 1024;
 		size *= BASE_SIZE;
 		program2["isText"] = true;
-		program2["nopiv"] = true;
+		program2["piv"] = mat4();
 		program2["color"] = color;
 		program2["useFull"] = true;
 		float hf, vf;
@@ -172,7 +172,7 @@ namespace onart {
 		constexpr float BASE_SIZE = 1.0f / 1024;
 		size *= BASE_SIZE;
 		program2["isText"] = true;
-		program2["nopiv"] = true;
+		program2["piv"] = mat4();
 		program2["color"] = color;
 		program2["useFull"] = true;
 		float hf, vf;

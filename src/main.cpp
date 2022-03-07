@@ -94,7 +94,7 @@ void mouse(GLFWwindow* window, int key, int action, int mods) {
 			pressedMouseKey[key] = frame;
 			break;
 		case GLFW_RELEASE:
-			pressedKey[key] = -frame;
+			pressedMouseKey[key] = -frame;
 			break;
 	}
 }

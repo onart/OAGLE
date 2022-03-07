@@ -144,6 +144,26 @@ namespace onart {
 	};
 
 	/// <summary>
+	/// 카메라 등의 영향을 받지 않는 것을 제외하면 Sprite와 동일합니다.
+	/// </summary>
+	class FixedSprite : public Animation {
+	public:
+		/// <summary>
+		/// 스프라이트를 생성하고 리턴합니다.
+		/// </summary>
+		/// <param name="name">애니메이션 이름입니다. 이름이 겹치는 경우 내용에 관계없이 생성하지 않고 기존에 있던 것을 리턴합니다.</param>
+		/// <param name="tex">스프라이트를 포함한 텍스처입니다.</param>
+		/// <param name="rect">텍스처 내의 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)입니다. 입력하지 않거나 영벡터를 입력하는 경우 이미지 전체를 사용합니다.</param>
+		/// <param name="pivot">피벗 좌표입니다. 선택한 직사각형 영역의 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 회전/크기/병진 변환의 중심입니다. 입력하지 않는 경우 이미지의 중심이 피벗이 됩니다.</param>
+		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0, vec2 pivot = _NAN);
+		void go(float elapsed, Entity* e, float dynamicTps = 1);
+	private:
+		FixedSprite(const pTexture& tex, const vec4& rect, const vec4& sctr);
+		pTexture tex;
+		vec4 ldwh, sctr;
+	};
+
+	/// <summary>
 	/// 3D 개체의 관절 애니메이션입니다. 현재 버전은 편의상 .dae 모델 파일을 디스크 혹은 메모리에서 로드하는 것만 허용합니다.
 	/// 3D 개체의 시각적 키포인트는 최대 64개의 뼈의 위치, 회전, 크기로 구성됩니다.
 	/// 뼈가 많은 만큼 몇 번째 프레임인지 판단하여 매번 호출하는 것은 불가능합니다. 애니메이션을 생성할 때 개체가 act()로 알림받을 시점(timepoint)을 직접 명시해 주세요.

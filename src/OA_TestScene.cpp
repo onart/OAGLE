@@ -11,5 +11,6 @@ namespace onart {
 		Font::load("ariblk.ttf", { 'A','B','C','l',u'°¡' }, 480, "arial"); 
 		entities.push_back(new TestEntity());
 		entities.push_back(new UI::Text("te2", Font::get("arial"), u"°¡°¡\nACCCCC", vec2(0), 2000, AlignH::LEFT, AlignV::TOP, 0.3f));
+		entities.push_back(new UI::Button("button1", vec4(0, 0, 1, 1), nullptr));
 	}
 }

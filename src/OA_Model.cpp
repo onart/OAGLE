@@ -232,7 +232,7 @@ namespace onart {
 
 	void Model::render() const {
 		program3.bind(**mesh);
-		program3["nopiv"] = true;
+		program3["piv"] = mat4();
 		program3["is2d"] = false;
 		program3["useFull"] = true;
 		for (auto& g : geom) {
