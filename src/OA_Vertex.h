@@ -82,7 +82,7 @@ namespace onart {
 			/// </summary>
 			static bool add(const std::string& name, const std::vector<Vertex>& v, const std::vector<unsigned>& i);
 			/// <summary>
-			/// 기초 모델을 메모리에서 제거합니다. 빌트인 모델과 사용 중인 모델은 바로 제거되지 않고 사용이 종료되면서 제거됩니다.
+			/// 기초 모델을 메모리에서 제거합니다. 사용 중인 모델은 바로 제거되지 않고 사용이 종료되면서 제거됩니다.
 			/// 사용 중이라서 바로 제거되지 않은 모델도 get으로 다시 얻을 수 없습니다.
 			/// </summary>
 			/// <param name="name">제거하려는 모델 이름</param>
@@ -90,6 +90,7 @@ namespace onart {
 			/// <summary>
 			/// 사용하고 있지 않은 메시를 모두 메모리에서 제거합니다.
 			/// 사용하고 있는 메시는 사용이 끝나는 즉시 메모리에서 회수할지, 그대로 남겨둘지 선택할 수 있습니다.
+			/// 빌트인 메시는 제거되지 않습니다.
 			/// </summary>
 			/// <param name="removeUsing">true인 경우 사용 중인 메시도 사용이 끝나면 바로 메모리에서 회수합니다.</param>
 			static void collect(bool removeUsing = false);

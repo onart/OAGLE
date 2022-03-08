@@ -268,9 +268,11 @@ namespace onart {
 	}
 
 	void Mesh::collect(bool removeUsing) {
-		if (removeUsing) { list.clear(); return; }
 		for (auto it = list.cbegin(); it != list.cend();) {
-			if (it->second.use_count() == 1) {
+			if (isReserved(it->first)) {
+				++it;
+			}
+			else if (removeUsing || it->second.use_count() == 1) {
 				list.erase(it++);
 			}
 			else {

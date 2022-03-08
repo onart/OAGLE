@@ -115,6 +115,7 @@ namespace onart {
 		/// <summary>
 		/// 마우스로 클릭할 수 있는 버튼 개체입니다.
 		/// 기본적으로는 마우스 외에 반응을 하지 않지만 반응 함수(애니메이션 트리거)를 public으로 두어 씬에서 키보드로 접근할 수 있게 구현이 가능합니다.
+		/// 버튼의 이미지로는 UIAnimation 또는 FixedSprite가 추천됩니다.
 		/// </summary>
 		class Button: public Entity
 		{
@@ -123,12 +124,12 @@ namespace onart {
 			/// 버튼을 생성합니다.
 			/// </summary>
 			/// <param name="key">프로그램 내에서 사용될 개체의 이름입니다.</param>
-			/// <param name="baseSCTR">2D 스프라이트/애니메이션의 경우 이 값은 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다. 3D로 버튼을 만들려는 경우 명시적 지원은 없어서 직접 조절해야 합니다. 앞 2차원은 x,y scale이며 뒤 2차원은 x,y 이동입니다.</param>
+			/// <param name="baseSCTR">2D 스프라이트/애니메이션의 경우 이 값은 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다. 상속 또는 참고하여 setModel() 같이 해서 3D로 버튼을 만들려는 경우 명시적 지원은 예정에 없으므로 직접 조절해야 합니다. 앞 2차원은 x,y scale이며 뒤 2차원은 x,y 이동입니다.</param>
 			/// <param name="ldwh">버튼이 사용할 직사각형 영역(LDWH)입니다. 직사각형이 아닌 영역을 인식 범위로 하고 싶다면 상속하여 Update()를 오버라이드해야 합니다.</param>
-			/// <param name="onClick">버튼 클릭 시 반응 함수입니다. UniversalFunctor 추상 클래스를 상속하여 사용하며, Button 객체는 기본적으로 전달 인자가 없습니다.</param>
-			/// <param name="normal">기본 상태의 애니메이션(이미지)입니다.</param>
-			/// <param name="onOver">마우스 오버 상태의 애니메이션(이미지)입니다.</param>
-			/// <param name="onDown">마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지 상태의 애니메이션(이미지)입니다.</param>
+			/// <param name="onClick">버튼 클릭 시 반응 함수입니다. UniversalFunctor 추상 클래스를 상속하여 사용하며, Button 객체는 기본적으로 전달 인자가 없습니다. nullptr 전달 시 아무 행동도 하지 않습니다.</param>
+			/// <param name="normal">기본 상태의 애니메이션(이미지)입니다. 입력하지 않으면 백색 직사각형이 렌더링됩니다.</param>
+			/// <param name="onOver">마우스 오버 상태의 애니메이션(이미지)입니다. 입력하지 않으면 normal 상태의 이미지가 약간 어두워집니다.</param>
+			/// <param name="onDown">마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지 상태의 애니메이션(이미지)입니다. 입력하지 않으면 normal 상태의 이미지가 onOver보다 어두워집니다.</param>
 			Button(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal = pAnimation(), pAnimation onOver = pAnimation(), pAnimation onDown = pAnimation());
 			/// <summary>
 			/// 마우스 커서가 버튼 위에 위치했을 때의 애니메이션이 나옵니다.
@@ -165,19 +166,52 @@ namespace onart {
 
 		/// <summary>
 		/// 마우스로 클릭할 수 있는 버튼 개체입니다.
-		/// 1회 클릭하면 상태가 변하고 다시 클릭하면 이전 상태로 돌아옵니다.
+		/// 1회 클릭하면 상태가 변하고 다시 클릭하면 이전 상태로 돌아옵니다. 프로그램 내적으로는 초기 상태가 off, 변한 상태가 on입니다.
 		/// 기본적으로는 마우스 외에 반응을 하지 않지만 반응 함수(애니메이션 트리거)를 public으로 두어 씬에서 키보드로 접근할 수 있게 구현이 가능합니다.
 		/// </summary>
 		class ToggleButton : public Entity {
 		public:
-			ToggleButton(const EntityKey& key, const vec4& ldwh, UIAnimation* normal1 = nullptr, UIAnimation* normal2 = nullptr, UIAnimation* onOver1 = nullptr, UIAnimation* onOver2 = nullptr, UIAnimation* onDown1 = nullptr, UIAnimation* onDown2 = nullptr);
-			virtual void onClick1();
-			virtual void onClick2();
-			void onMouseOver1();
-			void onMouseOver2();
-			void onMouseDown1();
-			void onMouseDown2();
+			/// <summary>
+			/// 토글 버튼을 생성합니다.
+			/// </summary>
+			/// <param name="key">프로그램 내에서 사용될 개체의 이름입니다.</param>
+			/// <param name="baseSCTR">2D 스프라이트/애니메이션의 경우 이 값은 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다. 3D로 버튼을 만들려는 경우 명시적 지원은 없어서 직접 조절해야 합니다. 앞 2차원은 x,y scale이며 뒤 2차원은 x,y 이동입니다.</param>
+			/// <param name="ldwh">버튼이 사용할 직사각형 영역(LDWH)입니다. 직사각형이 아닌 영역을 인식 범위로 하고 싶다면 상속하여 Update()를 오버라이드해야 합니다.</param>
+			/// <param name="onClick">클릭했을 시 반응 함수입니다. UniversalFunctor 추상 클래스를 상속하여 사용하며, ToggleButton 객체는 기본적으로 변화 후의 상태가 on이면 어떤 bool 포인터가 전달되며, off이면 nullptr가 전달됩니다. 역참조로 값을 읽는 것이 아님에 주의하세요.</param>
+			/// <param name="normal1">off, 기본 상태의 애니메이션(이미지)입니다. 입력하지 않으면 백색 직사각형이 렌더링됩니다.</param>
+			/// <param name="normal2">on, 기본 상태의 애니메이션(이미지)입니다. 입력하지 않으면 off 상태의 이미지의 green 성분만 남은 이미지로 렌더링됩니다.</param>
+			/// <param name="onOver1">off, 마우스 오버 상태의 애니메이션(이미지)입니다. 입력하지 않으면 off, normal 상태의 이미지가 약간 어두워집니다.</param>
+			/// <param name="onOver2">on, 마우스 오버 상태의 애니메이션(이미지)입니다. 입력하지 않으면 on, normal 상태의 이미지가 약간 어두워집니다.</param>
+			/// <param name="onDown1">off, 마우스 다운 상태의 애니메이션(이미지)입니다. 입력하지 않으면 off, normal 상태의 이미지가 onOver보다 어두워집니다.</param>
+			/// <param name="onDown2">on, 마우스 다운 상태의 애니메이션(이미지)입니다. 입력하지 않으면 on, normal 상태의 이미지가 onOver보다 어두워집니다.</param>
+			ToggleButton(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal1 = pAnimation(), pAnimation normal2 = pAnimation(), pAnimation onOver1 = pAnimation(), pAnimation onOver2 = pAnimation(), pAnimation onDown1 = pAnimation(), pAnimation onDown2 = pAnimation());
+			/// <summary>
+			/// 마우스 커서가 버튼 위에 위치했을 때의 애니메이션이 나옵니다.
+			/// </summary>
+			virtual void onMouseOver(bool isOn);
+			/// <summary>
+			/// 마우스 커서가 버튼으로부터 떠났을 때의 애니메이션이 나옵니다.
+			/// </summary>
+			virtual void onMouseLeft(bool isOn);
+			/// <summary>
+			/// 마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지의 애니메이션이 나옵니다.
+			/// </summary>
+			virtual void onMouseDown(bool isOn);
+			/// <summary>
+			/// 마우스 위치 및 클릭 상태를 파악하여 버튼이 반응합니다. (프레임당 1회 자동 호출됨)
+			/// </summary>
+			void Update();
+			/// <summary>
+			/// 버튼의 직사각형 영역을 변경합니다.
+			/// </summary>
+			/// <param name="newLDWH">좌-하-폭-높이 형식 직사각형입니다.</param>
+			void move(const vec4& newLDWH);
+		protected:
+			int st = 0;
+			vec4 ldwh;
 		private:
+			UniversalFunctor* onClick = nullptr;
+			bool hasNormal1, hasNormal2, hasOver1, hasOver2, hasDown1, hasDown2;
 		};
 
 		/// <summary>

@@ -8,16 +8,18 @@
 #ifndef __OA_UNIVERSAL_FUNCTOR_H__
 #define __OA_UNIVERSAL_FUNCTOR_H__
 
+#include<cstdarg>
+
 namespace onart {
 	/// <summary>
-	/// 이 프로그램에서 사용될 모든 펑터의 형태입니다. 매개변수는 void* 한 개입니다.
+	/// 이 프로그램에서 사용될 모든 펑터의 형태입니다. 매개변수는 기본 void* 한 개이며 사전 약속이 된 기준 원하는 만큼 사용할 수 있습니다.
 	/// 기본값이 nullptr로 존재하므로 매개변수가 없는 경우에도 사용 가능합니다.
 	/// 다형성을 활용해야 하는 특성상 참조자를 씁니다. 즉, 반드시 사용 범위 내에서 소멸하지 않는 객체를 사용해 주세요.
 	/// </summary>
 	class UniversalFunctor
 	{
 	public:
-		virtual void operator()(void* usr = nullptr) = 0;
+		virtual void operator()(void* usr = nullptr, ...) = 0;
 	};
 }
 

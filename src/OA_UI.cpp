@@ -94,7 +94,7 @@ namespace onart::UI {
 		FixedSprite::make("__defaultbutton", Material::get("white1x1"));
 		if (hasNormal = (bool)normal) { addAnim(normal); } else { addAnim("__defaultbutton"); }
 		if (hasOver = (bool)onOver) { addAnim(onOver); } else { addAnim("__defaultbutton"); }
-		if (hasDown = (bool)onDown) { addAnim(onDown); } else { addAnim("__defaultbutton"); }
+		if (hasDown = (bool)onDown) { addAnim(onDown); }
 		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
 		mat4 tr = mat4::r2r(prv, ldwh, -0.8f);
 		transform.setScale(tr[0], tr[5], 1);
@@ -133,10 +133,12 @@ namespace onart::UI {
 			break;
 		case 2:	// 마우스 다운 후
 			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
-				onMouseLeft();
 				if (isOver) {
 					if (onClick) (*onClick)();
 					onMouseOver();
+				}
+				else {
+					onMouseLeft();
 				}
 			}
 			break;
@@ -147,6 +149,145 @@ namespace onart::UI {
 	}
 
 	void Button::move(const vec4& newLDWH) {
+		mat4 tr = mat4::r2r(ldwh, newLDWH);
+		transform.setScale(transform.getScale() * vec3(tr[0], tr[5], 1));
+		transform.addPosition(tr[3], tr[7], 0);
+		ldwh = newLDWH;
+	}
+
+	ToggleButton::ToggleButton(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal1, pAnimation normal2, pAnimation onOver1, pAnimation onOver2, pAnimation onDown1, pAnimation onDown2)
+		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
+		FixedSprite::make("__defaultbutton", Material::get("white1x1"));
+		if (hasNormal1 = (bool)normal1) { addAnim(normal1); } else { addAnim("__defaultbutton"); }
+		if (hasNormal2 = (bool)normal2) { addAnim(normal2); } else { addAnim("__defaultbutton"); }
+		if (hasOver1 = (bool)onOver1) { addAnim(onOver1); } else { addAnim("__defaultbutton"); }
+		if (hasOver2 = (bool)onOver2) { addAnim(onOver2); } else { addAnim("__defaultbutton"); }
+		if (hasDown1 = (bool)onDown1) { addAnim(onDown1); } else { addAnim("__defaultbutton"); }
+		if (hasDown2 = (bool)onDown2) { addAnim(onDown2); }
+		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
+		mat4 tr = mat4::r2r(prv, ldwh, -0.8f);
+		transform.setScale(tr[0], tr[5], 1);
+		transform.setPosition(tr[3], tr[7], -0.8f);
+	}
+
+	void ToggleButton::onMouseOver(bool isOn) {
+		if (!isOn) {
+			st = 2;
+			if (hasOver1) { 
+				setAnim(2);
+				color = 1;
+			}
+			else {
+				setAnim(0);
+				color = vec4(vec3(0.8f), 1);
+			}
+		}
+		else {
+			st = 3;
+			if (hasOver2) {
+				setAnim(3);
+				color = 1;
+			}
+			else {
+				if (hasNormal2) {
+					setAnim(1);
+					color = 1;
+				}
+				else {
+					setAnim(0);
+					color = vec4(0, 0.8f, 0, 1);
+				}
+			}
+		}
+	}
+
+	void ToggleButton::onMouseLeft(bool isOn) {
+		if (!isOn) {
+			st = 0;
+			color = 1;
+			setAnim(0);
+		}
+		else {
+			st = 1;
+			if (hasNormal2) {
+				setAnim(1);
+				color = 1;
+			}
+			else {
+				setAnim(0);
+				color = vec4(0, 1, 0, 1);
+			}
+		}
+	}
+
+	void ToggleButton::onMouseDown(bool isOn) {
+		if (!isOn) {
+			st = 4;
+			if (hasDown1) {
+				setAnim(4);
+				color = 1;
+			}
+			else {
+				setAnim(0);
+				color = vec4(vec3(0.5f), 1);
+			}
+		}
+		else {
+			st = 5;
+			if (hasDown2) {
+				setAnim(5);
+				color = 1;
+			}
+			else {
+				if (hasNormal2) {
+					setAnim(1);
+					color = vec4(vec3(0.5f), 1);
+				}
+				else {
+					setAnim(0);
+					color = vec4(0, 0.5f, 0, 1);
+				}
+			}
+		}
+	}
+
+	void ToggleButton::Update() {
+		vec2 pos = Input::cameraCursorPos();
+		bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
+		const bool var = st % 2;
+		switch (st)
+		{
+		case 0:	// off 기본
+		case 1:	// on 기본
+			if (isOver)onMouseOver(var);
+			break;
+		case 2:	// off 오버
+		case 3: // on 오버
+			if (!isOver)onMouseLeft(var);
+			else if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) onMouseDown(var);
+			break;
+		case 4:	// off 다운
+		case 5: // on 다운
+			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
+				if (isOver) {
+					if (onClick) {
+						bool x;
+						if (st % 2)	(*onClick)(&x);	// 이제 켜짐
+						else (*onClick)();	// 이제 꺼짐
+					}
+					onMouseOver(!var);
+				}
+				else {
+					onMouseLeft(var);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	void ToggleButton::move(const vec4& newLDWH) {
 		mat4 tr = mat4::r2r(ldwh, newLDWH);
 		transform.setScale(transform.getScale() * vec3(tr[0], tr[5], 1));
 		transform.addPosition(tr[3], tr[7], 0);
