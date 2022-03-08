@@ -123,12 +123,13 @@ namespace onart {
 			/// 버튼을 생성합니다.
 			/// </summary>
 			/// <param name="key">프로그램 내에서 사용될 개체의 이름입니다.</param>
+			/// <param name="baseSCTR">2D 스프라이트/애니메이션의 경우 이 값은 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다. 3D로 버튼을 만들려는 경우 명시적 지원은 없어서 직접 조절해야 합니다. 앞 2차원은 x,y scale이며 뒤 2차원은 x,y 이동입니다.</param>
 			/// <param name="ldwh">버튼이 사용할 직사각형 영역(LDWH)입니다. 직사각형이 아닌 영역을 인식 범위로 하고 싶다면 상속하여 Update()를 오버라이드해야 합니다.</param>
 			/// <param name="onClick">버튼 클릭 시 반응 함수입니다. UniversalFunctor 추상 클래스를 상속하여 사용하며, Button 객체는 기본적으로 전달 인자가 없습니다.</param>
 			/// <param name="normal">기본 상태의 애니메이션(이미지)입니다.</param>
 			/// <param name="onOver">마우스 오버 상태의 애니메이션(이미지)입니다.</param>
 			/// <param name="onDown">마우스 왼쪽 버튼을 눌렀을 때부터 떼기 전까지 상태의 애니메이션(이미지)입니다.</param>
-			Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal = pAnimation(), pAnimation onOver = pAnimation(), pAnimation onDown = pAnimation());
+			Button(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal = pAnimation(), pAnimation onOver = pAnimation(), pAnimation onDown = pAnimation());
 			/// <summary>
 			/// 마우스 커서가 버튼 위에 위치했을 때의 애니메이션이 나옵니다.
 			/// </summary>
@@ -145,6 +146,11 @@ namespace onart {
 			/// 마우스 위치 및 클릭 상태를 파악하여 버튼이 반응합니다. (프레임당 1회 자동 호출됨)
 			/// </summary>
 			void Update();
+			/// <summary>
+			/// 버튼의 직사각형 영역을 변경합니다.
+			/// </summary>
+			/// <param name="newLDWH">좌-하-폭-높이 형식 직사각형입니다.</param>
+			void move(const vec4& newLDWH);
 			/// <summary>
 			/// onClick 함수를 변경합니다.
 			/// </summary>

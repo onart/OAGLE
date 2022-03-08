@@ -89,12 +89,16 @@ namespace onart::UI {
 		}
 	}
 
-	Button::Button(const EntityKey& key, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal, pAnimation onOver, pAnimation onDown)
-		:Entity(key, Transform(vec3(0, 0, -0.8f)), true), ldwh(ldwh), onClick(onClick) {
+	Button::Button(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal, pAnimation onOver, pAnimation onDown)
+		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
 		FixedSprite::make("__defaultbutton", Material::get("white1x1"));
 		if (hasNormal = (bool)normal) { addAnim(normal); } else { addAnim("__defaultbutton"); }
 		if (hasOver = (bool)onOver) { addAnim(onOver); } else { addAnim("__defaultbutton"); }
 		if (hasDown = (bool)onDown) { addAnim(onDown); } else { addAnim("__defaultbutton"); }
+		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
+		mat4 tr = mat4::r2r(prv, ldwh, -0.8f);
+		transform.setScale(tr[0], tr[5], 1);
+		transform.setPosition(tr[3], tr[7], -0.8f);
 	}
 
 	void Button::onMouseOver() {
@@ -140,5 +144,12 @@ namespace onart::UI {
 			break;
 		}
 		
+	}
+
+	void Button::move(const vec4& newLDWH) {
+		mat4 tr = mat4::r2r(ldwh, newLDWH);
+		transform.setScale(transform.getScale() * vec3(tr[0], tr[5], 1));
+		transform.addPosition(tr[3], tr[7], 0);
+		ldwh = newLDWH;
 	}
 }

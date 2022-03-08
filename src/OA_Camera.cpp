@@ -64,8 +64,8 @@ namespace onart {
 
 	mat4 Camera::Ratio::getAspectMatrix() {
 		mat4 ret;
-		ret[0] = ratio < 1 ? 1 / ratio : 1;
-		ret[5] = ratio > 1 ? ratio : 1;
+		ret[0] = ratio > 1 ? 1 / ratio : 1;
+		ret[5] = ratio < 1 ? ratio : 1;
 		return ret;
 	}
 
