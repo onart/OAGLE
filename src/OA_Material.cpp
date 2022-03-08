@@ -88,9 +88,19 @@ namespace onart {
 	}
 
 	void Material::drop(const std::string& name) {
-		auto t = texList.find(name);
-		if (t != texList.end()) {
-			texList.erase(t);
+		if (name == "white1x1") return;
+		texList.erase(name);
+	}
+
+	void Material::collect(bool removeUsing) {
+		if (removeUsing) { texList.clear(); return; }
+		for (auto iter = texList.cbegin(); iter != texList.cend();) {
+			if (iter->second.use_count() == 1) {
+				texList.erase(iter++);
+			}
+			else {
+				++iter;				
+			}
 		}
 	}
 

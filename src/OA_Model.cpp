@@ -58,6 +58,28 @@ namespace onart {
 		return 0;
 	}
 
+	pModel Model::get(const std::string& name) {
+		auto it = list.find(name);
+		if (it != list.end()) return it->second;
+		return pModel();
+	}
+
+	void Model::drop(const std::string& name) {
+		list.erase(name);
+	}
+
+	void Model::collect(bool removeUsing) {
+		if (removeUsing) { list.clear(); return; }
+		for (auto iter = list.cbegin(); iter != list.cend();) {
+			if (iter->second.use_count() == 1) {
+				list.erase(iter++);
+			}
+			else {
+				++iter;
+			}
+		}
+	}
+
 	pModel Model::load(const unsigned char* data, size_t len, const std::string& meshName, const char* hint) {
 		if (Mesh::get(meshName)) return list[meshName];
 		Assimp::Importer importer;

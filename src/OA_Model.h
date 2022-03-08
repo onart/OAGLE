@@ -42,6 +42,19 @@ namespace onart {
 		/// </summary>
 		static std::shared_ptr<Model> load(const std::string& file);
 		/// <summary>
+		/// 불러온 모델에 이름으로 접근합니다. 없는 이름으로 시도할 경우 nullptr를 리턴합니다.
+		/// </summary>		
+		static std::shared_ptr<Model> get(const std::string& name);
+		/// <summary>
+		/// 모델을 메모리에서 제거합니다. 사용 중인 모델은 사용이 종료된 후 메모리에서 제거되지만, drop() 호출 후-제거되기 전 그 모델을 get() 할 수 없습니다.
+		/// "사용"은 모델의 포인터를 스코프에 보유한 개체가 있는지를 말합니다.
+		/// </summary>
+		static void drop(const std::string& name);
+		/// <summary>
+		/// 사용 중이 아닌 모델을 메모리에서 제거합니다. 사용 중인 모델을 drop()처럼 제거하려는 경우 매개변수에 true를 전달합니다.
+		/// </summary>
+		static void collect(bool removeUsing = false);
+		/// <summary>
 		/// 셰이더에 이 모델을 렌더링합니다.
 		/// </summary>
 		/// <param name="color">색상(mix가 아니라 *로 적용됩니다.)</param>

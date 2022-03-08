@@ -508,10 +508,7 @@ namespace onart {
 	}
 
 	void Audio::Source::drop(const std::string& name) {
-		auto iter = n2i.find(name);
-		if (iter != n2i.end()) {
-			n2i.erase(iter);
-		}
+		n2i.erase(name);
 	}
 
 	void Audio::Source::collect(bool removeUsing) {

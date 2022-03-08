@@ -60,16 +60,12 @@ namespace onart {
 		return pAnimation();
 	}
 
-	bool Animation::drop(const std::string& name) {
-		auto iter = animations.find(name);
-		if (iter != animations.end() && iter->second.use_count() == 1) {
-			animations.erase(iter);
-			return true;
-		}
-		return false;
+	void Animation::drop(const std::string& name) {
+		animations.erase(name);
 	}
 
-	void Animation::collect() {
+	void Animation::collect(bool removeUsing) {
+		if (removeUsing) { animations.clear(); return; }
 		for (auto iter = animations.cbegin(); iter != animations.cend();) {
 			if (iter->second.use_count() == 1) {
 				animations.erase(iter++);

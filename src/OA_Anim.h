@@ -64,16 +64,15 @@ namespace onart {
 		/// </summary>
 		static std::shared_ptr<Animation> get(const std::string&);
 		/// <summary>
-		/// 이름으로 애니메이션을 내립니다. 현재 사용 중인 애니메이션은 내릴 수 없습니다.
+		/// 이름으로 애니메이션을 내립니다. 현재 사용 중인 애니메이션에 대하여 시도할 경우 사용하던 것은 모든 사용이 종료되면 메모리에서 내려가지만, 이 상태에서 get()으로 불러오는 것은 불가능합니다.
 		/// "사용"은 현재 플레이되고 있는 것뿐 아니라 그것을 보유하고 있는 개체가 있는 경우 사용 중인 것에 해당합니다.
-		/// 성공 여부를 리턴합니다.
 		/// </summary>
-		static bool drop(const std::string& s);
+		static void drop(const std::string& s);
 		/// <summary>
-		/// 현재 사용되고 있지 않은 애니메이션을 모두 내립니다.
+		/// 현재 사용되고 있지 않은 애니메이션을 모두 내립니다. 사용되고 있는 애니메이션에 대하여 drop()처럼 종료 시 메모리에서 내려가게 하고 싶은 경우 매개변수에 true를 전달합니다.
 		/// "사용"은 현재 플레이되고 있는 것뿐 아니라 그것을 보유하고 있는 개체가 있는 경우 사용 중인 것에 해당합니다.
 		/// </summary>
-		static void collect();
+		static void collect(bool removeUsing = false);
 	protected:
 		Animation(bool loop, float duration, int staticTps = 1);
 		inline float getTp(float elapsed) { if (duration <= 0)return 0; elapsed *= staticTps; return loop ? fmodf(elapsed, duration) : elapsed; }
