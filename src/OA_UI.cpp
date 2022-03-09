@@ -121,7 +121,7 @@ namespace onart::UI {
 
 	void Button::Update() {
 		vec2 pos = Input::cameraCursorPos();
-		bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
+		const bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
 		switch (st)
 		{
 		case 0:	// 기본
@@ -143,6 +143,7 @@ namespace onart::UI {
 			}
 			break;
 		default:
+			onMouseLeft();
 			break;
 		}
 		
@@ -165,7 +166,7 @@ namespace onart::UI {
 		if (hasDown1 = (bool)onDown1) { addAnim(onDown1); } else { addAnim("__defaultbutton"); }
 		if (hasDown2 = (bool)onDown2) { addAnim(onDown2); }
 		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
-		mat4 tr = mat4::r2r(prv, ldwh, -0.8f);
+		mat4 tr = std::move(mat4::r2r(prv, ldwh, -0.8f));
 		transform.setScale(tr[0], tr[5], 1);
 		transform.setPosition(tr[3], tr[7], -0.8f);
 	}
@@ -253,7 +254,7 @@ namespace onart::UI {
 
 	void ToggleButton::Update() {
 		vec2 pos = Input::cameraCursorPos();
-		bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
+		const bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
 		const bool var = st % 2;
 		switch (st)
 		{
@@ -270,9 +271,8 @@ namespace onart::UI {
 		case 5: // on 다운
 			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
 				if (isOver) {
-					if (onClick) {
-						bool x;
-						if (st % 2)	(*onClick)(&x);	// 이제 켜짐
+					if (onClick) {						
+						if (st % 2)	(*onClick)(&var);	// 이제 켜짐
 						else (*onClick)();	// 이제 꺼짐
 					}
 					onMouseOver(!var);
@@ -283,14 +283,238 @@ namespace onart::UI {
 			}
 			break;
 		default:
+			onMouseLeft(false);
 			break;
 		}
 	}
 
 	void ToggleButton::move(const vec4& newLDWH) {
-		mat4 tr = mat4::r2r(ldwh, newLDWH);
+		mat4 tr = std::move(mat4::r2r(ldwh, newLDWH));
 		transform.setScale(transform.getScale() * vec3(tr[0], tr[5], 1));
 		transform.addPosition(tr[3], tr[7], 0);
 		ldwh = newLDWH;
+	}
+
+	GaugeH::GaugeH(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin, bool isContinuous, pAnimation handle, pAnimation bar)
+		:Entity(key, Transform(), true), length(length), barArea(barLdwh), margin(margin), baseColor(handle ? 1 : vec4(0.5f, 0.5f, 0.5f, 1)), isContinuous(isContinuous) {
+		if (length <= 1) { value.c = 1; }
+		else { value.q = length - 1; }
+		margin = clamp(margin, 0.0f, 0.495f);
+		vec4 prv(-barSCTR.x / 2 + barSCTR.z, -barSCTR.y / 2 + barSCTR.w, barSCTR.x, barSCTR.y);
+		mat4 tr = std::move(mat4::r2r(prv, barArea));
+		if (!bar)bar = std::move(FixedSprite::make("__defaultbutton", Material::get("white1x1")));
+		if (!handle) { 
+			handle = std::move(FixedSprite::make("__defaultbutton", Material::get("white1x1"))); 
+			color = std::move(vec4(vec3(0.5f), 1));
+		}
+		this->bar = new Entity(key + "bar", Transform(vec3(tr[3], tr[7], -0.8f), vec3(tr[0], tr[5], 1)), bar, true);
+		leftmost = barArea.x + barArea.width * margin;
+		rightmost = barArea.x + barArea.width * (1 - margin);
+		prv = std::move(vec4(-handleSCTR.x / 2 + handleSCTR.z, -handleSCTR.y / 2 + handleSCTR.w, handleSCTR.x, handleSCTR.y));
+		vec2 center(barArea.left + barArea.width * (1 - margin), barArea.down + barArea.height / 2);
+		vec2 newSize = vec2(barArea.height, barArea.height) * handleSize;
+		handleArea = std::move(vec4(center.x - newSize.x / 2, center.y - newSize.y / 2, newSize.x, newSize.y));
+		tr = std::move(mat4::r2r(prv, handleArea));
+		transform.setPosition(tr[3], tr[7], -0.81f);
+		transform.setScale(tr[0], tr[5], 1);
+		addAnim(bar);
+	}
+
+	GaugeV::GaugeV(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin, bool isContinuous, pAnimation handle, pAnimation bar)
+		:Entity(key, Transform(), true), length(length), barArea(barLdwh), margin(margin), baseColor(handle ? 1 : vec4(0.5f, 0.5f, 0.5f, 1)), isContinuous(isContinuous) {
+		if (length <= 1) { value.c = 1; }
+		else { value.q = length - 1; }
+		margin = clamp(margin, 0.0f, 0.495f);
+		vec4 prv(-barSCTR.x / 2 + barSCTR.z, -barSCTR.y / 2 + barSCTR.w, barSCTR.x, barSCTR.y);
+		mat4 tr = std::move(mat4::r2r(prv, barArea));
+		if (!bar)bar = std::move(FixedSprite::make("__defaultbutton", Material::get("white1x1")));
+		if (!handle) {
+			handle = std::move(FixedSprite::make("__defaultbutton", Material::get("white1x1")));
+			color = std::move(vec4(vec3(0.5f), 1));
+		}
+		this->bar = new Entity(key + "bar", Transform(vec3(tr[3], tr[7], -0.8f), vec3(tr[0], tr[5], 1)), bar, true);
+		bottommost = barArea.y + barArea.height * margin;
+		topmost = barArea.y + barArea.height * (1 - margin);
+		prv = std::move(vec4(-handleSCTR.x / 2 + handleSCTR.z, -handleSCTR.y / 2 + handleSCTR.w, handleSCTR.x, handleSCTR.y));
+		vec2 center(barArea.left + barArea.width / 2, barArea.down + barArea.height * (1 - margin));
+		vec2 newSize = vec2(barArea.width, barArea.width) * handleSize;
+		handleArea = std::move(vec4(center.x - newSize.x / 2, center.y - newSize.y / 2, newSize.x, newSize.y));
+		tr = std::move(mat4::r2r(prv, handleArea));
+		transform.setPosition(tr[3], tr[7], -0.81f);
+		transform.setScale(tr[0], tr[5], 1);
+		addAnim(bar);
+	}
+
+	void GaugeH::onHolding(float x) {
+		st = 2;
+		color = baseColor * vec4(vec3(0.6f), 1);
+		float scale = (x - leftmost) / (rightmost - leftmost);
+		scale = clamp(scale, 0.0f, 1.0f);
+		if (length == 1) {
+			float prev = value.c;
+			if (scale == 0)x = leftmost;
+			else if (scale == 1)x = rightmost;
+			transform.setPositionX(x);
+			handleArea.left = x - handleArea.width / 2;
+			value.c = scale;
+			if (isContinuous && onScroll && prev != value.c) {
+				(*onScroll)(&value);
+			}
+		}
+		else {
+			int prev = value.q;
+			value.q = lroundf(scale * (length - 1));
+			float xpos = leftmost + barArea.width / (length - 1) * value.q * (1 - margin * 2);
+			xpos = xpos > rightmost ? rightmost : xpos;
+			transform.setPositionX(xpos);
+			handleArea.left = xpos - handleArea.width / 2;
+			if (isContinuous && onScroll && prev != value.q) {
+				(*onScroll)(&value);
+			}
+		}
+		if (!Input::isKeyPressed(Input::MouseKeyCode::left)) {
+			st = 0;
+			if (!isContinuous && onScroll) {
+				(*onScroll)(&value);
+			}
+		}
+	}
+
+	void GaugeV::onHolding(float y) {
+		st = 2;
+		color = baseColor * vec4(vec3(0.6f), 1);
+		float scale = (y - bottommost) / (topmost - bottommost);
+		scale = clamp(scale, 0.0f, 1.0f);
+		if (length == 1) {
+			float prev = value.c;
+			if (scale == 0)y = bottommost;
+			else if (scale == 1)y = topmost;
+			transform.setPositionY(y);
+			handleArea.down = y - handleArea.height / 2;
+			value.c = scale;
+			if (isContinuous && onScroll && prev != value.c) {
+				(*onScroll)(&value);
+			}
+		}
+		else {
+			int prev = value.q;
+			value.q = lroundf(scale * (length - 1));
+			float ypos = bottommost + barArea.height / (length - 1) * value.q * (1 - margin * 2);
+			ypos = ypos > topmost ? topmost : ypos;
+			transform.setPositionY(ypos);
+			handleArea.down = ypos - handleArea.height / 2;
+			if (isContinuous && onScroll && prev != value.q) {
+				(*onScroll)(&value);
+			}
+		}
+		if (!Input::isKeyPressed(Input::MouseKeyCode::left)) {
+			st = 0;
+			if (!isContinuous && onScroll) {
+				(*onScroll)(&value);
+			}
+		}
+	}
+
+	void GaugeH::Update() {
+		vec2 pos = Input::cameraCursorPos();
+		const bool isOnHandle = pos.x >= handleArea.left && pos.x <= handleArea.left + handleArea.width && pos.y >= handleArea.down && pos.y <= handleArea.down + handleArea.height;
+		const bool isOnBar = pos.x >= barArea.left && pos.x <= barArea.left + barArea.width && pos.y >= barArea.down && pos.y <= barArea.down + barArea.height;
+		switch (st)
+		{
+		case 0:	// 기본
+			if (isOnHandle) {
+				color = baseColor * vec4(vec3(0.8f), 1);
+				st = 1;
+			}
+			else {
+				color = baseColor;
+				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
+					onHolding(pos.x);
+				}
+			}
+			break;
+		case 1:	// 손잡이 위 커서
+			if (isOnHandle) {
+				if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
+					onHolding(pos.x);
+				}
+			}
+			else {
+				color = baseColor;
+				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
+					onHolding(pos.x);
+				}
+				else {
+					st = 0;
+				}
+			}
+			break;
+		case 2:	// 손잡이를 잡고 있는 커서
+			onHolding(pos.x);
+			break;
+		default:
+			break;
+		}
+	}
+
+	void GaugeV::Update() {
+		vec2 pos = Input::cameraCursorPos();
+		const bool isOnHandle = pos.x >= handleArea.left && pos.x <= handleArea.left + handleArea.width && pos.y >= handleArea.down && pos.y <= handleArea.down + handleArea.height;
+		const bool isOnBar = pos.x >= barArea.left && pos.x <= barArea.left + barArea.width && pos.y >= barArea.down && pos.y <= barArea.down + barArea.height;
+		switch (st)
+		{
+		case 0:	// 기본
+			if (isOnHandle) {
+				color = baseColor * vec4(vec3(0.8f), 1);
+				st = 1;
+			}
+			else {
+				color = baseColor;
+				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
+					onHolding(pos.y);
+				}
+			}
+			break;
+		case 1:	// 손잡이 위 커서
+			if (isOnHandle) {
+				if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
+					onHolding(pos.y);
+				}
+			}
+			else {
+				color = baseColor;
+				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
+					onHolding(pos.y);
+				}
+				else {
+					st = 0;
+				}
+			}
+			break;
+		case 2:	// 손잡이를 잡고 있는 커서
+			onHolding(pos.y);
+			break;
+		default:
+			st = 0;
+			break;
+		}
+	}
+
+	void GaugeH::render() {
+		bar->render();
+		Entity::render();
+	}
+
+	void GaugeV::render() {
+		bar->render();
+		Entity::render();
+	}
+
+	GaugeH::~GaugeH() {
+		delete bar;
+	}
+
+	GaugeV::~GaugeV() {
+		delete bar;
 	}
 }

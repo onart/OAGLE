@@ -1036,6 +1036,19 @@ namespace onart {
 	inline Quaternion operator*(float f, const Quaternion& q) { return q * f; }
 
 	/// <summary>
+	/// 최대/최소 제한을 두어 자른 값을 리턴합니다. 첫 값은 복사생성되니 기본자료형이 아닌 것을 사용할 때는 주의하세요.
+	/// </summary>
+	/// <param name="t">자르기 전 값</param>
+	/// <param name="min">최솟값</param>
+	/// <param name="max">최댓값</param>
+	/// <returns></returns>
+	template<class T>inline T clamp(T t, const T& min, const T& max) {
+		t = t < min ? min : t;
+		t = t > max ? max : t;
+		return t;
+	};
+
+	/// <summary>
 	/// 편리한 디버그를 위한 값 출력 함수입니다.
 	/// </summary>
 	/// <param name="v">표시할 변수</param>

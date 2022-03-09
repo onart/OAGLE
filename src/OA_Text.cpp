@@ -16,6 +16,8 @@
 #include "OA_Shader.h"
 #include "OA_Vertex.h"
 
+#pragma warning(disable: 26451)
+
 extern onart::Shader program2;
 
 namespace onart {

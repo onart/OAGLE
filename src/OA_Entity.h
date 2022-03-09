@@ -43,9 +43,31 @@ namespace onart {
 		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
 		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
 		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
-		/// <param name="responseContinuously">애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
+		/// <param name="responseContinuously">true인 경우 애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
 		Entity(const EntityKey& k, const Transform& transform, bool isFixed = false, bool responseContinuously = false);
-		~Entity();
+		/// <summary>
+		/// 개체를 생성합니다. 특별히 매 프레임 업데이트할 내용이 없는 개체는 상속 없이 그대로 사용할 수 있습니다.
+		/// <para>스프라이트 혹은 모델: addAnim(), setModel()로 정합니다.</para>
+		/// <para>상속할 때: isFixed=true인 경우 카메라의 영향을 받지 않습니다. (이는 [-1,1]^3에 들어갈 정도로 축척을 맞춰야 한다는 의미입니다)</para>
+		/// </summary>
+		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
+		/// <param name="anim0">기본 외형을 정합니다. 형태는 있으나 업데이트 함수는 필요 없을 때 유용합니다.</param>
+		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
+		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
+		/// <param name="responseContinuously">true인 경우 애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
+		Entity(const EntityKey& k, const Transform& transform, pAnimation& anim0, bool isFixed = false, bool responseContinuously = false);
+		/// <summary>
+		/// 개체를 생성합니다. 특별히 매 프레임 업데이트할 내용이 없는 개체는 상속 없이 그대로 사용할 수 있습니다.
+		/// <para>스프라이트 혹은 모델: addAnim(), setModel()로 정합니다.</para>
+		/// <para>상속할 때: isFixed=true인 경우 카메라의 영향을 받지 않습니다. (이는 [-1,1]^3에 들어갈 정도로 축척을 맞춰야 한다는 의미입니다)</para>
+		/// </summary>
+		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
+		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
+		/// <param name="model">기본 외형을 정합니다. 형태는 있으나 업데이트 함수는 필요 없을 때 유용합니다.</param>
+		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
+		/// <param name="responseContinuously">true인 경우 애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
+		Entity(const EntityKey& k, const Transform& transform, std::shared_ptr<Model>& model, bool isFixed = false, bool responseContinuously = false);
+		virtual ~Entity();
 		/// <summary>
 		/// 위치를 얻습니다. 카메라 등과 같이 월드 좌표를 지속적으로 추적하는 것을 위해 만들어졌습니다.
 		/// </summary>
@@ -94,6 +116,11 @@ namespace onart {
 		/// </summary>
 		static std::vector<Entity*> gets(const EntityKey& k);
 		/// <summary>
+		/// 현존 객체 중에서 해당 키를 가지고 원하는 개체형인 것을 벡터에 담아 리턴합니다.
+		/// </summary>
+		template <class T>
+		static std::vector<T*> gets(const EntityKey& k);
+		/// <summary>
 		/// 현존 객체 중에서 해당 키를 가진 것 중 가장 앞의 하나를 찾습니다. 없는 경우 nullptr를 반환합니다. 이 키에 대하여 하나의 개체만 있을 것이 확실한 경우 사용하기에 좋습니다.
 		/// </summary>
 		static Entity* get(const EntityKey& k);
@@ -103,6 +130,11 @@ namespace onart {
 		/// </summary>
 		template <class T>
 		inline static T* get(const EntityKey& k) { return dynamic_cast<T*>(get(k)); }
+		/// <summary>
+		/// 현존 객체 중에서 해당 키를 가지고 원하는 개체형인 것 중 가장 앞의 하나를 찾아 반환합니다. 단 하나도 없는 경우 nullptr를 반환합니다.
+		/// </summary>
+		template<class T>
+		static T* get2(const EntityKey& k);
 	protected:
 		/// <summary>
 		/// 개체의 위치, 크기, 회전을 나타냅니다.

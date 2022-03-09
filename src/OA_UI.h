@@ -15,6 +15,11 @@ namespace onart {
 	class Font;
 	class UIAnimation;
 	struct Texture;
+
+	/// <summary>
+	/// 자주 사용하는 UI 개체를 모아 두었습니다. 이것은 상속하거나 코드를 수정해서 활용할 수 있으며 자체 제어는 응용 계층에서 UniversalFunctor를 만들어서 수행해 주세요.
+	/// UI 개체는 기본적으로 마우스로 사용합니다. 이것의 위치가 겹치는 경우 z-index에 무관하게 모두 반응하며, 이에 대한 책임은 엔진이 지지 않습니다. Entity의 isActive 등을 통해 조절해 주세요.
+	/// </summary>
 	namespace UI {
 		/// <summary>
 		/// 텍스트 개체입니다. 글자별로 크기/색상을 조정할 수 있습니다.
@@ -115,6 +120,7 @@ namespace onart {
 		/// <summary>
 		/// 마우스로 클릭할 수 있는 버튼 개체입니다.
 		/// 기본적으로는 마우스 외에 반응을 하지 않지만 반응 함수(애니메이션 트리거)를 public으로 두어 씬에서 키보드로 접근할 수 있게 구현이 가능합니다.
+		/// 애니메이션을 주지 않고 생성할 경우 SCTR 매개변수는 vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)으로 주어야 합니다.
 		/// 버튼의 이미지로는 UIAnimation 또는 FixedSprite가 추천됩니다.
 		/// </summary>
 		class Button: public Entity
@@ -153,6 +159,10 @@ namespace onart {
 			/// <param name="newLDWH">좌-하-폭-높이 형식 직사각형입니다.</param>
 			void move(const vec4& newLDWH);
 			/// <summary>
+			/// 버튼을 클릭했을 때의 함수를 호출합니다.
+			/// </summary>
+			inline void click() { if (onClick)(*onClick)(); }
+			/// <summary>
 			/// onClick 함수를 변경합니다.
 			/// </summary>
 			inline void setOnClick(UniversalFunctor* n) { onClick = n; }
@@ -167,6 +177,7 @@ namespace onart {
 		/// <summary>
 		/// 마우스로 클릭할 수 있는 버튼 개체입니다.
 		/// 1회 클릭하면 상태가 변하고 다시 클릭하면 이전 상태로 돌아옵니다. 프로그램 내적으로는 초기 상태가 off, 변한 상태가 on입니다.
+		/// 애니메이션을 주지 않고 생성할 경우 SCTR 매개변수는 vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)으로 주어야 합니다.
 		/// 기본적으로는 마우스 외에 반응을 하지 않지만 반응 함수(애니메이션 트리거)를 public으로 두어 씬에서 키보드로 접근할 수 있게 구현이 가능합니다.
 		/// </summary>
 		class ToggleButton : public Entity {
@@ -206,6 +217,10 @@ namespace onart {
 			/// </summary>
 			/// <param name="newLDWH">좌-하-폭-높이 형식 직사각형입니다.</param>
 			void move(const vec4& newLDWH);
+			/// <summary>
+			/// onClick 함수를 변경합니다.
+			/// </summary>
+			inline void setOnClick(UniversalFunctor* n) { onClick = n; }
 		protected:
 			int st = 0;
 			vec4 ldwh;
@@ -215,17 +230,130 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// 마우스로 끌 수 있는 버튼 개체입니다. 1을 단위로 값 양자화가 가능합니다.
+		/// 마우스로 수평으로 끌 수 있는 버튼 개체입니다. 1을 단위로 값 양자화가 가능합니다.
 		/// 양자화되지 않은 게이지의 값은 0~1의 float로 제공됩니다.
+		/// 애니메이션을 주지 않고 생성할 경우 그에 해당하는 SCTR 매개변수는 vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)으로 주어야 합니다.
+		/// Gauge를 생성할 경우 그 이름의 뒤에 "_bar"를 덧붙인 이름으로 다른 개체가 함께 생성됩니다(타입은 기본 Entity입니다). 이는 Gauge가 사라질 때 자동으로 제거됩니다.
+		/// 이 때문에, Gauge를 생성하여 사용할 때 그 뒤에 "_bar"를 덧붙인 이름을 사용할 경우 그것이 유일한 개체가 아니며, 또한 이렇게 생성된 개체를 임의로 삭제할 경우 Gauge에 의해 세그먼테이션 오류가 발생할 수 있으니 주의하세요.
 		/// </summary>
-		class Gauge : public Entity {
+		class GaugeH : public Entity {
 		public:
-			Gauge(const EntityKey& key, const vec4& ldwh, Texture* handle, Texture* bar, int min, int max);
+			/// <summary>
+			/// 게이지를 생성합니다. 생성 직후 게이지는 오른쪽 끝에 가 있습니다.
+			/// </summary>
+			/// <param name="key">프로그램 내에서 사용할 이름입니다.</param>
+			/// <param name="barSCTR">2D 스프라이트/애니메이션의 경우 이 값은 막대 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다.</param>
+			/// <param name="handleSCTR">2D 스프라이트/애니메이션의 경우 이 값은 손잡이 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다.</param>
+			/// <param name="barLdwh">게이지의 막대가 차지하는 직사각형 영역입니다.</param>
+			/// <param name="handleSize">게이지의 손잡이의 크기입니다. 크기 1은 게이지 막대의 높이와 동일합니다.</param>
+			/// <param name="length">게이지가 가질 수 있는 값의 수입니다. 1 이하가 입력되는 경우 게이지는 0과 1 사이의 float 값을 가지며 그 이상의 경우 0부터 시작하는 int 값을 가지게 됩니다. (ex: length 3인 경우 0,1,2)</param>
+			/// <param name="onScroll">드래그할 때 호출되는 함수입니다. length가 1 이하인 경우 매개변수는 float*형입니다. length가 2 이상인 경우 매개변수는 int*형입니다.</param>
+			/// <param name="margin">양 끝에 들어갈 여유 공간입니다. 게이지 손잡이의 중심은 이 여유 공간까지 가지 않습니다. 이 값은 0보다 작거나 0.495보다 크면 자동으로 잘립니다.</param>
+			/// <param name="isContinuous">true인 경우 게이지가 움직임에 따라 연속으로 반응 함수가 호출되고 false인 경우 마우스를 뗐을 때에만 반응 함수가 호출됩니다.</param>
+			/// <param name="handle">손잡이 이미지(애니메이션)입니다.</param>
+			/// <param name="bar">막대 이미지(애니메이션)입니다.</param>
+			GaugeH(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin = 0.05f, bool isContinuous = false, pAnimation handle = pAnimation(), pAnimation bar = pAnimation());
+			~GaugeH();
+			/// <summary>
+			/// 마우스 위치 및 클릭 상태를 파악하여 게이지가 반응합니다. (프레임당 1회 자동 호출됨)
+			/// </summary>
+			void Update();
+			void render();
+			/// <summary>
+			/// 게이지가 가진 값을 설정합니다. 매개변수는 float이지만 이산(discrete) 게이지로 설정했더라도 그대로 사용하면 됩니다.
+			/// 범위를 넘는 값이 들어오면 자동으로 잘립니다.
+			/// </summary>
+			inline void setValue(float v) { if (length != 1)v /= length - 1; onHolding(leftmost + (rightmost - leftmost) * v); }
+		protected:
+			void onHolding(float x);
+
+			inline float getLength() { return length; }
+			inline float getLeft() { return leftmost; }
+			inline float getRight() { return rightmost; }
+			inline bool isContin() { return isContinuous; }
+
+			vec4 barArea, handleArea;
+			const vec4 baseColor;
+			const float margin;
+			int st = 0;
 		private:
+			UniversalFunctor* onScroll = nullptr;
+			Entity* bar = nullptr;
 			union {
 				int q;
 				float c;
 			}value;
+			const float length;
+			float leftmost, rightmost;
+			bool isContinuous;
+		};
+
+		/// <summary>
+		/// 마우스로 수직으로 끌 수 있는 버튼 개체입니다. 1을 단위로 값 양자화가 가능합니다.
+		/// 양자화되지 않은 게이지의 값은 0~1의 float로 제공됩니다.
+		/// 애니메이션을 주지 않고 생성할 경우 그에 해당하는 SCTR 매개변수는 vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)으로 주어야 합니다.
+		/// Gauge를 생성할 경우 그 이름의 뒤에 "_bar"를 덧붙인 이름으로 다른 개체가 함께 생성됩니다(타입은 기본 Entity입니다). 이는 Gauge가 사라질 때 자동으로 제거됩니다.
+		/// 이 때문에, Gauge를 생성하여 사용할 때 그 뒤에 "_bar"를 덧붙인 이름을 사용할 경우 그것이 유일한 개체가 아니며, 또한 이렇게 생성된 개체를 임의로 삭제할 경우 Gauge에 의해 세그먼테이션 오류가 발생할 수 있으니 주의하세요.
+		/// </summary>
+		class GaugeV : public Entity {
+		public:
+			/// <summary>
+			/// 게이지를 생성합니다. 생성 직후 게이지는 오른쪽 끝에 가 있습니다.
+			/// </summary>
+			/// <param name="key">프로그램 내에서 사용할 이름입니다.</param>
+			/// <param name="barSCTR">2D 스프라이트/애니메이션의 경우 이 값은 막대 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다.</param>
+			/// <param name="handleSCTR">2D 스프라이트/애니메이션의 경우 이 값은 손잡이 애니메이션 객체 내의 대표 sctr값을 입력하면 됩니다.</param>
+			/// <param name="barLdwh">게이지의 막대가 차지하는 직사각형 영역입니다.</param>
+			/// <param name="handleSize">게이지의 손잡이의 크기입니다. 크기 1은 게이지 막대의 폭과 동일합니다.</param>
+			/// <param name="length">게이지가 가질 수 있는 값의 수입니다. 1 이하가 입력되는 경우 게이지는 0과 1 사이의 float 값을 가지며 그 이상의 경우 0부터 시작하는 int 값을 가지게 됩니다. (ex: length 3인 경우 0,1,2)</param>
+			/// <param name="onScroll">드래그할 때 호출되는 함수입니다. length가 1 이하인 경우 매개변수는 float*형입니다. length가 2 이상인 경우 매개변수는 int*형입니다.</param>
+			/// <param name="margin">양 끝에 들어갈 여유 공간입니다. 게이지 손잡이의 중심은 이 여유 공간까지 가지 않습니다. 이 값은 0보다 작거나 0.495보다 크면 자동으로 잘립니다.</param>
+			/// <param name="isContinuous">true인 경우 게이지가 움직임에 따라 연속으로 반응 함수가 호출되고 false인 경우 마우스를 뗐을 때에만 반응 함수가 호출됩니다.</param>
+			/// <param name="handle">손잡이 이미지(애니메이션)입니다.</param>
+			/// <param name="bar">막대 이미지(애니메이션)입니다.</param>
+			GaugeV(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin = 0.05f, bool isContinuous = false, pAnimation handle = pAnimation(), pAnimation bar = pAnimation());
+			~GaugeV();
+			void onHolding(float y);
+			void Update();
+			void render();
+			/// <summary>
+			/// 게이지가 가진 값을 설정합니다. 매개변수는 float이지만 이산(discrete) 게이지로 설정했더라도 그대로 사용하면 됩니다.
+			/// 범위를 넘는 값이 들어오면 자동으로 잘립니다.
+			/// </summary>
+			inline void setValue(float v) { if (length != 1)v /= length - 1; onHolding(bottommost + (topmost - bottommost) * v); }
+		protected:
+			inline float getLength() { return length; }
+			inline float getTop() { return topmost; }
+			inline float getRight() { return bottommost; }
+			inline bool isContin() { return isContinuous; }
+			vec4 barArea, handleArea;
+			const vec4 baseColor;
+			const float margin;
+			int st = 0;
+		private:
+			UniversalFunctor* onScroll = nullptr;
+			Entity* bar = nullptr;
+			union {
+				int q;
+				float c;
+			}value;
+			const float length;
+			float topmost, bottommost;
+			bool isContinuous;
+		};
+
+		/// <summary>
+		/// 텍스트를 포함하는 드롭다운 리스트입니다.
+		/// </summary>
+		class Dropdown :public Entity {
+
+		};
+
+		/// <summary>
+		/// 텍스트를 입력받는 인터페이스입니다.
+		/// </summary>
+		class InputField : public Entity {
+
 		};
 	}
 }

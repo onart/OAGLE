@@ -7,6 +7,7 @@
 *********************************************************************************/
 #include "OA_Vertex.h"
 #include "externals/gl/glad/glad.h"
+#pragma warning(disable: 26451)
 
 namespace onart {
 
@@ -268,11 +269,22 @@ namespace onart {
 	}
 
 	void Mesh::collect(bool removeUsing) {
+		if (removeUsing) {
+			std::map<std::string, ppMesh> nextList;
+			for (size_t i = 0; i < sizeof(RESERVED) / sizeof(char*); i++) {
+				auto ms = list.find(RESERVED[i]);
+				if (ms != list.end()) {
+					nextList[RESERVED[i]].reset(ms->second.get());
+				}
+			}
+			list.swap(nextList);
+			return;
+		}
 		for (auto it = list.cbegin(); it != list.cend();) {
 			if (isReserved(it->first)) {
 				++it;
 			}
-			else if (removeUsing || it->second.use_count() == 1) {
+			else if (it->second.use_count() == 1) {
 				list.erase(it++);
 			}
 			else {

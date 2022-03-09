@@ -177,7 +177,7 @@ namespace onart {
 		/// <summary>
 		/// x좌표만 누적하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addtPositionX(float x) { pos.x += x; model[3] += x; }
+		inline void addPositionX(float x) { pos.x += x; model[3] += x; }
 		/// <summary>
 		/// y좌표만 누적하고 모델 행렬을 업데이트합니다.
 		/// </summary>

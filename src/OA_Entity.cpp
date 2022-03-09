@@ -23,13 +23,26 @@ namespace onart {
 
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
-	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc) :key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
+	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc)
+		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
 		entities.insert({ k,this });
+	}
+
+	Entity::Entity(const EntityKey& k, const Transform& transform, pAnimation& anim0, bool isFixed, bool rc)
+		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
+		entities.insert({ k,this });
+		if (anim0)addAnim(anim0);
+	}
+	
+	Entity::Entity(const EntityKey& k, const Transform& transform, std::shared_ptr<Model>& model, bool isFixed, bool rc)
+		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
+		entities.insert({ k,this });
+		if (model)setModel(model);
 	}
 
 	Entity::~Entity() {
 		auto ub = entities.upper_bound(key);
-		for (auto iter = entities.lower_bound(key); iter != ub; iter++) {
+		for (auto iter = entities.lower_bound(key); iter != ub; ++iter) {
 			if (iter->second == this) {
 				entities.erase(iter);
 				return;
@@ -45,10 +58,30 @@ namespace onart {
 		return v;
 	}
 
+	template <class T>
+	std::vector<T*> Entity::gets(const EntityKey& k) {
+		auto ub = entities.upper_bound(k);
+		std::vector<Entity*> v;
+		v.reserve(entities.count(k));
+		std::transform(entities.lower_bound(k), entities.upper_bound(k), std::back_inserter(v), [](std::pair<EntityKey, Entity*> p) {return dynamic_cast<T*>(p.second); });
+		v.erase(std::remove(v.begin(), v.end(), nullptr), v.end());
+		return v;
+	}
+
 	Entity* Entity::get(const EntityKey& k) {
 		auto e = entities.find(k);
 		if (e == entities.end()) return nullptr;
 		else return e->second;
+	}
+
+	template <class T>
+	T* Entity::get2(const EntityKey& k) {
+		auto ub = entities.upper_bound(k);
+		for (auto iter = entities.lower_bound(k); iter != ub; ++iter) {
+			auto x = dynamic_cast<T*>(iter->second);
+			if (x)return x;
+		}
+		return nullptr;
 	}
 
 	void Entity::render() {
@@ -99,7 +132,7 @@ namespace onart {
 	}
 
 	void Entity::Act(int kp, float progress) {
-
+		
 	}
 
 	void Entity::addAnim(const std::string& name) {

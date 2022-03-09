@@ -25,7 +25,7 @@ Blinn-Phong\
 노말매핑(예정)
 
 * 문서\
-PDF파일, Github Wiki를 준비중입니다.
+PDF파일, [Github Wiki](https://github.com/onart/OAGLE/wiki)를 준비중입니다.
 
 
 ## related source

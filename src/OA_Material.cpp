@@ -93,7 +93,13 @@ namespace onart {
 	}
 
 	void Material::collect(bool removeUsing) {
-		if (removeUsing) { texList.clear(); return; }
+		if (removeUsing) {
+			pTexture b = texList["white1x1"]; 
+			std::map<std::string, pTexture> nextList;
+			nextList["white1x1"] = b;
+			texList.swap(nextList);
+			return;
+		}
 		for (auto iter = texList.cbegin(); iter != texList.cend();) {
 			if (iter->second.use_count() == 1) {
 				texList.erase(iter++);
