@@ -8,10 +8,8 @@
 #include "OA_Hangul.h"
 
 namespace onart {
-    constexpr char16_t H_HEAD[] = u"ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
-    constexpr char16_t H_MID[] = u"ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ";
-    constexpr char16_t H_TAIL[] = u" ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ";
-    constexpr char16_t H_2[] = u"ㄳㄵㄶㄺㄻㄼㄽㄾㄿㅀㅘㅙㅚㅝㅞㅟㅢ";
+    constexpr size_t H_HEAD[] = { 0, 1, -1, 2, -1, -1, 3, 4, 5, -1, -1, -1, -1, -1, -1, -1, 6, 7, 8, -1, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
+    constexpr size_t H_TAIL[] = { 1, 2, 3, 4, 5, 6, 7, -1, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, -1, 18, 19, 20, 21, 22, -1, 23, 24, 25, 26, 27 };
     constexpr size_t NOTFOUND = -1;
 
     constexpr bool isPiece(char16_t c) {
@@ -28,37 +26,28 @@ namespace onart {
         std::stack<char16_t> sw; t.swap(sw);
     }
 
-    size_t binSearch(char16_t c, const char16_t* ar, size_t high) {
-        size_t low = 0;
-        while (low <= high) {
-            size_t mid = (low + high) / 2;
-            if (ar[mid] == c)return mid;
-            if (ar[mid] > c) high = mid - 1;
-            else low = mid + 1;
-        }
-        return NOTFOUND;
-    }
-
     size_t hIndex(char16_t c) {
-        return binSearch(c, H_HEAD, 18);
+        c -= u'ㄱ';
+        if (c < 0 || c>29)return NOTFOUND;
+        return H_HEAD[c];
     }
 
     size_t mIndex(char16_t c) {
-        return binSearch(c, H_MID, 20);
+        c -= u'ㅏ';
+        if (c < 0 || c>20)return NOTFOUND;
+        return c;
     }
 
     size_t tIndex(char16_t c) {
-        return binSearch(c, H_TAIL, 27);
-    }
-
-    size_t twIndex(char16_t c) {
-        return binSearch(c, H_2, 16);
+        c -= u'ㄱ';
+        if (c < 0 || c>29)return NOTFOUND;
+        return H_TAIL[c];
     }
 
     /// <summary>
     /// 자음+자음
     /// </summary>
-    char16_t cpc(char a, char b) {
+    char16_t cpc(char16_t a, char16_t b) {
         switch (a)
         {
         case u'ㄱ':
@@ -89,7 +78,7 @@ namespace onart {
     /// <summary>
     /// 모음+모음
     /// </summary>
-    char16_t vpv(char a, char b) {
+    char16_t vpv(char16_t a, char16_t b) {
         switch (a)
         {
         case u'ㅗ':
@@ -116,15 +105,15 @@ namespace onart {
     /// <summary>
     /// 자음+모음
     /// </summary>
-    char16_t cpv(char c, char v) {
-        return u'가' + hIndex(c) * 588 + mIndex(v) * 28;
+    char16_t cpv(char16_t c, char16_t v) {
+        return u'가' + (char16_t)hIndex(c) * 588 + (char16_t)mIndex(v) * 28;
     }
 
     /// <summary>
     /// 글자+받침
     /// </summary>
-    char16_t lpc(char l, char c) {
-        return l + tIndex(c);
+    char16_t lpc(char16_t l, char16_t c) {
+        return l + (char16_t)tIndex(c);
     }
 
     void HangulStateMachine::push(char16_t c) {
@@ -141,24 +130,24 @@ namespace onart {
                     case hState::K:
                         st = hState::EMPTY;
                         break;
-                    case onart::HangulStateMachine::ML:
+                    case hState::ML:
                         st = hState::K;
                         break;
-                    case onart::HangulStateMachine::RT:
-                    case onart::HangulStateMachine::RK:
+                    case hState::RT:
+                    case hState::RK:
                         st = hState::R;
                         break;
-                    case onart::HangulStateMachine::RML:
-                    case onart::HangulStateMachine::RKR:
+                    case hState::RML:
+                    case hState::RKR:
                         st = hState::RK;
                         break;
-                    case onart::HangulStateMachine::RKFR:
+                    case hState::RKFR:
                         st = hState::RKR;
                         break;
-                    case onart::HangulStateMachine::RMLR:
+                    case hState::RMLR:
                         st = hState::RML;
                         break;
-                    case onart::HangulStateMachine::RMLFR:
+                    case hState::RMLFR:
                         st = hState::RMLR;
                         break;
                     }
@@ -391,7 +380,7 @@ namespace onart {
                 break;
             case hState::RMLR:
                 if (typ == 1) {
-                    char nw = cpc(buf.top(), c);
+                    char16_t nw = cpc(buf.top(), c);
                     if (nw == c) {  // 새로 자음
                         clearBuffers();
                         buf.push(c);
@@ -451,7 +440,7 @@ namespace onart {
         }
     }
 
-    void HangulStateMachine::flush(const std::u16string& content = u"") {
+    void HangulStateMachine::flush(const std::u16string& content) {
         this->content = content;
         cursor = content.size();
         clearBuffers();
@@ -491,7 +480,7 @@ namespace onart {
         ptrdiff_t cs = (ptrdiff_t)cursor;
         cs += displace;
         if (cs < 0)cs = 0;
-        else if (cs > content.size()) cs = content.size();
+        else if (cs > (ptrdiff_t)content.size()) cs = content.size();
         cursor = (size_t)cs;
     }
 }

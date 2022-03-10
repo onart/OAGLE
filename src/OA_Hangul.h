@@ -42,7 +42,7 @@ namespace onart {
 		/// </summary>
 		void end();
 	private:
-		enum hState { EMPTY, R, K, ML, RT, RK, RML, RKR, RKFR, RMLR, RMLFR } st;   // 대표 글자로 각각 공백,ㄱ,ㅏ,ㅢ,ㄳ,가,긔,각,갉,긕,긝과 동상 글자를 뜻함
+		enum class hState { EMPTY, R, K, ML, RT, RK, RML, RKR, RKFR, RMLR, RMLFR } st;   // 대표 글자로 각각 공백,ㄱ,ㅏ,ㅢ,ㄳ,가,긔,각,갉,긕,긝과 동상 글자를 뜻함
 		void clearBuffers();
 		std::u16string content;
 		std::stack<char16_t> prev, buf;
