@@ -284,6 +284,7 @@ namespace onart {
                         clearBuffers();
                         buf.push(c);
                         prev.push(c);
+                        content.insert(++cursor, 1, c);
                         st = hState::K;
                     }
                     else {
@@ -292,6 +293,7 @@ namespace onart {
                         char16_t next = cpv(prev.top(), nw);
                         prev.push(now);
                         prev.push(next);
+                        content[cursor] = next;
                         st = hState::RML;
                     }
                 }

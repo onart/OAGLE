@@ -6,12 +6,7 @@
 #include "OA_Audio.h"
 namespace onart {
 	pSafeAudioStream p;
-	void TestScene::Update() {
-		static short x = 0; if (Input::isKeyPressedNow(Input::MouseKeyCode::wheel_down)) {
-			Entity::get<UI::GaugeH>("gh")->setValue(++x); print(x);
-	} else if(Input::isKeyPressedNow(Input::MouseKeyCode::wheel_up)) {
-		Entity::get<UI::GaugeH>("gh")->setValue(--x); print(x);
-	} }
+	void TestScene::Update() {  }
 	void TestScene::init() {
 		Font::load("ariblk.ttf", { 'A','B','C','l',u'°¡' }, 480, "arial"); 
 		entities.push_back(new TestEntity());

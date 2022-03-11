@@ -6,6 +6,7 @@
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
 #include "OA_UI.h"
+#include "OA_Shader.h"
 
 namespace onart::UI {
 	oastring toPlain(const oastring& content) {
@@ -29,14 +30,14 @@ namespace onart::UI {
 	}
 
 	Text::Text(const EntityKey& key, Font* font, const oastring& content, const vec4& targRect, float maxWidth, bool fullFit, AlignH align, float rowGap, const vec4& color)
-		:Entity(key, Transform(), true), font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(true), halign(align), rowGap(rowGap), center(targRect.left + targRect.width / 2, targRect.down + targRect.width / 2), fullFit(fullFit), targRect(targRect) {
+		:UIEntity(key, Transform(), true), font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(true), halign(align), rowGap(rowGap), center(targRect.left + targRect.width / 2, targRect.down + targRect.width / 2), fullFit(fullFit), targRect(targRect) {
 		setContent(content);
 		if (fullFit) { r2r = mat4::r2r(ldwh, targRect); }
 		else { r2r = mat4::r2r2(ldwh, targRect); }
 	}
 
 	Text::Text(const EntityKey& key, Font* font, const oastring& content, const vec2& center, float maxWidth, AlignH align, AlignV va, float size, float rowGap, const vec4& color)
-		: Entity(key, Transform(), true), font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(false), halign(align), valign(va), rowGap(rowGap), center(center), size(size) {
+		: UIEntity(key, Transform(), true), font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(false), halign(align), valign(va), rowGap(rowGap), center(center), size(size) {
 		setContent(content);
 	}
 
@@ -90,7 +91,7 @@ namespace onart::UI {
 	}
 
 	Button::Button(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal, pAnimation onOver, pAnimation onDown)
-		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
+		:UIEntity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
 		FixedSprite::make("__defaultbutton", Material::get("white1x1"));
 		if (hasNormal = (bool)normal) { addAnim(normal); } else { addAnim("__defaultbutton"); }
 		if (hasOver = (bool)onOver) { addAnim(onOver); } else { addAnim("__defaultbutton"); }
@@ -157,7 +158,7 @@ namespace onart::UI {
 	}
 
 	ToggleButton::ToggleButton(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal1, pAnimation normal2, pAnimation onOver1, pAnimation onOver2, pAnimation onDown1, pAnimation onDown2)
-		:Entity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
+		:UIEntity(key, Transform(), true), ldwh(ldwh), onClick(onClick) {
 		FixedSprite::make("__defaultbutton", Material::get("white1x1"));
 		if (hasNormal1 = (bool)normal1) { addAnim(normal1); } else { addAnim("__defaultbutton"); }
 		if (hasNormal2 = (bool)normal2) { addAnim(normal2); } else { addAnim("__defaultbutton"); }
@@ -296,7 +297,7 @@ namespace onart::UI {
 	}
 
 	GaugeH::GaugeH(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin, bool isContinuous, pAnimation handle, pAnimation bar)
-		:Entity(key, Transform(), true), length(length), barArea(barLdwh), margin(margin), baseColor(handle ? 1 : vec4(0.5f, 0.5f, 0.5f, 1)), isContinuous(isContinuous) {
+		:UIEntity(key, Transform(), true), length(length), barArea(barLdwh), margin(margin), baseColor(handle ? 1 : vec4(0.5f, 0.5f, 0.5f, 1)), isContinuous(isContinuous) {
 		if (length <= 1) { value.c = 1; }
 		else { value.q = length - 1; }
 		margin = clamp(margin, 0.0f, 0.495f);
@@ -321,7 +322,7 @@ namespace onart::UI {
 	}
 
 	GaugeV::GaugeV(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin, bool isContinuous, pAnimation handle, pAnimation bar)
-		:Entity(key, Transform(), true), length(length), barArea(barLdwh), margin(margin), baseColor(handle ? 1 : vec4(0.5f, 0.5f, 0.5f, 1)), isContinuous(isContinuous) {
+		:UIEntity(key, Transform(), true), length(length), barArea(barLdwh), margin(margin), baseColor(handle ? 1 : vec4(0.5f, 0.5f, 0.5f, 1)), isContinuous(isContinuous) {
 		if (length <= 1) { value.c = 1; }
 		else { value.q = length - 1; }
 		margin = clamp(margin, 0.0f, 0.495f);
@@ -516,5 +517,31 @@ namespace onart::UI {
 
 	GaugeV::~GaugeV() {
 		delete bar;
+	}
+
+	Slider::Slider(const EntityKey& key, const vec4& area, const vec2& size, const std::vector<UIEntity*>& component)
+		:UIEntity(key, Transform(), true), area(area.left, area.down, area.left + area.width, area.down + area.height) {
+		
+	}
+
+	void Slider::setPos(const vec2& pos) {
+
+	}
+
+	Slider::~Slider() {
+		for (UIEntity* e : component) {
+			delete e;
+		}
+	}
+
+	void Slider::Update() {
+		
+	}
+
+	void Slider::render() {
+		extern Shader program2;
+		program2["constraint"] = area;
+		// render components
+		program2["constraint"] = vec4(-100, -100, 100, 100);
 	}
 }

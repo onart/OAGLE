@@ -21,6 +21,17 @@ namespace onart {
 	/// UI 개체는 기본적으로 마우스로 사용합니다. 이것의 위치가 겹치는 경우 z-index에 무관하게 모두 반응하며, 이에 대한 책임은 엔진이 지지 않습니다. Entity의 isActive 등을 통해 조절해 주세요.
 	/// </summary>
 	namespace UI {
+		class UIEntity : public Entity {
+			friend class Slider;
+		public:
+			inline UIEntity(const EntityKey& _1, const Transform& _2, bool _3 = false, bool _4 = false) :Entity(_1, _2, _3, _4) { }
+			inline UIEntity(const EntityKey& _1, const Transform& _2, pAnimation& _3, bool _4 = false, bool _5 = false) : Entity(_1, _2, _3, _4, _5) {}
+			/// <summary>
+			/// 개체가 현재 판정이 가능한 상황인지 확인하기 위한 값입니다.
+			/// </summary>
+			virtual vec4 clickbox() { return vec4(-1, -1, 1, 1); }
+		};
+
 		/// <summary>
 		/// 텍스트 개체입니다. 글자별로 크기/색상을 조정할 수 있습니다.
 		/// <para>크기: 크기는 직사각형에 맞도록 나오는데, 텍스트 안에서 상대적 크기를 다르게 설정하고자 한다면 \a와 늘임축(x 또는 y 또는 a. 대문자는 인정하지 않습니다.), 그리고 정수 부분 1자리 소수 부분 2자리 실수를 입력합니다(즉, 최대 상대 크기는 9.99/0.01=999배). 예를 들어,
@@ -30,7 +41,7 @@ namespace onart {
 		/// "안녕"은 하양, "하세"는 빨강, "요"는 초록색으로 출력됩니다. 만약 \b 뒤 8자리가 유효하지 않은 값을 가지는 경우 색은 변하지 않으며 값들은 무시합니다.</para>
 		/// <para>줄바꿈: \n은 줄을 바꿉니다.</para>
 		/// </summary>
-		class Text: public Entity {
+		class Text: public UIEntity {
 		public:
 			/// <summary>
 			/// 텍스트 개체를 생성합니다. 특정 직사각형 범위에 고정됩니다. 이를 테면 고정 UI에 사용하기에 적합합니다.
@@ -123,7 +134,7 @@ namespace onart {
 		/// 애니메이션을 주지 않고 생성할 경우 SCTR 매개변수는 vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)으로 주어야 합니다.
 		/// 버튼의 이미지로는 UIAnimation 또는 FixedSprite가 추천됩니다.
 		/// </summary>
-		class Button: public Entity
+		class Button: public UIEntity
 		{
 		public:
 			/// <summary>
@@ -158,6 +169,7 @@ namespace onart {
 			/// </summary>
 			/// <param name="newLDWH">좌-하-폭-높이 형식 직사각형입니다.</param>
 			void move(const vec4& newLDWH);
+			inline vec4 clickbox() { return ldwh; }
 			/// <summary>
 			/// 버튼을 클릭했을 때의 함수를 호출합니다.
 			/// </summary>
@@ -180,7 +192,7 @@ namespace onart {
 		/// 애니메이션을 주지 않고 생성할 경우 SCTR 매개변수는 vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)으로 주어야 합니다.
 		/// 기본적으로는 마우스 외에 반응을 하지 않지만 반응 함수(애니메이션 트리거)를 public으로 두어 씬에서 키보드로 접근할 수 있게 구현이 가능합니다.
 		/// </summary>
-		class ToggleButton : public Entity {
+		class ToggleButton : public UIEntity {
 		public:
 			/// <summary>
 			/// 토글 버튼을 생성합니다.
@@ -236,7 +248,7 @@ namespace onart {
 		/// Gauge를 생성할 경우 그 이름의 뒤에 "_bar"를 덧붙인 이름으로 다른 개체가 함께 생성됩니다(타입은 기본 Entity입니다). 이는 Gauge가 사라질 때 자동으로 제거됩니다.
 		/// 이 때문에, Gauge를 생성하여 사용할 때 그 뒤에 "_bar"를 덧붙인 이름을 사용할 경우 그것이 유일한 개체가 아니며, 또한 이렇게 생성된 개체를 임의로 삭제할 경우 Gauge에 의해 세그먼테이션 오류가 발생할 수 있으니 주의하세요.
 		/// </summary>
-		class GaugeH : public Entity {
+		class GaugeH : public UIEntity {
 		public:
 			/// <summary>
 			/// 게이지를 생성합니다. 생성 직후 게이지는 오른쪽 끝에 가 있습니다.
@@ -295,7 +307,7 @@ namespace onart {
 		/// Gauge를 생성할 경우 그 이름의 뒤에 "_bar"를 덧붙인 이름으로 다른 개체가 함께 생성됩니다(타입은 기본 Entity입니다). 이는 Gauge가 사라질 때 자동으로 제거됩니다.
 		/// 이 때문에, Gauge를 생성하여 사용할 때 그 뒤에 "_bar"를 덧붙인 이름을 사용할 경우 그것이 유일한 개체가 아니며, 또한 이렇게 생성된 개체를 임의로 삭제할 경우 Gauge에 의해 세그먼테이션 오류가 발생할 수 있으니 주의하세요.
 		/// </summary>
-		class GaugeV : public Entity {
+		class GaugeV : public UIEntity {
 		public:
 			/// <summary>
 			/// 게이지를 생성합니다. 생성 직후 게이지는 오른쪽 끝에 가 있습니다.
@@ -341,18 +353,47 @@ namespace onart {
 			float topmost, bottommost;
 			bool isContinuous;
 		};
+		
+		/// <summary>
+		/// 좁은 공간에 UI 개체들을 포함하며 위치를 변경하여 접근합니다. 보이지 않게 된 개체들은 클릭 등 액션이 먹히지 않습니다.
+		/// </summary>
+		class Slider : public UIEntity {
+		public:
+			/// <summary>
+			/// 슬라이더를 생성합니다. 초기에는 좌측 상단에 꼭 붙어 있습니다.
+			/// </summary>
+			/// <param name="key">개체 이름입니다.</param>
+			/// <param name="area">슬라이더가 차지할 고정 영역입니다.</param>
+			/// <param name="size">슬라이더의 논리적 공간의 가로/세로 크기입니다.</param>
+			/// <param name="component">슬라이더에 포함될 개체들입니다. 존재 이유 자체에 따라, 이 개체들은 슬라이더가 제거될 때 모두 제거됩니다. 이는 여기 들어가는 개체들은 scene의 entities에 포함되지 않아야 한다는 의미와 같습니다.</param>
+			Slider(const EntityKey& key, const vec4& area, const vec2& size, const std::vector<UIEntity*>& component);
+			inline vec2 getPos() { return pos; }
+			inline vec4 clickbox() { return area; }
+			/// <summary>
+			/// 슬라이더가 보여줄 위치를 변경합니다. 생성 시 적용한 범위를 넘어가지 않도록 자동 조절됩니다.
+			/// </summary>
+			void setPos(const vec2&);
+			void Update();	// 메인 이슈: 변경하기
+			void render();	// clickbox가 겹치는 것만 render
+			~Slider();
+		private:
+			vec4 area;
+			vec2 size;
+			vec2 pos;
+			std::vector<UIEntity*> component;
+		};
 
 		/// <summary>
 		/// 텍스트를 포함하는 드롭다운 리스트입니다.
 		/// </summary>
-		class Dropdown :public Entity {
-
+		class Dropdown :public UIEntity {
+			
 		};
 
 		/// <summary>
 		/// 텍스트를 입력받는 인터페이스입니다.
 		/// </summary>
-		class InputField : public Entity {
+		class InputField : public UIEntity {
 
 		};
 	}
