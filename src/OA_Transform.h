@@ -29,18 +29,28 @@ namespace onart {
 		vec3 pos;
 		mat4 model;
 		/// <summary>
-		/// NOTE: ready를 true로 만들 수 있는 함수는 여기뿐이어야 합니다.
+		/// NOTE: ready를 true로 만들 수 있는 함수는 TRS()와 mat2prs()뿐이어야 합니다.
 		/// </summary>
 		inline void TRS() { model = mat4::TRS(pos, rotation, scale); ready = true; }
+		/// <summary>
+		/// NOTE: ready를 true로 만들 수 있는 함수는 TRS()와 mat2prs()뿐이어야 합니다.
+		/// </summary>
+		void mat2prs();
 	public:
 		inline Transform(const vec3& pos = 0, const vec3& scale = 1, const Quaternion& rot = { 1,0,0,0 }, Transform* parent = nullptr) :pos(pos), rotation(rot), scale(scale), parent(parent) { TRS(); }
 		inline Transform(const Transform& tr) : pos(tr.getPosition()), rotation(tr.getRotation()), scale(tr.getScale()), parent(tr.getParent()) { TRS(); }
+		inline Transform(const mat4& tr, Transform* parent = nullptr) : model(tr), parent(parent) { mat2prs(); }
+		
 		/// <summary>
 		/// 부모 트랜스폼을 설정합니다.
 		/// </summary>
 		/// <param name="p">부모 트랜스폼</param>
 		inline void setParent(Transform* p = nullptr) { parent = p; }
 		inline Transform* getParent() const { return parent; }
+		/// <summary>
+		/// 월드 z좌표를 리턴합니다. 이는 parent가 존재하는 경우 getPosition().z와 다르니 주의하세요.
+		/// </summary>
+		inline float zIndex() { return getModel()._34; }
 		/// <summary>
 		/// 인게임 모델 4x4 행렬을 리턴합니다.
 		/// </summary>
@@ -57,6 +67,11 @@ namespace onart {
 		/// 이 함수는 const Transform 객체에서 model을 얻는 데 쓰입니다.
 		/// </summary>
 		inline const mat4& getModel() const { return model; }
+		/// <summary>
+		/// 행렬을 이용해 위치, 회전, 크기를 업데이트합니다. 아핀 변환이 아니거나 기울임 변환(전단, shear)인 경우에 발생하는 고려되지 않은 상황은 책임지지 않습니다.
+		/// 더 정확히는, 추가 변환을 가하지 않는 경우 원하는 변환대로 수행되지만 추가 회전/병진/크기 변환을 하는 경우 처음 변환과 달라집니다.
+		/// </summary>
+		inline void setModel(const mat4& m) { model = m; mat2prs(); }
 		/// <summary>
 		/// 3D 위치를 리턴합니다.
 		/// </summary>

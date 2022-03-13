@@ -422,6 +422,11 @@ namespace onart {
 		inline float det() const { return _11 * (_22 * _33 - _23 * _32) + _12 * (_23 * _31 - _21 * _33) + _13 * (_21 * _32 - _22 * _31); }
 
 		/// <summary>
+		/// 행렬 대각 성분의 합을 반환합니다.
+		/// </summary>
+		inline float trace() const { return _11 + _22 + _33; }
+
+		/// <summary>
 		/// 역행렬을 반환합니다.
 		/// </summary>
 		inline mat3 inverse() const {
@@ -615,6 +620,11 @@ namespace onart {
 				_21 * _12 * _43 * _34 - _11 * _22 * _43 * _34 - _31 * _22 * _13 * _44 + _21 * _32 * _13 * _44 +
 				_31 * _12 * _23 * _44 - _11 * _32 * _23 * _44 - _21 * _12 * _33 * _44 + _11 * _22 * _33 * _44;
 		}
+
+		/// <summary>
+		/// 행렬의 대각선 성분 합을 리턴합니다.
+		/// </summary>
+		inline float trace() const { return _11 + _22 + _33 + _44; }
 
 		/// <summary>
 		/// 역행렬을 반환합니다.
@@ -812,7 +822,10 @@ namespace onart {
 	/// 3차원 회전 등을 표현하는 사원수입니다. 1, i, j, k 부분에 해당하는 c1, ci, cj, ck 멤버를 가집니다.
 	/// </summary>
 	struct Quaternion {
-		float c1 = 1, ci = 0, cj = 0, ck = 0;
+		union {
+			struct { float c1, ci, cj, ck; };
+			struct { float w, x, y, z; };
+		};
 
 		/// <summary>
 		/// 사원수를 생성합니다.

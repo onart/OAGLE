@@ -426,6 +426,15 @@ namespace onart {
 	}
 
 	/// <summary>
+	/// 실수 배열에서 앞 4개에 양의 제곱근을 취한 값을 저장합니다. 음수 검사는 하지 않고 nan으로 변합니다.
+	/// </summary>
+	inline void sqrt4(float* vec) {
+		__m128 m = _mm_loadu_ps(vec);
+		m = _mm_sqrt_ps(m);
+		_mm_storeu_ps(vec, m);
+	}
+
+	/// <summary>
 	/// 이중 정밀도 실수 배열에서 4개를 원하는 값으로 초기화합니다.
 	/// </summary>
 	/// <param name="vec">배열</param>

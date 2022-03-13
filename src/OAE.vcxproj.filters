@@ -71,6 +71,9 @@
     <ClCompile Include="OA_Hangul.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OA_Transform.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resources.h">

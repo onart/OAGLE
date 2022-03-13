@@ -190,6 +190,7 @@
     <ClCompile Include="OA_TestEntity.cpp" />
     <ClCompile Include="OA_TestScene.cpp" />
     <ClCompile Include="OA_Text.cpp" />
+    <ClCompile Include="OA_Transform.cpp" />
     <ClCompile Include="OA_UI.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
   </ItemGroup>
