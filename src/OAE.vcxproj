@@ -170,6 +170,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>externals\;</AdditionalLibraryDirectories>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -193,6 +195,7 @@
     <ClCompile Include="OA_Transform.cpp" />
     <ClCompile Include="OA_UI.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
+    <ClCompile Include="OA_Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
@@ -222,6 +225,7 @@
     <ClInclude Include="OA_UI.h" />
     <ClInclude Include="OA_UniversalFunctor.h" />
     <ClInclude Include="OA_Vertex.h" />
+    <ClInclude Include="OA_Window.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="OA_Shader.h" />
   </ItemGroup>

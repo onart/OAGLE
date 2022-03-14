@@ -204,6 +204,7 @@ void finalize() {
 	onart::Audio::terminate();
 }
 
+// 콘솔 숨김: 링커 옵션 - 고급 - 진입점 mainCRTStartup, 링커 - 시스템 - 하위 시스템 창(/SUBSYSTEM:WINDOWS)
 int main(int argc, char* argv[]) {
 	if (!(window = onart::createWindow("OAGLE", 1280, 720))) { 
 		glfwTerminate();
@@ -222,7 +223,10 @@ int main(int argc, char* argv[]) {
 	glfwSetMouseButtonCallback(window, mouse);
 	glfwSetCursorPosCallback(window, mouseMoved);
 	glfwSetScrollCallback(window, scroll);
-	//glfwSetDropCallback(window, callback);	 // 파일을 드래그하여 창에 드롭할 경우 경로가 전달됩니다. void callback(GLFWwindow* window, int count, const char** paths)
+	
+	//glfwSetCharCallback(window, callback);		 // 게임창에 입력된 글자의 유니코드 값 void callback(GLFWwindow* window, unsigned code)
+	//glfwSetWindowFocusCallback(window, callback)	 // 창이 입력 포커스를 얻었을 때/잃었을 때 호출됩니다. 잃은 경우 0, 아닌 경우 그 외의 값이 주어집니다. void callback(GLFWwindow* window, int focused)
+	//glfwSetDropCallback(window, callback);		 // 파일을 드래그하여 창에 드롭할 경우 경로가 전달됩니다. void callback(GLFWwindow* window, int count, const char** paths)
 	//glfwSetWindowCloseCallback(window, callback)	 // 윈도우 종료 신호 발생 시 콜백을 변경합니다. void callback(GLFWwindow* window)
 
 	for (frame = 1; !glfwWindowShouldClose(window); frame++) {

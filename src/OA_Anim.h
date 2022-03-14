@@ -234,9 +234,9 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 이것은 2D 애니메이션의 일종인데, 2D 개체와 다르게 카메라 및 셰이딩의 영향을 받지 않습니다.
+	/// 카메라 및 셰이딩의 영향을 받지 않는 2D 애니메이션입니다.
 	/// </summary>
-	class UIAnimation : public Animation2D {
+	class UIAnimation : public Animation {
 	public:
 		/// <summary>
 		/// 애니메이션을 생성하고 리턴합니다. Animation2D의 make와 완전히 동일하게 사용하면 됩니다.
@@ -250,6 +250,10 @@ namespace onart {
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 		UIAnimation(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
+		std::vector<Keypoint<pTexture>> tex;
+		std::vector<Keypoint<vec4>> rects;
+		std::vector<vec4> sctrs;
+		const bool hasTex, hasRect, hasPiv;
 	};
 
 	using pAnimation = std::shared_ptr<Animation>;

@@ -66,6 +66,11 @@ namespace onart {
 		/// 월드 상 좌표가 화면상에서 어느 위치에 나오는지 알려줍니다. 뷰포트는 중심이 (0,0)이며 종/횡 중 짧은 쪽의 길이가 2입니다.
 		/// </summary>
 		inline vec3 world2screen(const vec3& pos) { return zoom * ratio.projM4 * viewM4 * vec4(pos, 1.0f); }
+		
+		/// <summary>
+		/// 뷰 행렬을 리턴합니다.
+		/// </summary>
+		inline const mat4& getViewMatrix() const { return viewM4; }
 		/// <summary>
 		/// 뷰포트의 비율을 결정합니다.
 		/// </summary>

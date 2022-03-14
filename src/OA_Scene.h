@@ -12,7 +12,7 @@
 
 #include <string>
 #include <vector>
-#include <set>
+#include <map>
 
 namespace onart {
 	class Camera;
@@ -39,15 +39,6 @@ namespace onart {
 		/// </summary>
 		static Scene* currentScene;
 		/// <summary>
-		/// pause()를 해도 멈추지 않게 하고 싶은 개체의 키를 등록합니다. 중복 개체가 다수 존재하는 키를 등록한다면, 그에 대한 모든 개체가 pause()로는 멈추지 않습니다.
-		/// 또한 등록한 개체는 씬이 전환되어도 유지됩니다. 씬 자체는 등록할 수 없습니다. 일시정지 시 그런 부분을 관리할 일은 거의 없겠으나, 등록된 개체는 key 값의 오름차순 순서대로 업데이트됩니다.
-		/// </summary>
-		inline static void noStop(const EntityKey& k) { nonstop.insert(k); }
-		/// <summary>
-		/// 멈추지 않도록 등록했던 키를 등록 해제합니다.
-		/// </summary>
-		inline static void yesStop(const EntityKey& k) { nonstop.erase(k); }
-		/// <summary>
 		/// 응용 계층에서 사용할 일 없는 함수입니다.
 		/// </summary>
 		void update();
@@ -55,6 +46,11 @@ namespace onart {
 		/// 응용 계층에서 사용할 일 없는 함수입니다.
 		/// </summary>
 		void render();
+		/// <summary>
+		/// 씬에 개체를 추가합니다.
+		/// </summary>
+		void addEntity(Entity*);
+
 		inline int getSceneId() { return id; }
 		/// <summary>
 		/// 씬에서 매 프레임마다 호출됩니다. 항상 씬 내 개체의 Update()보다 먼저 실행됩니다.
@@ -77,10 +73,16 @@ namespace onart {
 		/// <param name="desiredCameraPos">현재 프레임에 카메라가 자리하려는 위치</param>
 		/// <returns>현재 씬에서의 제한이 적용된 이후 현재 프레임에 카메라가 자리하는 위치</returns>
 		virtual vec3 constrainCamera(const vec3& currentCameraPos, const vec3& desiredCameraPos);
-
-		virtual ~Scene() {};
+		static struct __dropentity{
+			friend class Entity;
+		private:
+			/// <summary>
+			/// 이것은 씬에서 개체를 제외합니다. 개체의 메모리가 해제되지는 않으며, 개체가 소멸할 때는 이 함수도 자동으로 호출됩니다.
+			/// </summary>
+			static void dropEntity(Entity*);
+		}__drop;
+		inline virtual ~Scene() {};
 	protected:
-		std::vector<Entity*> entities;
 		int id;
 		/// <summary>
 		/// 게임 실행 이후 흐른 시간(초)입니다.
@@ -94,19 +96,10 @@ namespace onart {
 		/// 다른 씬으로 전환합니다.
 		/// </summary>
 		void change(Scene* other);
-		/// <summary>
-		/// 씬 및 모든 개체의 업데이트를 중단합니다. 각 개체의 isActive를 변경시키지 않고 독립적으로 동작합니다. 렌더링은 중단하지 않습니다.
-		/// 중단되지 않는 예외 타겟은 noStop(), yesStop()를 통해 등록 및 취소할 수 있습니다.
-		/// </summary>
-		inline void pause() { isPaused = true; }
-		/// <summary>
-		/// pause를 취소합니다.
-		/// </summary>
-		inline void resume() { isPaused = false; }
 		// +다수의 광원
 	private:
-		bool isPaused = false;
-		static std::set<EntityKey> nonstop;
+		std::vector<Entity*> entities;
+		std::multimap<float, Entity**> renderOrder;
 		// +bgm
 	};
 }

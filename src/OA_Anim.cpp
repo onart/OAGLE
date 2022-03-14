@@ -533,7 +533,8 @@ namespace onart {
 		program2.draw();
 	}
 
-	UIAnimation::UIAnimation(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs) : Animation2D(loop, tex, rects, sctrs) {
+	UIAnimation::UIAnimation(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)
+		:tex(tex), rects(rects), sctrs(sctrs), Animation(loop, rects.empty() ? 0 : rects.rbegin()->tp), hasRect(!rects.empty()), hasTex(!tex.empty()), hasPiv(!sctrs.empty()) {
 
 	}
 

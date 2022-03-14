@@ -9,6 +9,8 @@
 #include "OA_Shader.h"
 #include "OA_Model.h"
 #include "OA_Anim.h"
+#include "OA_Scene.h"
+#include "OA_Camera.h"
 
 #include <algorithm>
 #include <iterator>
@@ -23,19 +25,23 @@ namespace onart {
 
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
-	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc)
-		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
+	float Entity::zIndex() {
+		return (mainCamera.getViewMatrix() * transform.getModel())._34;
+	}
+
+	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc, bool isTranslucent)
+		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
 		entities.insert({ k,this });
 	}
 
-	Entity::Entity(const EntityKey& k, const Transform& transform, pAnimation& anim0, bool isFixed, bool rc)
-		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
+	Entity::Entity(const EntityKey& k, const Transform& transform, pAnimation& anim0, bool isFixed, bool rc, bool isTranslucent)
+		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
 		entities.insert({ k,this });
 		if (anim0)addAnim(anim0);
 	}
 	
-	Entity::Entity(const EntityKey& k, const Transform& transform, std::shared_ptr<Model>& model, bool isFixed, bool rc)
-		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc) {
+	Entity::Entity(const EntityKey& k, const Transform& transform, std::shared_ptr<Model>& model, bool isFixed, bool rc, bool isTranslucent)
+		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
 		entities.insert({ k,this });
 		if (model)setModel(model);
 	}
@@ -48,6 +54,10 @@ namespace onart {
 				return;
 			}
 		}
+	}	
+
+	Entity::__dropfromscene::~__dropfromscene() { 
+		Scene::__dropentity::dropEntity(__this);
 	}
 
 	std::vector<Entity*> Entity::gets(const EntityKey& k) {
@@ -123,7 +133,7 @@ namespace onart {
 	}
 
 	void Entity::Update() {
-
+		
 	}
 
 	void Entity::act(int kp, float progress) {

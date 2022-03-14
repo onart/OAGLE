@@ -28,7 +28,7 @@
 
 #include "oagle_simd.h"
 
-#pragma warning(disable: 6294 6201)
+#pragma warning(disable: 6294 6201 26495)
 
 constexpr float PI = 3.14159265358979323846f;
 constexpr float INF = INFINITY;

@@ -8,50 +8,112 @@
 #include "OA_Scene.h"
 #include "OA_Entity.h"
 
+#include <queue>
+
 extern float tp, dt;
 
 namespace onart {
 	
 	Scene* Scene::currentScene;
-	std::set<EntityKey> Scene::nonstop;
 	const float& Scene::dt = ::dt;
 	const float& Scene::tp = ::tp;
-
+	
 	void Scene::update() {
-		if (isPaused) {
-			for (auto& k : nonstop) {
-				for (auto& e : Entity::gets(k)) {
-					e->update();
-				}
-			}
-			return;
-		}
 		Update();
-		for (auto e : entities) {
+		bool reap = false;
+		size_t sz = entities.size();
+		for (size_t i = 0; i < sz; i++) {
 			if (id != currentScene->id) return;
-			if (e) e->update();	// 씬 이동 시 소멸자를 바로 호출하는데 이때 update()가 남음
+			Entity* e = entities[i];
+			if (e)e->update();
+			else reap = true;
+		}
+		if (reap) {
+			entities.erase(std::remove(entities.begin(), entities.end(), nullptr), entities.end());
 		}
 	}
 
 	void Scene::render() {
-		for (auto e : entities) {
-			// +program3에 광원(최대 ?개)
-			if (e) e->render();
+#ifdef OAGLE_2DGAME
+		for (auto it = renderOrder.cbegin(); it != renderOrder.cend();) {
+			Entity* ep = *(it->second);
+			if (ep) {
+				ep->render();
+				++it;
+			}
+			else {
+				it = renderOrder.erase(it);
+			}
 		}
+#else
+		bool reap = false;
+		std::priority_queue<std::pair<float, Entity**>> hp;
+		size_t sz = entities.size();
+		for (size_t i = 0; i < sz; i++) {
+			Entity*& e = entities[i];
+			if (e) {
+				if (e->isTranslucent) {
+					hp.push({ e->zIndex(),&e });
+				}
+				else {
+					e->render();
+				}
+			}
+			else {
+				reap = true;
+			}
+		}
+		while (!hp.empty()) {
+			Entity* e = *(hp.top().second);
+			if (e)e->render();
+			hp.pop();
+		}
+		if (reap) {
+			entities.erase(std::remove(entities.begin(), entities.end(), nullptr), entities.end());
+		}
+#endif // OAGLE_2DGAME
 	}
 
 	void Scene::change(Scene* other) {
 		for (auto& e : entities) {
-			delete e;
-			e = nullptr;
+			if (e->preserveOnSceneChange) {
+				other->addEntity(e);
+			}
+			else {
+				delete e;
+				e = nullptr;
+			}
 		}
 		currentScene = other;
 		other->init();
 		delete this;
 	}
 
-	void Scene::actEvent(int idx) {
+	void Scene::addEntity(Entity* e) {
+		if (e) {
+			e->__scene.__this = e;
+			e->__scene.relatedScene = this;
+			e->__scene.index = (int)entities.size();
+			entities.push_back(e);
+#ifdef OAGLE_2DGAME
+			renderOrder.insert({ e->zIndex(),&(*entities.rbegin()) });
+#endif // OAGLE_2DGAME
+		}
+	}
 
+	void Scene::__dropentity::dropEntity(Entity* e) {
+		if (e && e->__scene.relatedScene == currentScene) {
+			for (int i = e->__scene.index; i >= 0; i--) {
+				if (currentScene->entities[i] == e) {
+					currentScene->entities[i] = nullptr;
+					break;
+				}
+			}
+		}
+	}
+
+	void Scene::actEvent(int idx) {
+		
 	}
 
 	vec3 Scene::constrainCamera(const vec3& currentCameraPos, const vec3& desiredCameraPos) {

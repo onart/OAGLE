@@ -48,10 +48,6 @@ namespace onart {
 		inline void setParent(Transform* p = nullptr) { parent = p; }
 		inline Transform* getParent() const { return parent; }
 		/// <summary>
-		/// 월드 z좌표를 리턴합니다. 이는 parent가 존재하는 경우 getPosition().z와 다르니 주의하세요.
-		/// </summary>
-		inline float zIndex() { return getModel()._34; }
-		/// <summary>
 		/// 인게임 모델 4x4 행렬을 리턴합니다.
 		/// </summary>
 		inline const mat4 getModel() { 

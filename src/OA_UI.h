@@ -29,7 +29,7 @@ namespace onart {
 			/// <summary>
 			/// 개체가 현재 판정이 가능한 상황인지 확인하기 위한 값입니다.
 			/// </summary>
-			virtual vec4 clickbox() { return vec4(-1, -1, 1, 1); }
+			virtual vec4 clickbox() { return vec4(-100, -100, 200, 200); }
 		};
 
 		/// <summary>
