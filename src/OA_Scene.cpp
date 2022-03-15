@@ -20,16 +20,11 @@ namespace onart {
 	
 	void Scene::update() {
 		Update();
-		bool reap = false;
 		size_t sz = entities.size();
 		for (size_t i = 0; i < sz; i++) {
 			if (id != currentScene->id) return;
 			Entity* e = entities[i];
 			if (e)e->update();
-			else reap = true;
-		}
-		if (reap) {
-			entities.erase(std::remove(entities.begin(), entities.end(), nullptr), entities.end());
 		}
 	}
 
@@ -46,35 +41,55 @@ namespace onart {
 			}
 		}
 #else
-		bool reap = false;
-		std::priority_queue<std::pair<float, Entity**>> hp;
+		std::priority_queue<std::pair<float, size_t>> hp;
 		size_t sz = entities.size();
 		for (size_t i = 0; i < sz; i++) {
-			Entity*& e = entities[i];
+			if (id != currentScene->id) return;
+			Entity* e = entities[i];
 			if (e) {
 				if (e->isTranslucent) {
-					hp.push({ e->zIndex(),&e });
+					hp.push({ e->zIndex(),i });
 				}
 				else {
 					e->render();
 				}
 			}
-			else {
-				reap = true;
-			}
 		}
 		while (!hp.empty()) {
-			Entity* e = *(hp.top().second);
+			Entity* e = entities[hp.top().second];
 			if (e)e->render();
 			hp.pop();
 		}
-		if (reap) {
-			entities.erase(std::remove(entities.begin(), entities.end(), nullptr), entities.end());
-		}
+		reap();
 #endif // OAGLE_2DGAME
 	}
 
+	void Scene::reap() {
+		if (!shouldReap) return;
+#ifdef OAGLE_2DGAME
+		std::set<size_t> ridx;
+		for (auto it : renderOrder.cbegin(); it != renderOrder.cend();) {
+			if (!entities[it->second]) {
+				ridx.insert(it->second);
+				it = renderOrder.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+		for (auto& i : renderOrder) {
+			for (auto& j : ridx) {
+				if (i.second > j) --i.second;
+				else break;
+			}
+		}
+#endif // OAGLE_2DGAME
+		entities.erase(std::remove(entities.begin(), entities.end(), nullptr), entities.end());
+	}
+
 	void Scene::change(Scene* other) {
+		if (other == this) return;
+		currentScene = other;
 		for (auto& e : entities) {
 			if (e->preserveOnSceneChange) {
 				other->addEntity(e);
@@ -84,7 +99,6 @@ namespace onart {
 				e = nullptr;
 			}
 		}
-		currentScene = other;
 		other->init();
 		delete this;
 	}
@@ -96,7 +110,7 @@ namespace onart {
 			e->__scene.index = (int)entities.size();
 			entities.push_back(e);
 #ifdef OAGLE_2DGAME
-			renderOrder.insert({ e->zIndex(),&(*entities.rbegin()) });
+			renderOrder.insert({ e->zIndex(),entities.size() - 1 });
 #endif // OAGLE_2DGAME
 		}
 	}
@@ -106,6 +120,7 @@ namespace onart {
 			for (int i = e->__scene.index; i >= 0; i--) {
 				if (currentScene->entities[i] == e) {
 					currentScene->entities[i] = nullptr;
+					currentScene->shouldReap = true;
 					break;
 				}
 			}

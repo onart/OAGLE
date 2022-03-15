@@ -97,9 +97,11 @@ namespace onart {
 		/// </summary>
 		void change(Scene* other);
 		// +´Ù¼öÀÇ ±¤¿ø
-	private:
+	private:	
 		std::vector<Entity*> entities;
-		std::multimap<float, Entity**> renderOrder;
+		std::multimap<float, size_t> renderOrder;
+		void reap();
+		bool shouldReap = false;
 		// +bgm
 	};
 }
