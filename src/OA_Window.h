@@ -9,14 +9,16 @@
 #define __OA_WINDOW_H__
 
 #include <memory>
+#include "oaglem.h"
 
 namespace onart {
 	class Animation;
 	namespace window {
 		/// <summary>
 		/// 커서 이미지 또는 애니메이션을 설정합니다. UIAnimation 또는 FixedSprite만 가능합니다. 그 외의 애니메이션 또는 nullptr가 전달되는 경우 기본 커서로 돌아옵니다.
+		/// GLFW 자체에서도 커서 이미지를 바꾸는 기능을 제공하지만, 이 함수는 단일 애니메이션을 설정할 수 있다는 차이가 있습니다. 마우스 커서의 클릭 판정은 물론 애니메이션 피벗에 있습니다.
 		/// </summary>
-		void setCursorImage(std::shared_ptr<Animation>&);
+		void setCursorImage(const std::shared_ptr<Animation>& p = std::shared_ptr<Animation>(), const vec2& scale = 1);
 	}
 }
 

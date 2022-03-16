@@ -512,11 +512,11 @@ namespace onart::UI {
 	}
 
 	GaugeH::~GaugeH() {
-		delete bar;
+		destroy(bar);
 	}
 
 	GaugeV::~GaugeV() {
-		delete bar;
+		destroy(bar);
 	}
 
 	Slider::Slider(const EntityKey& key, const vec4& area, const vec2& size, const std::vector<UIEntity*>& component)
@@ -530,7 +530,7 @@ namespace onart::UI {
 
 	Slider::~Slider() {
 		for (UIEntity* e : component) {
-			delete e;
+			destroy(e);
 		}
 	}
 

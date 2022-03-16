@@ -17,16 +17,35 @@
 
 #include "OA_Window.h"
 #include "OA_Anim.h"
+#include "OA_Entity.h"
+#include "OA_Scene.h"
 
 extern GLFWwindow* window;
 
 namespace onart::window {
-	void setCursorImage(pAnimation& anim) {
+	class CustomCursor :public Entity {
+	public:
+		CustomCursor(const EntityKey& k, const Transform& tr, pAnimation& anim) :Entity(k, tr, anim, true, false, true) {}
+		void Update() {
+			transform.setPosition(vec3(std::move(Input::cameraCursorPos()), -1));
+		}
+		~CustomCursor() {
+			glfwSetInputMode(::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+	};
+
+	void setCursorImage(const pAnimation& anim, const vec2& scale) {
 		pAnimation pa = std::dynamic_pointer_cast<FixedSprite>(anim);
 		if (!pa)pa = std::dynamic_pointer_cast<UIAnimation>(anim);
+		Entity::destroy(Entity::get<CustomCursor>("__cursor"));
 		if (!pa) {
-			glfwSetInputMode(::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 			return;
+		}
+		else {
+			glfwSetInputMode(::window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+			Entity* cursor = new CustomCursor("__cursor", Transform(0, scale), pa);
+			cursor->preserveOnSceneChange = true;
+			Scene::currentScene->addEntity(cursor);
 		}
 	}
 }

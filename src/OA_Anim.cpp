@@ -576,6 +576,6 @@ namespace onart {
 		};
 		pAnimation ua = std::make_shared<anim2d>(loop, tx, rctz, sctrz);
 		push(name, ua);
-		return anim;
+		return ua;
 	}
 }

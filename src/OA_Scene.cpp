@@ -78,10 +78,12 @@ namespace onart {
 			}
 		}
 		for (auto& i : renderOrder) {
+			size_t minus = 0;
 			for (auto& j : ridx) {
-				if (i.second > j) --i.second;
+				if (i.second > j) ++minus;
 				else break;
 			}
+			i.second -= minus;
 		}
 #endif // OAGLE_2DGAME
 		entities.erase(std::remove(entities.begin(), entities.end(), nullptr), entities.end());
@@ -95,7 +97,7 @@ namespace onart {
 				other->addEntity(e);
 			}
 			else {
-				delete e;
+				Entity::destroy(e);
 				e = nullptr;
 			}
 		}

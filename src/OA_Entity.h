@@ -43,7 +43,7 @@ namespace onart {
 		/// </summary>
 		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
 		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
-		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
+		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. false가 영향을 안 받는다는 뜻으로, 2D, 3D 모두 가능합니다.</param>
 		/// <param name="responseContinuously">true인 경우 애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
 		/// <param name="isTranslucent">모델 및 애니메이션 중 하나라도 투명성이 조금이라도 있는 경우 true로 설정합니다.</param>
 		Entity(const EntityKey& k, const Transform& transform, bool isFixed = false, bool responseContinuously = false, bool isTranslucent = false);
@@ -55,7 +55,7 @@ namespace onart {
 		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
 		/// <param name="anim0">기본 외형을 정합니다. 형태는 있으나 업데이트 함수는 필요 없을 때 유용합니다.</param>
 		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
-		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
+		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. false가 영향을 안 받는다는 뜻으로, 2D, 3D 모두 가능합니다.</param>
 		/// <param name="responseContinuously">true인 경우 애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
 		/// <param name="isTranslucent">애니메이션에 투명성이 조금이라도 있는 경우 true로 설정합니다.</param>
 		Entity(const EntityKey& k, const Transform& transform, pAnimation& anim0, bool isFixed = false, bool responseContinuously = false, bool isTranslucent = true);
@@ -67,11 +67,11 @@ namespace onart {
 		/// <param name="k">개체의 이름(혹은 id)입니다. 기본적으로 std::string 타입이지만 OA_USE_INT_AS_KEY 매크로 사용 시 int로 사용할 수 있습니다.</param>
 		/// <param name="transform">개체의 위치, 크기, 회전을 나타냅니다.</param>
 		/// <param name="model">기본 외형을 정합니다. 형태는 있으나 업데이트 함수는 필요 없을 때 유용합니다.</param>
-		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. 2D, 3D 모두 가능합니다.</param>
+		/// <param name="isFixed">카메라의 이동에 영향을 받는 여부를 설정합니다. false가 영향을 안 받는다는 뜻으로, 2D, 3D 모두 가능합니다.</param>
 		/// <param name="responseContinuously">true인 경우 애니메이션 진행 상태에 대하여 연속적으로 반응합니다.</param>
 		/// <param name="isTranslucent">모델 텍스처에 투명성이 조금이라도 있는 경우 true로 설정합니다.</param>
 		Entity(const EntityKey& k, const Transform& transform, std::shared_ptr<Model>& model, bool isFixed = false, bool responseContinuously = false, bool isTranslucent = false);
-		virtual ~Entity();
+		Entity(const Entity&) = delete;
 		/// <summary>
 		/// 위치를 얻습니다. 카메라 등과 같이 월드 좌표를 지속적으로 추적하는 것을 위해 만들어졌습니다.
 		/// </summary>
@@ -149,6 +149,10 @@ namespace onart {
 		template <class T>
 		inline static T* get(const EntityKey& k) { return dynamic_cast<T*>(get(k)); }
 		/// <summary>
+		/// 개체를 제거합니다.
+		/// </summary>
+		inline static void destroy(Entity* e) { delete e; }
+		/// <summary>
 		/// 현존 객체 중에서 해당 키를 가지고 원하는 개체형인 것 중 가장 앞의 하나를 찾아 반환합니다. 단 하나도 없는 경우 nullptr를 반환합니다.
 		/// </summary>
 		template<class T>
@@ -201,6 +205,7 @@ namespace onart {
 		/// 개체의 색상입니다. 섞이는 것이 아니라 성분별 곱하기로 계산되는 점 주의하세요.
 		/// </summary>
 		vec4 color = 1;
+		virtual ~Entity();
 	private:
 		float lt = 0;
 		EntityKey key;
