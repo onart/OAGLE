@@ -186,6 +186,7 @@
     <ClCompile Include="OA_Input.cpp" />
     <ClCompile Include="OA_Material.cpp" />
     <ClCompile Include="OA_Model.cpp" />
+    <ClCompile Include="OA_Physics.cpp" />
     <ClCompile Include="OA_Random.cpp" />
     <ClCompile Include="OA_Scene.cpp" />
     <ClCompile Include="OA_Shader.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="OA_Material.h" />
     <ClInclude Include="OA_Memory.h" />
     <ClInclude Include="OA_Model.h" />
+    <ClInclude Include="OA_Physics.h" />
     <ClInclude Include="OA_Random.h" />
     <ClInclude Include="OA_Scene.h" />
     <ClInclude Include="OA_TestEntity.h" />

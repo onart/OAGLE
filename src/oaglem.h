@@ -411,9 +411,9 @@ namespace onart {
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
 		/// </summary>
-		inline mat3& operator*=(float f) { for (int i = 0; i < 9; i++) a[i] *= f; }
+		inline mat3& operator*=(float f) { mulAll(a, f, 9); return *this; }
 		inline mat3 operator*(float f) const { mat3 r(*this); r *= f; return r; }
-		inline mat3& operator/=(float f) { for (int i = 0; i < 9; i++) a[i] /= f; }
+		inline mat3& operator/=(float f) { divAll(a, f, 9); return *this; }
 		inline mat3 operator/(float f) const { mat3 r(*this); r /= f; return r; }
 
 		/// <summary>
@@ -603,9 +603,9 @@ namespace onart {
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
 		/// </summary>
-		inline mat4& operator*=(float f) { mul4<float>(a, f); mul4<float>(a + 4, f); mul4<float>(a + 8, f); mul4<float>(a + 12, f); return *this; }
+		inline mat4& operator*=(float f) { mulAll(a, f, 16); return *this; }
 		inline mat4 operator*(float f) const { mat4 r(*this); r *= f; return r; }
-		inline mat4& operator/=(float f) { div4<float>(a, f); div4<float>(a + 4, f); div4<float>(a + 8, f); div4<float>(a + 12, f); return *this; }
+		inline mat4& operator/=(float f) { divAll(a, f, 16); return *this; }
 		inline mat4 operator/(float f) const { mat4 r(*this); r /= f; return r; }
 
 		/// <summary>
@@ -625,6 +625,27 @@ namespace onart {
 		/// 행렬의 대각선 성분 합을 리턴합니다.
 		/// </summary>
 		inline float trace() const { return _11 + _22 + _33 + _44; }
+		
+		/// <summary>
+		/// 좌측 상단 3x3 행렬로 캐스트합니다.
+		/// </summary>
+		inline operator mat3() const { return mat3(_11, _12, _13, _21, _22, _23, _31, _32, _33); }
+
+		/// <summary>
+		/// 아핀 변환의 역행렬을 조금 더 효율적으로 구합니다.
+		/// 참조: mat4::iTRS()
+		/// </summary>
+		inline mat4 affineInverse() const {
+			//https://stackoverflow.com/questions/2624422/efficient-4x4-matrix-inverse-affine-transform
+			mat3 ir(mat3(*this).inverse());
+			vec3 p = ir * (-this->col(4));
+			return mat4(
+				ir._11, ir._12, ir._13, p.x,
+				ir._21, ir._22, ir._23, p.y,
+				ir._31, ir._32, ir._33, p.z,
+				0, 0, 0, 1
+			);
+		}
 
 		/// <summary>
 		/// 역행렬을 반환합니다.
@@ -632,7 +653,8 @@ namespace onart {
 		inline mat4 inverse() const {
 			float d = det();
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
-			return mat4((_32 * _43 * _24 - _42 * _33 * _24 + _42 * _23 * _34 - _22 * _43 * _34 - _32 * _23 * _44 + _22 * _33 * _44),
+			return mat4(
+				(_32 * _43 * _24 - _42 * _33 * _24 + _42 * _23 * _34 - _22 * _43 * _34 - _32 * _23 * _44 + _22 * _33 * _44),
 				(_42 * _33 * _14 - _32 * _43 * _14 - _42 * _13 * _34 + _12 * _43 * _34 + _32 * _13 * _44 - _12 * _33 * _44),
 				(_22 * _43 * _14 - _42 * _23 * _14 + _42 * _13 * _24 - _12 * _43 * _24 - _22 * _13 * _44 + _12 * _23 * _44),
 				(_32 * _23 * _14 - _22 * _33 * _14 - _32 * _13 * _24 + _12 * _33 * _24 + _22 * _13 * _34 - _12 * _23 * _34),
@@ -663,11 +685,6 @@ namespace onart {
 		/// </summary>
 		inline operator float* () { return a; }
 		inline operator const float* () const { return a; }
-
-		/// <summary>
-		/// 좌측 상단 3x3 행렬로 캐스트합니다.
-		/// </summary>
-		inline operator mat3() { return mat3(_11, _12, _13, _21, _22, _23, _31, _32, _33); }
 
 		/// <summary>
 		/// 3차원 병진 행렬을 계산합니다.
@@ -729,6 +746,11 @@ namespace onart {
 		inline static mat4 rotate(float roll, float pitch, float yaw);
 
 		/// <summary>
+		/// 3차원 회전 사원수를 행렬 형태로 리턴합니다.
+		/// </summary>
+		inline static mat4 rotate(const Quaternion& q);
+
+		/// <summary>
 		/// lookAt 형식의 뷰 행렬을 계산합니다.
 		/// </summary>
 		/// <param name="eye">눈의 위치</param>
@@ -752,6 +774,14 @@ namespace onart {
 		/// <param name="rotation">회전</param>
 		/// <param name="scale">배율</param>
 		inline static mat4 TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale);
+		/// <summary>
+		/// 주어진 병진, 회전, 배율을 포함하는 아핀 변환의 역변환을 단순계산보다 조금 빠르게 계산합니다. 역변환이 없는 경우(ex: 배율에 영이 있음)
+		/// 비정상적인 값이 리턴될 것입니다.
+		/// </summary>
+		/// <param name="translation">병진</param>
+		/// <param name="rotation">회전</param>
+		/// <param name="scale">배율</param>
+		inline static mat4 iTRS(const vec3& translation, const Quaternion& rotation, const vec3& scale);
 		/// <summary>
 		/// 표준 뷰 볼륨 직육면체에 들어올 대상 뿔대(절두체)를 조절하는 투사 행렬을 계산합니다.
 		/// 순수 2D 게임을 만드는 경우, 단위 행렬에 aspect만 적용하면 됩니다.
@@ -897,7 +927,6 @@ namespace onart {
 		/// </summary>
 		inline Quaternion operator-() const { return Quaternion(-c1, -ci, -cj, -ck); }
 
-
 		/// <summary>
 		/// 사원수 회전을 합칩니다. 기존 사원수가 먼저 적용되며 크기 1임을 확인하지 않습니다.
 		/// </summary>
@@ -985,7 +1014,7 @@ namespace onart {
 			float cp = cosf(pitch / 2);	float sp = sinf(pitch / 2);
 			float cr = cosf(roll / 2);	float sr = sinf(roll / 2);
 			
-			return Quaternion(cr * cp * cy + sr * sp * sy, sr * cp * cy - cr * sp * sy, cr * sp * cy + sr * cp * sy, cr * cr * sy - sr * sp * cy);
+			return Quaternion(cr * cp * cy + sr * sp * sy, sr * cp * cy - cr * sp * sy, cr * sp * cy + sr * cp * sy, cr * cp * sy - sr * sp * cy);
 		}
 		
 	};
@@ -1028,6 +1057,7 @@ namespace onart {
 	inline mat3 mat3::rotate(float roll, float pitch, float yaw) { return mat3(mat4::rotate(roll, pitch, yaw)); }
 	inline mat4 mat4::rotate(const vec3& axis, float angle) { return Quaternion::rotation(axis, angle).toMat4(); }
 	inline mat4 mat4::rotate(float roll, float pitch, float yaw) { return Quaternion::euler(roll, pitch, yaw).toMat4(); }
+	inline mat4 mat4::rotate(const Quaternion& q) { return q.toMat4(); }
 	inline mat4 mat4::TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
 		// SIMD 미적용 시 곱 30회/합 6회, T*R*S 따로 하는 경우 곱 149회/합 102회
 		// SIMD 적용 시 곱 15회/합 6회, 따로 하는 경우 곱 44회/합 102회
@@ -1039,6 +1069,20 @@ namespace onart {
 		r[3] = translation.x;
 		r[7] = translation.y;
 		r[11] = translation.z;
+		return r;
+	}
+
+	inline mat4 mat4::iTRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
+		// SIMD 적용 시 곱 19회/합 18회
+		mat4 r = rotation.conjugate().toMat4();	// 공액사원수=역회전
+		vec3 sc(1); sc /= scale;
+		mul4(r.a, sc.x);
+		mul4(r.a + 4, sc.y);
+		mul4(r.a + 8, sc.z);
+		vec3 itr = r * (-translation);
+		r[3] = itr.x;
+		r[7] = itr.y;
+		r[11] = itr.z;
 		return r;
 	}
 

@@ -31,7 +31,7 @@ namespace onart {
 	std::map<std::string, pAnimation> Animation::animations;
 
 	static ppMesh mRect;
-
+	
 	/// <summary>
 	/// 정렬된 벡터에 대하여 현재 키포인트를 가리키는 반복자를 리턴합니다.
 	/// <para>* 현재 시각이 첫 키포인트보다 작은 경우(정상적 상황이라면 있어서는 안 될 일) 첫 키포인트를 리턴합니다.</para>
@@ -51,7 +51,7 @@ namespace onart {
 
 	Animation::Animation(bool loop, float duration, int staticTps)
 		:loop(loop), duration(duration), staticTps(staticTps) {
-		
+
 	}
 
 	pAnimation Animation::get(const std::string& name) {

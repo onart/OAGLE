@@ -75,7 +75,7 @@ namespace onart {
 		/// <summary>
 		/// 위치를 얻습니다. 카메라 등과 같이 월드 좌표를 지속적으로 추적하는 것을 위해 만들어졌습니다.
 		/// </summary>
-		inline const vec3& getPos() { return transform.getPosition(); }
+		inline const vec3& getPos() { return transform.getGlobalPosition(); }
 		/// <summary>
 		/// 개체가 active하다는 것은 update()가 매 프레임 호출된다는 의미입니다.
 		/// </summary>

@@ -99,7 +99,7 @@ namespace onart::UI {
 		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
 		mat4 tr = mat4::r2r(prv, ldwh, -0.8f);
 		transform.setScale(tr[0], tr[5], 1);
-		transform.setPosition(tr[3], tr[7], -0.8f);
+		transform.setLocalPosition(tr[3], tr[7], -0.8f);
 	}
 
 	void Button::onMouseOver() {
@@ -152,8 +152,8 @@ namespace onart::UI {
 
 	void Button::move(const vec4& newLDWH) {
 		mat4 tr = mat4::r2r(ldwh, newLDWH);
-		transform.setScale(transform.getScale() * vec3(tr[0], tr[5], 1));
-		transform.addPosition(tr[3], tr[7], 0);
+		transform.setScale(transform.getLocalScale() * vec3(tr[0], tr[5], 1));
+		transform.addLocalPosition(tr[3], tr[7], 0);
 		ldwh = newLDWH;
 	}
 
@@ -169,7 +169,7 @@ namespace onart::UI {
 		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
 		mat4 tr = std::move(mat4::r2r(prv, ldwh, -0.8f));
 		transform.setScale(tr[0], tr[5], 1);
-		transform.setPosition(tr[3], tr[7], -0.8f);
+		transform.setLocalPosition(tr[3], tr[7], -0.8f);
 	}
 
 	void ToggleButton::onMouseOver(bool isOn) {
@@ -292,7 +292,7 @@ namespace onart::UI {
 	void ToggleButton::move(const vec4& newLDWH) {
 		mat4 tr = std::move(mat4::r2r(ldwh, newLDWH));
 		transform.setScale(transform.getScale() * vec3(tr[0], tr[5], 1));
-		transform.addPosition(tr[3], tr[7], 0);
+		transform.addLocalPosition(tr[3], tr[7], 0);
 		ldwh = newLDWH;
 	}
 
@@ -316,7 +316,7 @@ namespace onart::UI {
 		vec2 newSize = vec2(barArea.height, barArea.height) * handleSize;
 		handleArea = std::move(vec4(center.x - newSize.x / 2, center.y - newSize.y / 2, newSize.x, newSize.y));
 		tr = std::move(mat4::r2r(prv, handleArea));
-		transform.setPosition(tr[3], tr[7], -0.81f);
+		transform.setLocalPosition(tr[3], tr[7], -0.81f);
 		transform.setScale(tr[0], tr[5], 1);
 		addAnim(bar);
 	}
@@ -341,7 +341,7 @@ namespace onart::UI {
 		vec2 newSize = vec2(barArea.width, barArea.width) * handleSize;
 		handleArea = std::move(vec4(center.x - newSize.x / 2, center.y - newSize.y / 2, newSize.x, newSize.y));
 		tr = std::move(mat4::r2r(prv, handleArea));
-		transform.setPosition(tr[3], tr[7], -0.81f);
+		transform.setLocalPosition(tr[3], tr[7], -0.81f);
 		transform.setScale(tr[0], tr[5], 1);
 		addAnim(bar);
 	}
@@ -355,7 +355,7 @@ namespace onart::UI {
 			float prev = value.c;
 			if (scale == 0)x = leftmost;
 			else if (scale == 1)x = rightmost;
-			transform.setPositionX(x);
+			transform.setLocalPositionX(x);
 			handleArea.left = x - handleArea.width / 2;
 			value.c = scale;
 			if (isContinuous && onScroll && prev != value.c) {
@@ -367,7 +367,7 @@ namespace onart::UI {
 			value.q = lroundf(scale * (length - 1));
 			float xpos = leftmost + barArea.width / (length - 1) * value.q * (1 - margin * 2);
 			xpos = xpos > rightmost ? rightmost : xpos;
-			transform.setPositionX(xpos);
+			transform.setLocalPositionX(xpos);
 			handleArea.left = xpos - handleArea.width / 2;
 			if (isContinuous && onScroll && prev != value.q) {
 				(*onScroll)(&value);
@@ -390,7 +390,7 @@ namespace onart::UI {
 			float prev = value.c;
 			if (scale == 0)y = bottommost;
 			else if (scale == 1)y = topmost;
-			transform.setPositionY(y);
+			transform.setLocalPositionY(y);
 			handleArea.down = y - handleArea.height / 2;
 			value.c = scale;
 			if (isContinuous && onScroll && prev != value.c) {
@@ -402,7 +402,7 @@ namespace onart::UI {
 			value.q = lroundf(scale * (length - 1));
 			float ypos = bottommost + barArea.height / (length - 1) * value.q * (1 - margin * 2);
 			ypos = ypos > topmost ? topmost : ypos;
-			transform.setPositionY(ypos);
+			transform.setLocalPositionY(ypos);
 			handleArea.down = ypos - handleArea.height / 2;
 			if (isContinuous && onScroll && prev != value.q) {
 				(*onScroll)(&value);

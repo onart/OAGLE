@@ -27,7 +27,7 @@ namespace onart::window {
 	public:
 		CustomCursor(const EntityKey& k, const Transform& tr, pAnimation& anim) :Entity(k, tr, anim, true, false, true) {}
 		void Update() {
-			transform.setPosition(vec3(std::move(Input::cameraCursorPos()), -1));
+			transform.setLocalPosition(vec3(std::move(Input::cameraCursorPos()), -1));
 		}
 		~CustomCursor() {
 			glfwSetInputMode(::window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
