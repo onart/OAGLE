@@ -52,7 +52,7 @@ namespace onart {
 		/// <summary>
 		/// 로컬 위치/크기/회전과 부모 변환을 명시하여 변환을 생성합니다.
 		/// </summary>
-		Transform(const vec3& pos = 0, const vec3& scale = 1, const Quaternion& rot = { 1,0,0,0 }, Transform* parent = nullptr);
+		Transform(const vec3& pos = 0.f, const vec3& scale = 1.f, const Quaternion& rot = { 1,0,0,0 }, Transform* parent = nullptr);
 		/// <summary>
 		/// 변환을 복사합니다. 부모 변환은 공유하지만, 자식 변환은 복사하지 않습니다.
 		/// </summary>

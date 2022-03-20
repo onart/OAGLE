@@ -19,6 +19,10 @@ namespace onart {
 		/// GLFW 자체에서도 커서 이미지를 바꾸는 기능을 제공하지만, 이 함수는 단일 애니메이션을 설정할 수 있다는 차이가 있습니다. 마우스 커서의 클릭 판정은 물론 애니메이션 피벗에 있습니다.
 		/// </summary>
 		void setCursorImage(const std::shared_ptr<Animation>& p = std::shared_ptr<Animation>(), const vec2& scale = 1);
+		/// <summary>
+		/// 창의 이름을 변경합니다. (공사중)
+		/// </summary>
+		void setWindowTitle(const char*);
 	}
 }
 

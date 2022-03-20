@@ -43,9 +43,15 @@ namespace onart::window {
 		}
 		else {
 			glfwSetInputMode(::window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-			Entity* cursor = new CustomCursor("__cursor", Transform(0, scale), pa);
+			Entity* cursor = new CustomCursor("__cursor", Transform(0.f, scale), pa);
 			cursor->preserveOnSceneChange = true;
 			Scene::currentScene->addEntity(cursor);
 		}
+	}
+	
+	void setWindowTitle(const char* name)
+	{
+		// UTF8 인코딩 필요
+		glfwSetWindowTitle(::window, name);
 	}
 }

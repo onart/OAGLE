@@ -82,7 +82,7 @@ namespace onart {
 
 		std::vector<Vertex> circ(N + 1);
 		std::vector<unsigned> indices(N * 3);
-		circ[0] = { vec3(0), vec3(0,0,-1.0f), vec2(0.5f) };
+		circ[0] = { vec3(0.f), vec3(0,0,-1.0f), vec2(0.5f) };
 		for (unsigned k = 0; k < N; k++)
 		{
 			float t = PI * 2.0f * k / float(N), c = cos(t), s = sin(t);

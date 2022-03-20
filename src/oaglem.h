@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <cassert>
 #include <cstring>
+#include <numeric>
 
 #include "oagle_simd.h"
 
@@ -80,6 +81,11 @@ namespace onart {
 		/// 복사 생성자입니다.
 		/// </summary>
 		inline nvec(const nvec<D,T>& v) { memcpy(entry, v.entry, sizeof(entry)); }
+
+		/// <summary>
+		/// 배열을 이용하여 벡터를 생성합니다.
+		/// </summary>
+		inline nvec(const T* v) { memcpy(entry, v, sizeof(entry)); }
 
 		/// <summary>
 		/// 한 차원 낮은 벡터를 이용하여 생성합니다.
@@ -189,8 +195,15 @@ namespace onart {
 
 		/// <summary>
 		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
+		/// dot 함수에 비해 행렬 간 곱 및 행렬 x 벡터에서 사용하기에 빠릅니다. (원인은 파악 중입니다)
 		/// </summary>
-		inline T dot(const nvec& v) const { auto nv = (*this) * v; T s = 0; for (unsigned i = 0; i < D; i++)s += nv[i]; return s; }
+		inline T dot2(const nvec& v) const { auto nv = (*this) * v; T s = 0; for (unsigned i = 0; i < D; i++)s += nv[i]; return s; }
+
+		/// <summary>
+		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
+		/// dot2 함수에 비해 단순히 벡터에서 사용하기에 빠릅니다. (원인은 파악 중입니다)
+		/// </summary>
+		inline T dot(const nvec& v) const { return std::transform_reduce(entry, entry + D, v.entry, (T)0); }
 
 		/// <summary>
 		/// 벡터 길이의 제곱을 리턴합니다.
@@ -375,7 +388,7 @@ namespace onart {
 		/// n행 벡터를 리턴합니다. 1~3만 입력 가능합니다.
 		/// </summary>
 		/// <param name="i">행 인덱스(1 base)</param>
-		inline vec3 row(int i) const { assert(i <= 3 && i >= 1); int st = 3 * i - 3; vec3 ret; memcpy(ret.entry, a + st, sizeof(ret.entry)); return ret; }
+		inline vec3 row(int i) const { assert(i <= 3 && i >= 1); int st = 3 * i - 3; return vec3(a + st); }
 
 		/// <summary>
 		/// n열 벡터를 리턴합니다. 1~4만 입력 가능합니다.
@@ -392,7 +405,7 @@ namespace onart {
 				vec3 r = row(i);
 				for (int j = 1; j <= 3; j++, ent++) {
 					vec3 c = m.col(j);
-					ret[ent] = r.dot(c);
+					ret[ent] = r.dot2(c);
 				}
 			}
 			return ret;
@@ -406,7 +419,7 @@ namespace onart {
 		/// <summary>
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
-		inline vec3 operator*(const vec3& v) const { return vec3(row(1).dot(v), row(2).dot(v), row(3).dot(v)); }
+		inline vec3 operator*(const vec3& v) const { return vec3(row(1).dot2(v), row(2).dot2(v), row(3).dot2(v)); }
 
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
@@ -582,7 +595,7 @@ namespace onart {
 				vec4 r = row(i);
 				for (int j = 1; j <= 4; j++, ent++) {
 					vec4 c = m.col(j);
-					ret[ent] = r.dot(c);
+					ret[ent] = r.dot2(c);
 				}
 			}
 			return ret;
@@ -597,7 +610,7 @@ namespace onart {
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
 		inline vec4 operator*(const vec4& v) const { 
-			return vec4(row(1).dot(v), row(2).dot(v), row(3).dot(v), row(4).dot(v));
+			return vec4(row(1).dot2(v), row(2).dot2(v), row(3).dot2(v), row(4).dot2(v));
 		}
 
 		/// <summary>

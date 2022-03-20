@@ -97,7 +97,7 @@ namespace onart {
 		/// <param name="center">중심 좌표입니다.</param>
 		/// <param name="size">글자의 크기입니다. 다른 폰트에 대해서는 이 값이 같다고 하여 같은 크기가 보장되지 않습니다.</param>
 		/// <param name="color">전체 텍스트의 색상을 결정합니다. 텍스트 자체에서 결정된 색상과는 성분별 곱으로 연산됩니다.</param>
-		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, AlignH ha, AlignV va, const vec2& center = 0, float size = 1, const vec4& color = 1);
+		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, AlignH ha, AlignV va, const vec2& center = 0.f, float size = 1, const vec4& color = 1.f);
 		/// <summary>
 		/// 주어진 위치를 중심으로 고정된 크기의 텍스트를 그리며, 추가적으로 변환을 적용합니다. (텍스트의 길이에 관계 없이 각 글자의 크기가 고정됨)
 		/// </summary>
@@ -110,7 +110,7 @@ namespace onart {
 		/// <param name="center">중심 좌표입니다.</param>
 		/// <param name="size">글자의 크기입니다. 다른 폰트에 대해서는 이 값이 같다고 하여 같은 크기가 보장되지 않습니다.</param>
 		/// <param name="color">전체 텍스트의 색상을 결정합니다. 텍스트 자체에서 결정된 색상과는 성분별 곱으로 연산됩니다.</param>
-		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const mat4& transform, AlignH ha, AlignV va, const vec2& center = 0, float size = 1, const vec4& color = 1);
+		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const mat4& transform, AlignH ha, AlignV va, const vec2& center = 0.f, float size = 1, const vec4& color = 1.f);
 
 		/// <summary>
 		/// 이 불러온 폰트에 대하여 해당 문장이 차지하는 상대적 공간, 그리고 각 행은 어디서 시작할지를 리턴합니다. 이 둘은 draw()에서 사용됩니다.
