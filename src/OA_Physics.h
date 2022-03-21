@@ -62,6 +62,10 @@ namespace onart {
 		/// 역질량을 리턴합니다.
 		/// </summary>
 		inline float getInverseMass() const { return inverseMass; }
+		/// <summary>
+		/// 현재 위치를 리턴합니다.
+		/// </summary>
+		inline const vec3& getPosition() const { return tr.getGlobalPosition(); }
 	protected:
 		vec3 velocity;
 		vec3 acceleration;
@@ -122,6 +126,10 @@ namespace onart {
 		/// 역질량을 리턴합니다.
 		/// </summary>
 		inline float getInverseMass() const { return inverseMass; }
+		/// <summary>
+		/// 현재 위치를 리턴합니다. 2D지만 vec3 타입입니다.
+		/// </summary>
+		inline const vec3& getPosition() const { return tr.getGlobalPosition(); }
 	protected:
 		vec2 velocity;
 		vec2 acceleration;
@@ -157,6 +165,17 @@ namespace onart {
 	public:
 		inline DragGenerator(float k1, float k2) :k1(k1), k2(k2) {}
 		void generate(PointMass* pm);
+	private:
+		float k1, k2;
+	};
+
+	/// <summary>
+	/// 계수 2개를 미리 정해 두고 항력을 적용합니다.
+	/// </summary>
+	class DragGenerator2D :public ForceGenerator2D {
+	public:
+		inline DragGenerator2D(float k1, float k2) :k1(k1), k2(k2) {}
+		void generate(PointMass2D* pm);
 	private:
 		float k1, k2;
 	};

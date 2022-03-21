@@ -364,6 +364,7 @@ namespace onart {
 				curW += ct.advance * curx;
 			}
 		}
+		program2["isText"] = false;
 	}
 
 	oastring Font::cutLine(const oastring& content, float maxWidth) {

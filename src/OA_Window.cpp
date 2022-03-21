@@ -43,7 +43,7 @@ namespace onart::window {
 		}
 		else {
 			glfwSetInputMode(::window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-			Entity* cursor = new CustomCursor("__cursor", Transform(0.f, scale), pa);
+			Entity* cursor = new CustomCursor("__cursor", Transform(vec3(0, 0, -1), scale), pa);
 			cursor->preserveOnSceneChange = true;
 			Scene::currentScene->addEntity(cursor);
 		}

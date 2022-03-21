@@ -89,4 +89,9 @@ namespace onart {
 		const vec3& v = pm->getVelocity();
 		pm->addForce(-v * (k1 + k2 * v.length()));
 	}
+
+	void DragGenerator2D::generate(PointMass2D* pm) {
+		const vec2& v = pm->getVelocity();
+		pm->addForce(-v * (k1 + k2 * v.length()));
+	}
 }

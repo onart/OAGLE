@@ -31,7 +31,7 @@ namespace onart {
 	void Scene::render() {
 #ifdef OAGLE_2DGAME
 		for (auto it = renderOrder.cbegin(); it != renderOrder.cend();) {
-			Entity* ep = *(it->second);
+			Entity* ep = entities[it->second];
 			if (ep) {
 				ep->render();
 				++it;
@@ -68,7 +68,7 @@ namespace onart {
 		if (!shouldReap) return;
 #ifdef OAGLE_2DGAME
 		std::set<size_t> ridx;
-		for (auto it : renderOrder.cbegin(); it != renderOrder.cend();) {
+		for (auto it = renderOrder.cbegin(); it != renderOrder.cend();) {
 			if (!entities[it->second]) {
 				ridx.insert(it->second);
 				it = renderOrder.erase(it);
@@ -112,7 +112,7 @@ namespace onart {
 			e->__scene.index = (int)entities.size();
 			entities.push_back(e);
 #ifdef OAGLE_2DGAME
-			renderOrder.insert({ e->zIndex(),entities.size() - 1 });
+			renderOrder.insert({ -e->zIndex(),entities.size() - 1 });
 #endif // OAGLE_2DGAME
 		}
 	}

@@ -100,6 +100,7 @@ namespace onart {
 	private:	
 		std::vector<Entity*> entities;
 		std::multimap<float, size_t> renderOrder;
+		std::vector<Entity*> bubble;
 		void reap();
 		bool shouldReap = false;
 		// +bgm
