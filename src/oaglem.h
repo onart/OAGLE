@@ -189,7 +189,7 @@ namespace onart {
 		inline const T& operator[](ptrdiff_t i) const { assert(i < D); return entry[i]; }
 
 		/// <summary>
-		/// 벡터의 방향을 유지하고 길이를 1로 맞춥니다. 정수 벡터에서는 사용할 수 없습니다.
+		/// 벡터의 방향을 유지하고 길이를 1로 맞춘 것을 리턴합니다. 정수 벡터에서는 사용할 수 없습니다.
 		/// </summary>
 		inline nvec normalize() const { return (*this) / length(); }
 
@@ -197,7 +197,13 @@ namespace onart {
 		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
 		/// dot 함수에 비해 행렬 간 곱 및 행렬 x 벡터에서 사용하기에 빠릅니다. (원인은 파악 중입니다)
 		/// </summary>
-		inline T dot2(const nvec& v) const { auto nv = (*this) * v; T s = 0; for (unsigned i = 0; i < D; i++)s += nv[i]; return s; }
+		inline T dot2(const nvec& v) const { 
+			auto nv = (*this) * v; T s = 0;
+			if constexpr (D == 2) return nv[0] + nv[1];
+			else if constexpr (D == 3) return nv[0] + nv[1] + nv[2];
+			else if constexpr (D == 4) return nv[0] + nv[1] + nv[2] + nv[3];
+			else for (unsigned i = 0; i < D; i++)s += nv[i]; return s; 
+		}
 
 		/// <summary>
 		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.

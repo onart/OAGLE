@@ -182,6 +182,7 @@
     <ClCompile Include="OA_CQueue.cpp" />
     <ClCompile Include="OA_Camera.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
+    <ClCompile Include="OA_ForceGenerator.cpp" />
     <ClCompile Include="OA_Hangul.cpp" />
     <ClCompile Include="OA_Input.cpp" />
     <ClCompile Include="OA_Material.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="OA_CQueue.h" />
     <ClInclude Include="OA_Camera.h" />
     <ClInclude Include="OA_Entity.h" />
+    <ClInclude Include="OA_ForceGenerator.h" />
     <ClInclude Include="OA_Hangul.h" />
     <ClInclude Include="OA_Input.h" />
     <ClInclude Include="OA_Material.h" />

@@ -139,46 +139,6 @@ namespace onart {
 	private:
 		Transform& tr;
 	};
-
-	/// <summary>
-	/// 매 프레임 힘을 지속적으로 가합니다. 중력 같은 거의 상수인 힘이 아닌 항력 등에 대하여 사용합니다.
-	/// </summary>
-	class ForceGenerator {
-	public:
-		virtual void generate(PointMass* pm) = 0;
-		inline virtual void generate(PointMass* pm, float dt) {}
-	};
-
-	/// <summary>
-	/// 매 프레임 힘을 지속적으로 가합니다. 중력 같은 거의 상수인 힘이 아닌 항력 등에 대하여 사용합니다.
-	/// </summary>
-	class ForceGenerator2D {
-	public:
-		virtual void generate(PointMass2D* pm) = 0;
-		inline virtual void generate(PointMass2D* pm, float dt) {}
-	};
-
-	/// <summary>
-	/// 이것은 힘 발생기의 한 예입니다. 계수 2개를 미리 정해 두고 항력을 적용합니다.
-	/// </summary>
-	class DragGenerator :public ForceGenerator {
-	public:
-		inline DragGenerator(float k1, float k2) :k1(k1), k2(k2) {}
-		void generate(PointMass* pm);
-	private:
-		float k1, k2;
-	};
-
-	/// <summary>
-	/// 계수 2개를 미리 정해 두고 항력을 적용합니다.
-	/// </summary>
-	class DragGenerator2D :public ForceGenerator2D {
-	public:
-		inline DragGenerator2D(float k1, float k2) :k1(k1), k2(k2) {}
-		void generate(PointMass2D* pm);
-	private:
-		float k1, k2;
-	};
 }
 
 #endif // !__OA_PHYSICS_H__
