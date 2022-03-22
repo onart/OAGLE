@@ -24,8 +24,8 @@ namespace onart {
 		class UIEntity : public Entity {
 			friend class Slider;
 		public:
-			inline UIEntity(const EntityKey& _1, const Transform& _2, bool _3 = false, bool _4 = false) :Entity(_1, _2, _3, _4) { }
-			inline UIEntity(const EntityKey& _1, const Transform& _2, pAnimation& _3, bool _4 = false, bool _5 = false) : Entity(_1, _2, _3, _4, _5) {}
+			inline UIEntity(const EntityKey& _1, const Transform& _2, bool _3 = true, bool _4 = false, bool _5 = false) : Entity(_1, _2, _3, _4, _5) { }
+			inline UIEntity(const EntityKey& _1, const Transform& _2, pAnimation& _3, bool _4 = true, bool _5 = false, bool _6 = false) : Entity(_1, _2, _3, _4, _5, _6) {}
 			/// <summary>
 			/// 개체가 현재 판정이 가능한 상황인지 확인하기 위한 값입니다.
 			/// </summary>

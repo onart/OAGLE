@@ -30,14 +30,14 @@ namespace onart::UI {
 	}
 
 	Text::Text(const EntityKey& key, Font* font, const oastring& content, const vec4& targRect, float maxWidth, bool fullFit, AlignH align, float rowGap, const vec4& color)
-		:UIEntity(key, Transform(vec3(0, 0, -0.9f)) , true), font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(true), halign(align), rowGap(rowGap), center(targRect.left + targRect.width / 2, targRect.down + targRect.width / 2), fullFit(fullFit), targRect(targRect) {
+		:UIEntity(key, Transform(vec3(0, 0, -0.9f)), true, false, true) , font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(true), halign(align), rowGap(rowGap), center(targRect.left + targRect.width / 2, targRect.down + targRect.width / 2), fullFit(fullFit), targRect(targRect) {
 		setContent(content);
 		if (fullFit) { r2r = mat4::r2r(ldwh, targRect); }
 		else { r2r = mat4::r2r2(ldwh, targRect); }
 	}
 
 	Text::Text(const EntityKey& key, Font* font, const oastring& content, const vec2& center, float maxWidth, AlignH align, AlignV va, float size, float rowGap, const vec4& color)
-		: UIEntity(key, Transform(vec3(0, 0, -0.9f)), true), font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(false), halign(align), valign(va), rowGap(rowGap), center(center), size(size) {
+		: UIEntity(key, Transform(vec3(0, 0, -0.9f)), true, false, true) , font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(false), halign(align), valign(va), rowGap(rowGap), center(center), size(size) {
 		setContent(content);
 	}
 

@@ -179,6 +179,7 @@ bool init() {
 	glEnable(GL_BLEND);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthFunc(GL_LEQUAL);
 	program2.initWithMemory(p2vert, p2frag);
 	program3.initWithMemory(p3vert, p3frag);
 
