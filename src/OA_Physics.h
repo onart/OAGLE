@@ -4,6 +4,11 @@
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*
+* Copyright (c) 2003-2009 Ian Millington
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
 #ifndef __OA_PHYSICS_H__
 #define __OA_PHYSICS_H__
@@ -55,6 +60,27 @@ namespace onart {
 		/// </summary>
 		void addAbsoluteForce(const vec3&);
 		/// <summary>
+		/// 현재 프레임의 가속도를 리턴합니다.
+		/// </summary>
+		/// <returns></returns>
+		vec3 getAcceleration();
+		/// <summary>
+		/// 속도를 강제로 지정합니다.
+		/// </summary>
+		inline void setVelocity(const vec3& v) { velocity = v; }
+		/// <summary>
+		/// x축 속도를 강제로 지정합니다.
+		/// </summary>
+		inline void setVelocityX(float x) { velocity.x = x; }
+		/// <summary>
+		/// y축 속도를 강제로 지정합니다.
+		/// </summary>
+		inline void setVelocityY(float y) { velocity.y = y; }
+		/// <summary>
+		/// z축 속도를 강제로 지정합니다.
+		/// </summary>
+		inline void setVelocityZ(float z) { velocity.z = z; }
+		/// <summary>
 		/// 현재 속도를 리턴합니다.
 		/// </summary>
 		inline const vec3& getVelocity() const { return velocity; }
@@ -65,7 +91,39 @@ namespace onart {
 		/// <summary>
 		/// 현재 위치를 리턴합니다.
 		/// </summary>
-		inline const vec3& getPosition() const { return tr.getGlobalPosition(); }
+		inline const vec3& getPosition() { return tr.getGlobalPosition(); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void setPosition(const vec3& p) { tr.setPosition(p); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 x축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void setPositionX(float x) { tr.setPositionX(x); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 y축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void setPositionY(float y) { tr.setPositionY(y); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 z축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void setPositionZ(float z) { tr.setPositionZ(z); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 위치를 강제로 변화시킵니다.
+		/// </summary>
+		inline void addPosition(const vec3& p) { tr.addPosition(p); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 x축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void addPositionX(float x) { tr.addPositionX(x); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 y축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void addPositionY(float y) { tr.addPositionY(y); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 z축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void addPositionZ(float z) { tr.addPositionZ(z); }
 	protected:
 		vec3 velocity;
 		vec3 acceleration;
@@ -119,6 +177,22 @@ namespace onart {
 		/// </summary>
 		void addAbsoluteForce(const vec2&);
 		/// <summary>
+		/// 현재 프레임의 가속도를 리턴합니다.
+		/// </summary>
+		vec2 getAcceleration();
+		/// <summary>
+		/// 속도를 강제로 지정합니다.
+		/// </summary>
+		inline void setVelocity(const vec2& v) { velocity = v; }
+		/// <summary>
+		/// x축 속도를 강제로 지정합니다.
+		/// </summary>
+		inline void setVelocityX(float x) { velocity.x = x; }
+		/// <summary>
+		/// y축 속도를 강제로 지정합니다.
+		/// </summary>
+		inline void setVelocityY(float y) { velocity.y = y; }
+		/// <summary>
 		/// 현재 속도를 리턴합니다.
 		/// </summary>
 		inline const vec2& getVelocity() const { return velocity; }
@@ -130,6 +204,30 @@ namespace onart {
 		/// 현재 위치를 리턴합니다. 2D지만 vec3 타입입니다.
 		/// </summary>
 		inline const vec3& getPosition() const { return tr.getGlobalPosition(); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void setPosition(const vec2& p) { tr.setPosition(p); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 x축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void setPositionX(float x) { tr.setPositionX(x); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 y축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void setPositionY(float y) { tr.setPositionY(y); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 위치를 강제로 변화시킵니다.
+		/// </summary>
+		inline void addPosition(const vec3& p) { tr.addPosition(p); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 x축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void addPositionX(float x) { tr.addPositionX(x); }
+		/// <summary>
+		/// 속도를 유지한 채로 현재 y축 위치를 강제로 설정합니다.
+		/// </summary>
+		inline void addPositionY(float y) { tr.addPositionY(y); }
 	protected:
 		vec2 velocity;
 		vec2 acceleration;
