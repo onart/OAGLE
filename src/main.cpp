@@ -7,6 +7,7 @@
 *********************************************************************************/
 #include <cstdio>
 #include <cstdlib>
+#include <filesystem>
 
 #include "resources.h"
 #include "oagle.h"
@@ -207,6 +208,7 @@ void finalize() {
 
 // 콘솔 숨김: 링커 옵션 - 고급 - 진입점 mainCRTStartup, 링커 - 시스템 - 하위 시스템 창(/SUBSYSTEM:WINDOWS)
 int main(int argc, char* argv[]) {
+	std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path());	// 디버그 또는 프로파일링 시 실행 파일 루트로 이동
 	if (!(window = onart::createWindow("OAGLE", 1280, 720))) { 
 		glfwTerminate();
 		return 1;

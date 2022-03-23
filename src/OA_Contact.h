@@ -85,7 +85,21 @@ namespace onart {
 		/// </summary>
 		virtual unsigned addContact(Contact* contact, unsigned limit) = 0;
 	protected:
-		inline float currentLength() { return matter[0]->getPosition().distance(matter[1]->getPosition()); }
+		float currentLength();
+	};
+
+	/// <summary>
+	/// 2개 물체를 묶어 두는 연결체입니다.
+	/// </summary>
+	class MatterLink2D : public ContactGenerator2D {
+	public:
+		PointMass2D* matter[2];
+		/// <summary>
+		/// 필요한 경우 접촉을 생성합니다. 접촉이 생성된 경우 1을 리턴하며, 아닌 경우 0을 리턴합니다. 주어진 contact에 값을 채웁니다.
+		/// </summary>
+		virtual unsigned addContact(Contact2D* contact, unsigned limit) = 0;
+	protected:
+		float currentLength();
 	};
 
 	/// <summary>
@@ -111,6 +125,31 @@ namespace onart {
 		/// 끈 유지에 필요한 경우 접촉을 생성합니다. 접촉이 생성된 경우 1을 리턴합니다.
 		/// </summary>
 		unsigned addContact(Contact* contact, unsigned limit);
+	};
+
+	/// <summary>
+	/// 2개 물체를 강성 끈으로 연결합니다.
+	/// </summary>
+	class MatterCable2D : public MatterLink2D {
+	public:
+		const float maxLen;
+		const float restitution;
+		/// <summary>
+		/// 끈 유지에 필요한 경우 접촉을 생성합니다. 접촉이 생성된 경우 1을 리턴합니다.
+		/// </summary>
+		unsigned addContact(Contact2D* contact, unsigned limit);
+	};
+
+	/// <summary>
+	/// 2개 물체를 강성 막대로 연결합니다.
+	/// </summary>
+	class MatterRod2D :public MatterLink2D {
+	public:
+		const float length;
+		/// <summary>
+		/// 끈 유지에 필요한 경우 접촉을 생성합니다. 접촉이 생성된 경우 1을 리턴합니다.
+		/// </summary>
+		unsigned addContact(Contact2D* contact, unsigned limit);
 	};
 }
 

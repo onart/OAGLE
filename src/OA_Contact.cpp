@@ -14,6 +14,9 @@
 #include "OA_Physics.h"
 
 namespace onart {
+	
+	unsigned ContactResolver::iterations;
+
 	void Contact::resolve(float duration) {
 		resolveVelocity(duration);
 		resolvePenetration(duration);
@@ -170,5 +173,42 @@ namespace onart {
 		contact->restitution = 0;
 		return 1;
 	}
+
+	float MatterLink::currentLength() { 
+		return matter[0]->getPosition().distance(matter[1]->getPosition()); 
+	}
 	
+	float MatterLink2D::currentLength() {
+		return vec2(matter[0]->getPosition()).distance(vec2(matter[1]->getPosition()));
+	}
+
+	unsigned MatterCable2D::addContact(Contact2D* contact, unsigned limit) {
+		float length = currentLength();
+		if (length < maxLen) return 0;
+		contact->matter[0] = matter[0];
+		contact->matter[1] = matter[1];
+		vec2 norm((matter[1]->getPosition() - matter[0]->getPosition()).normalize());
+		contact->contactNormal = norm;
+		contact->penetration = length - maxLen;
+		contact->restitution = restitution;
+		return 1;
+	}
+
+	unsigned MatterRod2D::addContact(Contact2D* contact, unsigned limit) {
+		float dist = currentLength();
+		if (dist == length) return 0;
+		contact->matter[0] = matter[0];
+		contact->matter[1] = matter[1];
+		vec2 norm((matter[1]->getPosition() - matter[0]->getPosition()).normalize());
+		if (dist > length) {
+			contact->contactNormal = norm;
+			contact->penetration = dist - length;
+		}
+		else {
+			contact->contactNormal = -norm;
+			contact->penetration = length - dist;
+		}
+		contact->restitution = 0;
+		return 1;
+	}
 }
