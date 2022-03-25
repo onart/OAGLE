@@ -12,6 +12,8 @@
 extern float dt;
 extern onart::Shader program2, program3;
 
+USE_SHADER_UNIFORM;
+
 namespace onart {
 
 	void Camera::viewUpdate() {
@@ -33,17 +35,17 @@ namespace onart {
 		}
 		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);
 		if (fixdir) { 
-			program3["view"] = viewM4 = mat4::lookAt(currentPos, currentPos - relativePos, up);
+			program3[view] = viewM4 = mat4::lookAt(currentPos, currentPos - relativePos, up);
 		}
 		else { 
-			program3["view"] = viewM4 = mat4::lookAt(currentPos, *desiredAt, up);
+			program3[view] = viewM4 = mat4::lookAt(currentPos, *desiredAt, up);
 		}
 		
 	}
 
 	void Camera::setZoom(float zoom) {
 		this->zoom = zoom;
-		program3["zoom"] = zoom;
+		program3[::zoom] = zoom;
 	}
 
 	vec2 Camera::mouse2screen(const vec2& mousePos)
@@ -71,28 +73,28 @@ namespace onart {
 
 	void Camera::Ratio::setProjMatrix2D() {
 		projM4 = getAspectMatrix();
-		program2["aspect"] = projM4;
-		program3["proj"] = projM4;
+		program2[aspect] = projM4;
+		program3[proj] = projM4;
 	}
 
 	void Camera::Ratio::setProjMatrix3D(float fovy, float dnear, float dfar) {
 		this->fovy = fovy;	this->dnear = dnear;	this->dfar = dfar;
-		program2["aspect"] = getAspectMatrix();
-		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
+		program2[aspect] = getAspectMatrix();
+		program3[proj] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setFovy(float fovy) {
 		this->fovy = fovy;
-		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
+		program3[proj] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setNear(float near) {
 		this->dnear = near;
-		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
+		program3[proj] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 
 	void Camera::Ratio::setFar(float far) {
 		this->dfar = far;
-		program3["proj"] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
+		program3[proj] = projM4 = mat4::perspective(fovy, ratio, dnear, dfar);
 	}
 }

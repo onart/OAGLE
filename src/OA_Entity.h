@@ -34,7 +34,7 @@ namespace onart {
 #ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY 매크로를 정의한 경우 정수 키를 사용할 수 있습니다.
 		using EntityKey = int;
 #else
-		using EntityKey = std::string;
+		using EntityKey = std::string;	// const char*로 변경 예정
 #endif
 		/// <summary>
 		/// 개체를 생성합니다. 특별히 매 프레임 업데이트할 내용이 없는 개체는 상속 없이 그대로 사용할 수 있습니다.

@@ -19,6 +19,10 @@
 namespace onart {
 	std::vector<PointMass*> PointMassSystem::indiv;
 	std::vector<PointMass2D*> PointMassSystem2D::indiv;
+	std::vector<ForceGenerator*> PointMassSystem::forces;
+	std::vector<ContactGenerator*> PointMassSystem::contacts;
+	std::vector<ForceGenerator2D*> PointMassSystem2D::forces;
+	std::vector<ContactGenerator2D*> PointMassSystem2D::contacts;
 
 	template <class T>
 	void insort(std::vector<T*>& v, T* e) {
@@ -27,8 +31,8 @@ namespace onart {
 
 	template <class T>
 	void removeFromSorted(std::vector<T*>& v, T* e) {
-		auto it = std::lower_bound(indiv.begin(), indiv.end(), p);
-		if (*it == p)indiv.erase(it);
+		auto it = std::lower_bound(v.begin(), v.end(), e);
+		if (*it == e)v.erase(it);
 	}
 
 	void PointMassSystem::addIndividual(PointMass* p) { insort(indiv, p); }

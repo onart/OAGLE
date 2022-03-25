@@ -18,8 +18,10 @@ namespace onart {
 	/// <summary>
 	/// 정점(vertex) 셰이더 - 조각(fragment) 셰이더가 연결된 프로그램
 	/// <para>이 클래스는 스레드 안전성이 보장되지 않습니다.</para>
-	/// <para>이 계층에 대한 수정 혹은 이용을 하려는 경우, uniform 변수는 const char* 리터럴 상수 혹은 전역 상수 정도만 제대로 캐싱될 수 있음을 명심하길 바랍니다.
-	/// std::string 등에서 동적할당된 주소를 끌어오는 경우 작동은 하지만 성능은 성능대로 나빠지고 쓸데없는 메모리 차지의 가능성이 높습니다.</para>
+	/// <para>이 계층에 대한 수정 혹은 이용을 하려는 경우, uniform 변수는 const char* 전역 상수만 제대로 캐싱될 수 있음을 명심하길 바랍니다.
+	/// (참고) https://timsong-cpp.github.io/cppwp/lex.string#16
+	/// (요약) 동일 혹은 끝에 포함되는 문자열 리터럴은 코드 영역에서 같은 공간을 공유해도 되지만 필수적이지는 않다.
+	/// 특히 std::string 등에서 동적할당된 주소를 끌어오는 경우 작동은 하지만 성능은 성능대로 나빠지고 쓸데없는 메모리 차지의 가능성이 높습니다.</para>
 	/// 이 프로젝트에서는 GLSL 셰이더 내의 다차원 배열에 대한 캐싱을 직접 지원하지 않겠습니다. 예를 들어 shader["var"][2][1] 같은 경우 반드시 -1의 위치로 보냅니다(=실패).
 	/// 이때는 일반 uniform 변수처럼 이런 식으로 해 주시기 바랍니다. 
 	/// <para>shader.uniform("var[1][2]",1); or shader["var[1]"][2]=1; or shader["var[1][2]"]=1;</para>
@@ -29,6 +31,28 @@ namespace onart {
 	{
 
 		public:
+			static constexpr const char* FIXED = "fixed";
+			static constexpr const char* MODEL = "model";
+			static constexpr const char* TRANSFORM = "transform";
+			static constexpr const char* IS2D = "is2d";
+			static constexpr const char* COLOR = "color";
+			static constexpr const char* HAS_BONES = "has_bones";
+			static constexpr const char* ONE_COLOR = "oneColor";
+			static constexpr const char* USE_FULL = "useFull";
+			static constexpr const char* LDWH = "ldwh";
+			static constexpr const char* PIVOT = "piv";
+			static constexpr const char* IS_TEXT = "isText";
+			static constexpr const char* BONES = "bones";
+			static constexpr const char* CONSTRAINT = "constraint";
+			static constexpr const char* ASPECT = "aspect";
+			static constexpr const char* PROJECTION = "proj";
+			static constexpr const char* VIEW = "view";
+			static constexpr const char* ZOOM = "zoom";
+			static constexpr const char* TEXT_GROUP = "textGroup";
+			static constexpr const char* K_A = "Ka";
+			static constexpr const char* K_D = "Kd";
+			static constexpr const char* K_S = "Ks";
+			static constexpr const char* SHININESS = "shininess";
 			/// <summary>
 			/// 텍스처 전달용 코드입니다.
 			/// <para>SURFACE0: 기본 표면 이미지입니다.</para>
@@ -209,5 +233,30 @@ namespace onart {
 	};
 }
 
-
+/// 셰이더 클래스 내부에 정의된 static 상수를 전역에서 사용합니다. 문장의 형식을 갖춘 것으로 보이기 위해 매크로 사용 뒤에 ;를 붙여 주세요.
+/// 소문자가 다른 이름과 겹칠까봐 부담스러운 경우 이 대신 USE_SHADER_UNIFORM_UPPER를 사용합니다. (소문자 버전은 가독성을 위해 제공됩니다.)
+#define USE_SHADER_UNIFORM static constexpr const char* fixed = onart::Shader::FIXED, * model = onart::Shader::MODEL, \
+							* transform = onart::Shader::TRANSFORM, * is2d = onart::Shader::IS2D, \
+							*color=onart::Shader::COLOR, *hasBones=onart::Shader::HAS_BONES,\
+							*oneColor=onart::Shader::ONE_COLOR, *useFull=onart::Shader::USE_FULL,\
+							*ldwh=onart::Shader::LDWH, *piv=onart::Shader::PIVOT,\
+							*isText=onart::Shader::IS_TEXT, *bones=onart::Shader::BONES,\
+							*constraint=onart::Shader::CONSTRAINT, *aspect=onart::Shader::ASPECT,\
+							*proj=onart::Shader::PROJECTION, *view=onart::Shader::VIEW,\
+							*zoom=onart::Shader::ZOOM, *textGroup=onart::Shader::TEXT_GROUP,\
+							*Ka=onart::Shader::K_A, *Kd=onart::Shader::K_D, *Ks=onart::Shader::K_S,\
+							*shininess=onart::Shader::SHININESS;
+/// 셰이더 클래스 내부에 정의된 static 상수를 전역에서 사용합니다. 문장의 형식을 갖춘 것으로 보이기 위해 매크로 사용 뒤에 ;를 붙여 주세요.
+/// 소문자가 다른 이름과 겹칠까봐 부담스러운 경우 이 매크로를 사용합니다. (소문자 버전은 가독성을 위해 제공됩니다.)
+#define USE_SHADER_UNIFORM_UPPER static constexpr const char* FIXED = onart::Shader::FIXED, * MODEL = onart::Shader::MODEL, \
+							* TRANSFORM = onart::Shader::TRANSFORM, * IS2D = onart::Shader::IS2D, \
+							*COLOR=onart::Shader::COLOR, *HAS_BONES=onart::Shader::HAS_BONES,\
+							*ONE_COLOR=onart::Shader::ONE_COLOR, *USE_FULL=onart::Shader::USE_FULL,\
+							*LDWH=onart::Shader::LDWH, *PIVOT=onart::Shader::PIVOT,\
+							*IS_TEXT=onart::Shader::IS_TEXT, *BONES=onart::Shader::BONES,\
+							*CONSTRAINT=onart::Shader::CONSTRAINT, *ASPECT=onart::Shader::ASPECT,\
+							*PROJ=onart::Shader::PROJECTION, *VIEW=onart::Shader::VIEW,\
+							*ZOOM=onart::Shader::ZOOM, *TEXT_GROUP=onart::Shader::TEXT_GROUP,\
+							*K_A=onart::Shader::K_A, *K_D=onart::Shader::K_D, *K_S=onart::Shader::K_S,\
+							*SHININESS=onart::Shader::SHININESS;
 #endif // !__OA_SHADER_H__

@@ -25,6 +25,7 @@
 #include <filesystem>
 
 extern onart::Shader program3;
+USE_SHADER_UNIFORM;
 
 namespace onart {
 	
@@ -254,28 +255,28 @@ namespace onart {
 
 	void Model::render() const {
 		program3.bind(**mesh);
-		program3["piv"] = mat4();
-		program3["is2d"] = false;
-		program3["useFull"] = true;
+		program3[piv] = mat4();
+		program3[is2d] = false;
+		program3[useFull] = true;
 		for (auto& g : geom) {
 			auto& mtl = materials[g.material];
 			if (mtl) {
-				program3["Ka"] = mtl->getAmbient();
-				program3["Ks"] = mtl->getSpecular();
-				program3["Kd"] = mtl->getDiffuse();
-				program3["shininess"] = mtl->getShininess();
+				program3[Ka] = mtl->getAmbient();
+				program3[Ks] = mtl->getSpecular();
+				program3[Kd] = mtl->getDiffuse();
+				program3[shininess] = mtl->getShininess();
 
 				unsigned df = mtl->getDiffuseTex();
 				if (df) {
 					program3.texture(df);
-					program3["oneColor"] = false;
+					program3[oneColor] = false;
 				}
 				else {
-					program3["oneColor"] = true;
+					program3[oneColor] = true;
 				}
 			}
 			else {
-				program3["oneColor"] = true;
+				program3[oneColor] = true;
 			}
 			program3.draw(g.start, g.count);
 		}

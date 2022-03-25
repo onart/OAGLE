@@ -18,6 +18,8 @@
 extern onart::Shader program2, program3;
 extern float tp, dt;
 
+USE_SHADER_UNIFORM;
+
 namespace onart {
 
 	const float& Entity::tp = ::tp;
@@ -98,27 +100,27 @@ namespace onart {
 		if (!isRendered) return;
 		if (isFixed) {
 			if (model) {
-				program3["fixed"] = true;
-				program3["model"] = transform.getModel();
+				program3[fixed] = true;
+				program3[::model] = transform.getModel();
 			}
 			else {
-				program2["transform"] = transform.getModel();
-				program2["color"] = color;
+				program2[::transform] = transform.getModel();
+				program2[::color] = color;
 			}
 		}
 		else {
-			program3["fixed"] = false;
-			program3["model"] = transform.getModel();
-			program3["color"] = color;
+			program3[fixed] = false;
+			program3[::model] = transform.getModel();
+			program3[::color] = color;
 		}
 		if (!model) {
-			program3["is2d"] = true;
+			program3[is2d] = true;
 		}
 		if (as >= 0) { 
 			anims[as]->go(lt - animStartTimepoint, this, animTps);
 		}
 		else {
-			program3["has_bones"] = false;
+			program3[hasBones] = false;
 		}
 		if (model) { 
 			model->render();

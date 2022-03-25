@@ -26,6 +26,7 @@
 #include <algorithm>
 
 extern onart::Shader program2, program3;
+USE_SHADER_UNIFORM;
 
 namespace onart {
 	std::map<std::string, pAnimation> Animation::animations;
@@ -126,21 +127,21 @@ namespace onart {
 		
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
-			program3["oneColor"] = false;
+			program3[oneColor] = false;
 			program3.texture(kpNow(tex, tp)->value->id);
 		}
 		else {
-			program3["oneColor"] = true;
+			program3[oneColor] = true;
 		}
 
 		if (hasRect) {
-			program3["useFull"] = false;
+			program3[useFull] = false;
 			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
 			int kp = 0;
-			if (l == rects.begin()) { program3["ldwh"] = rects[0].value; }
+			if (l == rects.begin()) { program3[ldwh] = rects[0].value; }
 			else { 
 				l--;
-				program3["ldwh"] = l->value;
+				program3[ldwh] = l->value;
 				kp = int(l - rects.begin());
 				int ak = e->getAnimKey();
 				if (ak != kp) {
@@ -166,18 +167,18 @@ namespace onart {
 					0, sctr.y, 0, sctr.w,
 					0, 0, 1, 0,
 					0, 0, 0, 1);
-				program3["piv"] = pivMat;
+				program3[piv] = pivMat;
 			}
 			else {
-				program3["piv"] = mat4();
+				program3[piv] = mat4();
 			}
 		}
 		else {
-			program3["useFull"] = true;
-			program3["piv"] = mat4();
+			program3[useFull] = true;
+			program3[piv] = mat4();
 		}
-		program3["has_bones"] = false;
-		program3["is2d"] = true;
+		program3[hasBones] = false;
+		program3[is2d] = true;
 		program3.bind(**mRect);
 		program3.draw();
 	}
@@ -212,22 +213,22 @@ namespace onart {
 	void Sprite::go(float, Entity*, float) {
 		if (!mRect)mRect = Mesh::get("rect");
 		if (tex) { 
-			program3["oneColor"] = false;
+			program3[oneColor] = false;
 			program3.texture(tex->id);
 		}
 		else {
-			program3["oneColor"] = true;
+			program3[oneColor] = true;
 		}
-		program3["useFull"] = false;
-		program3["ldwh"] = ldwh;
+		program3[useFull] = false;
+		program3[::ldwh] = ldwh;
 		mat4 pivMat(
 			sctr.x, 0, 0, sctr.z,
 			0, sctr.y, 0, sctr.w,
 			0, 0, 1, 0,
 			0, 0, 0, 1);
-		program3["piv"] = pivMat;
-		program3["has_bones"] = false;
-		program3["is2d"] = true;
+		program3[piv] = pivMat;
+		program3[hasBones] = false;
+		program3[is2d] = true;
 		program3.bind(**mRect);
 		program3.draw();
 	}
@@ -262,21 +263,21 @@ namespace onart {
 	void FixedSprite::go(float, Entity*, float) {
 		if (!mRect)mRect = Mesh::get("rect");
 		if (tex) {
-			program2["oneColor"] = false;
+			program2[oneColor] = false;
 			program2.texture(tex->id);
 		}
 		else {
-			program2["oneColor"] = true;
+			program2[oneColor] = true;
 		}
-		program2["useFull"] = false;
-		program2["ldwh"] = ldwh;
-		program2["isText"] = false;
+		program2[useFull] = false;
+		program2[::ldwh] = ldwh;
+		program2[isText] = false;
 		mat4 pivMat(
 			sctr.x, 0, 0, sctr.z,
 			0, sctr.y, 0, sctr.w,
 			0, 0, 1, 0,
 			0, 0, 0, 1);
-		program2["piv"] = pivMat;
+		program2[piv] = pivMat;
 		program2.bind(**mRect);
 		program2.draw();
 	}
@@ -311,9 +312,9 @@ namespace onart {
 		setGlobalTrans(btree);
 		int i = 0;
 		for (Bone& m : u) {
-			program3["bones"][i++] = m.uni;
+			program3[bones][i++] = m.uni;
 		}
-		program3["has_bones"] = true;
+		program3[hasBones] = true;
 	}
 
 	void Animation3D::readHierarchy(aiNode* root, BoneTree& tree) {
@@ -479,21 +480,21 @@ namespace onart {
 
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
-			program2["oneColor"] = false;
+			program2[oneColor] = false;
 			program2.texture(kpNow(tex, tp)->value->id);
 		}
 		else {
-			program2["oneColor"] = true;
+			program2[oneColor] = true;
 		}
 
 		if (hasRect) {
-			program2["useFull"] = false;
+			program2[useFull] = false;
 			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
 			int kp = 0;
-			if (l == rects.begin()) { program2["ldwh"] = rects[0].value; }
+			if (l == rects.begin()) { program2[ldwh] = rects[0].value; }
 			else {
 				l--;
-				program2["ldwh"] = l->value;
+				program2[ldwh] = l->value;
 				kp = int(l - rects.begin());
 				int ak = e->getAnimKey();
 				if (ak != kp) {
@@ -519,15 +520,15 @@ namespace onart {
 					0, sctr.y, 0, sctr.w,
 					0, 0, 1, 0,
 					0, 0, 0, 1);
-				program2["piv"] = pivMat;
+				program2[piv] = pivMat;
 			}
 			else {
-				program2["piv"] = mat4();
+				program2[piv] = mat4();
 			}
 		}
 		else {
-			program2["useFull"] = true;
-			program2["piv"] = mat4();
+			program2[useFull] = true;
+			program2[piv] = mat4();
 		}
 		program2.bind(**mRect);
 		program2.draw();

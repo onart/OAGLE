@@ -8,6 +8,8 @@
 #include "OA_UI.h"
 #include "OA_Shader.h"
 
+USE_SHADER_UNIFORM;
+
 namespace onart::UI {
 	oastring toPlain(const oastring& content) {
 		oastring ret;
@@ -540,8 +542,8 @@ namespace onart::UI {
 
 	void Slider::render() {
 		extern Shader program2;
-		program2["constraint"] = area;
+		program2[constraint] = area;
 		// render components
-		program2["constraint"] = vec4(-100, -100, 100, 100);
+		program2[constraint] = vec4(-100, -100, 100, 100);
 	}
 }
