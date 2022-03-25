@@ -27,6 +27,7 @@ namespace onart {
 		/// </summary>
 		/// <param name="tr">물리적으로 움직이게 할 트랜스폼 객체입니다. null이면 의미가 없으므로 참조자를 사용합니다.</param>
 		PointMass(Transform& tr);
+		virtual ~PointMass();
 		/// <summary>
 		/// 매 프레임 물리 법칙을 적용합니다.
 		/// </summary>
@@ -144,6 +145,7 @@ namespace onart {
 		/// </summary>
 		/// <param name="tr">물리적으로 움직이게 할 트랜스폼 객체입니다. null이면 의미가 없으므로 참조자를 사용합니다.</param>
 		PointMass2D(Transform& tr);
+		virtual ~PointMass2D();
 		/// <summary>
 		/// 매 프레임 물리 법칙을 적용합니다.
 		/// </summary>

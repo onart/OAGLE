@@ -10,47 +10,53 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
-#include "OA_ForceGenerator.h"
-#include "OA_PointMass.h"
+#ifndef _OA_PHYSICALSYSTEM_H__
+#define _OA_PHYSICALSYSTEM_H__
+
+#include <vector>
 
 namespace onart {
-	void DragGenerator::generate(PointMass* pm) {
-		const vec3& v = pm->getVelocity();
-		pm->addForce(-v * (k1 + k2 * v.length()));
-	}
+	class PointMass;
+	class PointMass2D;
+	class ForceGenerator;
+	class ForceGenerator2D;
+	class ContactGenerator;
+	class ContactGenerator2D;
+	/// <summary>
+	/// 질점으로 구성된 세계입니다. 응용 단계에서 다루어지지 않습니다.
+	/// </summary>
+	class PointMassSystem
+	{
+	public:
+		static void Update();
+		static void addIndividual(PointMass* m);
+		static void removeIndividual(PointMass* m);
+		static void addForceGenerator(ForceGenerator* g);
+		static void removeForceGenerator(ForceGenerator* g);
+		static void addContactGenerator(ContactGenerator* g);
+		static void removeContactGenerator(ContactGenerator* g);
+	private:
+		static std::vector<PointMass*> indiv;
+		static std::vector<ForceGenerator*> forces;
+		static std::vector<ContactGenerator*> contacts;
+	};
 
-	void DragGenerator2D::generate(PointMass2D* pm) {
-		const vec2& v = pm->getVelocity();
-		pm->addForce(-v * (k1 + k2 * v.length()));
-	}
-
-	void HookeSpring::generate(PointMass* pm) {
-		vec3 f(pm->getPosition()); f -= other->getPosition();
-		float mag = fabs(1 - restLength / f.length()) * k;
-		f *= -mag;
-		pm->addForce(f);
-	}
-
-	void HookeSpring2D::generate(PointMass2D* pm) {
-		vec2 f(pm->getPosition()); f -= other->getPosition();
-		float mag = fabs(1 - restLength / f.length()) * k;
-		f *= -mag;
-		pm->addForce(f);
-	}
-
-	void HookeBungee::generate(PointMass* pm) {
-		vec3 f(pm->getPosition()); f -= other->getPosition();
-		float mag = (1 - restLength / f.length()) * k;
-		if (mag <= 0) return;
-		f *= mag;
-		pm->addForce(f);
-	}
-
-	void HookeBungee2D::generate(PointMass2D* pm) {
-		vec2 f(pm->getPosition()); f -= other->getPosition();
-		float mag = (1 - restLength / f.length()) * k;
-		if (mag <= 0) return;
-		f *= mag;
-		pm->addForce(f);
-	}
+	/// <summary>
+	/// 2D 질점으로 구성된 세계입니다. 응용 단계에서 다루어지지 않습니다.
+	/// </summary>
+	class PointMassSystem2D {
+	public:
+		static void Update();
+		static void addIndividual(PointMass2D* m);
+		static void removeIndividual(PointMass2D* m);
+		static void addForceGenerator(ForceGenerator2D* g);
+		static void removeForceGenerator(ForceGenerator2D* g);
+		static void addContactGenerator(ContactGenerator2D* g);
+		static void removeContactGenerator(ContactGenerator2D* g);
+	private:
+		static std::vector<PointMass2D*> indiv;
+		static std::vector<ForceGenerator2D*> forces;
+		static std::vector<ContactGenerator2D*> contacts;
+	};
 }
+#endif // !_OA_PHYSICALSYSTEM_H__

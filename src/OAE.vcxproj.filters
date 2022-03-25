@@ -77,13 +77,16 @@
     <ClCompile Include="OA_Window.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OA_Physics.cpp">
+    <ClCompile Include="OA_PointMass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_ForceGenerator.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Contact.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_PhysicalSystem.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -178,13 +181,16 @@
     <ClInclude Include="OA_Window.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_Physics.h">
+    <ClInclude Include="OA_PointMass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_ForceGenerator.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Contact.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_PhysicalSystem.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

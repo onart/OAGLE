@@ -10,91 +10,40 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
-#include "OA_Physics.h"
+#include "OA_PhysicalSystem.h"
+#include "OA_Contact.h"
+#include "OA_PointMass.h"
 
-extern float dt;
+#include <algorithm>
 
 namespace onart {
-	PointMass::PointMass(Transform& tr) :tr(tr) {}
-	PointMass2D::PointMass2D(Transform& tr) :tr(tr) {}
+	std::vector<PointMass*> PointMassSystem::indiv;
+	std::vector<PointMass2D*> PointMassSystem2D::indiv;
 
-	void PointMass::Update() {
-		tr.addPosition(dt * velocity);
-		impulse(dt * netForce);
-		velocity += dt * acceleration;
-		velocity *= std::powf(damp, dt);
-		netForce = 0;
+	template <class T>
+	void insort(std::vector<T*>& v, T* e) {
+		v.insert(std::lower_bound(v.begin(), v.end(), e), e);
 	}
 
-	void PointMass::Update(float dt) {
-		tr.addPosition(dt * velocity);
-		impulse(dt * netForce);
-		velocity += dt * acceleration;
-		velocity *= std::powf(damp, dt);
-		netForce = 0;
+	template <class T>
+	void removeFromSorted(std::vector<T*>& v, T* e) {
+		auto it = std::lower_bound(indiv.begin(), indiv.end(), p);
+		if (*it == p)indiv.erase(it);
 	}
 
-	void PointMass2D::Update() {
-		tr.addPosition(dt * velocity);
-		impulse(dt * netForce);
-		velocity += dt * acceleration;
-		velocity *= std::powf(damp, dt);
-		netForce = 0;
-	}
+	void PointMassSystem::addIndividual(PointMass* p) { insort(indiv, p); }
+	void PointMassSystem::removeIndividual(PointMass* p) { removeFromSorted(indiv, p); }
+	void PointMassSystem::addContactGenerator(ContactGenerator* p) { insort(contacts, p); }
+	void PointMassSystem::removeContactGenerator(ContactGenerator* p) { removeFromSorted(contacts, p); }
+	void PointMassSystem::addForceGenerator(ForceGenerator* p) { insort(forces, p); }
+	void PointMassSystem::removeForceGenerator(ForceGenerator* p) { removeFromSorted(forces, p); }
 
-	void PointMass2D::Update(float dt) {
-		tr.addPosition(dt * velocity);
-		impulse(dt * netForce);
-		velocity += dt * acceleration;
-		velocity *= std::powf(damp, dt);
-		netForce = 0;
-	}
+	void PointMassSystem2D::addIndividual(PointMass2D* p) { insort(indiv, p); }
+	void PointMassSystem2D::removeIndividual(PointMass2D* p) { removeFromSorted(indiv, p); }
+	void PointMassSystem2D::addContactGenerator(ContactGenerator2D* p) { insort(contacts, p); }
+	void PointMassSystem2D::removeContactGenerator(ContactGenerator2D* p) { removeFromSorted(contacts, p); }
+	void PointMassSystem2D::addForceGenerator(ForceGenerator2D* p) { insort(forces, p); }
+	void PointMassSystem2D::removeForceGenerator(ForceGenerator2D* p) { removeFromSorted(forces, p); }
 
-	void PointMass::impulse(const vec3& a) {
-		velocity += a * inverseMass;
-	}
-
-	void PointMass2D::impulse(const vec2& a) {
-		velocity += a * inverseMass;
-	}
-
-	void PointMass::accelerate(const vec3& a) {
-		velocity += a;
-	}
-
-	void PointMass2D::accelerate(const vec2& a) {
-		velocity += a;
-	}
-
-	vec3 PointMass::getAcceleration() {
-		return acceleration + netForce * inverseMass;
-	}
-
-	void PointMass::addForce(const vec3& f) {
-		netForce += f;
-	}
-
-	void PointMass2D::addForce(const vec2& f) {
-		netForce += f;
-	}
-
-	void PointMass::addConstantForce(const vec3& f) {
-		acceleration += f * inverseMass;
-	}
-
-	void PointMass::addAbsoluteForce(const vec3& f) {
-		acceleration += f;
-	}
-
-	void PointMass2D::addConstantForce(const vec2& f) {
-		acceleration += f * inverseMass;
-	}
-
-	void PointMass2D::addAbsoluteForce(const vec2& f) {
-		acceleration += f;
-	}
-
-	vec2 PointMass2D::getAcceleration() {
-		return acceleration * netForce * inverseMass;
-	}
+	
 }
