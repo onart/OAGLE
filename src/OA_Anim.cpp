@@ -365,6 +365,7 @@ namespace onart {
 			}	
 		}
 		std::sort(sigKp.begin(), sigKp.end());
+		//n2i.clear();
 	}
 
 	pAnimation Animation3D::load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp) {
@@ -473,6 +474,124 @@ namespace onart {
 		for (auto& ch : t.children) {
 			setGlobalTrans(ch, global);
 		}
+	}
+
+	void Animation3D::exportBin(const std::string& fileName) {
+		FILE* fp;
+		fopen_s(&fp, (fileName + ".oanim").c_str(), "wb");
+		if(fp){
+			{
+				float f = getDuration();
+				int i = getTps();
+				fwrite(&f, sizeof(float), 1, fp);
+				fwrite(&i, sizeof(int), 1, fp);
+				fwrite(&globalInverse, sizeof(mat4), 1, fp);
+			}
+			// vector<Bone> u;
+			int sz = (int)u.size();
+			fwrite(&sz, sizeof(int), 1, fp);
+			for (Bone& b : u) { fwrite(&b.offset, sizeof(mat4), 1, fp); }
+			// map<int, BoneAnim> keys;
+			sz = (int)keys.size();
+			fwrite(&sz, sizeof(int), 1, fp);
+			for (auto& k : keys) {
+				fwrite(&k.first, sizeof(int), 1, fp);
+				sz = (int)k.second.keyPos.size();
+				fwrite(&sz, sizeof(int), 1, fp);
+				fwrite(k.second.keyPos.data(), sizeof(Keypoint<vec3>), sz, fp);
+				sz = (int)k.second.keyRot.size();
+				fwrite(&sz, sizeof(int), 1, fp);
+				fwrite(k.second.keyRot.data(), sizeof(Keypoint<Quaternion>), sz, fp);
+				sz = (int)k.second.keyScale.size();
+				fwrite(&sz, sizeof(int), 1, fp);
+				fwrite(k.second.keyScale.data(), sizeof(Keypoint<vec3>), sz, fp);
+			}
+			// BoneTree btree;
+			static struct {
+				void operator()(BoneTree& bt, FILE* fp) {
+					fwrite(&bt.id, sizeof(int), 1, fp);
+					int sz = (int)bt.children.size();
+					fwrite(&sz, sizeof(int), 1, fp);
+					fwrite(&bt.transformation, sizeof(mat4), 1, fp);
+					for (BoneTree& child : bt.children) {
+						operator()(child, fp);
+					}
+				}
+			}traverse;
+			traverse(btree, fp);
+			fclose(fp);
+		}
+		else {
+			perror("fopen");
+		}
+	}
+
+	pAnimation Animation3D::loadBin(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp) {
+		FILE* fp;
+		fopen_s(&fp, file.c_str(), "rb");
+		if (fp) {
+			struct anim3d :public Animation3D {
+				anim3d(FILE* _1, float _2, int _3, bool _4, const std::vector<float>& _5) :Animation3D(_1, _2, _3, _4, _5) {}
+			};
+			float dur;
+			fread(&dur, sizeof(float), 1, fp);
+			int tps;
+			fread(&tps, sizeof(int), 1, fp);
+			pAnimation ret = std::make_shared<anim3d>(fp, dur, tps, loop, sig_kp);
+			fclose(fp);
+			return ret;
+		}
+		else {
+			perror("fopen");
+			return pAnimation();
+		}
+	}
+
+	Animation3D::Animation3D(FILE* fp, float duration, int tps, bool loop, const std::vector<float>& sig_kp)
+		:Animation(loop, duration, tps) {
+		fread(&globalInverse, sizeof(mat4), 1, fp);
+		int sz;
+		// vector<Bone> u;
+		fread(&sz, sizeof(int), 1, fp);
+		u.reserve(sz);
+		mat4* off = (mat4*)malloc(sizeof(mat4) * sz);	// 생성자 호출 x
+		if (!off) exit(1);
+		fread(off, sizeof(mat4), sz, fp);
+		mat4* off2 = off;
+		for (int i = 0; i < sz; i++, off2++) { u.push_back(Bone(*off2)); }
+		free(off);
+		// map<int, BoneAnim> keys;
+		fread(&sz, sizeof(int), 1, fp);
+		for (int i = 0; i < sz; i++) {
+			int id; fread(&id, sizeof(int), 1, fp);
+			BoneAnim& ba = keys[id];
+			fread(&sz, sizeof(int), 1, fp);
+			ba.keyPos.resize(sz);
+			fread(&ba.keyPos[0], sizeof(Keypoint<vec3>), sz, fp);
+			fread(&sz, sizeof(int), 1, fp);
+			ba.keyRot.resize(sz);
+			fread(&ba.keyRot[0], sizeof(Keypoint<Quaternion>), sz, fp);
+			fread(&sz, sizeof(int), 1, fp);
+			ba.keyScale.resize(sz);
+			fread(&ba.keyScale[0], sizeof(Keypoint<vec3>), sz, fp);
+		}
+		// BoneTree btree;
+		static struct {
+			void operator()(BoneTree& bt, FILE* fp) {
+				fread(&bt.id, sizeof(int), 1, fp);
+				int sz; fread(&sz, sizeof(int), 1, fp);
+				fread(&bt.transformation, sizeof(mat4), 1, fp);
+				bt.children.resize(sz);
+				for (BoneTree& child : bt.children) {
+					operator()(child, fp);
+				}
+			}
+		}traverse;
+		traverse(btree, fp);
+	}
+
+	void Animation3D::exportCode(const std::string& fileName) {
+
 	}
 
 	void UIAnimation::go(float elapsed, Entity* e, float dynamicTps) {		

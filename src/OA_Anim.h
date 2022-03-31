@@ -75,6 +75,8 @@ namespace onart {
 		static void collect(bool removeUsing = false);
 	protected:
 		Animation(bool loop, float duration, int staticTps = 1);
+		inline float getDuration() { return duration; }
+		inline int getTps() { return staticTps; }
 		inline float getTp(float elapsed) { if (duration <= 0)return 0; elapsed *= staticTps; return loop ? fmodf(elapsed, duration) : elapsed; }
 		/// <summary>
 		/// map에 애니메이션을 추가합니다.
@@ -188,7 +190,32 @@ namespace onart {
 		/// <param name="loop">루프 여부를 선택하세요.</param>
 		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
 		static std::shared_ptr<Animation> load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp = {});
-
+		/// <summary>
+		/// 이 프로그램에서 내보낸 애니메이션 데이터를 불러옵니다.
+		/// </summary>
+		/// <param name="name">애니메이션의 이름을 정해주세요. 중복인 경우 덮어쓰지 않고 기존의 것을 그대로 리턴합니다.</param>
+		/// <param name="file">파일 이름을 입력해주세요.</param>
+		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
+		static std::shared_ptr<Animation> loadBin(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp = {});
+		/// <summary>
+		/// 이 프로그램에서 내보낸 애니메이션 데이터를 메모리로부터 불러옵니다.
+		/// </summary>
+		/// <param name="name">애니메이션의 이름을 정해주세요. 중복인 경우 덮어쓰지 않고 기존의 것을 그대로 리턴합니다.</param>
+		/// <param name="dat">변수 주소를 대입해 주세요.</param>
+		/// <param name="len">배열 변수의 길이를 입력해 주세요.</param>
+		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
+		static std::shared_ptr<Animation> loadBin(const std::string& name, const unsigned char* dat, size_t len, const std::vector<float>& sig_kp = {});
+		/// <summary>
+		/// 애니메이션 데이터를 바이너리 형태로 내보냅니다. 파일 이름은 (이름.oanim)입니다.
+		/// 모델과 애니메이션을 다대다 대응하는 경우, 통일된 규격이 아닌 필요한 데이터만 있는 전용 데이터를 사용하는 것이 용량을 줄이는 방법이 될 수 있습니다.
+		/// sig_kp 부분은 저장되지 않습니다.
+		/// </summary>
+		void exportBin(const std::string& fileName);
+		/// <summary>
+		/// 애니메이션을 생성하는 코드를 C++ 코드 형태로 내보냅니다. 파일 이름은 (애니메이션이름.txt)입니다.
+		/// sig_kp 부분은 저장됩니다.
+		/// </summary>
+		void exportCode(const std::string& fileName);
 		/// <summary>
 		/// 애니메이션의 현재 상태를 렌더링하고, 필요한 경우 개체에서 함수를 호출합니다.
 		/// </summary>
@@ -210,7 +237,6 @@ namespace onart {
 		struct BoneTree {
 			int id = -1;
 			mat4 transformation;
-			mat4 global;
 			std::vector<BoneTree> children;
 		};
 
@@ -224,6 +250,7 @@ namespace onart {
 		void readHierarchy(aiNode* root, Animation3D::BoneTree& tree);
 
 		Animation3D(const aiScene*, float duration, int tps, bool loop, const std::vector<float>& sig_kp);
+		Animation3D(FILE* fp, float duration, int tps, bool loop, const std::vector<float>& sig_kp);
 		std::vector<float> sigKp;
 		std::map<int, BoneAnim> keys;
 		std::vector<Bone> u;

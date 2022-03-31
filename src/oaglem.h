@@ -56,12 +56,10 @@ namespace onart {
 		struct { T r, g, b, a; };
 		struct { T s, t, p, q; };
 		struct { T left, down, width, height; };
-#ifdef OAGELM_USE_GLSL_LIKE
 		struct { T xy[2]; T zw[2]; };
 		struct { T xyz[3]; };
 		struct { T _x; T yz[2]; };
 		struct { T __x; T yzw[3]; };
-#endif
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
