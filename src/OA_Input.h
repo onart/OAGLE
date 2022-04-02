@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -31,11 +31,11 @@ extern onart::ivec2 mousePos;
 
 namespace onart::Input {
 	/// <summary>
-	/// ÀÔ·ÂµÈ Å°¸¦ Ã£±â À§ÇÑ ÄÚµåÀÔ´Ï´Ù.
+	/// ì…ë ¥ëœ í‚¤ë¥¼ ì°¾ê¸° ìœ„í•œ ì½”ë“œì…ë‹ˆë‹¤.
 	/// </summary>
 	enum class KeyCode
 	{
-		// ¼ıÀÚ¿­
+		// ìˆ«ìì—´
 		alpha0 = GLFW_KEY_0,
 		alpha1 = GLFW_KEY_1,
 		alpha2 = GLFW_KEY_2,
@@ -50,7 +50,7 @@ namespace onart::Input {
 		equal = GLFW_KEY_EQUAL,
 		prime = GLFW_KEY_GRAVE_ACCENT,
 		backspace = GLFW_KEY_BACKSPACE,
-		// Å°ÆĞµå
+		// í‚¤íŒ¨ë“œ
 		pad0 = GLFW_KEY_KP_0,
 		pad1 = GLFW_KEY_KP_1,
 		pad2 = GLFW_KEY_KP_2,
@@ -67,7 +67,7 @@ namespace onart::Input {
 		plus = GLFW_KEY_KP_ADD,
 		pad_enter = GLFW_KEY_KP_ENTER,
 		numlock = GLFW_KEY_NUM_LOCK,
-		// ¾ËÆÄºª
+		// ì•ŒíŒŒë²³
 		A = GLFW_KEY_A,
 		B = GLFW_KEY_B,
 		C = GLFW_KEY_C,
@@ -94,7 +94,7 @@ namespace onart::Input {
 		X = GLFW_KEY_X,
 		Y = GLFW_KEY_Y,
 		Z = GLFW_KEY_Z,
-		// ÃÖ»ó´Ü
+		// ìµœìƒë‹¨
 		F1 = GLFW_KEY_F1,
 		F2 = GLFW_KEY_F2,
 		F3 = GLFW_KEY_F3,
@@ -111,14 +111,14 @@ namespace onart::Input {
 		print = GLFW_KEY_PRINT_SCREEN,
 		scroll = GLFW_KEY_SCROLL_LOCK,
 		pause = GLFW_KEY_PAUSE,
-		// ±â´É ÆĞµå
+		// ê¸°ëŠ¥ íŒ¨ë“œ
 		insert = GLFW_KEY_INSERT,
 		home = GLFW_KEY_HOME,
 		pageup = GLFW_KEY_PAGE_UP,
 		pagedown = GLFW_KEY_PAGE_DOWN,
 		end = GLFW_KEY_END,
 		Delete = GLFW_KEY_DELETE,
-		// ÁÂ/ÇÏ´Ü
+		// ì¢Œ/í•˜ë‹¨
 		tab = GLFW_KEY_TAB,
 		capslock = GLFW_KEY_CAPS_LOCK,
 		shift_L = GLFW_KEY_LEFT_SHIFT,
@@ -129,12 +129,12 @@ namespace onart::Input {
 		window_R = GLFW_KEY_RIGHT_SUPER,
 		alt_L = GLFW_KEY_LEFT_ALT,
 		alt_R = GLFW_KEY_RIGHT_ALT,
-		// ¹æÇâÅ°
+		// ë°©í–¥í‚¤
 		left = GLFW_KEY_LEFT,
 		right = GLFW_KEY_RIGHT,
 		up = GLFW_KEY_UP,
 		down = GLFW_KEY_DOWN,
-		// ³ª¸ÓÁö
+		// ë‚˜ë¨¸ì§€
 		comma = GLFW_KEY_COMMA,
 		period = GLFW_KEY_PERIOD,
 		slash = GLFW_KEY_SLASH,
@@ -148,7 +148,7 @@ namespace onart::Input {
 	};
 
 	/// <summary>
-	/// ¸¶¿ì½º Å¬¸¯ ¹× ÈÙ ÀÌµ¿¿¡ ´ëÇÏ¿© ³ª¿Â Å° ÄÚµåÀÔ´Ï´Ù.
+	/// ë§ˆìš°ìŠ¤ í´ë¦­ ë° íœ  ì´ë™ì— ëŒ€í•˜ì—¬ ë‚˜ì˜¨ í‚¤ ì½”ë“œì…ë‹ˆë‹¤.
 	/// </summary>
 	enum class MouseKeyCode {
 		left = GLFW_MOUSE_BUTTON_LEFT,
@@ -159,67 +159,67 @@ namespace onart::Input {
 	};
 
 	/// <summary>
-	/// ÇöÀç Å°°¡ ´­·Á ÀÖ´Ù¸é true¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+	/// í˜„ì¬ í‚¤ê°€ ëˆŒë ¤ ìˆë‹¤ë©´ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="code">È®ÀÎÇÒ Å°</param>
+	/// <param name="code">í™•ì¸í•  í‚¤</param>
 	inline bool isKeyPressed(KeyCode code) { return pressedKey[(int)code] > 0; }
 
 	/// <summary>
-	/// ÇöÀç Å°°¡ ´­·Á ÀÖ´Ù¸é true¸¦ ¸®ÅÏÇÕ´Ï´Ù. ¸¶¿ì½ºÀÇ °æ¿ì ÁÂ/¿ì/ÈÙ ¹öÆ°¸¸ Á¦°øµÇ¸ç, ¸¶¿ì½º ÈÙ up/downÀÇ °æ¿ì ÀÌ ÇÔ¼ö´Â ÀÇµµ´ë·Î µ¿ÀÛÇÏÁö ¾ÊÀ» °¡´É¼ºÀÌ ³ôÀ¸¸ç, »ç¿ëÇÏÁö ¾Ê´Â °ÍÀ» ±ÇÀåµå¸³´Ï´Ù.
+	/// í˜„ì¬ í‚¤ê°€ ëˆŒë ¤ ìˆë‹¤ë©´ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. ë§ˆìš°ìŠ¤ì˜ ê²½ìš° ì¢Œ/ìš°/íœ  ë²„íŠ¼ë§Œ ì œê³µë˜ë©°, ë§ˆìš°ìŠ¤ íœ  up/downì˜ ê²½ìš° ì´ í•¨ìˆ˜ëŠ” ì˜ë„ëŒ€ë¡œ ë™ì‘í•˜ì§€ ì•Šì„ ê°€ëŠ¥ì„±ì´ ë†’ìœ¼ë©°, ì‚¬ìš©í•˜ì§€ ì•ŠëŠ” ê²ƒì„ ê¶Œì¥ë“œë¦½ë‹ˆë‹¤.
 	/// </summary>
-	/// /// <param name="code">È®ÀÎÇÒ Å°</param>
+	/// /// <param name="code">í™•ì¸í•  í‚¤</param>
 	inline bool isKeyPressed(MouseKeyCode code) { return pressedMouseKey[(int)code] > 0; }
 
 	/// <summary>
-	/// ÇöÀç ÇÁ·¹ÀÓ¿¡ Å¬¸¯µÇ¾ú´Ù¸é true¸¦ ¸®ÅÏÇÕ´Ï´Ù. ¸¶¿ì½º ÈÙ up/downÀÇ °æ¿ì ÀÌ¹ø ÇÁ·¹ÀÓ¿¡ ±× ¹æÇâÀ¸·Î ±¼¸®°í ÀÖ´Ù¸é true°¡ ¸®ÅÏµË´Ï´Ù.
+	/// í˜„ì¬ í”„ë ˆì„ì— í´ë¦­ë˜ì—ˆë‹¤ë©´ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. ë§ˆìš°ìŠ¤ íœ  up/downì˜ ê²½ìš° ì´ë²ˆ í”„ë ˆì„ì— ê·¸ ë°©í–¥ìœ¼ë¡œ êµ´ë¦¬ê³  ìˆë‹¤ë©´ trueê°€ ë¦¬í„´ë©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="code">È®ÀÎÇÒ Å°</param>
+	/// <param name="code">í™•ì¸í•  í‚¤</param>
 	inline bool isKeyPressedNow(MouseKeyCode code) { return pressedMouseKey[(int)code] == frame; }
 
 	/// <summary>
-	/// ÇöÀç ÇÁ·¹ÀÓ¿¡ Å°°¡ ´­·È´Ù¸é true¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+	/// í˜„ì¬ í”„ë ˆì„ì— í‚¤ê°€ ëˆŒë ¸ë‹¤ë©´ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="code">È®ÀÎÇÒ Å°</param>
+	/// <param name="code">í™•ì¸í•  í‚¤</param>
 	inline bool isKeyPressedNow(KeyCode code) { return pressedKey[(int)code] == frame; }
 
 	/// <summary>
-	/// ÇöÀç ÇÁ·¹ÀÓ¿¡ Å°°¡ ¶¼¿´´Ù¸é true¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+	/// í˜„ì¬ í”„ë ˆì„ì— í‚¤ê°€ ë–¼ì˜€ë‹¤ë©´ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="code">È®ÀÎÇÒ Å°</param>
+	/// <param name="code">í™•ì¸í•  í‚¤</param>
 	inline bool isKeyReleasedNow(MouseKeyCode code) { return pressedMouseKey[(int)code] == -frame; }
 
 	/// <summary>
-	/// ÇöÁ¦ ÇÁ·¹ÀÓ¿¡ Å°°¡ ¶¼¿´´Ù¸é true¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+	/// í˜„ì œ í”„ë ˆì„ì— í‚¤ê°€ ë–¼ì˜€ë‹¤ë©´ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="code">È®ÀÎÇÒ Å°</param>
+	/// <param name="code">í™•ì¸í•  í‚¤</param>
 	inline bool isKeyReleasedNow(KeyCode code) { return pressedKey[(int)code] == -frame; }
 
 	/// <summary>
-	/// (¸¶¿ì½º¸¦ Á¦¿ÜÇÏ°í) ¾î¶² Å°µçÁö ´­·Á ÀÖ´Â »óÈ²ÀÎ °æ¿ì true¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+	/// (ë§ˆìš°ìŠ¤ë¥¼ ì œì™¸í•˜ê³ ) ì–´ë–¤ í‚¤ë“ ì§€ ëˆŒë ¤ ìˆëŠ” ìƒí™©ì¸ ê²½ìš° trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 	/// </summary>
 	inline bool isAnyKeyIn() { return keyCount; }
 
 	/// <summary>
-	/// ÇöÀç ÇÁ·¹ÀÓ¿¡ ´­¸° ¸ğµç Å°¸¦ STL º¤ÅÍ ÇüÅÂ·Î ¸®ÅÏÇÕ´Ï´Ù. "´­·Á ÀÖ´Â"ÀÌ ¾Æ´Õ´Ï´Ù.
-	/// GLFW 3.3.6 ¹öÀü¿¡¼­´Â ¾ÈÀüÇÕ´Ï´Ù.
+	/// í˜„ì¬ í”„ë ˆì„ì— ëˆŒë¦° ëª¨ë“  í‚¤ë¥¼ STL ë²¡í„° í˜•íƒœë¡œ ë¦¬í„´í•©ë‹ˆë‹¤. "ëˆŒë ¤ ìˆëŠ”"ì´ ì•„ë‹™ë‹ˆë‹¤.
+	/// GLFW 3.3.6 ë²„ì „ì—ì„œëŠ” ì•ˆì „í•©ë‹ˆë‹¤.
 	/// </summary>
 	std::vector<KeyCode> allKeyInputsForNow();
 
 	/// <summary>
-	/// Ã¢ ³»¿¡¼­ ¸¶¿ì½º Æ÷ÀÎÅÍÀÇ À§Ä¡¸¦ ¸®ÅÏÇÕ´Ï´Ù. ÁÂÃø »ó´ÜÀÌ (0,0)ÀÌ¸ç ´ÜÀ§´Â pxÀÔ´Ï´Ù.
+	/// ì°½ ë‚´ì—ì„œ ë§ˆìš°ìŠ¤ í¬ì¸í„°ì˜ ìœ„ì¹˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. ì¢Œì¸¡ ìƒë‹¨ì´ (0,0)ì´ë©° ë‹¨ìœ„ëŠ” pxì…ë‹ˆë‹¤.
 	/// </summary>
 	inline ivec2 cursorPos() { return mousePos; }
 
 	/// <summary>
-	/// ¸¶¿ì½º Æ÷ÀÎÅÍÀÇ À§Ä¡¸¦ °ÔÀÓ È­¸é ±âÁØÀ¸·Î ¸®ÅÏÇÕ´Ï´Ù(Ã¢ ±âÁØÀÌ ¾Æ´Õ´Ï´Ù). ÁÂÃø »ó´ÜÀÌ (0,0), ±×¸®°í ¿ìÃø ÇÏ´ÜÀÌ (1,1)ÀÔ´Ï´Ù.
+	/// ë§ˆìš°ìŠ¤ í¬ì¸í„°ì˜ ìœ„ì¹˜ë¥¼ ê²Œì„ í™”ë©´ ê¸°ì¤€ìœ¼ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤(ì°½ ê¸°ì¤€ì´ ì•„ë‹™ë‹ˆë‹¤). ì¢Œì¸¡ ìƒë‹¨ì´ (0,0), ê·¸ë¦¬ê³  ìš°ì¸¡ í•˜ë‹¨ì´ (1,1)ì…ë‹ˆë‹¤.
 	/// cf) Camera::mouse2screen(), Input::cameraCursorPos()
-	/// *°í dpi È­¸é¿¡ ´ëÇÑ º¸Á¤ÀÌ °ËÁõµÇÁö ¾ÊÀº »óÅÂÀÔ´Ï´Ù.
+	/// *ê³  dpi í™”ë©´ì— ëŒ€í•œ ë³´ì •ì´ ê²€ì¦ë˜ì§€ ì•Šì€ ìƒíƒœì…ë‹ˆë‹¤.
 	/// </summary>
 	vec2 relativeCursorPos();
 
 	/// <summary>
-	/// ¸¶¿ì½º Æ÷ÀÎÅÍÀÇ À§Ä¡¸¦ ºäÆ÷Æ® ±âÁØÀ¸·Î ¸®ÅÏÇÕ´Ï´Ù. Áß½ÉÀÌ (0,0)ÀÌ¸ç Á¾È¾ Áß ÂªÀº ÂÊÀÇ ±æÀÌ°¡ 2ÀÔ´Ï´Ù.
-	/// ÇÁ·¹ÀÓ´ç ¿©·¯ ¹ø ÇÊ¿äÇÒ °æ¿ì ÀÌ°ÍÀ» È°¿ëÇÏ´Â °ÍÀÌ ÈÎ¾À ÁÁ½À´Ï´Ù.
+	/// ë§ˆìš°ìŠ¤ í¬ì¸í„°ì˜ ìœ„ì¹˜ë¥¼ ë·°í¬íŠ¸ ê¸°ì¤€ìœ¼ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤. ì¤‘ì‹¬ì´ (0,0)ì´ë©° ì¢…íš¡ ì¤‘ ì§§ì€ ìª½ì˜ ê¸¸ì´ê°€ 2ì…ë‹ˆë‹¤.
+	/// í”„ë ˆì„ë‹¹ ì—¬ëŸ¬ ë²ˆ í•„ìš”í•  ê²½ìš° ì´ê²ƒì„ í™œìš©í•˜ëŠ” ê²ƒì´ í›¨ì”¬ ì¢‹ìŠµë‹ˆë‹¤.
 	/// </summary>
 	vec2 cameraCursorPos();
 }

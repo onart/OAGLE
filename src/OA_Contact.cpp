@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -32,7 +32,7 @@ namespace onart {
 		float after = afterSpeed();
 		if (after > 0) return;
 		float after2 = -after * restitution;
-		// Á¤Áö Á¢ÃË
+		// ì •ì§€ ì ‘ì´‰
 		vec3 frameAcc = matter[0]->getAcceleration();
 		if (matter[1])frameAcc -= matter[1]->getAcceleration();
 		float afterByAcc = frameAcc.dot(contactNormal) * duration;
@@ -40,7 +40,7 @@ namespace onart {
 			after += restitution * afterByAcc;
 			if (after < 0)after = 0;
 		}
-		// Á¤Áö Á¢ÃË
+		// ì •ì§€ ì ‘ì´‰
 		float delta = after2 - after;
 
 		float totalInverseMass = matter[0]->getInverseMass();
@@ -78,7 +78,7 @@ namespace onart {
 		if (after > 0) return;
 		float after2 = -after * restitution;
 		float delta = after2 - after;
-		// Á¤Áö Á¢ÃË
+		// ì •ì§€ ì ‘ì´‰
 		vec3 frameAcc = matter[0]->getAcceleration();
 		if (matter[1])frameAcc -= matter[1]->getAcceleration();
 		float afterByAcc = frameAcc.dot(contactNormal) * duration;
@@ -86,7 +86,7 @@ namespace onart {
 			after += restitution * afterByAcc;
 			if (after < 0)after = 0;
 		}
-		// Á¤Áö Á¢ÃË
+		// ì •ì§€ ì ‘ì´‰
 		float totalInverseMass = matter[0]->getInverseMass();
 		if (matter[1])totalInverseMass += matter[1]->getInverseMass();
 		if (totalInverseMass <= 0) return;

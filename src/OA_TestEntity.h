@@ -1,4 +1,4 @@
-#ifndef __OA_TESTENTITY_H__
+﻿#ifndef __OA_TESTENTITY_H__
 #define __OA_TESTENTITY_H__
 
 #include "OA_Entity.h"

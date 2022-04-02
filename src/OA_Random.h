@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -15,69 +15,69 @@
 
 namespace onart {
 	/// <summary>
-	/// ·£´ı ¸ğµâÀ» °£´ÜÇÑ ÇüÅÂ·Î ÀÏºÎ¸¸ Ãß¸° ³×ÀÓ½ºÆäÀÌ½ºÀÔ´Ï´Ù. mt19937À» »ç¿ëÇÕ´Ï´Ù.
+	/// ëœë¤ ëª¨ë“ˆì„ ê°„ë‹¨í•œ í˜•íƒœë¡œ ì¼ë¶€ë§Œ ì¶”ë¦° ë„¤ì„ìŠ¤í˜ì´ìŠ¤ì…ë‹ˆë‹¤. mt19937ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
 	/// </summary>
 	namespace Random {
 		/// <summary>
-		/// ¸ğµç ³­¼öÀÇ ½Ãµå¸¦ Á÷Á¢ Á¤ÇÕ´Ï´Ù. 0Àº »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.
+		/// ëª¨ë“  ë‚œìˆ˜ì˜ ì‹œë“œë¥¼ ì§ì ‘ ì •í•©ë‹ˆë‹¤. 0ì€ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="sd">½Ãµå°ªÀÌ¸ç 0À» ÀÔ·ÂÇÏ´Â °æ¿ì random_device¿¡¼­ °¡Á®¿É´Ï´Ù.</param>
+		/// <param name="sd">ì‹œë“œê°’ì´ë©° 0ì„ ì…ë ¥í•˜ëŠ” ê²½ìš° random_deviceì—ì„œ ê°€ì ¸ì˜µë‹ˆë‹¤.</param>
 		void seed(unsigned sd = 0);
 		/// <summary>
-		/// Á¤±Ô ºĞÆ÷¿¡¼­ float ³­¼ö¸¦ ¾ò½À´Ï´Ù.
+		/// ì •ê·œ ë¶„í¬ì—ì„œ float ë‚œìˆ˜ë¥¼ ì–»ìŠµë‹ˆë‹¤.
 		/// </summary>
 		float randomN();
 		/// <summary>
-		/// 0°ú 1 »çÀÌÀÇ ±Õµî ºĞÆ÷¿¡¼­ ³­¼ö¸¦ ¾ò½À´Ï´Ù.
+		/// 0ê³¼ 1 ì‚¬ì´ì˜ ê· ë“± ë¶„í¬ì—ì„œ ë‚œìˆ˜ë¥¼ ì–»ìŠµë‹ˆë‹¤.
 		/// </summary>
 		float random();
 		/// <summary>
-		/// ÁÖ¾îÁø ¼ö¸¸Å­ 0°ú 1 »çÀÌÀÇ ±Õµî ºĞÆ÷¿¡¼­ ³­¼ö¸¦ ¾ò¾î º¤ÅÍ·Î ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ìˆ˜ë§Œí¼ 0ê³¼ 1 ì‚¬ì´ì˜ ê· ë“± ë¶„í¬ì—ì„œ ë‚œìˆ˜ë¥¼ ì–»ì–´ ë²¡í„°ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="n">»ı¼ºÇÒ °³¼ö</param>
+		/// <param name="n">ìƒì„±í•  ê°œìˆ˜</param>
 		std::vector<float> random(size_t n);
 		/// <summary>
-		/// 0°ú ÁÖ¾îÁø ¼ö(Æ÷ÇÔ) »çÀÌÀÇ ±Õµî ºĞÆ÷¿¡¼­ ³­¼ö¸¦ ¾ò½À´Ï´Ù.
+		/// 0ê³¼ ì£¼ì–´ì§„ ìˆ˜(í¬í•¨) ì‚¬ì´ì˜ ê· ë“± ë¶„í¬ì—ì„œ ë‚œìˆ˜ë¥¼ ì–»ìŠµë‹ˆë‹¤.
 		/// </summary>
 		int irandom(int end);
 		/// <summary>
-		/// ÁÖ¾îÁø ¼öµé(Æ÷ÇÔ) »çÀÌÀÇ ±Õµî ºĞÆ÷¿¡¼­ ³­¼ö¸¦ ¾ò½À´Ï´Ù.
+		/// ì£¼ì–´ì§„ ìˆ˜ë“¤(í¬í•¨) ì‚¬ì´ì˜ ê· ë“± ë¶„í¬ì—ì„œ ë‚œìˆ˜ë¥¼ ì–»ìŠµë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="start">¹üÀ§ÀÇ ¿ŞÂÊ ³¡°ª(Æ÷ÇÔ)</param>
-		/// <param name="end">¹üÀ§ÀÇ ¿À¸¥ÂÊ ³¡°ª(Æ÷ÇÔ)</param>
+		/// <param name="start">ë²”ìœ„ì˜ ì™¼ìª½ ëê°’(í¬í•¨)</param>
+		/// <param name="end">ë²”ìœ„ì˜ ì˜¤ë¥¸ìª½ ëê°’(í¬í•¨)</param>
 		int irandom(int start, int end);
 		/// <summary>
-		/// 0°ú ÁÖ¾îÁø ¼ö(Æ÷ÇÔ) »çÀÌÀÇ ±Õµî ºĞÆ÷¿¡¼­ ³­¼ö¸¦ ÁÖ¾îÁø ¼ö¸¸Å­ ¾ò¾î º¤ÅÍ·Î ¸®ÅÏÇÕ´Ï´Ù.
+		/// 0ê³¼ ì£¼ì–´ì§„ ìˆ˜(í¬í•¨) ì‚¬ì´ì˜ ê· ë“± ë¶„í¬ì—ì„œ ë‚œìˆ˜ë¥¼ ì£¼ì–´ì§„ ìˆ˜ë§Œí¼ ì–»ì–´ ë²¡í„°ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="end">¹üÀ§ÀÇ ¿À¸¥ÂÊ ³¡°ª(Æ÷ÇÔ)</param>
-		/// <param name="n">»ı¼ºÇÒ °³¼ö</param>
+		/// <param name="end">ë²”ìœ„ì˜ ì˜¤ë¥¸ìª½ ëê°’(í¬í•¨)</param>
+		/// <param name="n">ìƒì„±í•  ê°œìˆ˜</param>
 		std::vector<int> irandoms(int end, size_t n);
 		/// <summary>
-		/// ÁÖ¾îÁø ¼öµé(Æ÷ÇÔ) »çÀÌÀÇ ±Õµî ºĞÆ÷¿¡¼­ ³­¼ö¸¦ ÁÖ¾îÁø ¼ö¸¸Å­ ¾ò¾î º¤ÅÍ·Î ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ìˆ˜ë“¤(í¬í•¨) ì‚¬ì´ì˜ ê· ë“± ë¶„í¬ì—ì„œ ë‚œìˆ˜ë¥¼ ì£¼ì–´ì§„ ìˆ˜ë§Œí¼ ì–»ì–´ ë²¡í„°ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="start">¹üÀ§ÀÇ ¿ŞÂÊ ³¡°ª(Æ÷ÇÔ)</param>
-		/// <param name="end">¹üÀ§ÀÇ ¿À¸¥ÂÊ ³¡°ª(Æ÷ÇÔ)</param>
-		/// <param name="n">»ı¼ºÇÒ °³¼ö</param>
+		/// <param name="start">ë²”ìœ„ì˜ ì™¼ìª½ ëê°’(í¬í•¨)</param>
+		/// <param name="end">ë²”ìœ„ì˜ ì˜¤ë¥¸ìª½ ëê°’(í¬í•¨)</param>
+		/// <param name="n">ìƒì„±í•  ê°œìˆ˜</param>
 		std::vector<int> irandoms(int start, int end, size_t n);
 		/// <summary>
-		/// ÁÖ¾îÁø È®·ü·Î true¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ í™•ë¥ ë¡œ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="p">true¸¦ ¸®ÅÏÇÒ È®·ü</param>
+		/// <param name="p">trueë¥¼ ë¦¬í„´í•  í™•ë¥ </param>
 		bool trial(float p = 0.5f);
 		/// <summary>
-		/// Àü¿ª¿¡¼­ »ç¿ë ÁßÀÎ ¿£ÁøÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì „ì—­ì—ì„œ ì‚¬ìš© ì¤‘ì¸ ì—”ì§„ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		std::mt19937& getEngine();
 		/// <summary>
-		/// ÁÖ¾îÁø º¤ÅÍ È¤Àº º¤ÅÍ ±â¹İ ÄÁÅ×ÀÌ³ÊÀÇ °ªµéÀÇ ¼ø¼­¸¦ ¹«ÀÛÀ§·Î º¯°æÇÕ´Ï´Ù.
-		/// ¿øº»ÀÇ °ªÀ» ±×´ë·Î µÎ°í ¼¯Àº °á°ú¹°À» ¸®ÅÏÇÏ´Â ÇÔ¼ö°¡ ¾Æ´Ô¿¡ ÁÖÀÇÇÏ¼¼¿ä.
+		/// ì£¼ì–´ì§„ ë²¡í„° í˜¹ì€ ë²¡í„° ê¸°ë°˜ ì»¨í…Œì´ë„ˆì˜ ê°’ë“¤ì˜ ìˆœì„œë¥¼ ë¬´ì‘ìœ„ë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
+		/// ì›ë³¸ì˜ ê°’ì„ ê·¸ëŒ€ë¡œ ë‘ê³  ì„ì€ ê²°ê³¼ë¬¼ì„ ë¦¬í„´í•˜ëŠ” í•¨ìˆ˜ê°€ ì•„ë‹˜ì— ì£¼ì˜í•˜ì„¸ìš”.
 		/// </summary>
 		template <class T> inline void shuffle(std::vector<T>& v) { std::shuffle(v.begin(), v.end(), getEngine()); }
 		/// <summary>
-		/// ÁÖ¾îÁø º¤ÅÍ È¤Àº º¤ÅÍ ±â¹İ ÄÁÅ×ÀÌ³ÊÀÇ °ªµé¿¡¼­ ¹«ÀÛÀ§ n°³¸¦ ÃßÃâÇÏ¿© ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ë²¡í„° í˜¹ì€ ë²¡í„° ê¸°ë°˜ ì»¨í…Œì´ë„ˆì˜ ê°’ë“¤ì—ì„œ ë¬´ì‘ìœ„ nê°œë¥¼ ì¶”ì¶œí•˜ì—¬ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="v">¿øº» º¤ÅÍ</param>
-		/// <param name="n">ÃßÃâÇÒ ¼ö</param>
+		/// <param name="v">ì›ë³¸ ë²¡í„°</param>
+		/// <param name="n">ì¶”ì¶œí•  ìˆ˜</param>
 		template <class T> inline std::vector<T> sample(const std::vector<T>& v, unsigned n) {
 			std::vector<T> rv;
 			rv.reserve(n);

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -14,11 +14,11 @@ namespace onart {
 	{
 	public:
 		/// <summary>
-		/// Ä«¸Þ¶ó°¡ 3Â÷¿ø º¤ÅÍ¸¦ µû¶ó°©´Ï´Ù. nullptr¸¦ ´ëÀÔÇÏ´Â °æ¿ì Ä«¸Þ¶ó°¡ ¿ø·¡ °¡·Á´ø À§Ä¡±îÁö °¡¼­ Á¤ÁöÇÏÁö¸¸,
-		/// Ä«¸Þ¶ó°¡ µû¶ó°¡´ø µ¿Àû ÇÒ´çµÈ vec3 °´Ã¼°¡ ÇØÁ¦µÈ °æ¿ì ÇÁ·Î±×·¥ÀÌ ±úÁö´Ï ÁÖÀÇÇÏ¼¼¿ä.
+		/// ì¹´ë©”ë¼ê°€ 3ì°¨ì› ë²¡í„°ë¥¼ ë”°ë¼ê°‘ë‹ˆë‹¤. nullptrë¥¼ ëŒ€ìž…í•˜ëŠ” ê²½ìš° ì¹´ë©”ë¼ê°€ ì›ëž˜ ê°€ë ¤ë˜ ìœ„ì¹˜ê¹Œì§€ ê°€ì„œ ì •ì§€í•˜ì§€ë§Œ,
+		/// ì¹´ë©”ë¼ê°€ ë”°ë¼ê°€ë˜ ë™ì  í• ë‹¹ëœ vec3 ê°ì²´ê°€ í•´ì œëœ ê²½ìš° í”„ë¡œê·¸ëž¨ì´ ê¹¨ì§€ë‹ˆ ì£¼ì˜í•˜ì„¸ìš”.
 		/// </summary>
-		/// <param name="relativePos">Ä«¸Þ¶ó°¡ º¼ ÁöÁ¡À» ±âÁØÀ¸·Î ÇÑ Ä«¸Þ¶óÀÇ À§Ä¡ÀÔ´Ï´Ù.</param>
-		/// <param name="at">Ä«¸Þ¶ó°¡ µû¶ó°¥ º¤ÅÍÀÔ´Ï´Ù.</param>
+		/// <param name="relativePos">ì¹´ë©”ë¼ê°€ ë³¼ ì§€ì ì„ ê¸°ì¤€ìœ¼ë¡œ í•œ ì¹´ë©”ë¼ì˜ ìœ„ì¹˜ìž…ë‹ˆë‹¤.</param>
+		/// <param name="at">ì¹´ë©”ë¼ê°€ ë”°ë¼ê°ˆ ë²¡í„°ìž…ë‹ˆë‹¤.</param>
 		inline void follow(const vec3& relativePos, const vec3* at = nullptr) { 
 			this->relativePos = relativePos; 
 			if (!at) {
@@ -27,52 +27,52 @@ namespace onart {
 			this->at = at; 
 		}
 		/// <summary>
-		/// Ä«¸Þ¶ó°¡ ¿øÇÏ´Â À§Ä¡¸¦ º¸µµ·Ï °íÁ¤ÇÕ´Ï´Ù.
+		/// ì¹´ë©”ë¼ê°€ ì›í•˜ëŠ” ìœ„ì¹˜ë¥¼ ë³´ë„ë¡ ê³ ì •í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="relativePos">Ä«¸Þ¶ó°¡ º¼ ÁöÁ¡À» ±âÁØ(0,0,0)À¸·Î ÇÑ Ä«¸Þ¶óÀÇ À§Ä¡ÀÔ´Ï´Ù.</param>
-		/// <param name="fixedAt">Ä«¸Þ¶ó°¡ º¼ ÁöÁ¡ÀÔ´Ï´Ù.</param>
+		/// <param name="relativePos">ì¹´ë©”ë¼ê°€ ë³¼ ì§€ì ì„ ê¸°ì¤€(0,0,0)ìœ¼ë¡œ í•œ ì¹´ë©”ë¼ì˜ ìœ„ì¹˜ìž…ë‹ˆë‹¤.</param>
+		/// <param name="fixedAt">ì¹´ë©”ë¼ê°€ ë³¼ ì§€ì ìž…ë‹ˆë‹¤.</param>
 		inline void fix(const vec3& relativePos, const vec3& fixedAt) { at = nullptr; this->fixedAt = fixedAt; this->relativePos = relativePos; }
 
 		/// <summary>
-		/// Ä«¸Þ¶óÀÇ ¿òÁ÷ÀÓ µô·¹ÀÌ¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì¹´ë©”ë¼ì˜ ì›€ì§ìž„ ë”œë ˆì´ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="s">µô·¹ÀÌÀÇ °áÁ¤ º¯¼öÀÔ´Ï´Ù. Ä«¸Þ¶ó°¡ eyeÀÇ À§Ä¡±îÁö ¿ÏÀüÈ÷(atÀÌ Á¤ÁöÇÑ ±âÁØ, Ä«¸Þ¶ó°¡ ÀÌµ¿ÇØ¾ß ÇÒ °Å¸®ÀÇ 99%) ÀÌµ¿ÇÏ´Â µ¥ °É¸®´Â ½Ã°£À» ÀÇ¹ÌÇÕ´Ï´Ù. À½ÀÇ °ªÀ» ³ÖÀ» °æ¿ì °­Á¦·Î ¾çÀÇ °ªÀ¸·Î º¯È¯µË´Ï´Ù.</param>
+		/// <param name="s">ë”œë ˆì´ì˜ ê²°ì • ë³€ìˆ˜ìž…ë‹ˆë‹¤. ì¹´ë©”ë¼ê°€ eyeì˜ ìœ„ì¹˜ê¹Œì§€ ì™„ì „ížˆ(atì´ ì •ì§€í•œ ê¸°ì¤€, ì¹´ë©”ë¼ê°€ ì´ë™í•´ì•¼ í•  ê±°ë¦¬ì˜ 99%) ì´ë™í•˜ëŠ” ë° ê±¸ë¦¬ëŠ” ì‹œê°„ì„ ì˜ë¯¸í•©ë‹ˆë‹¤. ìŒì˜ ê°’ì„ ë„£ì„ ê²½ìš° ê°•ì œë¡œ ì–‘ì˜ ê°’ìœ¼ë¡œ ë³€í™˜ë©ë‹ˆë‹¤.</param>
 		void setDelay(float s);
 		
 		/// <summary>
-		/// Ä«¸Þ¶ó¿¡ µû¸¥ ºä Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÏ¿© ¼ÎÀÌ´õ¿¡ ³Ñ±é´Ï´Ù. FPS°¡ 20 ÀÌ»óÀÎ °æ¿ì Ä«¸Þ¶óÀÇ ¿òÁ÷ÀÓÀÌ Å©°Ô Â÷ÀÌ ³ªÁö ¾Ê½À´Ï´Ù.
+		/// ì¹´ë©”ë¼ì— ë”°ë¥¸ ë·° í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•˜ì—¬ ì…°ì´ë”ì— ë„˜ê¹ë‹ˆë‹¤. FPSê°€ 20 ì´ìƒì¸ ê²½ìš° ì¹´ë©”ë¼ì˜ ì›€ì§ìž„ì´ í¬ê²Œ ì°¨ì´ ë‚˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		void viewUpdate();
 
 		/// <summary>
-		/// Ä«¸Þ¶óÀÇ ÁÜ ¼öÁØÀ» Á¤ÇÕ´Ï´Ù. Áï Ä«¸Þ¶ó¿¡ Ç¥½ÃµÇ´Â ¿ùµåÀÇ ¹üÀ§¸¦ Á¶Á¤ÇÕ´Ï´Ù.
+		/// ì¹´ë©”ë¼ì˜ ì¤Œ ìˆ˜ì¤€ì„ ì •í•©ë‹ˆë‹¤. ì¦‰ ì¹´ë©”ë¼ì— í‘œì‹œë˜ëŠ” ì›”ë“œì˜ ë²”ìœ„ë¥¼ ì¡°ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		void setZoom(float zoom);
 
 		/// <summary>
-		/// Input::relativeCursorPos()´Â ºäÆ÷Æ® ÁÂÃø »ó´ÜÀÌ (0,0), ¿ìÃø ÇÏ´ÜÀÌ (1,1)ÀÌ µÇµµ·Ï ¸®ÅÏÇÏ´Âµ¥ ÀÌ¸¦ ÇÁ·Î±×·¥ ³»¿¡¼­ Åë¿ëµÇ´Â Ç¥ÁØ ºä ÁÂÇ¥(Áß½ÉÀÌ (0,0)ÀÌ¸ç Á¾/È¾ Áß ÂªÀº ÂÊÀÇ ±æÀÌ°¡ 2)·Î º¯È¯ÇÕ´Ï´Ù.
-		/// Ä¿¼­°¡ ºäÆ÷Æ® ¹ÛÀ¸·Î ³ª°¬´õ¶óµµ Æ¯º°ÇÑ °á°ú°ªÀ» ¸®ÅÏÇÏÁö ¾Ê½À´Ï´Ù.
+		/// Input::relativeCursorPos()ëŠ” ë·°í¬íŠ¸ ì¢Œì¸¡ ìƒë‹¨ì´ (0,0), ìš°ì¸¡ í•˜ë‹¨ì´ (1,1)ì´ ë˜ë„ë¡ ë¦¬í„´í•˜ëŠ”ë° ì´ë¥¼ í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ í†µìš©ë˜ëŠ” í‘œì¤€ ë·° ì¢Œí‘œ(ì¤‘ì‹¬ì´ (0,0)ì´ë©° ì¢…/íš¡ ì¤‘ ì§§ì€ ìª½ì˜ ê¸¸ì´ê°€ 2)ë¡œ ë³€í™˜í•©ë‹ˆë‹¤.
+		/// ì»¤ì„œê°€ ë·°í¬íŠ¸ ë°–ìœ¼ë¡œ ë‚˜ê°”ë”ë¼ë„ íŠ¹ë³„í•œ ê²°ê³¼ê°’ì„ ë¦¬í„´í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="mousePos">Input::relativeCursorPos()¿¡¼­ ¹ÞÀº °ª</param>
+		/// <param name="mousePos">Input::relativeCursorPos()ì—ì„œ ë°›ì€ ê°’</param>
 		vec2 mouse2screen(const vec2& mousePos);
 
 		/// <summary>
-		/// Ä«¸Þ¶ó°¡ ÀÌµ¿ÇÒ ¶§ º¸´Â ¹æÇâÀ» °íÁ¤ÇÕ´Ï´Ù. Æ¯È÷ 2D °ÔÀÓ¿¡¼­ Ä«¸Þ¶ó µô·¹ÀÌ¸¦ 0º¸´Ù Å©°Ô ¼³Á¤ÇÒ °æ¿ì ÇÊ¼öÀÔ´Ï´Ù.
+		/// ì¹´ë©”ë¼ê°€ ì´ë™í•  ë•Œ ë³´ëŠ” ë°©í–¥ì„ ê³ ì •í•©ë‹ˆë‹¤. íŠ¹ížˆ 2D ê²Œìž„ì—ì„œ ì¹´ë©”ë¼ ë”œë ˆì´ë¥¼ 0ë³´ë‹¤ í¬ê²Œ ì„¤ì •í•  ê²½ìš° í•„ìˆ˜ìž…ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="fix">°íÁ¤ ¿©ºÎ(false·Î Á¤ÇÏ¸é °íÁ¤À» ÇØÁ¦ÇÕ´Ï´Ù.)</param>
+		/// <param name="fix">ê³ ì • ì—¬ë¶€(falseë¡œ ì •í•˜ë©´ ê³ ì •ì„ í•´ì œí•©ë‹ˆë‹¤.)</param>
 		inline void fixDirection(bool fix = true) { fixdir = fix; }
 		
 		/// <summary>
-		/// ¿ùµå »ó ÁÂÇ¥°¡ È­¸é»ó¿¡¼­ ¾î´À À§Ä¡¿¡ ³ª¿À´ÂÁö ¾Ë·ÁÁÝ´Ï´Ù. ºäÆ÷Æ®´Â Áß½ÉÀÌ (0,0)ÀÌ¸ç Á¾/È¾ Áß ÂªÀº ÂÊÀÇ ±æÀÌ°¡ 2ÀÔ´Ï´Ù.
+		/// ì›”ë“œ ìƒ ì¢Œí‘œê°€ í™”ë©´ìƒì—ì„œ ì–´ëŠ ìœ„ì¹˜ì— ë‚˜ì˜¤ëŠ”ì§€ ì•Œë ¤ì¤ë‹ˆë‹¤. ë·°í¬íŠ¸ëŠ” ì¤‘ì‹¬ì´ (0,0)ì´ë©° ì¢…/íš¡ ì¤‘ ì§§ì€ ìª½ì˜ ê¸¸ì´ê°€ 2ìž…ë‹ˆë‹¤.
 		/// </summary>
 		inline vec3 world2screen(const vec3& pos) { return zoom * ratio.projM4 * viewM4 * vec4(pos, 1.0f); }
 		
 		/// <summary>
-		/// ºä Çà·ÄÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë·° í–‰ë ¬ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const mat4& getViewMatrix() const { return viewM4; }
 		/// <summary>
-		/// ºäÆ÷Æ®ÀÇ ºñÀ²À» °áÁ¤ÇÕ´Ï´Ù.
+		/// ë·°í¬íŠ¸ì˜ ë¹„ìœ¨ì„ ê²°ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		struct Ratio {
 			friend class Camera;
@@ -84,46 +84,46 @@ namespace onart {
 			mat4 getAspectMatrix();
 		public:
 			/// <summary>
-			/// Á¾È¾ºñ¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+			/// ì¢…íš¡ë¹„ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="rw">°¡·ÎÀÇ »ó´ëÀû ±æÀÌ</param>
-			/// <param name="rh">¼¼·ÎÀÇ »ó´ëÀû ±æÀÌ</param>
+			/// <param name="rw">ê°€ë¡œì˜ ìƒëŒ€ì  ê¸¸ì´</param>
+			/// <param name="rh">ì„¸ë¡œì˜ ìƒëŒ€ì  ê¸¸ì´</param>
 			inline void setRatio(unsigned rw, unsigned rh) {
 				R_WIDTH = rw;
 				R_HEIGHT = rh;
 				ratio = (float)rw / rh;
 			}
 			/// <summary>
-			/// ¼³Á¤µÈ Á¾È¾ºñ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+			/// ì„¤ì •ëœ ì¢…íš¡ë¹„ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 			/// </summary>
 			inline float getRatio() { return ratio; }
 
 			/// <summary>
-			/// 2D ±×·¡ÇÈÀ» ·»´õ¸µÇÏ´Â °æ¿ì »ç¿ëÇÏ´Â Á¾È¾ºñ Çà·ÄÀ» ´Ù½Ã Á¤ÇÕ´Ï´Ù. À½ÀÇ °ªÀ» ÀÔ·ÂÇÏ¸é ¾È µË´Ï´Ù.
+			/// 2D ê·¸ëž˜í”½ì„ ë Œë”ë§í•˜ëŠ” ê²½ìš° ì‚¬ìš©í•˜ëŠ” ì¢…íš¡ë¹„ í–‰ë ¬ì„ ë‹¤ì‹œ ì •í•©ë‹ˆë‹¤. ìŒì˜ ê°’ì„ ìž…ë ¥í•˜ë©´ ì•ˆ ë©ë‹ˆë‹¤.
 			/// </summary>
 			void setProjMatrix2D();
 
 			/// <summary>
-			/// 3D ±×·¡ÇÈÀ» ·»´õ¸µÇÏ´Â °æ¿ì »ç¿ëÇÏ´Â ÇÁ·ÎÁ§¼Ç Çà·ÄÀ» ´Ù½Ã Á¤ÇÕ´Ï´Ù. À½ÀÇ °ªÀ» ÀÔ·ÂÇÏ¸é ¾È µË´Ï´Ù.
+			/// 3D ê·¸ëž˜í”½ì„ ë Œë”ë§í•˜ëŠ” ê²½ìš° ì‚¬ìš©í•˜ëŠ” í”„ë¡œì ì…˜ í–‰ë ¬ì„ ë‹¤ì‹œ ì •í•©ë‹ˆë‹¤. ìŒì˜ ê°’ì„ ìž…ë ¥í•˜ë©´ ì•ˆ ë©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="fovy">Ä«¸Þ¶óÀÇ »óÇÏ ½Ã¾ß°¢ÀÔ´Ï´Ù.</param>
-			/// <param name="dnear">º¼ ¼ö ÀÖ´Â °¡Àå °¡±î¿î °Å¸®ÀÔ´Ï´Ù.</param>
-			/// <param name="dfar">º¼ ¼ö ÀÖ´Â °¡Àå ¸Õ °Å¸®ÀÔ´Ï´Ù.</param>
+			/// <param name="fovy">ì¹´ë©”ë¼ì˜ ìƒí•˜ ì‹œì•¼ê°ìž…ë‹ˆë‹¤.</param>
+			/// <param name="dnear">ë³¼ ìˆ˜ ìžˆëŠ” ê°€ìž¥ ê°€ê¹Œìš´ ê±°ë¦¬ìž…ë‹ˆë‹¤.</param>
+			/// <param name="dfar">ë³¼ ìˆ˜ ìžˆëŠ” ê°€ìž¥ ë¨¼ ê±°ë¦¬ìž…ë‹ˆë‹¤.</param>
 			void setProjMatrix3D(float fovy, float dnear, float dfar);
 			/// <summary>
-			/// 3D ±×·¡ÇÈÀ» ·»´õ¸µÇÏ´Â °æ¿ì »ç¿ëÇÏ´Â ÇÁ·ÎÁ§¼Ç Çà·Ä¿¡¼­ »óÇÏ ½Ã¾ß°¢¸¸ º¯°æÇÕ´Ï´Ù. À½ÀÇ °ªÀ» ÀÔ·ÂÇÏ¸é ¾È µË´Ï´Ù.
+			/// 3D ê·¸ëž˜í”½ì„ ë Œë”ë§í•˜ëŠ” ê²½ìš° ì‚¬ìš©í•˜ëŠ” í”„ë¡œì ì…˜ í–‰ë ¬ì—ì„œ ìƒí•˜ ì‹œì•¼ê°ë§Œ ë³€ê²½í•©ë‹ˆë‹¤. ìŒì˜ ê°’ì„ ìž…ë ¥í•˜ë©´ ì•ˆ ë©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="fovy">Ä«¸Þ¶óÀÇ »óÇÏ ½Ã¾ß°¢ÀÔ´Ï´Ù.</param>
+			/// <param name="fovy">ì¹´ë©”ë¼ì˜ ìƒí•˜ ì‹œì•¼ê°ìž…ë‹ˆë‹¤.</param>
 			void setFovy(float fovy);
 			/// <summary>
-			/// 3D ±×·¡ÇÈÀ» ·»´õ¸µÇÏ´Â °æ¿ì »ç¿ëÇÏ´Â ÇÁ·ÎÁ§¼Ç Çà·Ä¿¡¼­ º¼ ¼ö ÀÖ´Â ÃÖ´Ü°Å¸®¸¸ º¯°æÇÕ´Ï´Ù. À½ÀÇ °ªÀ» ÀÔ·ÂÇÏ¸é ¾È µË´Ï´Ù.
+			/// 3D ê·¸ëž˜í”½ì„ ë Œë”ë§í•˜ëŠ” ê²½ìš° ì‚¬ìš©í•˜ëŠ” í”„ë¡œì ì…˜ í–‰ë ¬ì—ì„œ ë³¼ ìˆ˜ ìžˆëŠ” ìµœë‹¨ê±°ë¦¬ë§Œ ë³€ê²½í•©ë‹ˆë‹¤. ìŒì˜ ê°’ì„ ìž…ë ¥í•˜ë©´ ì•ˆ ë©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="near">º¼ ¼ö ÀÖ´Â °¡Àå °¡±î¿î °Å¸®ÀÔ´Ï´Ù.</param>
+			/// <param name="near">ë³¼ ìˆ˜ ìžˆëŠ” ê°€ìž¥ ê°€ê¹Œìš´ ê±°ë¦¬ìž…ë‹ˆë‹¤.</param>
 			void setNear(float near);
 			/// <summary>
-			/// 3D ±×·¡ÇÈÀ» ·»´õ¸µÇÏ´Â °æ¿ì »ç¿ëÇÏ´Â ÇÁ·ÎÁ§¼Ç Çà·Ä¿¡¼­ º¼ ¼ö ÀÖ´Â ÃÖÀå°Å¸®¸¸ º¯°æÇÕ´Ï´Ù. À½ÀÇ °ªÀ» ÀÔ·ÂÇÏ¸é ¾È µË´Ï´Ù.
+			/// 3D ê·¸ëž˜í”½ì„ ë Œë”ë§í•˜ëŠ” ê²½ìš° ì‚¬ìš©í•˜ëŠ” í”„ë¡œì ì…˜ í–‰ë ¬ì—ì„œ ë³¼ ìˆ˜ ìžˆëŠ” ìµœìž¥ê±°ë¦¬ë§Œ ë³€ê²½í•©ë‹ˆë‹¤. ìŒì˜ ê°’ì„ ìž…ë ¥í•˜ë©´ ì•ˆ ë©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="far">º¼ ¼ö ÀÖ´Â °¡Àå ¸Õ °Å¸®ÀÔ´Ï´Ù.</param>
+			/// <param name="far">ë³¼ ìˆ˜ ìžˆëŠ” ê°€ìž¥ ë¨¼ ê±°ë¦¬ìž…ë‹ˆë‹¤.</param>
 			void setFar(float far);
 		} ratio;
 	private:
@@ -132,7 +132,7 @@ namespace onart {
 		vec3 currentPos;
 		float delay = 0;
 		const vec3* at = nullptr;
-		mat4 viewM4;	// UI(program2)¿Í ¿ùµå(program3)ÀÇ ¿¬°áÁ¡. Ä«¸Þ¶ó´Â ÇÏ³ª¸¸ ÀÖÀ» °ÍÀÌ¹Ç·Î ¸Þ¸ð¸® ¹®Á¦´Â °ÅÀÇ ¾ø´Ù°í ºÁµµ ¹«¹æ
+		mat4 viewM4;	// UI(program2)ì™€ ì›”ë“œ(program3)ì˜ ì—°ê²°ì . ì¹´ë©”ë¼ëŠ” í•˜ë‚˜ë§Œ ìžˆì„ ê²ƒì´ë¯€ë¡œ ë©”ëª¨ë¦¬ ë¬¸ì œëŠ” ê±°ì˜ ì—†ë‹¤ê³  ë´ë„ ë¬´ë°©
 		float zoom = 1;	// //
 		bool fixdir = false;
 	};

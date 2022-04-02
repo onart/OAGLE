@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -30,14 +30,14 @@ namespace onart {
 		inline operator float() const { return tp; }
 
 		/// <summary>
-		/// Á¤·ÄÀ» À§ÇÑ LESS ÇÔ¼öÀÔ´Ï´Ù. ÆíÀÇ¸¦ À§ÇØ µ¿ºÀÇß½À´Ï´Ù.
+		/// ì •ë ¬ì„ ìœ„í•œ LESS í•¨ìˆ˜ìž…ë‹ˆë‹¤. íŽ¸ì˜ë¥¼ ìœ„í•´ ë™ë´‰í–ˆìŠµë‹ˆë‹¤.
 		/// </summary>
 		inline bool operator<(const Keypoint& k2) const {
 			return tp < k2.tp;
 		}
 
 		/// <summary>
-		/// Á¤·ÄÀ» À§ÇÑ LESS ÇÔ¼öÀÔ´Ï´Ù. ÆíÀÇ¸¦ À§ÇØ µ¿ºÀÇß½À´Ï´Ù.
+		/// ì •ë ¬ì„ ìœ„í•œ LESS í•¨ìˆ˜ìž…ë‹ˆë‹¤. íŽ¸ì˜ë¥¼ ìœ„í•´ ë™ë´‰í–ˆìŠµë‹ˆë‹¤.
 		/// </summary>
 		inline bool operator<(float k2) const {
 			return tp < k2;
@@ -47,30 +47,30 @@ namespace onart {
 	class Entity;
 
 	/// <summary>
-	/// °³Ã¼ÀÇ ½Ã°¢Àû »óÅÂ¸¦ ³ªÅ¸³»´Â Animation Å¬·¡½ºÀÔ´Ï´Ù. ½Ã°¢Àû »óÅÂ ÀÌ¿ÜÀÇ ºÎºÐ(ex: ÆÇÁ¤ º¯°æ)Àº °³Ã¼ÀÇ Act()¿¡¼­ Á¤ÀÇÇÏ´Â °ÍÀÌ ¸Å¿ì ±ÇÀåµË´Ï´Ù.
-	/// ÅØ½ºÃ³ ¹× Á÷»ç°¢Çü ÁÂÇ¥¸¦ ³Ñ±â´Â 2d animation, Á¤Á¡¿¡ ¿µÇâÀ» ÁÖ´Â °ñ°ÝÀÇ º¯È¯ Çà·ÄÀ» ³Ñ±â´Â 3d animationÀÌ ÆÄ»ýµË´Ï´Ù.
+	/// ê°œì²´ì˜ ì‹œê°ì  ìƒíƒœë¥¼ ë‚˜íƒ€ë‚´ëŠ” Animation í´ëž˜ìŠ¤ìž…ë‹ˆë‹¤. ì‹œê°ì  ìƒíƒœ ì´ì™¸ì˜ ë¶€ë¶„(ex: íŒì • ë³€ê²½)ì€ ê°œì²´ì˜ Act()ì—ì„œ ì •ì˜í•˜ëŠ” ê²ƒì´ ë§¤ìš° ê¶Œìž¥ë©ë‹ˆë‹¤.
+	/// í…ìŠ¤ì²˜ ë° ì§ì‚¬ê°í˜• ì¢Œí‘œë¥¼ ë„˜ê¸°ëŠ” 2d animation, ì •ì ì— ì˜í–¥ì„ ì£¼ëŠ” ê³¨ê²©ì˜ ë³€í™˜ í–‰ë ¬ì„ ë„˜ê¸°ëŠ” 3d animationì´ íŒŒìƒë©ë‹ˆë‹¤.
 	/// </summary>
 	class Animation
 	{
 	public:
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀÇ ÇØ´ç ½ÃÁ¡ÀÇ ÇÁ·¹ÀÓÀ» ¼ÎÀÌ´õ¿¡ º¸³»¸ç ¾Ö´Ï¸ÞÀÌ¼Ç Å°Æ÷ÀÎÆ®¸¦ º¸³À´Ï´Ù. 2D ¾Ö´Ï¸ÞÀÌ¼ÇÀº bind¿Í draw°¡ È£ÃâµÇ¹Ç·Î ¸ðµ¨ Çà·ÄÀº ÀÌº¸´Ù Àü¿¡ ³Ñ°Ü¾ß ÇÕ´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì˜ í•´ë‹¹ ì‹œì ì˜ í”„ë ˆìž„ì„ ì…°ì´ë”ì— ë³´ë‚´ë©° ì• ë‹ˆë©”ì´ì…˜ í‚¤í¬ì¸íŠ¸ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. 2D ì• ë‹ˆë©”ì´ì…˜ì€ bindì™€ drawê°€ í˜¸ì¶œë˜ë¯€ë¡œ ëª¨ë¸ í–‰ë ¬ì€ ì´ë³´ë‹¤ ì „ì— ë„˜ê²¨ì•¼ í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="elapsed">ÃÖÃÊ ½ÃÀÛ ÈÄ °æ°ú ½Ã°£</param>
-		/// <param name="e">ÀÌº¥Æ® ¹ÞÀ» °³Ã¼</param>
+		/// <param name="elapsed">ìµœì´ˆ ì‹œìž‘ í›„ ê²½ê³¼ ì‹œê°„</param>
+		/// <param name="e">ì´ë²¤íŠ¸ ë°›ì„ ê°œì²´</param>
 		virtual void go(float elapsed, Entity* e, float dynamicTps = 1) = 0;
 		/// <summary>
-		/// ÀÌ¸§À¸·Î ¾Ö´Ï¸ÞÀÌ¼ÇÀ» Ã£½À´Ï´Ù. ¾ø´Â °æ¿ì nullptr¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì´ë¦„ìœ¼ë¡œ ì• ë‹ˆë©”ì´ì…˜ì„ ì°¾ìŠµë‹ˆë‹¤. ì—†ëŠ” ê²½ìš° nullptrë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		static std::shared_ptr<Animation> get(const std::string&);
 		/// <summary>
-		/// ÀÌ¸§À¸·Î ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ³»¸³´Ï´Ù. ÇöÀç »ç¿ë ÁßÀÎ ¾Ö´Ï¸ÞÀÌ¼Ç¿¡ ´ëÇÏ¿© ½ÃµµÇÒ °æ¿ì »ç¿ëÇÏ´ø °ÍÀº ¸ðµç »ç¿ëÀÌ Á¾·áµÇ¸é ¸Þ¸ð¸®¿¡¼­ ³»·Á°¡Áö¸¸, ÀÌ »óÅÂ¿¡¼­ get()À¸·Î ºÒ·¯¿À´Â °ÍÀº ºÒ°¡´ÉÇÕ´Ï´Ù.
-		/// "»ç¿ë"Àº ÇöÀç ÇÃ·¹ÀÌµÇ°í ÀÖ´Â °Í»Ó ¾Æ´Ï¶ó ±×°ÍÀ» º¸À¯ÇÏ°í ÀÖ´Â °³Ã¼°¡ ÀÖ´Â °æ¿ì »ç¿ë ÁßÀÎ °Í¿¡ ÇØ´çÇÕ´Ï´Ù.
+		/// ì´ë¦„ìœ¼ë¡œ ì• ë‹ˆë©”ì´ì…˜ì„ ë‚´ë¦½ë‹ˆë‹¤. í˜„ìž¬ ì‚¬ìš© ì¤‘ì¸ ì• ë‹ˆë©”ì´ì…˜ì— ëŒ€í•˜ì—¬ ì‹œë„í•  ê²½ìš° ì‚¬ìš©í•˜ë˜ ê²ƒì€ ëª¨ë“  ì‚¬ìš©ì´ ì¢…ë£Œë˜ë©´ ë©”ëª¨ë¦¬ì—ì„œ ë‚´ë ¤ê°€ì§€ë§Œ, ì´ ìƒíƒœì—ì„œ get()ìœ¼ë¡œ ë¶ˆëŸ¬ì˜¤ëŠ” ê²ƒì€ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤.
+		/// "ì‚¬ìš©"ì€ í˜„ìž¬ í”Œë ˆì´ë˜ê³  ìžˆëŠ” ê²ƒë¿ ì•„ë‹ˆë¼ ê·¸ê²ƒì„ ë³´ìœ í•˜ê³  ìžˆëŠ” ê°œì²´ê°€ ìžˆëŠ” ê²½ìš° ì‚¬ìš© ì¤‘ì¸ ê²ƒì— í•´ë‹¹í•©ë‹ˆë‹¤.
 		/// </summary>
 		static void drop(const std::string& s);
 		/// <summary>
-		/// ÇöÀç »ç¿ëµÇ°í ÀÖÁö ¾ÊÀº ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ¸ðµÎ ³»¸³´Ï´Ù. »ç¿ëµÇ°í ÀÖ´Â ¾Ö´Ï¸ÞÀÌ¼Ç¿¡ ´ëÇÏ¿© drop()Ã³·³ Á¾·á ½Ã ¸Þ¸ð¸®¿¡¼­ ³»·Á°¡°Ô ÇÏ°í ½ÍÀº °æ¿ì ¸Å°³º¯¼ö¿¡ true¸¦ Àü´ÞÇÕ´Ï´Ù.
-		/// "»ç¿ë"Àº ÇöÀç ÇÃ·¹ÀÌµÇ°í ÀÖ´Â °Í»Ó ¾Æ´Ï¶ó ±×°ÍÀ» º¸À¯ÇÏ°í ÀÖ´Â °³Ã¼°¡ ÀÖ´Â °æ¿ì »ç¿ë ÁßÀÎ °Í¿¡ ÇØ´çÇÕ´Ï´Ù.
+		/// í˜„ìž¬ ì‚¬ìš©ë˜ê³  ìžˆì§€ ì•Šì€ ì• ë‹ˆë©”ì´ì…˜ì„ ëª¨ë‘ ë‚´ë¦½ë‹ˆë‹¤. ì‚¬ìš©ë˜ê³  ìžˆëŠ” ì• ë‹ˆë©”ì´ì…˜ì— ëŒ€í•˜ì—¬ drop()ì²˜ëŸ¼ ì¢…ë£Œ ì‹œ ë©”ëª¨ë¦¬ì—ì„œ ë‚´ë ¤ê°€ê²Œ í•˜ê³  ì‹¶ì€ ê²½ìš° ë§¤ê°œë³€ìˆ˜ì— trueë¥¼ ì „ë‹¬í•©ë‹ˆë‹¤.
+		/// "ì‚¬ìš©"ì€ í˜„ìž¬ í”Œë ˆì´ë˜ê³  ìžˆëŠ” ê²ƒë¿ ì•„ë‹ˆë¼ ê·¸ê²ƒì„ ë³´ìœ í•˜ê³  ìžˆëŠ” ê°œì²´ê°€ ìžˆëŠ” ê²½ìš° ì‚¬ìš© ì¤‘ì¸ ê²ƒì— í•´ë‹¹í•©ë‹ˆë‹¤.
 		/// </summary>
 		static void collect(bool removeUsing = false);
 	protected:
@@ -79,7 +79,7 @@ namespace onart {
 		inline int getTps() { return staticTps; }
 		inline float getTp(float elapsed) { if (duration <= 0)return 0; elapsed *= staticTps; return loop ? fmodf(elapsed, duration) : elapsed; }
 		/// <summary>
-		/// map¿¡ ¾Ö´Ï¸ÞÀÌ¼ÇÀ» Ãß°¡ÇÕ´Ï´Ù.
+		/// mapì— ì• ë‹ˆë©”ì´ì…˜ì„ ì¶”ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static void push(const std::string& s, std::shared_ptr<Animation>& a) { animations[s].reset(); animations[s] = a; }
 		inline ~Animation() { }
@@ -91,51 +91,51 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 2D °³Ã¼ÀÇ ÄÆ ¾Ö´Ï¸ÞÀÌ¼ÇÀÔ´Ï´Ù.
-	/// 2D °³Ã¼ÀÇ ½Ã°¢Àû Å°Æ÷ÀÎÆ®´Â 2Á¾·ù·Î, (ÅØ½ºÃ³,½ÃÁ¡), (ÅØ½ºÃ³ ³» Á÷»ç°¢Çü°ú ÇÇ¹þ, ½ÃÁ¡)ÀÔ´Ï´Ù. (ÅØ½ºÃ³,½ÃÁ¡)ÀÇ °æ¿ì °³Ã¼·Î º¸³¾ Å°Æ÷ÀÎÆ® ³Ñ¹ö¿Í´Â ¹«°üÇÕ´Ï´Ù.
-	/// Áï act()´Â ÅØ½ºÃ³ ³» Á÷»ç°¢Çü Å°Æ÷ÀÎÆ®¸¸À» ±âÁØÀ¸·Î È£ÃâµË´Ï´Ù.
-	/// <para>Á÷»ç°¢Çü: LDWH(¿ÞÂÊ/¾Æ·¡/°¡·Î/¼¼·Î) ¼ø¼­·Î Á¤ÀÇµÇ´Â vec4ÀÔ´Ï´Ù. ¿øº» ÅØ½ºÃ³ ÀÌ¹ÌÁöÀÇ ÁÂÃø ÇÏ´ÜÀ» (0,0)À¸·Î ÇÏ´Â ÇÈ¼¿ ´ÜÀ§ÀÔ´Ï´Ù.</para>
-	/// ÇÇ¹þÀÌ ¼³Á¤µÈ °æ¿ì ÇÇ¹þÀ» ±âÁØÀ¸·Î 2D ÅØ½ºÃ³°¡ ±×·ÁÁö´Â Á÷»ç°¢Çü Å©±â°¡ ÇØ´ç ½ÃÁ¡ÀÇ rect¸¦ ±âÁØÀ¸·Î ÀÚµ¿ Á¶ÀýµÇ°í ÇÇ¹þÀÌ È¸Àü/Å©±â º¯È¯ÀÇ Áß½ÉÀÌ µË´Ï´Ù.
-	/// ¼³Á¤µÇÁö ¾ÊÀº °æ¿ì Á÷»ç°¢Çü Å©±â´Â º¯ÇÏÁö ¾ÊÀ¸¸ç º¯È¯ÀÇ Áß½ÉÀº ±×´ë·Î ÇÁ·¹ÀÓ Á÷»ç°¢ÇüÀÇ Áß½ÉÀÌ µË´Ï´Ù.
-	/// ÇÇ¹þÀº ¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °¢ ÇÁ·¹ÀÓÀÇ Å©±â(rects)°¡ °°Áö ¾Ê°Ô ±×·ÁÁø °æ¿ì¿¡ ¸í½ÃÇÏ´Â °ÍÀÌ ÁÁ½À´Ï´Ù. ÇÇ¹þÀº ÅØ½ºÃ³ ³» Á÷»ç°¢ÇüÀÇ ÁÂÃø ÇÏ´ÜÀ» (0,0)À¸·Î ÇÏ´Â ÇÈ¼¿ ´ÜÀ§ÀÔ´Ï´Ù.
+	/// 2D ê°œì²´ì˜ ì»· ì• ë‹ˆë©”ì´ì…˜ìž…ë‹ˆë‹¤.
+	/// 2D ê°œì²´ì˜ ì‹œê°ì  í‚¤í¬ì¸íŠ¸ëŠ” 2ì¢…ë¥˜ë¡œ, (í…ìŠ¤ì²˜,ì‹œì ), (í…ìŠ¤ì²˜ ë‚´ ì§ì‚¬ê°í˜•ê³¼ í”¼ë²—, ì‹œì )ìž…ë‹ˆë‹¤. (í…ìŠ¤ì²˜,ì‹œì )ì˜ ê²½ìš° ê°œì²´ë¡œ ë³´ë‚¼ í‚¤í¬ì¸íŠ¸ ë„˜ë²„ì™€ëŠ” ë¬´ê´€í•©ë‹ˆë‹¤.
+	/// ì¦‰ act()ëŠ” í…ìŠ¤ì²˜ ë‚´ ì§ì‚¬ê°í˜• í‚¤í¬ì¸íŠ¸ë§Œì„ ê¸°ì¤€ìœ¼ë¡œ í˜¸ì¶œë©ë‹ˆë‹¤.
+	/// <para>ì§ì‚¬ê°í˜•: LDWH(ì™¼ìª½/ì•„ëž˜/ê°€ë¡œ/ì„¸ë¡œ) ìˆœì„œë¡œ ì •ì˜ë˜ëŠ” vec4ìž…ë‹ˆë‹¤. ì›ë³¸ í…ìŠ¤ì²˜ ì´ë¯¸ì§€ì˜ ì¢Œì¸¡ í•˜ë‹¨ì„ (0,0)ìœ¼ë¡œ í•˜ëŠ” í”½ì…€ ë‹¨ìœ„ìž…ë‹ˆë‹¤.</para>
+	/// í”¼ë²—ì´ ì„¤ì •ëœ ê²½ìš° í”¼ë²—ì„ ê¸°ì¤€ìœ¼ë¡œ 2D í…ìŠ¤ì²˜ê°€ ê·¸ë ¤ì§€ëŠ” ì§ì‚¬ê°í˜• í¬ê¸°ê°€ í•´ë‹¹ ì‹œì ì˜ rectë¥¼ ê¸°ì¤€ìœ¼ë¡œ ìžë™ ì¡°ì ˆë˜ê³  í”¼ë²—ì´ íšŒì „/í¬ê¸° ë³€í™˜ì˜ ì¤‘ì‹¬ì´ ë©ë‹ˆë‹¤.
+	/// ì„¤ì •ë˜ì§€ ì•Šì€ ê²½ìš° ì§ì‚¬ê°í˜• í¬ê¸°ëŠ” ë³€í•˜ì§€ ì•Šìœ¼ë©° ë³€í™˜ì˜ ì¤‘ì‹¬ì€ ê·¸ëŒ€ë¡œ í”„ë ˆìž„ ì§ì‚¬ê°í˜•ì˜ ì¤‘ì‹¬ì´ ë©ë‹ˆë‹¤.
+	/// í”¼ë²—ì€ ì• ë‹ˆë©”ì´ì…˜ì˜ ê° í”„ë ˆìž„ì˜ í¬ê¸°(rects)ê°€ ê°™ì§€ ì•Šê²Œ ê·¸ë ¤ì§„ ê²½ìš°ì— ëª…ì‹œí•˜ëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤. í”¼ë²—ì€ í…ìŠ¤ì²˜ ë‚´ ì§ì‚¬ê°í˜•ì˜ ì¢Œì¸¡ í•˜ë‹¨ì„ (0,0)ìœ¼ë¡œ í•˜ëŠ” í”½ì…€ ë‹¨ìœ„ìž…ë‹ˆë‹¤.
 	/// 
-	/// ¸ðµç ¾Ö´Ï¸ÞÀÌ¼ÇÀÇ ½ÃÀÛ ½ÃÁ¡Àº ¹Ýµå½Ã 0ÀÌ¾î¾ß ÇÕ´Ï´Ù.
+	/// ëª¨ë“  ì• ë‹ˆë©”ì´ì…˜ì˜ ì‹œìž‘ ì‹œì ì€ ë°˜ë“œì‹œ 0ì´ì–´ì•¼ í•©ë‹ˆë‹¤.
 	/// 
-	/// »ý¼ºÀÚ¿¡¼­ ÅØ½ºÃ³ ÀÔ·ÂÀº °¡µ¶¼º»ó Material::genTextureFromMemory() ÇÔ¼ö ÀÌ¿ëÀÌ ±ÇÀåµË´Ï´Ù.
+	/// ìƒì„±ìžì—ì„œ í…ìŠ¤ì²˜ ìž…ë ¥ì€ ê°€ë…ì„±ìƒ Material::genTextureFromMemory() í•¨ìˆ˜ ì´ìš©ì´ ê¶Œìž¥ë©ë‹ˆë‹¤.
 	/// 
 	/// </summary>
 	class Animation2D: public Animation {
 	public:
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¸§ÀÔ´Ï´Ù. ÀÌ¸§ÀÌ °ãÄ¡´Â °æ¿ì ³»¿ë¿¡ °ü°è¾øÀÌ »ý¼ºÇÏÁö ¾Ê°í ±âÁ¸¿¡ ÀÖ´ø °ÍÀ» ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="loop">·çÇÁ ¿©ºÎ¸¦ ¼±ÅÃÇÕ´Ï´Ù. falseÀÎ °æ¿ì ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³¡³ª¸é ¸¶Áö¸· »óÅÂ¸¦ À¯ÁöÇÕ´Ï´Ù.</param>
-		/// <param name="tex">½ÃÁ¡°ú ÅØ½ºÃ³ÀÇ ¼ø¼­½Ö ÁýÇÕÀÔ´Ï´Ù.</param>
-		/// <param name="rects">½ÃÁ¡°ú Á÷»ç°¢Çü ¿µ¿ª(LDWH. ÁÂ/ÇÏ/Æø/³ôÀÌ, ´ÜÀ§´Â px)ÀÇ ¼ø¼­½Ö ÁýÇÕÀÔ´Ï´Ù. ºñ¾î ÀÖÀ¸¸é ¾È µË´Ï´Ù.</param>
-		/// <param name="pivots">rects¿¡ ÀÏ´ëÀÏ·Î ´ëÀÀÇÏ´Â ÇÇ¹þ ÁÂÇ¥ÀÔ´Ï´Ù. ´ëÀÀ Á÷»ç°¢Çü ¿µ¿ªÀÇ ÁÂÃø ÇÏ´ÜÀ» 0À¸·Î, ÇÈ¼¿ ´ÜÀ§·Î ÀÔ·ÂÇÏ¸é µË´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê´Â °æ¿ì ¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °¢ ÇÁ·¹ÀÓÀº ´ÜÀ§ Á¤»ç°¢Çü¿¡ µé¾î°¡¸ç Á¤»ç°¢ÇüÀÇ Áß½ÉÀÌ °ð ÇÇ¹þÀÌ µË´Ï´Ù.</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ ì´ë¦„ìž…ë‹ˆë‹¤. ì´ë¦„ì´ ê²¹ì¹˜ëŠ” ê²½ìš° ë‚´ìš©ì— ê´€ê³„ì—†ì´ ìƒì„±í•˜ì§€ ì•Šê³  ê¸°ì¡´ì— ìžˆë˜ ê²ƒì„ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="loop">ë£¨í”„ ì—¬ë¶€ë¥¼ ì„ íƒí•©ë‹ˆë‹¤. falseì¸ ê²½ìš° ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚˜ë©´ ë§ˆì§€ë§‰ ìƒíƒœë¥¼ ìœ ì§€í•©ë‹ˆë‹¤.</param>
+		/// <param name="tex">ì‹œì ê³¼ í…ìŠ¤ì²˜ì˜ ìˆœì„œìŒ ì§‘í•©ìž…ë‹ˆë‹¤.</param>
+		/// <param name="rects">ì‹œì ê³¼ ì§ì‚¬ê°í˜• ì˜ì—­(LDWH. ì¢Œ/í•˜/í­/ë†’ì´, ë‹¨ìœ„ëŠ” px)ì˜ ìˆœì„œìŒ ì§‘í•©ìž…ë‹ˆë‹¤. ë¹„ì–´ ìžˆìœ¼ë©´ ì•ˆ ë©ë‹ˆë‹¤.</param>
+		/// <param name="pivots">rectsì— ì¼ëŒ€ì¼ë¡œ ëŒ€ì‘í•˜ëŠ” í”¼ë²— ì¢Œí‘œìž…ë‹ˆë‹¤. ëŒ€ì‘ ì§ì‚¬ê°í˜• ì˜ì—­ì˜ ì¢Œì¸¡ í•˜ë‹¨ì„ 0ìœ¼ë¡œ, í”½ì…€ ë‹¨ìœ„ë¡œ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•ŠëŠ” ê²½ìš° ì• ë‹ˆë©”ì´ì…˜ì˜ ê° í”„ë ˆìž„ì€ ë‹¨ìœ„ ì •ì‚¬ê°í˜•ì— ë“¤ì–´ê°€ë©° ì •ì‚¬ê°í˜•ì˜ ì¤‘ì‹¬ì´ ê³§ í”¼ë²—ì´ ë©ë‹ˆë‹¤.</param>
 		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	protected:
 		std::vector<Keypoint<pTexture>> tex;
 		std::vector<Keypoint<vec4>> rects;
-		std::vector<vec4> sctrs;	// ÀÌ¸§ ¶æ: scale/translateÀÇ ¸Ó¸´±ÛÀÚ
+		std::vector<vec4> sctrs;	// ì´ë¦„ ëœ»: scale/translateì˜ ë¨¸ë¦¿ê¸€ìž
 		const bool hasTex, hasRect, hasPiv;
 		Animation2D(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs = {});
 	};
 
 	/// <summary>
-	/// 1ÄÆ ±¸¼ºÀÓÀ» Á¦¿ÜÇÏ¸é Animation2D¿Í µ¿ÀÏÇÕ´Ï´Ù(Ä«¸Þ¶ó µîÀÇ ¿µÇâÀ» ¹Þ½À´Ï´Ù). Æ¯¼º»ó ·çÇÁ ¿©ºÎ, Å¸ÀÓÆ÷ÀÎÆ®¸¦ ÀÔ·Â¹ÞÁö ¾ÊÀ¸¸ç °³Ã¼ÀÇ act()´Â È£ÃâµÇÁö ¾Ê½À´Ï´Ù.
+	/// 1ì»· êµ¬ì„±ìž„ì„ ì œì™¸í•˜ë©´ Animation2Dì™€ ë™ì¼í•©ë‹ˆë‹¤(ì¹´ë©”ë¼ ë“±ì˜ ì˜í–¥ì„ ë°›ìŠµë‹ˆë‹¤). íŠ¹ì„±ìƒ ë£¨í”„ ì—¬ë¶€, íƒ€ìž„í¬ì¸íŠ¸ë¥¼ ìž…ë ¥ë°›ì§€ ì•Šìœ¼ë©° ê°œì²´ì˜ act()ëŠ” í˜¸ì¶œë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 	/// </summary>
 	class Sprite: public Animation {
 	public:
 		/// <summary>
-		/// ½ºÇÁ¶óÀÌÆ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù.
+		/// ìŠ¤í”„ë¼ì´íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¸§ÀÔ´Ï´Ù. ÀÌ¸§ÀÌ °ãÄ¡´Â °æ¿ì ³»¿ë¿¡ °ü°è¾øÀÌ »ý¼ºÇÏÁö ¾Ê°í ±âÁ¸¿¡ ÀÖ´ø °ÍÀ» ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="tex">½ºÇÁ¶óÀÌÆ®¸¦ Æ÷ÇÔÇÑ ÅØ½ºÃ³ÀÔ´Ï´Ù.</param>
-		/// <param name="rect">ÅØ½ºÃ³ ³»ÀÇ Á÷»ç°¢Çü ¿µ¿ª(LDWH. ÁÂ/ÇÏ/Æø/³ôÀÌ, ´ÜÀ§´Â px)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê°Å³ª ¿µº¤ÅÍ¸¦ ÀÔ·ÂÇÏ´Â °æ¿ì ÀÌ¹ÌÁö ÀüÃ¼¸¦ »ç¿ëÇÕ´Ï´Ù.</param>
-		/// <param name="pivot">ÇÇ¹þ ÁÂÇ¥ÀÔ´Ï´Ù. ¼±ÅÃÇÑ Á÷»ç°¢Çü ¿µ¿ªÀÇ ÁÂÃø ÇÏ´ÜÀ» 0À¸·Î, ÇÈ¼¿ ´ÜÀ§·Î ÀÔ·ÂÇÏ¸é µË´Ï´Ù. È¸Àü/Å©±â/º´Áø º¯È¯ÀÇ Áß½ÉÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê´Â °æ¿ì ÀÌ¹ÌÁöÀÇ Áß½ÉÀÌ ÇÇ¹þÀÌ µË´Ï´Ù.</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ ì´ë¦„ìž…ë‹ˆë‹¤. ì´ë¦„ì´ ê²¹ì¹˜ëŠ” ê²½ìš° ë‚´ìš©ì— ê´€ê³„ì—†ì´ ìƒì„±í•˜ì§€ ì•Šê³  ê¸°ì¡´ì— ìžˆë˜ ê²ƒì„ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="tex">ìŠ¤í”„ë¼ì´íŠ¸ë¥¼ í¬í•¨í•œ í…ìŠ¤ì²˜ìž…ë‹ˆë‹¤.</param>
+		/// <param name="rect">í…ìŠ¤ì²˜ ë‚´ì˜ ì§ì‚¬ê°í˜• ì˜ì—­(LDWH. ì¢Œ/í•˜/í­/ë†’ì´, ë‹¨ìœ„ëŠ” px)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šê±°ë‚˜ ì˜ë²¡í„°ë¥¼ ìž…ë ¥í•˜ëŠ” ê²½ìš° ì´ë¯¸ì§€ ì „ì²´ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.</param>
+		/// <param name="pivot">í”¼ë²— ì¢Œí‘œìž…ë‹ˆë‹¤. ì„ íƒí•œ ì§ì‚¬ê°í˜• ì˜ì—­ì˜ ì¢Œì¸¡ í•˜ë‹¨ì„ 0ìœ¼ë¡œ, í”½ì…€ ë‹¨ìœ„ë¡œ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤. íšŒì „/í¬ê¸°/ë³‘ì§„ ë³€í™˜ì˜ ì¤‘ì‹¬ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•ŠëŠ” ê²½ìš° ì´ë¯¸ì§€ì˜ ì¤‘ì‹¬ì´ í”¼ë²—ì´ ë©ë‹ˆë‹¤.</param>
 		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0.f, vec2 pivot = _NAN);
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
@@ -145,17 +145,17 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// Ä«¸Þ¶ó µîÀÇ ¿µÇâÀ» ¹ÞÁö ¾Ê´Â °ÍÀ» Á¦¿ÜÇÏ¸é Sprite¿Í µ¿ÀÏÇÕ´Ï´Ù.
+	/// ì¹´ë©”ë¼ ë“±ì˜ ì˜í–¥ì„ ë°›ì§€ ì•ŠëŠ” ê²ƒì„ ì œì™¸í•˜ë©´ Spriteì™€ ë™ì¼í•©ë‹ˆë‹¤.
 	/// </summary>
 	class FixedSprite : public Animation {
 	public:
 		/// <summary>
-		/// ½ºÇÁ¶óÀÌÆ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù.
+		/// ìŠ¤í”„ë¼ì´íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¸§ÀÔ´Ï´Ù. ÀÌ¸§ÀÌ °ãÄ¡´Â °æ¿ì ³»¿ë¿¡ °ü°è¾øÀÌ »ý¼ºÇÏÁö ¾Ê°í ±âÁ¸¿¡ ÀÖ´ø °ÍÀ» ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="tex">½ºÇÁ¶óÀÌÆ®¸¦ Æ÷ÇÔÇÑ ÅØ½ºÃ³ÀÔ´Ï´Ù.</param>
-		/// <param name="rect">ÅØ½ºÃ³ ³»ÀÇ Á÷»ç°¢Çü ¿µ¿ª(LDWH. ÁÂ/ÇÏ/Æø/³ôÀÌ, ´ÜÀ§´Â px)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê°Å³ª ¿µº¤ÅÍ¸¦ ÀÔ·ÂÇÏ´Â °æ¿ì ÀÌ¹ÌÁö ÀüÃ¼¸¦ »ç¿ëÇÕ´Ï´Ù.</param>
-		/// <param name="pivot">ÇÇ¹þ ÁÂÇ¥ÀÔ´Ï´Ù. ¼±ÅÃÇÑ Á÷»ç°¢Çü ¿µ¿ªÀÇ ÁÂÃø ÇÏ´ÜÀ» 0À¸·Î, ÇÈ¼¿ ´ÜÀ§·Î ÀÔ·ÂÇÏ¸é µË´Ï´Ù. È¸Àü/Å©±â/º´Áø º¯È¯ÀÇ Áß½ÉÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê´Â °æ¿ì ÀÌ¹ÌÁöÀÇ Áß½ÉÀÌ ÇÇ¹þÀÌ µË´Ï´Ù.</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ ì´ë¦„ìž…ë‹ˆë‹¤. ì´ë¦„ì´ ê²¹ì¹˜ëŠ” ê²½ìš° ë‚´ìš©ì— ê´€ê³„ì—†ì´ ìƒì„±í•˜ì§€ ì•Šê³  ê¸°ì¡´ì— ìžˆë˜ ê²ƒì„ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="tex">ìŠ¤í”„ë¼ì´íŠ¸ë¥¼ í¬í•¨í•œ í…ìŠ¤ì²˜ìž…ë‹ˆë‹¤.</param>
+		/// <param name="rect">í…ìŠ¤ì²˜ ë‚´ì˜ ì§ì‚¬ê°í˜• ì˜ì—­(LDWH. ì¢Œ/í•˜/í­/ë†’ì´, ë‹¨ìœ„ëŠ” px)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šê±°ë‚˜ ì˜ë²¡í„°ë¥¼ ìž…ë ¥í•˜ëŠ” ê²½ìš° ì´ë¯¸ì§€ ì „ì²´ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.</param>
+		/// <param name="pivot">í”¼ë²— ì¢Œí‘œìž…ë‹ˆë‹¤. ì„ íƒí•œ ì§ì‚¬ê°í˜• ì˜ì—­ì˜ ì¢Œì¸¡ í•˜ë‹¨ì„ 0ìœ¼ë¡œ, í”½ì…€ ë‹¨ìœ„ë¡œ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤. íšŒì „/í¬ê¸°/ë³‘ì§„ ë³€í™˜ì˜ ì¤‘ì‹¬ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•ŠëŠ” ê²½ìš° ì´ë¯¸ì§€ì˜ ì¤‘ì‹¬ì´ í”¼ë²—ì´ ë©ë‹ˆë‹¤.</param>
 		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0.f, vec2 pivot = _NAN);
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
@@ -165,63 +165,63 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 3D °³Ã¼ÀÇ °üÀý ¾Ö´Ï¸ÞÀÌ¼ÇÀÔ´Ï´Ù. ÇöÀç ¹öÀüÀº ÆíÀÇ»ó .dae ¸ðµ¨ ÆÄÀÏÀ» µð½ºÅ© È¤Àº ¸Þ¸ð¸®¿¡¼­ ·ÎµåÇÏ´Â °Í¸¸ Çã¿ëÇÕ´Ï´Ù.
-	/// 3D °³Ã¼ÀÇ ½Ã°¢Àû Å°Æ÷ÀÎÆ®´Â ÃÖ´ë 64°³ÀÇ »ÀÀÇ À§Ä¡, È¸Àü, Å©±â·Î ±¸¼ºµË´Ï´Ù.
-	/// »À°¡ ¸¹Àº ¸¸Å­ ¸î ¹øÂ° ÇÁ·¹ÀÓÀÎÁö ÆÇ´ÜÇÏ¿© ¸Å¹ø È£ÃâÇÏ´Â °ÍÀº ºÒ°¡´ÉÇÕ´Ï´Ù. ¾Ö´Ï¸ÞÀÌ¼ÇÀ» »ý¼ºÇÒ ¶§ °³Ã¼°¡ act()·Î ¾Ë¸²¹ÞÀ» ½ÃÁ¡(timepoint)À» Á÷Á¢ ¸í½ÃÇØ ÁÖ¼¼¿ä.
-	/// 3D °üÀý ¾Ö´Ï¸ÞÀÌ¼Ç¿¡¼­ "»À"´Â ¼ÎÀÌ´õ·Î ÀÌ¸§¼øÀ¸·Î Àü´ÞµË´Ï´Ù. ´Ù¸¥ ¸ðµ¨¿¡ µ¿ÀÏÇÑ ¾Ö´Ï¸ÞÀÌ¼ÇÀ» Àû¿ëÇÏ°í ½ÍÀº °æ¿ì
-	/// ¸ðµ¨¿¡¼­ Á¤Á¡-»À ´ëÀÀÀ» ÇÒ ¶§ ¹Ýµå½Ã µ¿ÀÏÇÑ ÀÌ¸§ÀÇ »À¸¦ »ç¿ëÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+	/// 3D ê°œì²´ì˜ ê´€ì ˆ ì• ë‹ˆë©”ì´ì…˜ìž…ë‹ˆë‹¤. í˜„ìž¬ ë²„ì „ì€ íŽ¸ì˜ìƒ .dae ëª¨ë¸ íŒŒì¼ì„ ë””ìŠ¤í¬ í˜¹ì€ ë©”ëª¨ë¦¬ì—ì„œ ë¡œë“œí•˜ëŠ” ê²ƒë§Œ í—ˆìš©í•©ë‹ˆë‹¤.
+	/// 3D ê°œì²´ì˜ ì‹œê°ì  í‚¤í¬ì¸íŠ¸ëŠ” ìµœëŒ€ 64ê°œì˜ ë¼ˆì˜ ìœ„ì¹˜, íšŒì „, í¬ê¸°ë¡œ êµ¬ì„±ë©ë‹ˆë‹¤.
+	/// ë¼ˆê°€ ë§Žì€ ë§Œí¼ ëª‡ ë²ˆì§¸ í”„ë ˆìž„ì¸ì§€ íŒë‹¨í•˜ì—¬ ë§¤ë²ˆ í˜¸ì¶œí•˜ëŠ” ê²ƒì€ ë¶ˆê°€ëŠ¥í•©ë‹ˆë‹¤. ì• ë‹ˆë©”ì´ì…˜ì„ ìƒì„±í•  ë•Œ ê°œì²´ê°€ act()ë¡œ ì•Œë¦¼ë°›ì„ ì‹œì (timepoint)ì„ ì§ì ‘ ëª…ì‹œí•´ ì£¼ì„¸ìš”.
+	/// 3D ê´€ì ˆ ì• ë‹ˆë©”ì´ì…˜ì—ì„œ "ë¼ˆ"ëŠ” ì…°ì´ë”ë¡œ ì´ë¦„ìˆœìœ¼ë¡œ ì „ë‹¬ë©ë‹ˆë‹¤. ë‹¤ë¥¸ ëª¨ë¸ì— ë™ì¼í•œ ì• ë‹ˆë©”ì´ì…˜ì„ ì ìš©í•˜ê³  ì‹¶ì€ ê²½ìš°
+	/// ëª¨ë¸ì—ì„œ ì •ì -ë¼ˆ ëŒ€ì‘ì„ í•  ë•Œ ë°˜ë“œì‹œ ë™ì¼í•œ ì´ë¦„ì˜ ë¼ˆë¥¼ ì‚¬ìš©í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.
 	/// </summary>
 	class Animation3D: public Animation {
 	public:
 		/// <summary>
-		/// .dae ÆÄÀÏ¿¡¼­ 3D °üÀý ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ·ÎµåÇÕ´Ï´Ù.
+		/// .dae íŒŒì¼ì—ì„œ 3D ê´€ì ˆ ì• ë‹ˆë©”ì´ì…˜ì„ ë¡œë“œí•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼ÇÀÇ ÀÌ¸§À» Á¤ÇØÁÖ¼¼¿ä. Áßº¹ÀÎ °æ¿ì µ¤¾î¾²Áö ¾Ê°í ±âÁ¸ÀÇ °ÍÀ» ±×´ë·Î ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="file">ÆÄÀÏ ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä.</param>
-		/// <param name="loop">·çÇÁ ¿©ºÎ¸¦ ¼±ÅÃÇÏ¼¼¿ä.</param>
-		/// <param name="sig_kp">act()·Î ¾Ë¸²¹ÞÀ» ½ÃÁ¡(float)</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ì˜ ì´ë¦„ì„ ì •í•´ì£¼ì„¸ìš”. ì¤‘ë³µì¸ ê²½ìš° ë®ì–´ì“°ì§€ ì•Šê³  ê¸°ì¡´ì˜ ê²ƒì„ ê·¸ëŒ€ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="file">íŒŒì¼ ì´ë¦„ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”.</param>
+		/// <param name="loop">ë£¨í”„ ì—¬ë¶€ë¥¼ ì„ íƒí•˜ì„¸ìš”.</param>
+		/// <param name="sig_kp">act()ë¡œ ì•Œë¦¼ë°›ì„ ì‹œì (float)</param>
 		static std::shared_ptr<Animation> load(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp = {});
 		/// <summary>
-		/// .dae ÆÄÀÏ Çü½ÄÀÇ ¹è¿­ º¯¼ö¿¡¼­ 3D °üÀý ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ·ÎµåÇÕ´Ï´Ù.
+		/// .dae íŒŒì¼ í˜•ì‹ì˜ ë°°ì—´ ë³€ìˆ˜ì—ì„œ 3D ê´€ì ˆ ì• ë‹ˆë©”ì´ì…˜ì„ ë¡œë“œí•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼ÇÀÇ ÀÌ¸§À» Á¤ÇØÁÖ¼¼¿ä. Áßº¹ÀÎ °æ¿ì µ¤¾î¾²Áö ¾Ê°í ±âÁ¸ÀÇ °ÍÀ» ±×´ë·Î ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="dat">º¯¼ö ÁÖ¼Ò¸¦ ´ëÀÔÇØ ÁÖ¼¼¿ä.</param>
-		/// <param name="len">¹è¿­ º¯¼öÀÇ ±æÀÌ¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä.</param>
-		/// <param name="loop">·çÇÁ ¿©ºÎ¸¦ ¼±ÅÃÇÏ¼¼¿ä.</param>
-		/// <param name="sig_kp">act()·Î ¾Ë¸²¹ÞÀ» ½ÃÁ¡(float)</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ì˜ ì´ë¦„ì„ ì •í•´ì£¼ì„¸ìš”. ì¤‘ë³µì¸ ê²½ìš° ë®ì–´ì“°ì§€ ì•Šê³  ê¸°ì¡´ì˜ ê²ƒì„ ê·¸ëŒ€ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="dat">ë³€ìˆ˜ ì£¼ì†Œë¥¼ ëŒ€ìž…í•´ ì£¼ì„¸ìš”.</param>
+		/// <param name="len">ë°°ì—´ ë³€ìˆ˜ì˜ ê¸¸ì´ë¥¼ ìž…ë ¥í•´ ì£¼ì„¸ìš”.</param>
+		/// <param name="loop">ë£¨í”„ ì—¬ë¶€ë¥¼ ì„ íƒí•˜ì„¸ìš”.</param>
+		/// <param name="sig_kp">act()ë¡œ ì•Œë¦¼ë°›ì„ ì‹œì (float)</param>
 		static std::shared_ptr<Animation> load(const std::string& name, const unsigned char* dat, size_t len, bool loop, const std::vector<float>& sig_kp = {});
 		/// <summary>
-		/// ÀÌ ÇÁ·Î±×·¥¿¡¼­ ³»º¸³½ ¾Ö´Ï¸ÞÀÌ¼Ç µ¥ÀÌÅÍ¸¦ ºÒ·¯¿É´Ï´Ù.
+		/// ì´ í”„ë¡œê·¸ëž¨ì—ì„œ ë‚´ë³´ë‚¸ ì• ë‹ˆë©”ì´ì…˜ ë°ì´í„°ë¥¼ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼ÇÀÇ ÀÌ¸§À» Á¤ÇØÁÖ¼¼¿ä. Áßº¹ÀÎ °æ¿ì µ¤¾î¾²Áö ¾Ê°í ±âÁ¸ÀÇ °ÍÀ» ±×´ë·Î ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="file">ÆÄÀÏ ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä.</param>
-		/// <param name="sig_kp">act()·Î ¾Ë¸²¹ÞÀ» ½ÃÁ¡(float)</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ì˜ ì´ë¦„ì„ ì •í•´ì£¼ì„¸ìš”. ì¤‘ë³µì¸ ê²½ìš° ë®ì–´ì“°ì§€ ì•Šê³  ê¸°ì¡´ì˜ ê²ƒì„ ê·¸ëŒ€ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="file">íŒŒì¼ ì´ë¦„ì„ ìž…ë ¥í•´ì£¼ì„¸ìš”.</param>
+		/// <param name="sig_kp">act()ë¡œ ì•Œë¦¼ë°›ì„ ì‹œì (float)</param>
 		static std::shared_ptr<Animation> loadBin(const std::string& name, const std::string& file, bool loop, const std::vector<float>& sig_kp = {});
 		/// <summary>
-		/// ÀÌ ÇÁ·Î±×·¥¿¡¼­ ³»º¸³½ ¾Ö´Ï¸ÞÀÌ¼Ç µ¥ÀÌÅÍ¸¦ ¸Þ¸ð¸®·ÎºÎÅÍ ºÒ·¯¿É´Ï´Ù.
+		/// ì´ í”„ë¡œê·¸ëž¨ì—ì„œ ë‚´ë³´ë‚¸ ì• ë‹ˆë©”ì´ì…˜ ë°ì´í„°ë¥¼ ë©”ëª¨ë¦¬ë¡œë¶€í„° ë¶ˆëŸ¬ì˜µë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼ÇÀÇ ÀÌ¸§À» Á¤ÇØÁÖ¼¼¿ä. Áßº¹ÀÎ °æ¿ì µ¤¾î¾²Áö ¾Ê°í ±âÁ¸ÀÇ °ÍÀ» ±×´ë·Î ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="dat">º¯¼ö ÁÖ¼Ò¸¦ ´ëÀÔÇØ ÁÖ¼¼¿ä.</param>
-		/// <param name="len">¹è¿­ º¯¼öÀÇ ±æÀÌ¸¦ ÀÔ·ÂÇØ ÁÖ¼¼¿ä.</param>
-		/// <param name="sig_kp">act()·Î ¾Ë¸²¹ÞÀ» ½ÃÁ¡(float)</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ì˜ ì´ë¦„ì„ ì •í•´ì£¼ì„¸ìš”. ì¤‘ë³µì¸ ê²½ìš° ë®ì–´ì“°ì§€ ì•Šê³  ê¸°ì¡´ì˜ ê²ƒì„ ê·¸ëŒ€ë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="dat">ë³€ìˆ˜ ì£¼ì†Œë¥¼ ëŒ€ìž…í•´ ì£¼ì„¸ìš”.</param>
+		/// <param name="len">ë°°ì—´ ë³€ìˆ˜ì˜ ê¸¸ì´ë¥¼ ìž…ë ¥í•´ ì£¼ì„¸ìš”.</param>
+		/// <param name="sig_kp">act()ë¡œ ì•Œë¦¼ë°›ì„ ì‹œì (float)</param>
 		static std::shared_ptr<Animation> loadBin(const std::string& name, const unsigned char* dat, size_t len, const std::vector<float>& sig_kp = {});
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼Ç µ¥ÀÌÅÍ¸¦ ¹ÙÀÌ³Ê¸® ÇüÅÂ·Î ³»º¸³À´Ï´Ù. ÆÄÀÏ ÀÌ¸§Àº (ÀÌ¸§.oanim)ÀÔ´Ï´Ù.
-		/// ¸ðµ¨°ú ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ´Ù´ë´Ù ´ëÀÀÇÏ´Â °æ¿ì, ÅëÀÏµÈ ±Ô°ÝÀÌ ¾Æ´Ñ ÇÊ¿äÇÑ µ¥ÀÌÅÍ¸¸ ÀÖ´Â Àü¿ë µ¥ÀÌÅÍ¸¦ »ç¿ëÇÏ´Â °ÍÀÌ ¿ë·®À» ÁÙÀÌ´Â ¹æ¹ýÀÌ µÉ ¼ö ÀÖ½À´Ï´Ù.
-		/// sig_kp ºÎºÐÀº ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ ë°ì´í„°ë¥¼ ë°”ì´ë„ˆë¦¬ í˜•íƒœë¡œ ë‚´ë³´ëƒ…ë‹ˆë‹¤. íŒŒì¼ ì´ë¦„ì€ (ì´ë¦„.oanim)ìž…ë‹ˆë‹¤.
+		/// ëª¨ë¸ê³¼ ì• ë‹ˆë©”ì´ì…˜ì„ ë‹¤ëŒ€ë‹¤ ëŒ€ì‘í•˜ëŠ” ê²½ìš°, í†µì¼ëœ ê·œê²©ì´ ì•„ë‹Œ í•„ìš”í•œ ë°ì´í„°ë§Œ ìžˆëŠ” ì „ìš© ë°ì´í„°ë¥¼ ì‚¬ìš©í•˜ëŠ” ê²ƒì´ ìš©ëŸ‰ì„ ì¤„ì´ëŠ” ë°©ë²•ì´ ë  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+		/// sig_kp ë¶€ë¶„ì€ ì €ìž¥ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		void exportBin(const std::string& fileName);
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» »ý¼ºÇÏ´Â ÄÚµå¸¦ C++ ÄÚµå ÇüÅÂ·Î ³»º¸³À´Ï´Ù. ÆÄÀÏ ÀÌ¸§Àº (¾Ö´Ï¸ÞÀÌ¼ÇÀÌ¸§.txt)ÀÔ´Ï´Ù.
-		/// sig_kp ºÎºÐÀº ÀúÀåµË´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ìƒì„±í•˜ëŠ” ì½”ë“œë¥¼ C++ ì½”ë“œ í˜•íƒœë¡œ ë‚´ë³´ëƒ…ë‹ˆë‹¤. íŒŒì¼ ì´ë¦„ì€ (ì• ë‹ˆë©”ì´ì…˜ì´ë¦„.txt)ìž…ë‹ˆë‹¤.
+		/// sig_kp ë¶€ë¶„ì€ ì €ìž¥ë©ë‹ˆë‹¤.
 		/// </summary>
 		void exportCode(const std::string& fileName);
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀÇ ÇöÀç »óÅÂ¸¦ ·»´õ¸µÇÏ°í, ÇÊ¿äÇÑ °æ¿ì °³Ã¼¿¡¼­ ÇÔ¼ö¸¦ È£ÃâÇÕ´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì˜ í˜„ìž¬ ìƒíƒœë¥¼ ë Œë”ë§í•˜ê³ , í•„ìš”í•œ ê²½ìš° ê°œì²´ì—ì„œ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="elapsed">¾Ö´Ï¸ÞÀÌ¼Ç ½ÃÀÛ ÈÄ Áö³­ ½Ã°£</param>
-		/// <param name="e">°³Ã¼ Æ÷ÀÎÅÍ</param>
-		/// <param name="dynamicTps">¾Ö´Ï¸ÞÀÌ¼Ç ¼Óµµ(±âº»°ª=1)</param>
+		/// <param name="elapsed">ì• ë‹ˆë©”ì´ì…˜ ì‹œìž‘ í›„ ì§€ë‚œ ì‹œê°„</param>
+		/// <param name="e">ê°œì²´ í¬ì¸í„°</param>
+		/// <param name="dynamicTps">ì• ë‹ˆë©”ì´ì…˜ ì†ë„(ê¸°ë³¸ê°’=1)</param>
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 
@@ -261,18 +261,18 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// Ä«¸Þ¶ó ¹× ¼ÎÀÌµùÀÇ ¿µÇâÀ» ¹ÞÁö ¾Ê´Â 2D ¾Ö´Ï¸ÞÀÌ¼ÇÀÔ´Ï´Ù.
+	/// ì¹´ë©”ë¼ ë° ì…°ì´ë”©ì˜ ì˜í–¥ì„ ë°›ì§€ ì•ŠëŠ” 2D ì• ë‹ˆë©”ì´ì…˜ìž…ë‹ˆë‹¤.
 	/// </summary>
 	class UIAnimation : public Animation {
 	public:
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù. Animation2DÀÇ make¿Í ¿ÏÀüÈ÷ µ¿ÀÏÇÏ°Ô »ç¿ëÇÏ¸é µË´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤. Animation2Dì˜ makeì™€ ì™„ì „ížˆ ë™ì¼í•˜ê²Œ ì‚¬ìš©í•˜ë©´ ë©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¸§ÀÔ´Ï´Ù. ÀÌ¸§ÀÌ °ãÄ¡´Â °æ¿ì ³»¿ë¿¡ °ü°è¾øÀÌ »ý¼ºÇÏÁö ¾Ê°í ±âÁ¸¿¡ ÀÖ´ø °ÍÀ» ¸®ÅÏÇÕ´Ï´Ù.</param>
-		/// <param name="loop">·çÇÁ ¿©ºÎ¸¦ ¼±ÅÃÇÕ´Ï´Ù. falseÀÎ °æ¿ì ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³¡³ª¸é ¸¶Áö¸· »óÅÂ¸¦ À¯ÁöÇÕ´Ï´Ù.</param>
-		/// <param name="tex">½ÃÁ¡°ú ÅØ½ºÃ³ÀÇ ¼ø¼­½Ö ÁýÇÕÀÔ´Ï´Ù.</param>
-		/// <param name="rects">½ÃÁ¡°ú Á÷»ç°¢Çü ¿µ¿ª(LDWH. ÁÂ/ÇÏ/Æø/³ôÀÌ, ´ÜÀ§´Â px)ÀÇ ¼ø¼­½Ö ÁýÇÕÀÔ´Ï´Ù. ºñ¾î ÀÖÀ¸¸é ¾È µË´Ï´Ù.</param>
-		/// <param name="pivots">rects¿¡ ÀÏ´ëÀÏ·Î ´ëÀÀÇÏ´Â ÇÇ¹þ ÁÂÇ¥ÀÔ´Ï´Ù. ÁÂÃø ÇÏ´ÜÀ» 0À¸·Î, ÇÈ¼¿ ´ÜÀ§·Î ÀÔ·ÂÇÏ¸é µË´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê´Â °æ¿ì ¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °¢ ÇÁ·¹ÀÓÀº ´ÜÀ§ Á¤»ç°¢Çü¿¡ µé¾î°¡¸ç Á¤»ç°¢ÇüÀÇ Áß½ÉÀÌ °ð ÇÇ¹þÀÌ µË´Ï´Ù.</param>
+		/// <param name="name">ì• ë‹ˆë©”ì´ì…˜ ì´ë¦„ìž…ë‹ˆë‹¤. ì´ë¦„ì´ ê²¹ì¹˜ëŠ” ê²½ìš° ë‚´ìš©ì— ê´€ê³„ì—†ì´ ìƒì„±í•˜ì§€ ì•Šê³  ê¸°ì¡´ì— ìžˆë˜ ê²ƒì„ ë¦¬í„´í•©ë‹ˆë‹¤.</param>
+		/// <param name="loop">ë£¨í”„ ì—¬ë¶€ë¥¼ ì„ íƒí•©ë‹ˆë‹¤. falseì¸ ê²½ìš° ì• ë‹ˆë©”ì´ì…˜ì´ ëë‚˜ë©´ ë§ˆì§€ë§‰ ìƒíƒœë¥¼ ìœ ì§€í•©ë‹ˆë‹¤.</param>
+		/// <param name="tex">ì‹œì ê³¼ í…ìŠ¤ì²˜ì˜ ìˆœì„œìŒ ì§‘í•©ìž…ë‹ˆë‹¤.</param>
+		/// <param name="rects">ì‹œì ê³¼ ì§ì‚¬ê°í˜• ì˜ì—­(LDWH. ì¢Œ/í•˜/í­/ë†’ì´, ë‹¨ìœ„ëŠ” px)ì˜ ìˆœì„œìŒ ì§‘í•©ìž…ë‹ˆë‹¤. ë¹„ì–´ ìžˆìœ¼ë©´ ì•ˆ ë©ë‹ˆë‹¤.</param>
+		/// <param name="pivots">rectsì— ì¼ëŒ€ì¼ë¡œ ëŒ€ì‘í•˜ëŠ” í”¼ë²— ì¢Œí‘œìž…ë‹ˆë‹¤. ì¢Œì¸¡ í•˜ë‹¨ì„ 0ìœ¼ë¡œ, í”½ì…€ ë‹¨ìœ„ë¡œ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•ŠëŠ” ê²½ìš° ì• ë‹ˆë©”ì´ì…˜ì˜ ê° í”„ë ˆìž„ì€ ë‹¨ìœ„ ì •ì‚¬ê°í˜•ì— ë“¤ì–´ê°€ë©° ì •ì‚¬ê°í˜•ì˜ ì¤‘ì‹¬ì´ ê³§ í”¼ë²—ì´ ë©ë‹ˆë‹¤.</param>
 		static std::shared_ptr<Animation> make(const std::string& name, bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec2>& pivots = {});
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:

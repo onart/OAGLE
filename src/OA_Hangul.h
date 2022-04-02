@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -13,7 +13,7 @@
 
 namespace onart {
 	/// <summary>
-	/// ÇÑ±Û ÀÔ·ÂÀ» À§ÇÑ »óÅÂ ¸Ó½ÅÀÔ´Ï´Ù.
+	/// í•œê¸€ ì…ë ¥ì„ ìœ„í•œ ìƒíƒœ ë¨¸ì‹ ì…ë‹ˆë‹¤.
 	/// </summary>
 	class HangulStateMachine
 	{
@@ -22,27 +22,27 @@ namespace onart {
 		inline std::u16string getContent() { return content; }
 		void flush(const std::u16string& content = u"");
 		/// <summary>
-		/// ÇÑ ±ÛÀÚ¸¦ ÀÔ·ÂÇÑ °á°ú°¡ ¹İ¿µµË´Ï´Ù. 0À» ÀÔ·ÂÇÏ´Â °æ¿ì ÇöÀç ÀÔ·Â ÁßÀÎ ÇÑ±Û ³¹ÀÚÀÇ ÀÔ·ÂÀ» Á¾·áÇÕ´Ï´Ù.
+		/// í•œ ê¸€ìë¥¼ ì…ë ¥í•œ ê²°ê³¼ê°€ ë°˜ì˜ë©ë‹ˆë‹¤. 0ì„ ì…ë ¥í•˜ëŠ” ê²½ìš° í˜„ì¬ ì…ë ¥ ì¤‘ì¸ í•œê¸€ ë‚±ìì˜ ì…ë ¥ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.
 		/// </summary>
 		void push(char16_t c = 0);
 		/// <summary>
-		/// ¹®ÀÚ¿­À» ÇöÀç Ä¿¼­ À§Ä¡¿¡ »ğÀÔÇÕ´Ï´Ù.
+		/// ë¬¸ìì—´ì„ í˜„ì¬ ì»¤ì„œ ìœ„ì¹˜ì— ì‚½ì…í•©ë‹ˆë‹¤.
 		/// </summary>
 		void append(const std::u16string&);
 		/// <summary>
-		/// ÇöÀç À§Ä¡¿¡¼­ Ä¿¼­¸¦ ÀÌµ¿ÇÕ´Ï´Ù.
+		/// í˜„ì¬ ìœ„ì¹˜ì—ì„œ ì»¤ì„œë¥¼ ì´ë™í•©ë‹ˆë‹¤.
 		/// </summary>
 		void moveCursor(ptrdiff_t);
 		/// <summary>
-		/// Ä¿¼­¸¦ ¸Ç Ã³À½ À§Ä¡·Î ÀÌµ¿ÇÕ´Ï´Ù.
+		/// ì»¤ì„œë¥¼ ë§¨ ì²˜ìŒ ìœ„ì¹˜ë¡œ ì´ë™í•©ë‹ˆë‹¤.
 		/// </summary>
 		void home();
 		/// <summary>
-		/// Ä¿¼­¸¦ ¸Ç ³¡ À§Ä¡·Î ÀÌµ¿ÇÕ´Ï´Ù.
+		/// ì»¤ì„œë¥¼ ë§¨ ë ìœ„ì¹˜ë¡œ ì´ë™í•©ë‹ˆë‹¤.
 		/// </summary>
 		void end();
 	private:
-		enum class hState { EMPTY, R, K, ML, RT, RK, RML, RKR, RKFR, RMLR, RMLFR } st;   // ´ëÇ¥ ±ÛÀÚ·Î °¢°¢ °ø¹é,¤¡,¤¿,¤Ò,¤£,°¡,±á,°¢,°¦,ƒS,ƒa°ú µ¿»ó ±ÛÀÚ¸¦ ¶æÇÔ
+		enum class hState { EMPTY, R, K, ML, RT, RK, RML, RKR, RKFR, RMLR, RMLFR } st;   // ëŒ€í‘œ ê¸€ìë¡œ ê°ê° ê³µë°±,ã„±,ã…,ã…¢,ã„³,ê°€,ê¸”,ê°,ê°‰,ê¸•,ê¸ê³¼ ë™ìƒ ê¸€ìë¥¼ ëœ»í•¨
 		void clearBuffers();
 		std::u16string content;
 		std::stack<char16_t> prev, buf;

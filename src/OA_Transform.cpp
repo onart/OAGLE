@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -125,7 +125,7 @@ namespace onart {
 
 	void Transform::setPosition(const vec3& p) {
 		if (!parent)return setLocalPosition(p);
-		// FACT: ºÎ¸ğ º¯È¯ÀÌ ¾ÆÇÉ º¯È¯ÀÏ ¶§ ±Û·Î¹ú Æ÷Áö¼ÇÀ» ¿òÁ÷ÀÌ°í ÀÚ½Ä º¯È¯¿¡ ¹İ¿µÇÒ °æ¿ì, ÀÚ½Ä º¯È¯ ¶ÇÇÑ À§Ä¡¸¸ º¯ÇÔ
+		// FACT: ë¶€ëª¨ ë³€í™˜ì´ ì•„í•€ ë³€í™˜ì¼ ë•Œ ê¸€ë¡œë²Œ í¬ì§€ì…˜ì„ ì›€ì§ì´ê³  ìì‹ ë³€í™˜ì— ë°˜ì˜í•  ê²½ìš°, ìì‹ ë³€í™˜ ë˜í•œ ìœ„ì¹˜ë§Œ ë³€í•¨
 		getModel();
 		globalModel._14 = p.x;	globalModel._24 = p.y;	globalModel._34 = p.z;
 		globalPos = p;

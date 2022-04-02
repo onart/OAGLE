@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -24,7 +24,7 @@ namespace onart {
 		FILE* fp;
 		fopen_s(&fp, vert, "rb");
 		if (!fp) {
-			fprintf(stderr, "¼ÎÀÌ´õ ÆÄÀÏÀÌ ¾ø½À´Ï´Ù: %s\n", vert);
+			fprintf(stderr, "ì…°ì´ë” íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤: %s\n", vert);
 			return;
 		}
 		auto size = (size_t)std::filesystem::file_size(vert);
@@ -35,7 +35,7 @@ namespace onart {
 
 		fopen_s(&fp, frag, "rb");
 		if (!fp) {
-			fprintf(stderr, "¼ÎÀÌ´õ ÆÄÀÏÀÌ ¾ø½À´Ï´Ù: %s\n", frag);
+			fprintf(stderr, "ì…°ì´ë” íŒŒì¼ì´ ì—†ìŠµë‹ˆë‹¤: %s\n", frag);
 			delete[] vertScript;
 			return;
 		}
@@ -81,7 +81,7 @@ namespace onart {
 		int buf;
 		glGetShaderiv(prog, GL_COMPILE_STATUS, &buf);
 		if (buf != GL_TRUE) {
-			printf("¼ÎÀÌ´õ ÄÄÆÄÀÏ ¿À·ù°¡ ÀÖ½À´Ï´Ù.\n");
+			printf("ì…°ì´ë” ì»´íŒŒì¼ ì˜¤ë¥˜ê°€ ìžˆìŠµë‹ˆë‹¤.\n");
 			glGetShaderiv(prog, GL_INFO_LOG_LENGTH, &buf);
 			if (buf > 0 && buf < 4096) {
 				char log[4096];
@@ -100,7 +100,7 @@ namespace onart {
 		int logLen;
 		glGetProgramInfoLog(id, MAX_LOG, &logLen, msg);
 		if (logLen > 1 && logLen <= MAX_LOG) {
-			printf("¼ÎÀÌ´õ %d: %s\n", id, msg);
+			printf("ì…°ì´ë” %d: %s\n", id, msg);
 		}
 
 		int linkStatus;
@@ -114,7 +114,7 @@ namespace onart {
 		glValidateProgram(id);
 		glGetProgramInfoLog(id, MAX_LOG, &logLen, msg);
 		if (logLen > 1 && logLen <= MAX_LOG) {
-			printf("¼ÎÀÌ´õ %d: %s\n", id, msg);
+			printf("ì…°ì´ë” %d: %s\n", id, msg);
 		}
 
 		int valStatus;
@@ -257,7 +257,7 @@ namespace onart {
 
 	void Shader::use() {
 		if (id == 0) {
-			fprintf(stderr, "%p: »ç¿ëÇÒ ¼ö ¾ø´Â ¼ÎÀÌ´õ ÇÁ·Î±×·¥ÀÔ´Ï´Ù.\n", this);
+			fprintf(stderr, "%p: ì‚¬ìš©í•  ìˆ˜ ì—†ëŠ” ì…°ì´ë” í”„ë¡œê·¸ëž¨ìž…ë‹ˆë‹¤.\n", this);
 			return;
 		}
 		if (usingShader != this) { 

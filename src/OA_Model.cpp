@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -49,7 +49,7 @@ namespace onart {
 			}
 			fs::path p = fs::absolute(modelDirectory / texpath.C_Str());
 			if (!fs::exists(p)) {
-				printf("ÅØ½ºÃ³ ÆÄÀÏ\n%s\n¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù. ¸Ş¸ğ¸®¿¡¼­ ºÒ·¯¿À·Á´Â °æ¿ì ÀÌÈÄ ³ª¿À´Â ÀÎµ¦½º¿Í À¯ÇüÀ» Âü°íÇÏ¿© È£ÃâÇØ ÁÖ¼¼¿ä.\n", p.string().c_str());
+				printf("í…ìŠ¤ì²˜ íŒŒì¼\n%s\në¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ë©”ëª¨ë¦¬ì—ì„œ ë¶ˆëŸ¬ì˜¤ë ¤ëŠ” ê²½ìš° ì´í›„ ë‚˜ì˜¤ëŠ” ì¸ë±ìŠ¤ì™€ ìœ í˜•ì„ ì°¸ê³ í•˜ì—¬ í˜¸ì¶œí•´ ì£¼ì„¸ìš”.\n", p.string().c_str());
 				return pTexture();
 			}
 			else {
@@ -85,7 +85,7 @@ namespace onart {
 		if (Mesh::get(meshName)) return list[meshName];
 		Assimp::Importer importer;
 		const aiScene* scn = importer.ReadFileFromMemory(data, len, importFlags, hint);
-		if (!scn) { printf("Assimp ¿À·ù: %s\n", importer.GetErrorString()); return pModel(); }
+		if (!scn) { printf("Assimp ì˜¤ë¥˜: %s\n", importer.GetErrorString()); return pModel(); }
 		struct mdl :public Model { mdl(const aiScene* _1, const std::string& _2) :Model(_1, _2) {} };
 		pModel& pm = list[meshName];
 		pm.reset(new mdl(scn, meshName));
@@ -97,7 +97,7 @@ namespace onart {
 		if (Mesh::get(fullPath)) return list[fullPath];
 		Assimp::Importer importer;
 		const aiScene* scn = importer.ReadFile(fullPath, importFlags);
-		if (!scn) { printf("Assimp ¿À·ù: %s\n", importer.GetErrorString()); return pModel(); }
+		if (!scn) { printf("Assimp ì˜¤ë¥˜: %s\n", importer.GetErrorString()); return pModel(); }
 		struct mdl :public Model { mdl(const aiScene* _1, const std::string& _2) :Model(_1, _2) {} };
 		pModel& pm = list[fullPath];
 		pm.reset(new mdl(scn, fullPath));
@@ -130,7 +130,7 @@ namespace onart {
 			
 			const size_t v0 = vList.size();
 			const size_t i0 = iList.size();
-			// ÀÎµ¦½º ÀúÀå
+			// ì¸ë±ìŠ¤ ì €ì¥
 			for (size_t fid = 0; fid < m->mNumFaces; fid++) {
 				const aiFace& face = m->mFaces[fid];
 				auto ind = iList.insert(iList.end(), face.mIndices, face.mIndices + face.mNumIndices);
@@ -138,7 +138,7 @@ namespace onart {
 				for (; ind < ed; ind++) *ind += (unsigned)v0;
 			}
 			
-			// Á¤Á¡ µ¥ÀÌÅÍ ÀúÀå
+			// ì •ì  ë°ì´í„° ì €ì¥
 			if (m->HasTextureCoords(0)) {
 				for (size_t vid = 0; vid < m->mNumVertices; vid++) {
 					const aiVector3D& pos = m->mVertices[vid];
@@ -192,10 +192,10 @@ namespace onart {
 				}
 			}
 			for (Vertex& v : vList) {
-				clamp4(v.boneIDs.entry, 0, MAX_BONE_COUNT);	// ¼ÎÀÌ´õ ºĞ±â Á¦°Å¸¦ À§ÇØ (-1¿¡´Â weight 0ÀÌ ´ëÀÀ)
+				clamp4(v.boneIDs.entry, 0, MAX_BONE_COUNT);	// ì…°ì´ë” ë¶„ê¸° ì œê±°ë¥¼ ìœ„í•´ (-1ì—ëŠ” weight 0ì´ ëŒ€ì‘)
 			}
 #endif
-			// ¸ÅÅÍ¸®¾ó
+			// ë§¤í„°ë¦¬ì–¼
 			if (!materials[m->mMaterialIndex]) {
 				Material* material = new Material;
 				const aiMaterial* mtl = scn->mMaterials[m->mMaterialIndex];
@@ -217,10 +217,10 @@ namespace onart {
 				materials[m->mMaterialIndex].reset(material);
 #ifdef _DEBUG
 				if (!difftex) {
-					printf("¸ğµ¨ [%s]ÀÇ %d¹ø diffuse ÅØ½ºÃ³¸¦ ºÒ·¯¿Ã ¼ö ¾ø¾ú½À´Ï´Ù. ¸Ş¸ğ¸®¿¡¼­ ºÒ·¯¿À°íÀÚ ÇÏ´Â °æ¿ì, »ı¼ºÇÑ °´Ã¼¿¡ ´ëÇÏ¿© addTex() ÇÔ¼ö¸¦ È£ÃâÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\n", name.c_str(), m->mMaterialIndex);
+					printf("ëª¨ë¸ [%s]ì˜ %dë²ˆ diffuse í…ìŠ¤ì²˜ë¥¼ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤. ë©”ëª¨ë¦¬ì—ì„œ ë¶ˆëŸ¬ì˜¤ê³ ì í•˜ëŠ” ê²½ìš°, ìƒì„±í•œ ê°ì²´ì— ëŒ€í•˜ì—¬ addTex() í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\n", name.c_str(), m->mMaterialIndex);
 				}
 				if (!normtex) {
-					printf("¸ğµ¨ [%s]ÀÇ %d¹ø normal ÅØ½ºÃ³¸¦ ºÒ·¯¿Ã ¼ö ¾ø¾ú½À´Ï´Ù. ¸Ş¸ğ¸®¿¡¼­ ºÒ·¯¿À°íÀÚ ÇÏ´Â °æ¿ì, »ı¼ºÇÑ °´Ã¼¿¡ ´ëÇÏ¿© addTex() ÇÔ¼ö¸¦ È£ÃâÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.\n", name.c_str(), m->mMaterialIndex);
+					printf("ëª¨ë¸ [%s]ì˜ %dë²ˆ normal í…ìŠ¤ì²˜ë¥¼ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ì—†ì—ˆìŠµë‹ˆë‹¤. ë©”ëª¨ë¦¬ì—ì„œ ë¶ˆëŸ¬ì˜¤ê³ ì í•˜ëŠ” ê²½ìš°, ìƒì„±í•œ ê°ì²´ì— ëŒ€í•˜ì—¬ addTex() í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•´ ì£¼ì‹œê¸° ë°”ëë‹ˆë‹¤.\n", name.c_str(), m->mMaterialIndex);
 				}
 #endif
 			}
@@ -231,7 +231,7 @@ namespace onart {
 	}
 
 	void Model::addTex(unsigned index, std::shared_ptr<Texture>& tex, TexType typ) {
-		if (index >= materials.size()) { fprintf(stderr, "%s: ÀÎµ¦½º°¡ Àß¸øµÇ¾ú½À´Ï´Ù.\n", __func__); return; }
+		if (index >= materials.size()) { fprintf(stderr, "%s: ì¸ë±ìŠ¤ê°€ ì˜ëª»ë˜ì—ˆìŠµë‹ˆë‹¤.\n", __func__); return; }
 		auto& mtl = materials[index];
 		if (!mtl) { return; }
 		switch (typ)

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -42,13 +42,13 @@ namespace onart {
 	constexpr int R_HEIGHT = 9;
 	constexpr float LRPOL = R_WIDTH > R_HEIGHT ? (float)R_WIDTH / R_HEIGHT : 1;
 	constexpr float UDPOL = R_WIDTH > R_HEIGHT ? 1 : (float)R_HEIGHT / R_WIDTH;
-	constexpr bool OA_FIX_TIMESCALE = false;	// trueÀÎ °æ¿ì ÇÁ·¹ÀÓ Å¸ÀÓÀÌ ´À·ÁÁ®µµ dt°ªÀº 1/60À¸·Î °íÁ¤µÇ°Ô ÇÕ´Ï´Ù.
-	constexpr float OA_DEFAULT_VSYNC_FPS = 60;	// ±âº» ÇÁ·¹ÀÓ Å¸ÀÓÀ» Á¶ÀýÇÏ´Â »ó¼ö·Î ¸¸µé °èÈ¹ÀÔ´Ï´Ù. (¼º°øÇÏ´Â °æ¿ì º¯¼öµµ Ãß°¡µË´Ï´Ù.)
+	constexpr bool OA_FIX_TIMESCALE = false;	// trueì¸ ê²½ìš° í”„ë ˆìž„ íƒ€ìž„ì´ ëŠë ¤ì ¸ë„ dtê°’ì€ 1/60ìœ¼ë¡œ ê³ ì •ë˜ê²Œ í•©ë‹ˆë‹¤.
+	constexpr float OA_DEFAULT_VSYNC_FPS = 60;	// ê¸°ë³¸ í”„ë ˆìž„ íƒ€ìž„ì„ ì¡°ì ˆí•˜ëŠ” ìƒìˆ˜ë¡œ ë§Œë“¤ ê³„íšìž…ë‹ˆë‹¤. (ì„±ê³µí•˜ëŠ” ê²½ìš° ë³€ìˆ˜ë„ ì¶”ê°€ë©ë‹ˆë‹¤.)
 
 	/// <summary>
-	/// GLFW ÃÊ±âÈ­ ÇÔ¼ö¸¦ ´Ü ÇÑ ¹ø¸¸ È£ÃâÇÕ´Ï´Ù.
+	/// GLFW ì´ˆê¸°í™” í•¨ìˆ˜ë¥¼ ë‹¨ í•œ ë²ˆë§Œ í˜¸ì¶œí•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <returns>¼º°ø ¿©ºÎ</returns>
+	/// <returns>ì„±ê³µ ì—¬ë¶€</returns>
 	inline bool initGLFW() {
 		static bool b = false;
 		if (b) return true;
@@ -57,23 +57,23 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Á¾·á ½Ã È£ÃâµÇ´Â ÇÔ¼öÀÔ´Ï´Ù.
+	/// ì¢…ë£Œ ì‹œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="window">´ÝÀ» Ã¢</param>
+	/// <param name="window">ë‹«ì„ ì°½</param>
 	inline void destroyWindow(GLFWwindow* window) {
 		glfwDestroyWindow(window);
 		glfwTerminate();
 	}
 
 	/// <summary>
-	/// GLFW ¿À·ù ¹ß»ý ½Ã ³»¿ëÀ» Ãâ·ÂÇÏ´Â ÄÝ¹éÀÔ´Ï´Ù.
+	/// GLFW ì˜¤ë¥˜ ë°œìƒ ì‹œ ë‚´ìš©ì„ ì¶œë ¥í•˜ëŠ” ì½œë°±ìž…ë‹ˆë‹¤.
 	/// </summary>
 	inline void printError(int code, const char* desc) {
 		fprintf(stderr, "GLFW ERROR %d: %s\n", code, desc);
 	}
 	
 	/// <summary>
-	/// DPI º¸Á¤À» À§ÇØ ÇöÀç DPI ¸®ÅÏ (ÃÖÁ¾ÀûÀ¸·Î °ªÀ» °öÇÏ±â)
+	/// DPI ë³´ì •ì„ ìœ„í•´ í˜„ìž¬ DPI ë¦¬í„´ (ìµœì¢…ì ìœ¼ë¡œ ê°’ì„ ê³±í•˜ê¸°)
 	/// </summary>
 	/// <returns></returns>
 	inline float dpiRatio() {
@@ -84,60 +84,60 @@ namespace onart {
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		if (!monitor) return 1;
 		float xr, yr;
-		glfwGetMonitorContentScale(monitor, &xr, &yr);	// ÇöÀç DPI¿Í ÇÃ·§Æû ±âº» DPI ºñÀ²
+		glfwGetMonitorContentScale(monitor, &xr, &yr);	// í˜„ìž¬ DPIì™€ í”Œëž«í¼ ê¸°ë³¸ DPI ë¹„ìœ¨
 		r = std::max(xr, yr);
 		if (r < 1.01f || r > 16.0f) r = 1;
 		return r;
 	}
 
 	/// <summary>
-	/// Ã¢À» Á¤ÇØÁø ¿É¼ÇÀ¸·Î »ý¼ºÇÕ´Ï´Ù. ´Ù¸¥ ¿É¼ÇÀº GLFW ¹®¼­¸¦ º¸°í ¼öÁ¤ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+	/// ì°½ì„ ì •í•´ì§„ ì˜µì…˜ìœ¼ë¡œ ìƒì„±í•©ë‹ˆë‹¤. ë‹¤ë¥¸ ì˜µì…˜ì€ GLFW ë¬¸ì„œë¥¼ ë³´ê³  ìˆ˜ì •í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="name">Ã¢ÀÇ ÀÌ¸§À¸·Î Ç¥½ÃµÉ ¹®ÀÚ¿­ÀÔ´Ï´Ù. UTF-8 ÀÎÄÚµù</param>
-	/// <param name="width">Ã¢ÀÇ °¡·Î ±æÀÌÀÔ´Ï´Ù.</param>
-	/// <param name="height">Ã¢ÀÇ ¼¼·Î ±æÀÌÀÔ´Ï´Ù.</param>
-	/// <returns>»ý¼ºÇÑ windowÀÇ Æ÷ÀÎÅÍ</returns>
+	/// <param name="name">ì°½ì˜ ì´ë¦„ìœ¼ë¡œ í‘œì‹œë  ë¬¸ìžì—´ìž…ë‹ˆë‹¤. UTF-8 ì¸ì½”ë”©</param>
+	/// <param name="width">ì°½ì˜ ê°€ë¡œ ê¸¸ì´ìž…ë‹ˆë‹¤.</param>
+	/// <param name="height">ì°½ì˜ ì„¸ë¡œ ê¸¸ì´ìž…ë‹ˆë‹¤.</param>
+	/// <returns>ìƒì„±í•œ windowì˜ í¬ì¸í„°</returns>
 	inline GLFWwindow* createWindow(std::string name, unsigned width, unsigned height) {
 		initGLFW();
 		glfwSetErrorCallback(printError);
 		/*
 		* https://www.glfw.org/docs/latest/window_guide.html#window_hints
-		* GLFW_RESIZABLE:		»ç¿ëÀÚ¿¡ ÀÇÇÑ Ã¢ Å©±â Á¶Àý °¡´É ¿©ºÎ. falseÀÎ °æ¿ì¿¡µµ ÇÁ·Î±×·¥ ÃøÀº glfwSetWindowSize·Î °¡´ÉÇÔ. ±âº» TRUE
-		* GLFW_VISIBLE:			Ã³À½¿¡ Ã¢À» º¸ÀÏÁö. ±âº» TRUE
-		* GLFW_DECORATED:		°æ°è, ´Ý±â ¹öÆ° µî µ¥ÄÚ·¹ÀÌ¼ÇÀÌ ÀÖ´ÂÁö (falseÀÎ °æ¿ì »ç¿ëÀÚ Å©±â Á¶Á¤ ºÒ°¡´É). ±âº» TRUE
-		* GLFW_FOCUSED:			Ã¢ »ý¼º ½Ã Æ÷Ä¿½º °¡Á®¿È ¿©ºÎ, ±âº» TRUE
-		* GLFW_AUTO_ICONIFY:	ÀüÃ¼È­¸é Ã¢ÀÌ ¿­¸®¸é ±âÁ¸ ºñµð¿À ¸ðµå Ã¢ÀÌ ÀÚµ¿À¸·Î ÃÖ¼ÒÈ­/Æ÷Ä¿½º ³ª°¡¸é º¹±¸. ±âº» TRUE
-		* GLFW_FLOATING:		Ã¢¸ðµå Ã¢ÀÌ Ç×»ó °¡Àå ¾Õ¿¡ À§Ä¡. ±âº» FALSE
-		* GLFW_MAXIMIZED:		»ý¼º ½Ã ÃÖ´ëÈ­ »óÅÂ. ±âº» FALSE
-		* GLFW_CENTER_CURSOR:	ÀüÃ¼È­¸é ½Ã Ä¿¼­°¡ °¡¿îµ¥·Î ÀÌµ¿. TRUE
-		* GLFW_TRANSPARENT_FRAMEBUFFER:	Ã¢ ÇÁ·¹ÀÓ¹öÆÛ Åõ¸í¼º ¿©ºÎ. ±âº» FALSE
-		* GLFW_FOCUS_ON_SHOW:	glfwShowWindow() È£Ãâ ½Ã Ã¢ÀÌ ÀÔ·Â Æ÷Ä¿½º¸¦ ¾òÀ½. ±âº» TRUE
-		* GLFW_SCALE_TO_MONIOTR:Ã¢ÀÌ ¸ð´ÏÅÍ ³»¿ë ±Ô¸ð¿¡ µû¶ó ÀÚµ¿À¸·Î ÀçÁ¶Á¤. È­¸é ÁÂÇ¥°¡ ÇÈ¼¿°ú ÀÏ´ëÀÏ ´ëÀÀÇÏ´Â °æ¿ì¿¡¸¸ µ¿ÀÛ. ±âº» FALSE
-		* GLFW_(RED | GREEN | BLUE | ALPHA | STENCIL)_BITS: »ö»óÀÇ ºñÆ® Á¤¹Ðµµ.  ±âº» 8
-		* GLFW_DEPTH_BITS:		±âº» 24
-		* GLFW_ACCUM_(RED | GREEB | BLUE | ALPHA)_BITS:	accumulation ¹öÆÛÀÇ ºñÆ® Á¤¹Ðµµ. ±âº» 0
-		* GLFW_AUX_BUFFERS:		ÀÓ½Ã ¹öÆÛÀÇ ¼ö. ±âº» 0
-		* GLFW_SAMPLES:			¸ÖÆ¼»ùÇÃ¸µ ÃÖ´ë ¼ö. ±âº» 0
-		* GLFW_REFRESH_RATE:	¸ð´ÏÅÍ ÁÖ»çÀ². ±âº» GLFW_DONT_CARE (¸ð´ÏÅÍ ÃÖ´ëÄ¡·Î)
-		* GLFW_STEREO:			OPENGL ½ºÅ×¸®¿À½ºÄÚÇÈ ·»´õ¸µ »ç¿ë ¿©ºÎ. ±âº» FALSE
-		* GLFW_SRGB_CAPABLE:	ÇÁ·¹ÀÓ¹öÆÛ°¡ sRGB¸¦ Ä¿¹ö °¡´ÉÇÑÁö. ±âº» FALSE
-		* GLFW_DOUBLEBUFFER:	´õºí¹öÆÛ¸¦ »ç¿ëÇÒÁö. ±âº» TRUE
-		* GLFW_CLIENT_API:		Å¬¶óÀÌ¾ðÆ® API. ±âº» GLFW_OPENGL_API. GLFW_OPENGL_ES_API, GLFW_NO_API°¡ ´Ù¸¥ ¿É¼ÇÀ¸·Î °¡´É
-		* GLFW_CONTEXT_CREATION_API:	»ç¿ëÇÒ ÄÁÅØ½ºÆ® »ý¼º API. ±âº» GLFW_NATIVE_CONTEXT_API. GLFW_EGL_CONTEXT_API, GLFW_OSMESA_CONTEXT_APIµµ °¡´É
-		* GLFW_CONTEXT_VERSION_MAJOR:	Å¬¶óÀÌ¾ðÆ® API ¹öÀü. ±âº» 1
-		* GLFW_CONTEXT_VERSION_MINOR:	±âº» 0
-		* GLFW_CONTEXT_ROBUSTNESS:		°­°Ç Àü·«(?). ±âº» GLFW_NO_ROBUSTNESS, GLFW_NO_RESET_NOTIFICATION, GLFW_LOSE_CONTEXT_ON_RESETÀÌ Ãß°¡·Î °¡´É
-		* GLFW_CONTEXT_RELEASE_BEHAVIOR:¸±¸®Áî ½Ã Çàµ¿À» ÁöÁ¤. ±âº» GLFW_ANY_RELEASE_BEHAVIOR, GLFW_RELEASE_BEHAVIOR_(FLUSH | NONE)µµ °¡´É
-		* GLFW_OPENGL_FORWARD_COMPAT:	OPENGL ÄÁÅØ½ºÆ®°¡ ÀÌÈÄ¿Í È£È¯¼ºÀ» °®ÃâÁö ¼³Á¤. ±âº» FALSE
-		* GLFW_OPENGL_DEBUG_CONTEXT:	OPENGLÀÌ µð¹ö±× ¸ðµå·Î µ¹¾Æ°¨. ±âº» FALSE
-		* GLFW_OPENGL_PROFILE:			OPENGL ÄÁÅØ½ºÆ® ÇÁ·ÎÇÊ. ±âº» GLFW_OPENGL_ANY_PROFILE, GLFW_OPENGL_(CORE | COMPAT | ANY)_PROFILE °¡´É
-		* ¾Æ·¡´Â MAC, X11 »ç¿ë ½Ã »çÀÌÆ®¿¡¼­ Âü°í
-		* GLFW_COCOA_RETINA_FRAMEBUFFER: ±âº» TRUE
-		* GLFW_COCOA_FRAME_NAME: ±âº» ""
-		* GLFW_COCOA_GRAPHICS_SWITCHING: ±âº» FALSE
-		* GLFW_X11_GRAPHICS_SWITCHING: ±âº» FALSE
-		* GLFW_X11_CLASS_NAME: ±âº» ""
-		* GLFW_X11_INSTANCE_NAME: ±âº» ""
+		* GLFW_RESIZABLE:		ì‚¬ìš©ìžì— ì˜í•œ ì°½ í¬ê¸° ì¡°ì ˆ ê°€ëŠ¥ ì—¬ë¶€. falseì¸ ê²½ìš°ì—ë„ í”„ë¡œê·¸ëž¨ ì¸¡ì€ glfwSetWindowSizeë¡œ ê°€ëŠ¥í•¨. ê¸°ë³¸ TRUE
+		* GLFW_VISIBLE:			ì²˜ìŒì— ì°½ì„ ë³´ì¼ì§€. ê¸°ë³¸ TRUE
+		* GLFW_DECORATED:		ê²½ê³„, ë‹«ê¸° ë²„íŠ¼ ë“± ë°ì½”ë ˆì´ì…˜ì´ ìžˆëŠ”ì§€ (falseì¸ ê²½ìš° ì‚¬ìš©ìž í¬ê¸° ì¡°ì • ë¶ˆê°€ëŠ¥). ê¸°ë³¸ TRUE
+		* GLFW_FOCUSED:			ì°½ ìƒì„± ì‹œ í¬ì»¤ìŠ¤ ê°€ì ¸ì˜´ ì—¬ë¶€, ê¸°ë³¸ TRUE
+		* GLFW_AUTO_ICONIFY:	ì „ì²´í™”ë©´ ì°½ì´ ì—´ë¦¬ë©´ ê¸°ì¡´ ë¹„ë””ì˜¤ ëª¨ë“œ ì°½ì´ ìžë™ìœ¼ë¡œ ìµœì†Œí™”/í¬ì»¤ìŠ¤ ë‚˜ê°€ë©´ ë³µêµ¬. ê¸°ë³¸ TRUE
+		* GLFW_FLOATING:		ì°½ëª¨ë“œ ì°½ì´ í•­ìƒ ê°€ìž¥ ì•žì— ìœ„ì¹˜. ê¸°ë³¸ FALSE
+		* GLFW_MAXIMIZED:		ìƒì„± ì‹œ ìµœëŒ€í™” ìƒíƒœ. ê¸°ë³¸ FALSE
+		* GLFW_CENTER_CURSOR:	ì „ì²´í™”ë©´ ì‹œ ì»¤ì„œê°€ ê°€ìš´ë°ë¡œ ì´ë™. TRUE
+		* GLFW_TRANSPARENT_FRAMEBUFFER:	ì°½ í”„ë ˆìž„ë²„í¼ íˆ¬ëª…ì„± ì—¬ë¶€. ê¸°ë³¸ FALSE
+		* GLFW_FOCUS_ON_SHOW:	glfwShowWindow() í˜¸ì¶œ ì‹œ ì°½ì´ ìž…ë ¥ í¬ì»¤ìŠ¤ë¥¼ ì–»ìŒ. ê¸°ë³¸ TRUE
+		* GLFW_SCALE_TO_MONIOTR:ì°½ì´ ëª¨ë‹ˆí„° ë‚´ìš© ê·œëª¨ì— ë”°ë¼ ìžë™ìœ¼ë¡œ ìž¬ì¡°ì •. í™”ë©´ ì¢Œí‘œê°€ í”½ì…€ê³¼ ì¼ëŒ€ì¼ ëŒ€ì‘í•˜ëŠ” ê²½ìš°ì—ë§Œ ë™ìž‘. ê¸°ë³¸ FALSE
+		* GLFW_(RED | GREEN | BLUE | ALPHA | STENCIL)_BITS: ìƒ‰ìƒì˜ ë¹„íŠ¸ ì •ë°€ë„.  ê¸°ë³¸ 8
+		* GLFW_DEPTH_BITS:		ê¸°ë³¸ 24
+		* GLFW_ACCUM_(RED | GREEB | BLUE | ALPHA)_BITS:	accumulation ë²„í¼ì˜ ë¹„íŠ¸ ì •ë°€ë„. ê¸°ë³¸ 0
+		* GLFW_AUX_BUFFERS:		ìž„ì‹œ ë²„í¼ì˜ ìˆ˜. ê¸°ë³¸ 0
+		* GLFW_SAMPLES:			ë©€í‹°ìƒ˜í”Œë§ ìµœëŒ€ ìˆ˜. ê¸°ë³¸ 0
+		* GLFW_REFRESH_RATE:	ëª¨ë‹ˆí„° ì£¼ì‚¬ìœ¨. ê¸°ë³¸ GLFW_DONT_CARE (ëª¨ë‹ˆí„° ìµœëŒ€ì¹˜ë¡œ)
+		* GLFW_STEREO:			OPENGL ìŠ¤í…Œë¦¬ì˜¤ìŠ¤ì½”í”½ ë Œë”ë§ ì‚¬ìš© ì—¬ë¶€. ê¸°ë³¸ FALSE
+		* GLFW_SRGB_CAPABLE:	í”„ë ˆìž„ë²„í¼ê°€ sRGBë¥¼ ì»¤ë²„ ê°€ëŠ¥í•œì§€. ê¸°ë³¸ FALSE
+		* GLFW_DOUBLEBUFFER:	ë”ë¸”ë²„í¼ë¥¼ ì‚¬ìš©í• ì§€. ê¸°ë³¸ TRUE
+		* GLFW_CLIENT_API:		í´ë¼ì´ì–¸íŠ¸ API. ê¸°ë³¸ GLFW_OPENGL_API. GLFW_OPENGL_ES_API, GLFW_NO_APIê°€ ë‹¤ë¥¸ ì˜µì…˜ìœ¼ë¡œ ê°€ëŠ¥
+		* GLFW_CONTEXT_CREATION_API:	ì‚¬ìš©í•  ì»¨í…ìŠ¤íŠ¸ ìƒì„± API. ê¸°ë³¸ GLFW_NATIVE_CONTEXT_API. GLFW_EGL_CONTEXT_API, GLFW_OSMESA_CONTEXT_APIë„ ê°€ëŠ¥
+		* GLFW_CONTEXT_VERSION_MAJOR:	í´ë¼ì´ì–¸íŠ¸ API ë²„ì „. ê¸°ë³¸ 1
+		* GLFW_CONTEXT_VERSION_MINOR:	ê¸°ë³¸ 0
+		* GLFW_CONTEXT_ROBUSTNESS:		ê°•ê±´ ì „ëžµ(?). ê¸°ë³¸ GLFW_NO_ROBUSTNESS, GLFW_NO_RESET_NOTIFICATION, GLFW_LOSE_CONTEXT_ON_RESETì´ ì¶”ê°€ë¡œ ê°€ëŠ¥
+		* GLFW_CONTEXT_RELEASE_BEHAVIOR:ë¦´ë¦¬ì¦ˆ ì‹œ í–‰ë™ì„ ì§€ì •. ê¸°ë³¸ GLFW_ANY_RELEASE_BEHAVIOR, GLFW_RELEASE_BEHAVIOR_(FLUSH | NONE)ë„ ê°€ëŠ¥
+		* GLFW_OPENGL_FORWARD_COMPAT:	OPENGL ì»¨í…ìŠ¤íŠ¸ê°€ ì´í›„ì™€ í˜¸í™˜ì„±ì„ ê°–ì¶œì§€ ì„¤ì •. ê¸°ë³¸ FALSE
+		* GLFW_OPENGL_DEBUG_CONTEXT:	OPENGLì´ ë””ë²„ê·¸ ëª¨ë“œë¡œ ëŒì•„ê°. ê¸°ë³¸ FALSE
+		* GLFW_OPENGL_PROFILE:			OPENGL ì»¨í…ìŠ¤íŠ¸ í”„ë¡œí•„. ê¸°ë³¸ GLFW_OPENGL_ANY_PROFILE, GLFW_OPENGL_(CORE | COMPAT | ANY)_PROFILE ê°€ëŠ¥
+		* ì•„ëž˜ëŠ” MAC, X11 ì‚¬ìš© ì‹œ ì‚¬ì´íŠ¸ì—ì„œ ì°¸ê³ 
+		* GLFW_COCOA_RETINA_FRAMEBUFFER: ê¸°ë³¸ TRUE
+		* GLFW_COCOA_FRAME_NAME: ê¸°ë³¸ ""
+		* GLFW_COCOA_GRAPHICS_SWITCHING: ê¸°ë³¸ FALSE
+		* GLFW_X11_GRAPHICS_SWITCHING: ê¸°ë³¸ FALSE
+		* GLFW_X11_CLASS_NAME: ê¸°ë³¸ ""
+		* GLFW_X11_INSTANCE_NAME: ê¸°ë³¸ ""
 		*/
 		glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, VMAJOR);
@@ -151,7 +151,7 @@ namespace onart {
 		}
 		GLFWwindow* window = glfwCreateWindow(width, height, name.c_str(), nullptr, nullptr);
 		
-		// È­¸é °¡¿îµ¥
+		// í™”ë©´ ê°€ìš´ë°
 		const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		int x = (mode->width - width) / 2;
 		int y = (mode->height - height) / 2;
@@ -163,18 +163,18 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// OpenGL È®ÀåÀ» ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// OpenGL í™•ìž¥ì„ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
 	/// <param name="window"></param>
 	/// <returns></returns>
 	inline bool initExtensions(GLFWwindow* window) {
 		
-		// ÁÖ¾îÁø Ã¢¿¡ ´ëÇÑ °Í
+		// ì£¼ì–´ì§„ ì°½ì— ëŒ€í•œ ê²ƒ
 		glfwMakeContextCurrent(window);
 #ifdef GL_ES_VERSION_2_0
-		if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) { fprintf(stderr, "init_extensions(): gladLoadGLES2Loader() ¿À·ù\n"); glfwTerminate(); return false; }
+		if (!gladLoadGLES2Loader((GLADloadproc)glfwGetProcAddress)) { fprintf(stderr, "init_extensions(): gladLoadGLES2Loader() ì˜¤ë¥˜\n"); glfwTerminate(); return false; }
 #else
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { fprintf(stderr, "init_extensions(): gladLoadGLLoader() ¿À·ù\n"); glfwTerminate(); return false; }
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) { fprintf(stderr, "init_extensions(): gladLoadGLLoader() ì˜¤ë¥˜\n"); glfwTerminate(); return false; }
 #endif // GL_ES_VERSION_2_0
 		
 		glGetIntegerv(GL_MAJOR_VERSION, &VMAJOR);
@@ -182,7 +182,7 @@ namespace onart {
 		while (VMINOR > 10) VMINOR /= 10;
 		
 		if (VMAJOR <= 2) {
-			fprintf(stderr, "°æ°í: ÀÌ ÇÁ·Î±×·¥Àº OpenGL 3 ¹Ì¸¸ ¹öÀü°ú È£È¯ÀÌ Àß µÇÁö ¸øÇÒ ¼ö ÀÖ½À´Ï´Ù.\n");
+			fprintf(stderr, "ê²½ê³ : ì´ í”„ë¡œê·¸ëž¨ì€ OpenGL 3 ë¯¸ë§Œ ë²„ì „ê³¼ í˜¸í™˜ì´ ìž˜ ë˜ì§€ ëª»í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.\n");
 		}
 		char* slv = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 		char* p = slv;
@@ -211,11 +211,11 @@ namespace onart {
 #else
 		int next; glGetIntegerv(GL_NUM_EXTENSIONS, &next);
 		for (int k = 0; k < next; k++) ext.insert((const char*)glGetStringi(GL_EXTENSIONS, k));
-		if (ext.find("GL_ARB_vertex_buffer_object") == ext.end()) fprintf(stderr, "VBO°¡ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.\n");
-		if (ext.find("GL_ARB_vertex_array_object") == ext.end()) fprintf(stderr, "VAO°¡ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.\n");
-		if (ext.find("GL_ARB_vertex_shader") == ext.end()) fprintf(stderr, "Á¤Á¡ ¼ÎÀÌ´õ°¡ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.\n");
-		if (ext.find("GL_ARB_fragment_shader") == ext.end()) fprintf(stderr, "Á¶°¢ ¼ÎÀÌ´õ°¡ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.\n");
-		if (ext.find("GL_ARB_shader_objects") == ext.end()) fprintf(stderr, "¼ÎÀÌ´õ ¿ÀºêÁ§Æ®°¡ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.\n");
+		if (ext.find("GL_ARB_vertex_buffer_object") == ext.end()) fprintf(stderr, "VBOê°€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
+		if (ext.find("GL_ARB_vertex_array_object") == ext.end()) fprintf(stderr, "VAOê°€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
+		if (ext.find("GL_ARB_vertex_shader") == ext.end()) fprintf(stderr, "ì •ì  ì…°ì´ë”ê°€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
+		if (ext.find("GL_ARB_fragment_shader") == ext.end()) fprintf(stderr, "ì¡°ê° ì…°ì´ë”ê°€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
+		if (ext.find("GL_ARB_shader_objects") == ext.end()) fprintf(stderr, "ì…°ì´ë” ì˜¤ë¸Œì íŠ¸ê°€ ì§€ì›ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
 		
 #endif	// GL_ES_VERSION_2_0
 		return true;

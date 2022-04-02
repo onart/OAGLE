@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -20,51 +20,51 @@ struct AVIOContext;
 struct SwrContext;
 struct PaStreamCallbackTimeInfo;
 
-constexpr unsigned long RINGBUFFER_SIZE = 8820;	// »ç¿îµå Àç»ý/Á¤Áö ¹Ý¿µÀÇ µô·¹ÀÌ¿Í °ü·ÃµÇ¾î ÀÖ½À´Ï´Ù. ´Üµ¶ ¼öÁ¤ÀÌ °¡´ÉÇÕ´Ï´Ù.
-constexpr int STD_SAMPLE_RATE = 44100;	// À½Áú°ú ÇÁ·Î±×·¥ ¼º´É¿¡ °ü·ÃµÇ¾î ÀÖ½À´Ï´Ù. ´Üµ¶ ¼öÁ¤ÀÌ °¡´ÉÇÕ´Ï´Ù.
+constexpr unsigned long RINGBUFFER_SIZE = 8820;	// ì‚¬ìš´ë“œ ìž¬ìƒ/ì •ì§€ ë°˜ì˜ì˜ ë”œë ˆì´ì™€ ê´€ë ¨ë˜ì–´ ìžˆìŠµë‹ˆë‹¤. ë‹¨ë… ìˆ˜ì •ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+constexpr int STD_SAMPLE_RATE = 44100;	// ìŒì§ˆê³¼ í”„ë¡œê·¸ëž¨ ì„±ëŠ¥ì— ê´€ë ¨ë˜ì–´ ìžˆìŠµë‹ˆë‹¤. ë‹¨ë… ìˆ˜ì •ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 
-constexpr bool OA_AUDIO_NOTHREAD = false;	// ¾î¶² ÀÌÀ¯µç ¿Àµð¿À ¸ðµâÀÌ ½º·¹µå¸¦ »ý¼ºÇÏ±â ¿øÇÏÁö ¾Ê´Â °æ¿ì true·Î ¼³Á¤ÇØ ÁÖ¼¼¿ä. ±×·¯¸é ½º·¹µå ´ë½Å ÇÁ·¹ÀÓ Å¸ÀÓ¿¡ ¿Àµð¿À ³»¿ëÀ» ÀÐ½À´Ï´Ù.
-constexpr bool OA_AUDIO_WAIT_ON_DRAG = false;	// NOTHREAD »ó¼ö°¡ trueÀÌ¸ç ÀÌ°Íµµ trueÀÎ °æ¿ì, Ã¢À» Àâ°í ÀÖ´Â µîÀÇ À©µµ¿ì ¸Þ½ÃÁö ÀÔ·ÂÀÌ ¿À·¡ Áö¼ÓµÉ °æ¿ì ¼Ò¸®°¡ Á¤ÁöÇÕ´Ï´Ù.
+constexpr bool OA_AUDIO_NOTHREAD = false;	// ì–´ë–¤ ì´ìœ ë“  ì˜¤ë””ì˜¤ ëª¨ë“ˆì´ ìŠ¤ë ˆë“œë¥¼ ìƒì„±í•˜ê¸° ì›í•˜ì§€ ì•ŠëŠ” ê²½ìš° trueë¡œ ì„¤ì •í•´ ì£¼ì„¸ìš”. ê·¸ëŸ¬ë©´ ìŠ¤ë ˆë“œ ëŒ€ì‹  í”„ë ˆìž„ íƒ€ìž„ì— ì˜¤ë””ì˜¤ ë‚´ìš©ì„ ì½ìŠµë‹ˆë‹¤.
+constexpr bool OA_AUDIO_WAIT_ON_DRAG = false;	// NOTHREAD ìƒìˆ˜ê°€ trueì´ë©° ì´ê²ƒë„ trueì¸ ê²½ìš°, ì°½ì„ ìž¡ê³  ìžˆëŠ” ë“±ì˜ ìœˆë„ìš° ë©”ì‹œì§€ ìž…ë ¥ì´ ì˜¤ëž˜ ì§€ì†ë  ê²½ìš° ì†Œë¦¬ê°€ ì •ì§€í•©ë‹ˆë‹¤.
 
 namespace onart {
 	/// <summary>
-	/// À½¼ºÀ» Àç»ýÇÏ´Â ¸ðµâÀÔ´Ï´Ù.
-	/// ÀÌ ¸ðµâÀº ÀÌ ¿£Áø¿¡(OAGLE) ´ëÇÏ¿© Á¾¼ÓÀûÀÔ´Ï´Ù. (´Ü, ¿£Áø ¹× ±âÅ¸ ÄÄÆ÷³ÍÆ®´Â ¿Àµð¿À ¸ðµâ¿¡ Á¾¼ÓÀûÀÌÁö ¾Ê½À´Ï´Ù.)
-	/// ÀÌ ¸ðµâÀ» ´Ù¸¥ °÷¿¡ È°¿ëÇÏ·Á¸é main.cppÀÇ init(), finalize()¿Í ¸ÞÀÎ for·çÇÁ ºÎºÐÀ» Àß Âü°íÇØ ÁÖ¼¼¿ä.
-	/// »ó¾÷Àû È°¿ëÀ» ÇÏÁö ¾ÊÀ» °æ¿ì irrKlang ¶óÀÌºê·¯¸®¸¦ ÃßÃµÇÕ´Ï´Ù.
-	/// ÀÌ Å¬·¡½º´Â init()È£Ãâ ½Ã 1°³ÀÇ ½º·¹µå¸¦ »ý¼ºÇÕ´Ï´Ù. Çì´õÀÇ »ó¼ö OA_AUDIO_NOTHREAD¸¦ »ç¿ëÇÏ´Â °æ¿ì º°µµÀÇ ½º·¹µå¸¦ »ý¼ºÇÏÁö ¾ÊÁö¸¸ ÇÁ·¹ÀÓ Å¸ÀÓ Áõ°¡ ¿ì·Á°¡ ÀÖÀ¸¸ç,
-	/// (Ã¢ ²ø±â ½Ã ¹öÆÛÀÇ ³»¿ëÀÌ ±×´ë·Î ¹Ýº¹Àç»ýµÇ´Â ¹®Á¦, °¡²û ¼Ò¸®°¡ ²÷±â´Â ¹®Á¦) Áß ÇÏ³ª¸¦ ¼±ÅÃÇØ¾ß ÇÕ´Ï´Ù.
+	/// ìŒì„±ì„ ìž¬ìƒí•˜ëŠ” ëª¨ë“ˆìž…ë‹ˆë‹¤.
+	/// ì´ ëª¨ë“ˆì€ ì´ ì—”ì§„ì—(OAGLE) ëŒ€í•˜ì—¬ ì¢…ì†ì ìž…ë‹ˆë‹¤. (ë‹¨, ì—”ì§„ ë° ê¸°íƒ€ ì»´í¬ë„ŒíŠ¸ëŠ” ì˜¤ë””ì˜¤ ëª¨ë“ˆì— ì¢…ì†ì ì´ì§€ ì•ŠìŠµë‹ˆë‹¤.)
+	/// ì´ ëª¨ë“ˆì„ ë‹¤ë¥¸ ê³³ì— í™œìš©í•˜ë ¤ë©´ main.cppì˜ init(), finalize()ì™€ ë©”ì¸ forë£¨í”„ ë¶€ë¶„ì„ ìž˜ ì°¸ê³ í•´ ì£¼ì„¸ìš”.
+	/// ìƒì—…ì  í™œìš©ì„ í•˜ì§€ ì•Šì„ ê²½ìš° irrKlang ë¼ì´ë¸ŒëŸ¬ë¦¬ë¥¼ ì¶”ì²œí•©ë‹ˆë‹¤.
+	/// ì´ í´ëž˜ìŠ¤ëŠ” init()í˜¸ì¶œ ì‹œ 1ê°œì˜ ìŠ¤ë ˆë“œë¥¼ ìƒì„±í•©ë‹ˆë‹¤. í—¤ë”ì˜ ìƒìˆ˜ OA_AUDIO_NOTHREADë¥¼ ì‚¬ìš©í•˜ëŠ” ê²½ìš° ë³„ë„ì˜ ìŠ¤ë ˆë“œë¥¼ ìƒì„±í•˜ì§€ ì•Šì§€ë§Œ í”„ë ˆìž„ íƒ€ìž„ ì¦ê°€ ìš°ë ¤ê°€ ìžˆìœ¼ë©°,
+	/// (ì°½ ëŒê¸° ì‹œ ë²„í¼ì˜ ë‚´ìš©ì´ ê·¸ëŒ€ë¡œ ë°˜ë³µìž¬ìƒë˜ëŠ” ë¬¸ì œ, ê°€ë” ì†Œë¦¬ê°€ ëŠê¸°ëŠ” ë¬¸ì œ) ì¤‘ í•˜ë‚˜ë¥¼ ì„ íƒí•´ì•¼ í•©ë‹ˆë‹¤.
 	/// </summary>
 	class Audio
 	{
 	public:
 		/// <summary>
-		/// Ã¢À» µå·¡±×ÇÒ ¶§ ¼Ò¸®¸¦ ¸ØÃß±â À§ÇÑ º¯¼öÀÔ´Ï´Ù. ÀÀ¿ë °èÃþ¿¡¼­ »ç¿ëÇÏÁö ¸¶½Ã±â ¹Ù¶ø´Ï´Ù.
-		/// ÀüÃ¼ ¼Ò¸®¸¦ ¸ØÃß±â À§ÇØ ÀÌ¸¦ »ç¿ëÇÒ °æ¿ì, ÇÁ·¹ÀÓ ½ÃÀÛ°ú µ¿½Ã¿¡ Á¤Áö°¡ Ç®¸®°Ô µË´Ï´Ù.
+		/// ì°½ì„ ë“œëž˜ê·¸í•  ë•Œ ì†Œë¦¬ë¥¼ ë©ˆì¶”ê¸° ìœ„í•œ ë³€ìˆ˜ìž…ë‹ˆë‹¤. ì‘ìš© ê³„ì¸µì—ì„œ ì‚¬ìš©í•˜ì§€ ë§ˆì‹œê¸° ë°”ëžë‹ˆë‹¤.
+		/// ì „ì²´ ì†Œë¦¬ë¥¼ ë©ˆì¶”ê¸° ìœ„í•´ ì´ë¥¼ ì‚¬ìš©í•  ê²½ìš°, í”„ë ˆìž„ ì‹œìž‘ê³¼ ë™ì‹œì— ì •ì§€ê°€ í’€ë¦¬ê²Œ ë©ë‹ˆë‹¤.
 		/// </summary>
 		static bool wait;
 		/// <summary>
-		/// ÀÐ±â Àü¿ë ¸¶½ºÅÍ º¼·ýÀÔ´Ï´Ù.
+		/// ì½ê¸° ì „ìš© ë§ˆìŠ¤í„° ë³¼ë¥¨ìž…ë‹ˆë‹¤.
 		/// </summary>
 		static const float& masterVolume;
 		/// <summary>
-		/// ÀÀ¿ë ´Ü°è¿¡¼­ È£ÃâÇÒ ÀÏÀÌ ¾ø½À´Ï´Ù.
+		/// ì‘ìš© ë‹¨ê³„ì—ì„œ í˜¸ì¶œí•  ì¼ì´ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
 		static void update();
 		/// <summary>
-		/// ¿Àµð¿À »ç¿ëÀ» ½ÃÀÛÇÕ´Ï´Ù. È£ÃâµÇÁö ¾ÊÀ¸¸é ¼Ò¸® °ü·Ã ±â´ÉÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. ÀÀ¿ë ´Ü°è¿¡¼­ È£ÃâÇÒ ÀÏÀÌ ¾ø½À´Ï´Ù.
+		/// ì˜¤ë””ì˜¤ ì‚¬ìš©ì„ ì‹œìž‘í•©ë‹ˆë‹¤. í˜¸ì¶œë˜ì§€ ì•Šìœ¼ë©´ ì†Œë¦¬ ê´€ë ¨ ê¸°ëŠ¥ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. ì‘ìš© ë‹¨ê³„ì—ì„œ í˜¸ì¶œí•  ì¼ì´ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
 		static void init();
 		/// <summary>
-		/// ¿Àµð¿À »ç¿ëÀ» Á¾·áÇÕ´Ï´Ù. ÀÀ¿ë ´Ü°è¿¡¼­ È£ÃâÇÒ ÀÏÀÌ ¾ø½À´Ï´Ù.
+		/// ì˜¤ë””ì˜¤ ì‚¬ìš©ì„ ì¢…ë£Œí•©ë‹ˆë‹¤. ì‘ìš© ë‹¨ê³„ì—ì„œ í˜¸ì¶œí•  ì¼ì´ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
 		static void terminate();
 		/// <summary>
-		/// ¸¶½ºÅÍ º¼·ýÀ» Á¶Á¤ÇÕ´Ï´Ù. ¹üÀ§´Â 0~1ÀÔ´Ï´Ù.
+		/// ë§ˆìŠ¤í„° ë³¼ë¥¨ì„ ì¡°ì •í•©ë‹ˆë‹¤. ë²”ìœ„ëŠ” 0~1ìž…ë‹ˆë‹¤.
 		/// </summary>
 		static void setMasterVolume(float v);
 		/// <summary>
-		/// ÀÀ¿ë ´Ü°è¿¡¼­ È£ÃâÇÒ ÀÏÀÌ ¾ø½À´Ï´Ù.
+		/// ì‘ìš© ë‹¨ê³„ì—ì„œ í˜¸ì¶œí•  ì¼ì´ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
 		static void allow(bool);
 
@@ -72,71 +72,71 @@ namespace onart {
 		class SafeStreamPointer;
 
 		/// <summary>
-		/// ¿Àµð¿À µ¥ÀÌÅÍ¸¦ ºÒ·¯¿À´Â ¿Àµð¿À ¼Ò½ºÀÔ´Ï´Ù. Àç»ýÇÒ °æ¿ì Stream °´Ã¼°¡ »ý¼ºµË´Ï´Ù.
-		/// ·Îµå, ¾ð·Îµå, Àç»ýÀ» ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-		/// 32ºñÆ® ºÎµ¿¼Ò¼öÁ¡, ÃÊ´ç 44100»ùÇÃ, ½ºÅ×·¹¿À·Î ÀÚµ¿À¸·Î ¸ÂÃçÁý´Ï´Ù. Æ¯È÷ ¿©·¯ À½¿øÀ» µ¿½Ã Àç»ýÇÏ´Â °æ¿ì, STD_SAMPLE_RATE¸¦ ³»¸²À¸·Î½á ¼º´É Çâ»óÀ» µµ¸ðÇÒ ¼ö ÀÖ½À´Ï´Ù.
+		/// ì˜¤ë””ì˜¤ ë°ì´í„°ë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ” ì˜¤ë””ì˜¤ ì†ŒìŠ¤ìž…ë‹ˆë‹¤. ìž¬ìƒí•  ê²½ìš° Stream ê°ì²´ê°€ ìƒì„±ë©ë‹ˆë‹¤.
+		/// ë¡œë“œ, ì–¸ë¡œë“œ, ìž¬ìƒì„ í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+		/// 32ë¹„íŠ¸ ë¶€ë™ì†Œìˆ˜ì , ì´ˆë‹¹ 44100ìƒ˜í”Œ, ìŠ¤í…Œë ˆì˜¤ë¡œ ìžë™ìœ¼ë¡œ ë§žì¶°ì§‘ë‹ˆë‹¤. íŠ¹ížˆ ì—¬ëŸ¬ ìŒì›ì„ ë™ì‹œ ìž¬ìƒí•˜ëŠ” ê²½ìš°, STD_SAMPLE_RATEë¥¼ ë‚´ë¦¼ìœ¼ë¡œì¨ ì„±ëŠ¥ í–¥ìƒì„ ë„ëª¨í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 		/// </summary>
 		class Source {
 			friend class Stream;
 			friend class Audio;
 		public:
 			/// <summary>
-			/// ¼Ò½ºÀÇ º¼·ýÀ» Á¶ÀýÇÕ´Ï´Ù. ¼Ò½º ÀÚÃ¼ÀÇ º¼·ýÀ» Á¶Á¤ÇÏ´Â °ÍÀÌ ¼º´É»ó ÁÁÁö¸¸, »ç¿ëÀÚ°¡ ¿øÇÏ´Â ´ë·Î Á¶ÀýÇÒ ¼ö ÀÖ°Ô ÇÏ·Á¸é ÀÌ ÇÔ¼ö¸¦ »ç¿ëÇØ¾ß ÇÕ´Ï´Ù.
-			/// ¹è°æÀ½¾Ç/È¿°úÀ½¾Ç µîÀÇ ºÐ·ù·Î ÀÏ°ý Á¶Á¤ÇÏ´Â °ÍÀº ÀÀ¿ë °èÃþ ¸òÀÔ´Ï´Ù.
+			/// ì†ŒìŠ¤ì˜ ë³¼ë¥¨ì„ ì¡°ì ˆí•©ë‹ˆë‹¤. ì†ŒìŠ¤ ìžì²´ì˜ ë³¼ë¥¨ì„ ì¡°ì •í•˜ëŠ” ê²ƒì´ ì„±ëŠ¥ìƒ ì¢‹ì§€ë§Œ, ì‚¬ìš©ìžê°€ ì›í•˜ëŠ” ëŒ€ë¡œ ì¡°ì ˆí•  ìˆ˜ ìžˆê²Œ í•˜ë ¤ë©´ ì´ í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•´ì•¼ í•©ë‹ˆë‹¤.
+			/// ë°°ê²½ìŒì•…/íš¨ê³¼ìŒì•… ë“±ì˜ ë¶„ë¥˜ë¡œ ì¼ê´„ ì¡°ì •í•˜ëŠ” ê²ƒì€ ì‘ìš© ê³„ì¸µ ëª«ìž…ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="v">0°ú 1 »çÀÌÀÇ °ª¸¸ °¡´ÉÇÏ¸ç ±× ¿ÜÀÇ °ª ÀÔ·Â ½Ã °­Á¦·Î ¸ÂÃçÁý´Ï´Ù.</param>
+			/// <param name="v">0ê³¼ 1 ì‚¬ì´ì˜ ê°’ë§Œ ê°€ëŠ¥í•˜ë©° ê·¸ ì™¸ì˜ ê°’ ìž…ë ¥ ì‹œ ê°•ì œë¡œ ë§žì¶°ì§‘ë‹ˆë‹¤.</param>
 			void setVolume(float v);
 
 			/// <summary>
-			/// ºÒ·¯¿Â À½¿øÀÇ Æ÷ÀÎÅÍ¸¦ È¹µæÇÕ´Ï´Ù. Àß¸øµÈ ÀÌ¸§À» ÀÔ·ÂÇÑ °æ¿ì nullptr¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+			/// ë¶ˆëŸ¬ì˜¨ ìŒì›ì˜ í¬ì¸í„°ë¥¼ íšë“í•©ë‹ˆë‹¤. ìž˜ëª»ëœ ì´ë¦„ì„ ìž…ë ¥í•œ ê²½ìš° nullptrë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 			/// </summary>
 			static std::shared_ptr<Source> get(const std::string& name);
 
 			/// <summary>
-			/// ¼Ò¸® ÆÄÀÏ¿¡¼­ À½¼ºÀ» ºÒ·¯¿É´Ï´Ù. º°¸íÀÌ °ãÄ¡´Â °æ¿ì ±âÁ¸¿¡ ÀÌ¹Ì ·ÎµåÇÑ °ÍÀ» ¸®ÅÏÇÕ´Ï´Ù.
+			/// ì†Œë¦¬ íŒŒì¼ì—ì„œ ìŒì„±ì„ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤. ë³„ëª…ì´ ê²¹ì¹˜ëŠ” ê²½ìš° ê¸°ì¡´ì— ì´ë¯¸ ë¡œë“œí•œ ê²ƒì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="file">ºÒ·¯¿Ã À½¼º ÆÄÀÏ ÀÌ¸§(°æ·Î)ÀÔ´Ï´Ù.</param>
-			/// <param name="name">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ º°¸íÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê´Â °æ¿ì ÆÄÀÏ ÀÌ¸§ ±×´ë·Î µé¾î°©´Ï´Ù.</param>
-			/// <returns>ºÒ·¯¿Â ¼Ò½ºÀÇ Æ÷ÀÎÅÍ¸¦ ¸®ÅÏÇÕ´Ï´Ù.</returns>
+			/// <param name="file">ë¶ˆëŸ¬ì˜¬ ìŒì„± íŒŒì¼ ì´ë¦„(ê²½ë¡œ)ìž…ë‹ˆë‹¤.</param>
+			/// <param name="name">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  ë³„ëª…ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•ŠëŠ” ê²½ìš° íŒŒì¼ ì´ë¦„ ê·¸ëŒ€ë¡œ ë“¤ì–´ê°‘ë‹ˆë‹¤.</param>
+			/// <returns>ë¶ˆëŸ¬ì˜¨ ì†ŒìŠ¤ì˜ í¬ì¸í„°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.</returns>
 			static std::shared_ptr<Source> load(const std::string& file, const std::string& name = "");
 
 			/// <summary>
-			/// ¸Þ¸ð¸®¿¡¼­ À½¼ºÀ» ºÒ·¯¿É´Ï´Ù. º°¸íÀÌ °ãÄ¡´Â °æ¿ì ±âÁ¸¿¡ ÀÌ¹Ì ·ÎµåÇÑ °ÍÀ» ¸®ÅÏÇÕ´Ï´Ù.
+			/// ë©”ëª¨ë¦¬ì—ì„œ ìŒì„±ì„ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤. ë³„ëª…ì´ ê²¹ì¹˜ëŠ” ê²½ìš° ê¸°ì¡´ì— ì´ë¯¸ ë¡œë“œí•œ ê²ƒì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="mem">ÆÄÀÏ¿¡ ÇØ´çÇÏ´Â ¸Þ¸ð¸®ÀÇ ½ÃÀÛ ÁÖ¼ÒÀÔ´Ï´Ù.</param>
-			/// <param name="size">ÆÄÀÏÀÇ Å©±â(¹ÙÀÌÆ®)ÀÔ´Ï´Ù.</param>
-			/// <param name="name">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ º°¸íÀÌ¸ç, ÇÊ¼öÀûÀ¸·Î ÁöÁ¤ÇØ¾ß ÇÕ´Ï´Ù.</param>
+			/// <param name="mem">íŒŒì¼ì— í•´ë‹¹í•˜ëŠ” ë©”ëª¨ë¦¬ì˜ ì‹œìž‘ ì£¼ì†Œìž…ë‹ˆë‹¤.</param>
+			/// <param name="size">íŒŒì¼ì˜ í¬ê¸°(ë°”ì´íŠ¸)ìž…ë‹ˆë‹¤.</param>
+			/// <param name="name">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  ë³„ëª…ì´ë©°, í•„ìˆ˜ì ìœ¼ë¡œ ì§€ì •í•´ì•¼ í•©ë‹ˆë‹¤.</param>
 			static std::shared_ptr<Source> load(const void* mem, size_t size, const std::string& name);
 
 			/// <summary>
-			/// ºÒ·¯¿Â À½¼ºÀ» ¸Þ¸ð¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù. ÇØ´ç ÀÌ¸§ÀÇ À½¿øÀÌ ¾ø°Å³ª ´Ù¸¥ °÷¿¡¼­ »ç¿ë ÁßÀÎ °æ¿ì »ç¿ë Á¾·á Áï½Ã ¸Þ¸ð¸®°¡ È¸¼öµË´Ï´Ù.
-			/// À½¿øÀÇ ¸Þ¸ð¸®°¡ È¸¼öµÇ±â ÀüÀÌ¶óµµ, ÇÃ·¹ÀÌ ÁßÀÌ´ø ½ºÆ®¸²ÀÇ ¼Ò¸®°¡ ¸ØÃß°í »õ·Î Àç»ýÇÏ´õ¶óµµ ¼Ò¸®°¡ ³ªÁö ¾Ê½À´Ï´Ù.
-			/// "»ç¿ë"Àº "Àç»ý"°ú´Â ¹«°üÇÏ°Ô À½¿ø Æ÷ÀÎÅÍ¸¦ º¸À¯ÇÏ°í ÀÖ´Â °´Ã¼°¡ ÀÖÀ¸¸é »ç¿ëÇÏ´Â °ÍÀ¸·Î Ä¨´Ï´Ù. °´Ã¼/Æ÷ÀÎÅÍ¸¦ ¼Ò¸ê½ÃÅ°Áö ¾Ê°í »ç¿ëÀ» Á¾·áÇÏ·Á¸é
-			/// ÇØ´ç À½¿ø Æ÷ÀÎÅÍ·Î reset() ¶Ç´Â swap(pAudioSource()) µîÀ» È£ÃâÇÏ¸é µË´Ï´Ù.
-			/// À½¿øÀÇ Æ÷ÀÎÅÍ¸¦ °¡Áö°í Àç»ýÇßÁö¸¸ ±× Æ÷ÀÎÅÍ¸¦ µû·Î ¸â¹ö µîÀ¸·Î À¯ÁöÇÏÁö ¾Ê°í ¼Ò¸êÇßÀ» °æ¿ì, ½ºÆ®¸²Àº ´õÀÌ»ó ¼Ò¸®°¡ ³ªÁö ¾ÊÀ¸¸ç dropÀ¸·Î À½¿øÀÌ ¼Ò¸êµÇ´Â Áï½Ã ¸Þ¸ð¸®°¡ È¸¼öµË´Ï´Ù.
+			/// ë¶ˆëŸ¬ì˜¨ ìŒì„±ì„ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤. í•´ë‹¹ ì´ë¦„ì˜ ìŒì›ì´ ì—†ê±°ë‚˜ ë‹¤ë¥¸ ê³³ì—ì„œ ì‚¬ìš© ì¤‘ì¸ ê²½ìš° ì‚¬ìš© ì¢…ë£Œ ì¦‰ì‹œ ë©”ëª¨ë¦¬ê°€ íšŒìˆ˜ë©ë‹ˆë‹¤.
+			/// ìŒì›ì˜ ë©”ëª¨ë¦¬ê°€ íšŒìˆ˜ë˜ê¸° ì „ì´ë¼ë„, í”Œë ˆì´ ì¤‘ì´ë˜ ìŠ¤íŠ¸ë¦¼ì˜ ì†Œë¦¬ê°€ ë©ˆì¶”ê³  ìƒˆë¡œ ìž¬ìƒí•˜ë”ë¼ë„ ì†Œë¦¬ê°€ ë‚˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+			/// "ì‚¬ìš©"ì€ "ìž¬ìƒ"ê³¼ëŠ” ë¬´ê´€í•˜ê²Œ ìŒì› í¬ì¸í„°ë¥¼ ë³´ìœ í•˜ê³  ìžˆëŠ” ê°ì²´ê°€ ìžˆìœ¼ë©´ ì‚¬ìš©í•˜ëŠ” ê²ƒìœ¼ë¡œ ì¹©ë‹ˆë‹¤. ê°ì²´/í¬ì¸í„°ë¥¼ ì†Œë©¸ì‹œí‚¤ì§€ ì•Šê³  ì‚¬ìš©ì„ ì¢…ë£Œí•˜ë ¤ë©´
+			/// í•´ë‹¹ ìŒì› í¬ì¸í„°ë¡œ reset() ë˜ëŠ” swap(pAudioSource()) ë“±ì„ í˜¸ì¶œí•˜ë©´ ë©ë‹ˆë‹¤.
+			/// ìŒì›ì˜ í¬ì¸í„°ë¥¼ ê°€ì§€ê³  ìž¬ìƒí–ˆì§€ë§Œ ê·¸ í¬ì¸í„°ë¥¼ ë”°ë¡œ ë©¤ë²„ ë“±ìœ¼ë¡œ ìœ ì§€í•˜ì§€ ì•Šê³  ì†Œë©¸í–ˆì„ ê²½ìš°, ìŠ¤íŠ¸ë¦¼ì€ ë”ì´ìƒ ì†Œë¦¬ê°€ ë‚˜ì§€ ì•Šìœ¼ë©° dropìœ¼ë¡œ ìŒì›ì´ ì†Œë©¸ë˜ëŠ” ì¦‰ì‹œ ë©”ëª¨ë¦¬ê°€ íšŒìˆ˜ë©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="name">Á¦°ÅÇÒ À½¿ø ÀÌ¸§</param>
+			/// <param name="name">ì œê±°í•  ìŒì› ì´ë¦„</param>
 			static void drop(const std::string& name);
 
 			/// <summary>
-			/// ºÒ·¯¿Â ¸ðµç À½¿ø Áß ÇöÀç »ç¿ëµÇ°í ÀÖÁö ¾ÊÀº °ÍÀ» ¸ðµÎ ¸Þ¸ð¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù.
-			/// »ç¿ë ÁßÀÎ À½¿øÀº [Áï½Ã ¸ØÃß°í »ç¿ëÀÌ ³¡³ª´Â Áï½Ã ¸Þ¸ð¸®¿¡¼­ È¸¼ö]ÇÒÁö, [±×´ë·Î ³²°ÜµÑ]Áö ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.
-			/// À½¿øÀÇ ¸Þ¸ð¸®°¡ È¸¼öµÇ±â ÀüÀÌ¶óµµ, ÇÃ·¹ÀÌ ÁßÀÌ´ø ½ºÆ®¸²ÀÇ ¼Ò¸®°¡ ¸ØÃß°í »õ·Î Àç»ýÇÏ´õ¶óµµ ¼Ò¸®°¡ ³ªÁö ¾Ê½À´Ï´Ù.
-			/// "»ç¿ë"Àº "Àç»ý"°ú´Â ¹«°üÇÏ°Ô À½¿ø Æ÷ÀÎÅÍ¸¦ º¸À¯ÇÏ°í ÀÖ´Â °´Ã¼°¡ ÀÖÀ¸¸é »ç¿ëÇÏ´Â °ÍÀ¸·Î Ä¨´Ï´Ù. °´Ã¼/Æ÷ÀÎÅÍ¸¦ ¼Ò¸ê½ÃÅ°Áö ¾Ê°í »ç¿ëÀ» Á¾·áÇÏ·Á¸é
-			/// ÇØ´ç À½¿ø Æ÷ÀÎÅÍ·Î reset() ¶Ç´Â swap(pAudioSource()) µîÀ» È£ÃâÇÏ¸é µË´Ï´Ù.
+			/// ë¶ˆëŸ¬ì˜¨ ëª¨ë“  ìŒì› ì¤‘ í˜„ìž¬ ì‚¬ìš©ë˜ê³  ìžˆì§€ ì•Šì€ ê²ƒì„ ëª¨ë‘ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤.
+			/// ì‚¬ìš© ì¤‘ì¸ ìŒì›ì€ [ì¦‰ì‹œ ë©ˆì¶”ê³  ì‚¬ìš©ì´ ëë‚˜ëŠ” ì¦‰ì‹œ ë©”ëª¨ë¦¬ì—ì„œ íšŒìˆ˜]í• ì§€, [ê·¸ëŒ€ë¡œ ë‚¨ê²¨ë‘˜]ì§€ ì„ íƒí•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+			/// ìŒì›ì˜ ë©”ëª¨ë¦¬ê°€ íšŒìˆ˜ë˜ê¸° ì „ì´ë¼ë„, í”Œë ˆì´ ì¤‘ì´ë˜ ìŠ¤íŠ¸ë¦¼ì˜ ì†Œë¦¬ê°€ ë©ˆì¶”ê³  ìƒˆë¡œ ìž¬ìƒí•˜ë”ë¼ë„ ì†Œë¦¬ê°€ ë‚˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+			/// "ì‚¬ìš©"ì€ "ìž¬ìƒ"ê³¼ëŠ” ë¬´ê´€í•˜ê²Œ ìŒì› í¬ì¸í„°ë¥¼ ë³´ìœ í•˜ê³  ìžˆëŠ” ê°ì²´ê°€ ìžˆìœ¼ë©´ ì‚¬ìš©í•˜ëŠ” ê²ƒìœ¼ë¡œ ì¹©ë‹ˆë‹¤. ê°ì²´/í¬ì¸í„°ë¥¼ ì†Œë©¸ì‹œí‚¤ì§€ ì•Šê³  ì‚¬ìš©ì„ ì¢…ë£Œí•˜ë ¤ë©´
+			/// í•´ë‹¹ ìŒì› í¬ì¸í„°ë¡œ reset() ë˜ëŠ” swap(pAudioSource()) ë“±ì„ í˜¸ì¶œí•˜ë©´ ë©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="removeUsing">trueÀÎ °æ¿ì »ç¿ë ÁßÀÎ À½¿øÀÇ ¸ðµç »ç¿ëÀÌ ³¡³ª´Â Áï½Ã ¸Þ¸ð¸®¿¡¼­ È¸¼öµË´Ï´Ù.</param>
+			/// <param name="removeUsing">trueì¸ ê²½ìš° ì‚¬ìš© ì¤‘ì¸ ìŒì›ì˜ ëª¨ë“  ì‚¬ìš©ì´ ëë‚˜ëŠ” ì¦‰ì‹œ ë©”ëª¨ë¦¬ì—ì„œ íšŒìˆ˜ë©ë‹ˆë‹¤.</param>
 			static void collect(bool removeUsing = false);
 
 			/// <summary>
-			/// ºÒ·¯¿Â À½¼ºÀ» Àç»ýÇÕ´Ï´Ù. Àç»ýÇÑ ½ºÆ®¸²ÀÇ Æ÷ÀÎÅÍ°¡ ¸®ÅÏµÇ¸ç, ÀÌ¸¦ ÀÌ¿ëÇØ Áß´Ü/Àç°³/Á¤Áö¸¦ ÇÒ ¼ö ÀÖ½À´Ï´Ù. ·çÇÁ ¿©ºÎ¸¦ ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.
-			/// ·çÇÁ À½¼ºÀÌ ¾Æ´Ñ °æ¿ì ÀÚµ¿À¸·Î ¸Þ¸ð¸®°¡ ÇØÁ¦µË´Ï´Ù.
+			/// ë¶ˆëŸ¬ì˜¨ ìŒì„±ì„ ìž¬ìƒí•©ë‹ˆë‹¤. ìž¬ìƒí•œ ìŠ¤íŠ¸ë¦¼ì˜ í¬ì¸í„°ê°€ ë¦¬í„´ë˜ë©°, ì´ë¥¼ ì´ìš©í•´ ì¤‘ë‹¨/ìž¬ê°œ/ì •ì§€ë¥¼ í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ë£¨í”„ ì—¬ë¶€ë¥¼ ì„ íƒí•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+			/// ë£¨í”„ ìŒì„±ì´ ì•„ë‹Œ ê²½ìš° ìžë™ìœ¼ë¡œ ë©”ëª¨ë¦¬ê°€ í•´ì œë©ë‹ˆë‹¤.
 			/// </summary>
 			Stream* play(bool loop = false);
 
 			/// <summary>
-			/// ºÒ·¯¿Â À½¼ºÀ» Àç»ýÇÕ´Ï´Ù. Àç»ýÇÑ ½ºÆ®¸²ÀÇ ¾ÈÀü Æ÷ÀÎÅÍ°¡ ¸®ÅÏµÇ¸ç, ÀÌ¸¦ ÀÌ¿ëÇØ Áß´Ü/Àç°³/Á¤Áö¸¦ ÇÒ ¼ö ÀÖ½À´Ï´Ù. ·çÇÁ ¿©ºÎ¸¦ ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.
-			/// ·çÇÁ À½¼ºÀÌ ¾Æ´Ñ °æ¿ì ÀÚµ¿À¸·Î ¸Þ¸ð¸®°¡ ÇØÁ¦µË´Ï´Ù. ¾ÈÀü Æ÷ÀÎÅÍ´Â ¸Þ¸ð¸®°¡ ÇØÁ¦µÈ ÀÌÈÄ¿¡µµ ÇÔ¼ö¸¦ È£ÃâÇÒ ¼ö ÀÖÀ¸¸ç ÀÌ¶§ ÇÔ¼ö´Â Ç¥¸é»ó ¾Æ¹« µ¿ÀÛµµ ÇÏÁö ¾Ê½À´Ï´Ù.
+			/// ë¶ˆëŸ¬ì˜¨ ìŒì„±ì„ ìž¬ìƒí•©ë‹ˆë‹¤. ìž¬ìƒí•œ ìŠ¤íŠ¸ë¦¼ì˜ ì•ˆì „ í¬ì¸í„°ê°€ ë¦¬í„´ë˜ë©°, ì´ë¥¼ ì´ìš©í•´ ì¤‘ë‹¨/ìž¬ê°œ/ì •ì§€ë¥¼ í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ë£¨í”„ ì—¬ë¶€ë¥¼ ì„ íƒí•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+			/// ë£¨í”„ ìŒì„±ì´ ì•„ë‹Œ ê²½ìš° ìžë™ìœ¼ë¡œ ë©”ëª¨ë¦¬ê°€ í•´ì œë©ë‹ˆë‹¤. ì•ˆì „ í¬ì¸í„°ëŠ” ë©”ëª¨ë¦¬ê°€ í•´ì œëœ ì´í›„ì—ë„ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ìˆ˜ ìžˆìœ¼ë©° ì´ë•Œ í•¨ìˆ˜ëŠ” í‘œë©´ìƒ ì•„ë¬´ ë™ìž‘ë„ í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 			/// </summary>
 			SafeStreamPointer playSafe(bool loop = false);
 		private:
@@ -170,31 +170,31 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// ÇöÀç Àç»ýµÇ°í ÀÖ´Â ¼Ò¸®ÀÔ´Ï´Ù.
-		/// Áß´Ü/Àç°³/Á¤Áö¸¦ ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-		/// ÃÖ´ë 0.1ÃÊÀÇ µô·¹ÀÌ°¡ ÀÖÀ» ¼ö ÀÖ½À´Ï´Ù. µô·¹ÀÌ°¡ ÈÎ¾À Âª¾ÒÀ¸¸é ÁÁ°Ú´Ù¸é, RINGBUFFER_SIZE¸¦ ´õ ÀÛ°Ô Á¶ÀýÇØ ÁÖ¼¼¿ä.
+		/// í˜„ìž¬ ìž¬ìƒë˜ê³  ìžˆëŠ” ì†Œë¦¬ìž…ë‹ˆë‹¤.
+		/// ì¤‘ë‹¨/ìž¬ê°œ/ì •ì§€ë¥¼ í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+		/// ìµœëŒ€ 0.1ì´ˆì˜ ë”œë ˆì´ê°€ ìžˆì„ ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ë”œë ˆì´ê°€ í›¨ì”¬ ì§§ì•˜ìœ¼ë©´ ì¢‹ê² ë‹¤ë©´, RINGBUFFER_SIZEë¥¼ ë” ìž‘ê²Œ ì¡°ì ˆí•´ ì£¼ì„¸ìš”.
 		/// </summary>
 		class Stream {
 			friend class Source;
 		public:
 			/// <summary>
-			/// ÇöÀç Àç»ýµÇ°í ÀÖ´Â ½ºÆ®¸² ¼öÀÔ´Ï´Ù.
+			/// í˜„ìž¬ ìž¬ìƒë˜ê³  ìžˆëŠ” ìŠ¤íŠ¸ë¦¼ ìˆ˜ìž…ë‹ˆë‹¤.
 			/// </summary>
 			static const int& activeCount;
 			/// <summary>
-			/// Àç»ýµÇ°í ÀÖ´Â ¼Ò¸®¸¦ ÀÏ½ÃÀûÀ¸·Î ¸ØÃä´Ï´Ù. ¸ØÃç ÀÖ´Â °æ¿ì ¾Æ¹«°Íµµ ÇÏÁö ¾Ê½À´Ï´Ù.
+			/// ìž¬ìƒë˜ê³  ìžˆëŠ” ì†Œë¦¬ë¥¼ ì¼ì‹œì ìœ¼ë¡œ ë©ˆì¶¥ë‹ˆë‹¤. ë©ˆì¶° ìžˆëŠ” ê²½ìš° ì•„ë¬´ê²ƒë„ í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 			/// </summary>
 			void pause();
 			/// <summary>
-			/// ¸ØÃç ÀÖ´Â ¼Ò¸®¸¦ ´Ù½Ã Àç»ýÇÕ´Ï´Ù. ¸ØÃç ÀÖÁö ¾ÊÀº °æ¿ì ¾Æ¹«°Íµµ ÇÏÁö ¾Ê½À´Ï´Ù.
+			/// ë©ˆì¶° ìžˆëŠ” ì†Œë¦¬ë¥¼ ë‹¤ì‹œ ìž¬ìƒí•©ë‹ˆë‹¤. ë©ˆì¶° ìžˆì§€ ì•Šì€ ê²½ìš° ì•„ë¬´ê²ƒë„ í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 			/// </summary>
 			void resume();
 			/// <summary>
-			/// ¼Ò¸®¸¦ Á¤ÁöÇÕ´Ï´Ù.
+			/// ì†Œë¦¬ë¥¼ ì •ì§€í•©ë‹ˆë‹¤.
 			/// </summary>
 			void end();
 			/// <summary>
-			/// ¼Ò¸®¸¦ Ã³À½ºÎÅÍ ´Ù½Ã Àç»ýÇÕ´Ï´Ù. ¸ØÃç ÀÖ´Â °æ¿ì Ã³À½À¸·Î µ¹¾Æ°¡Áö¸¸ ¹Ù·Î Àç»ýµÇÁö´Â ¾Ê½À´Ï´Ù.
+			/// ì†Œë¦¬ë¥¼ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ìž¬ìƒí•©ë‹ˆë‹¤. ë©ˆì¶° ìžˆëŠ” ê²½ìš° ì²˜ìŒìœ¼ë¡œ ëŒì•„ê°€ì§€ë§Œ ë°”ë¡œ ìž¬ìƒë˜ì§€ëŠ” ì•ŠìŠµë‹ˆë‹¤.
 			/// </summary>
 			void restart();
 		private:
@@ -210,7 +210,7 @@ namespace onart {
 			bool loop;
 		};
 		/// <summary>
-		/// ÇöÀç Àç»ýµÇ°í ÀÖ´Â ¼Ò¸®ÀÔ´Ï´Ù. ¿øº» ½ºÆ®¸²ÀÌ ÇØÁ¦µÈ °æ¿ì¿¡µµ »ç¿ëÇÒ ¼ö ÀÖÀ¸¸ç ÇØÁ¦µÈ ½ºÆ®¸²¿¡ ´ëÇÏ¿© ÇÔ¼ö¸¦ È£ÃâÇÒ °æ¿ì ¾Æ¹«·± µ¿ÀÛÀ» ÇÏÁö ¾Ê½À´Ï´Ù.
+		/// í˜„ìž¬ ìž¬ìƒë˜ê³  ìžˆëŠ” ì†Œë¦¬ìž…ë‹ˆë‹¤. ì›ë³¸ ìŠ¤íŠ¸ë¦¼ì´ í•´ì œëœ ê²½ìš°ì—ë„ ì‚¬ìš©í•  ìˆ˜ ìžˆìœ¼ë©° í•´ì œëœ ìŠ¤íŠ¸ë¦¼ì— ëŒ€í•˜ì—¬ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•  ê²½ìš° ì•„ë¬´ëŸ° ë™ìž‘ì„ í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		class SafeStreamPointer {
 			friend class Source;
@@ -234,8 +234,8 @@ namespace onart {
 		static int playCallback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData);
 	};
 
-	using pAudioSource = std::shared_ptr<Audio::Source>;	// À½¿øÀÇ Æ÷ÀÎÅÍÀÔ´Ï´Ù.
-	using pSafeAudioStream = Audio::SafeStreamPointer;		// ½ºÆ®¸²ÀÇ ¾ÈÀü Æ÷ÀÎÅÍÀÔ´Ï´Ù. ·çÇÁ¿Í °°ÀÌ ÀÚµ¿À¸·Î ¼Ò¸êÇÏÁö ¾Ê´Â ½ºÆ®¸²¿¡ ´ëÇØ¼­´Â ¾ÈÀü Æ÷ÀÎÅÍ°¡ Æ¯º°È÷ ÇÊ¿äÇÏÁö ¾Ê½À´Ï´Ù.
+	using pAudioSource = std::shared_ptr<Audio::Source>;	// ìŒì›ì˜ í¬ì¸í„°ìž…ë‹ˆë‹¤.
+	using pSafeAudioStream = Audio::SafeStreamPointer;		// ìŠ¤íŠ¸ë¦¼ì˜ ì•ˆì „ í¬ì¸í„°ìž…ë‹ˆë‹¤. ë£¨í”„ì™€ ê°™ì´ ìžë™ìœ¼ë¡œ ì†Œë©¸í•˜ì§€ ì•ŠëŠ” ìŠ¤íŠ¸ë¦¼ì— ëŒ€í•´ì„œëŠ” ì•ˆì „ í¬ì¸í„°ê°€ íŠ¹ë³„ížˆ í•„ìš”í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 }
 
 #endif // !__OA_AUDIO_H__

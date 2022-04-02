@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -23,113 +23,113 @@ using oachar = char;
 #endif
 
 /// <summary>
-/// ÀÌ ¸ðµâÀº ±âº»ÀûÀ¸·Î UTF-16 ¹®ÀÚ¿­, Áï std::u16stringÀ» »ç¿ëÇÒ °ÍÀÔ´Ï´Ù. ´Ù½Ã ¸»ÇØ, ¾Æ½ºÅ° ¹üÀ§ ³»/¿ÜÀÇ ¹®ÀÚ ¸ðµÎ ½ºÆ®¸µ¿¡¼­ ÇÑ ÀÚ¸®¸¦ Â÷ÁöÇÕ´Ï´Ù.
-/// ¸®ÅÍ·²Àº u"¹®ÀÚ¿­" È¤Àº u'¹®'ÀÌ´Ï, Çü º¯È¯ ÄÄÆÄÀÏ ¿À·ù ½Ã Âü°íÇØ ÁÖ¼¼¿ä.
-/// OA_NO_UNICODE16 ¸ÅÅ©·Î¸¦ Á¤ÀÇÇÏ¸é std::stringÀ» »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù. ´Ü, ÀÌ¶§ ¾Æ½ºÅ° ¹üÀ§ ¿Ü ¹®ÀÚ°¡ Á¸ÀçÇÏ´Â °æ¿ì ÅØ½ºÆ® Ãâ·ÂÀº ¿øÇÏ´Â ´ë·Î µÇÁö ¾ÊÀ» °ÍÀÔ´Ï´Ù.
+/// ì´ ëª¨ë“ˆì€ ê¸°ë³¸ì ìœ¼ë¡œ UTF-16 ë¬¸ìžì—´, ì¦‰ std::u16stringì„ ì‚¬ìš©í•  ê²ƒìž…ë‹ˆë‹¤. ë‹¤ì‹œ ë§í•´, ì•„ìŠ¤í‚¤ ë²”ìœ„ ë‚´/ì™¸ì˜ ë¬¸ìž ëª¨ë‘ ìŠ¤íŠ¸ë§ì—ì„œ í•œ ìžë¦¬ë¥¼ ì°¨ì§€í•©ë‹ˆë‹¤.
+/// ë¦¬í„°ëŸ´ì€ u"ë¬¸ìžì—´" í˜¹ì€ u'ë¬¸'ì´ë‹ˆ, í˜• ë³€í™˜ ì»´íŒŒì¼ ì˜¤ë¥˜ ì‹œ ì°¸ê³ í•´ ì£¼ì„¸ìš”.
+/// OA_NO_UNICODE16 ë§¤í¬ë¡œë¥¼ ì •ì˜í•˜ë©´ std::stringì„ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ë‹¨, ì´ë•Œ ì•„ìŠ¤í‚¤ ë²”ìœ„ ì™¸ ë¬¸ìžê°€ ì¡´ìž¬í•˜ëŠ” ê²½ìš° í…ìŠ¤íŠ¸ ì¶œë ¥ì€ ì›í•˜ëŠ” ëŒ€ë¡œ ë˜ì§€ ì•Šì„ ê²ƒìž…ë‹ˆë‹¤.
 /// </summary>
 namespace onart {
 	enum class AlignH { CENTER, LEFT, RIGHT };
 	enum class AlignV { CENTER, TOP, BOTTOM };
 	/// <summary>
-	/// Æ®·çÅ¸ÀÔ¸¸ »ç¿ë °¡´ÉÇÕ´Ï´Ù.
+	/// íŠ¸ë£¨íƒ€ìž…ë§Œ ì‚¬ìš© ê°€ëŠ¥í•©ë‹ˆë‹¤.
 	/// </summary>
 	class Font
 	{
 	public:
 		/// <summary>
-		/// ÆùÆ® ÆÄÀÏÀ» ºÒ·¯¿É´Ï´Ù. ºÒ·¯¿Â ÆÄÀÏÀº ÀÌ¸§À» ÅëÇØ¼­ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù. ÀÌ ÇÁ·Î±×·¥¿¡¼­ »ç¿ëÇÏ´Â ¸ðµâÀÎ stb_truetypeÀº ÆÄÀÏ ±æÀÌ¸¦ ¹ÞÁö ¾Ê½À´Ï´Ù.
-		/// µû¶ó¼­, ¾Õ Çì´õ ºÎºÐÀº Àß ²Ù¸çÁ³Áö¸¸ ½ÇÁ¦·Î À¯È¿ÇÑ Æ®·çÅ¸ÀÔ ÆÄÀÏÀÌ ¾Æ´Ñ °æ¿ì ¹®Á¦°¡ ¹ß»ýÇÒ ¼ö ÀÖÀ¸¹Ç·Î »ç¿ëÇÏÁö ¸¶½Ã±â ¹Ù¶ø´Ï´Ù.
+		/// í°íŠ¸ íŒŒì¼ì„ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤. ë¶ˆëŸ¬ì˜¨ íŒŒì¼ì€ ì´ë¦„ì„ í†µí•´ì„œ ì ‘ê·¼í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ì´ í”„ë¡œê·¸ëž¨ì—ì„œ ì‚¬ìš©í•˜ëŠ” ëª¨ë“ˆì¸ stb_truetypeì€ íŒŒì¼ ê¸¸ì´ë¥¼ ë°›ì§€ ì•ŠìŠµë‹ˆë‹¤.
+		/// ë”°ë¼ì„œ, ì•ž í—¤ë” ë¶€ë¶„ì€ ìž˜ ê¾¸ë©°ì¡Œì§€ë§Œ ì‹¤ì œë¡œ ìœ íš¨í•œ íŠ¸ë£¨íƒ€ìž… íŒŒì¼ì´ ì•„ë‹Œ ê²½ìš° ë¬¸ì œê°€ ë°œìƒí•  ìˆ˜ ìžˆìœ¼ë¯€ë¡œ ì‚¬ìš©í•˜ì§€ ë§ˆì‹œê¸° ë°”ëžë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="file">ºÒ·¯¿Ã ÆÄÀÏ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-		/// <param name="v">½ÇÁ¦·Î »ç¿ëÇÒ ¹®ÀÚÀÇ ÁýÇÕÀÔ´Ï´Ù. °ãÄ¡´Â °Ô ÀÖ¾îµµ ¿©·¯ ¹ø ·ÎµåÇÏÁö ¾ÊÀ¸´Ï ¸ðµç ½ºÆ®¸µÀ» ±×´ë·Î ÇÕÃÄ¼­ ³Ö¾îµµ µË´Ï´Ù.</param>
-		/// <param name="resolution">ÅØ½ºÃ³ ºñÆ®¸ÊÀÇ ÇØ»óµµÀÔ´Ï´Ù. °ªÀÌ Å¬¼ö·Ï ±Û¾¾°¡ ´õ ¸Å²ô·´°Ô Ãâ·ÂµÇ°ÚÁö¸¸ ±×¸¸Å­ ±×·¡ÇÈ ¿ë·®À» ¸¹ÀÌ Â÷ÁöÇÏ°í ´À·ÁÁö¹Ç·Î ÇÊ¿äÇÑ ¸¸Å­¸¸ »ç¿ëÇÏ´Â °ÍÀÌ ÁÁ½À´Ï´Ù.
-		/// ÀÌ °ªÀ» ¹Ù²Ù¾î¼­ ÄÄÆÄÀÏÇÒ °æ¿ì UI::Text °³Ã¼ÀÇ maxwidth, size ºÎºÐµµ ²À Á¶Á¤µÇ¾î¾ß ÇÕ´Ï´Ù.</param>
-		/// <param name="name">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ ÀÌ¸§ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀº °æ¿ì ÆÄÀÏ ÀÌ¸§À» »ç¿ëÇÕ´Ï´Ù.</param>
+		/// <param name="file">ë¶ˆëŸ¬ì˜¬ íŒŒì¼ ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+		/// <param name="v">ì‹¤ì œë¡œ ì‚¬ìš©í•  ë¬¸ìžì˜ ì§‘í•©ìž…ë‹ˆë‹¤. ê²¹ì¹˜ëŠ” ê²Œ ìžˆì–´ë„ ì—¬ëŸ¬ ë²ˆ ë¡œë“œí•˜ì§€ ì•Šìœ¼ë‹ˆ ëª¨ë“  ìŠ¤íŠ¸ë§ì„ ê·¸ëŒ€ë¡œ í•©ì³ì„œ ë„£ì–´ë„ ë©ë‹ˆë‹¤.</param>
+		/// <param name="resolution">í…ìŠ¤ì²˜ ë¹„íŠ¸ë§µì˜ í•´ìƒë„ìž…ë‹ˆë‹¤. ê°’ì´ í´ìˆ˜ë¡ ê¸€ì”¨ê°€ ë” ë§¤ë„ëŸ½ê²Œ ì¶œë ¥ë˜ê² ì§€ë§Œ ê·¸ë§Œí¼ ê·¸ëž˜í”½ ìš©ëŸ‰ì„ ë§Žì´ ì°¨ì§€í•˜ê³  ëŠë ¤ì§€ë¯€ë¡œ í•„ìš”í•œ ë§Œí¼ë§Œ ì‚¬ìš©í•˜ëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.
+		/// ì´ ê°’ì„ ë°”ê¾¸ì–´ì„œ ì»´íŒŒì¼í•  ê²½ìš° UI::Text ê°œì²´ì˜ maxwidth, size ë¶€ë¶„ë„ ê¼­ ì¡°ì •ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.</param>
+		/// <param name="name">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  ì´ë¦„ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šì€ ê²½ìš° íŒŒì¼ ì´ë¦„ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.</param>
 		static Font* load(const std::string& file, const std::vector<oachar>& v, float resolution = 48, const std::string& name = "");
 		/// <summary>
-		/// ÆùÆ® ÆÄÀÏ¿¡ ÇØ´çÇÏ´Â µ¥ÀÌÅÍ¸¦ ¸Þ¸ð¸®¿¡¼­ ºÒ·¯¿É´Ï´Ù. ºÒ·¯¿Â ÆÄÀÏÀº ÀÌ¸§À» ÅëÇØ¼­ Á¢±ÙÇÒ ¼ö ÀÖ½À´Ï´Ù. ÀÌ ÇÁ·Î±×·¥¿¡¼­ »ç¿ëÇÏ´Â ¸ðµâÀÎ stb_truetypeÀº ÆÄÀÏ ±æÀÌ¸¦ ¹ÞÁö ¾Ê½À´Ï´Ù.
-		/// µû¶ó¼­, ¾Õ Çì´õ ºÎºÐÀº Àß ²Ù¸çÁ³Áö¸¸ ½ÇÁ¦·Î À¯È¿ÇÑ Æ®·çÅ¸ÀÔ ÆÄÀÏÀÌ ¾Æ´Ñ °æ¿ì ¹®Á¦°¡ ¹ß»ýÇÒ ¼ö ÀÖÀ¸¹Ç·Î »ç¿ëÇÏÁö ¸¶½Ã±â ¹Ù¶ø´Ï´Ù.
+		/// í°íŠ¸ íŒŒì¼ì— í•´ë‹¹í•˜ëŠ” ë°ì´í„°ë¥¼ ë©”ëª¨ë¦¬ì—ì„œ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤. ë¶ˆëŸ¬ì˜¨ íŒŒì¼ì€ ì´ë¦„ì„ í†µí•´ì„œ ì ‘ê·¼í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ì´ í”„ë¡œê·¸ëž¨ì—ì„œ ì‚¬ìš©í•˜ëŠ” ëª¨ë“ˆì¸ stb_truetypeì€ íŒŒì¼ ê¸¸ì´ë¥¼ ë°›ì§€ ì•ŠìŠµë‹ˆë‹¤.
+		/// ë”°ë¼ì„œ, ì•ž í—¤ë” ë¶€ë¶„ì€ ìž˜ ê¾¸ë©°ì¡Œì§€ë§Œ ì‹¤ì œë¡œ ìœ íš¨í•œ íŠ¸ë£¨íƒ€ìž… íŒŒì¼ì´ ì•„ë‹Œ ê²½ìš° ë¬¸ì œê°€ ë°œìƒí•  ìˆ˜ ìžˆìœ¼ë¯€ë¡œ ì‚¬ìš©í•˜ì§€ ë§ˆì‹œê¸° ë°”ëžë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="dat">¸Þ¸ð¸® ½ÃÀÛ ÁÖ¼Ò</param>
-		/// <param name="name">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-		/// <param name="v">½ÇÁ¦·Î »ç¿ëÇÒ ¹®ÀÚÀÇ ÁýÇÕÀÔ´Ï´Ù. °ãÄ¡´Â °Ô ÀÖ¾îµµ ¿©·¯ ¹ø ·ÎµåÇÏÁö ¾ÊÀ¸´Ï ¸ðµç ½ºÆ®¸µÀ» ±×´ë·Î ÇÕÃÄ¼­ ³Ö¾îµµ µË´Ï´Ù.</param>
-		/// <param name="resolution">ÅØ½ºÃ³ ºñÆ®¸ÊÀÇ ÇØ»óµµÀÔ´Ï´Ù. °ªÀÌ Å¬¼ö·Ï ±Û¾¾°¡ ´õ ¸Å²ô·´°Ô Ãâ·ÂµÇ°ÚÁö¸¸ ±×¸¸Å­ ±×·¡ÇÈ ¿ë·®À» ¸¹ÀÌ Â÷ÁöÇÏ°í ´À·ÁÁö¹Ç·Î ÇÊ¿äÇÑ ¸¸Å­¸¸ »ç¿ëÇÏ´Â °ÍÀÌ ÁÁ½À´Ï´Ù.
-		/// ÀÌ °ªÀ» ¹Ù²Ù¾î¼­ ÄÄÆÄÀÏÇÒ °æ¿ì UI::Text °³Ã¼ÀÇ maxwidth, size ºÎºÐµµ ²À Á¶Á¤µÇ¾î¾ß ÇÕ´Ï´Ù.</param>
+		/// <param name="dat">ë©”ëª¨ë¦¬ ì‹œìž‘ ì£¼ì†Œ</param>
+		/// <param name="name">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+		/// <param name="v">ì‹¤ì œë¡œ ì‚¬ìš©í•  ë¬¸ìžì˜ ì§‘í•©ìž…ë‹ˆë‹¤. ê²¹ì¹˜ëŠ” ê²Œ ìžˆì–´ë„ ì—¬ëŸ¬ ë²ˆ ë¡œë“œí•˜ì§€ ì•Šìœ¼ë‹ˆ ëª¨ë“  ìŠ¤íŠ¸ë§ì„ ê·¸ëŒ€ë¡œ í•©ì³ì„œ ë„£ì–´ë„ ë©ë‹ˆë‹¤.</param>
+		/// <param name="resolution">í…ìŠ¤ì²˜ ë¹„íŠ¸ë§µì˜ í•´ìƒë„ìž…ë‹ˆë‹¤. ê°’ì´ í´ìˆ˜ë¡ ê¸€ì”¨ê°€ ë” ë§¤ë„ëŸ½ê²Œ ì¶œë ¥ë˜ê² ì§€ë§Œ ê·¸ë§Œí¼ ê·¸ëž˜í”½ ìš©ëŸ‰ì„ ë§Žì´ ì°¨ì§€í•˜ê³  ëŠë ¤ì§€ë¯€ë¡œ í•„ìš”í•œ ë§Œí¼ë§Œ ì‚¬ìš©í•˜ëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.
+		/// ì´ ê°’ì„ ë°”ê¾¸ì–´ì„œ ì»´íŒŒì¼í•  ê²½ìš° UI::Text ê°œì²´ì˜ maxwidth, size ë¶€ë¶„ë„ ê¼­ ì¡°ì •ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.</param>
 		static Font* load(const unsigned char* dat, const std::string& name, const std::vector<oachar>& v, float resolution = 48);
 		/// <summary>
-		/// ºÒ·¯¿Â ÆùÆ® ÆÄÀÏ¿¡ ´ëÇÑ °ÍÀ» ¸Þ¸ð¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù.
+		/// ë¶ˆëŸ¬ì˜¨ í°íŠ¸ íŒŒì¼ì— ëŒ€í•œ ê²ƒì„ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="name">Á¦°ÅÇÒ ÀÌ¸§</param>
+		/// <param name="name">ì œê±°í•  ì´ë¦„</param>
 		static void drop(const std::string& name);
 		/// <summary>
-		/// ÆùÆ® ÆÄÀÏÀÇ Æ÷ÀÎÅÍ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// í°íŠ¸ íŒŒì¼ì˜ í¬ì¸í„°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		static Font* get(const std::string& name);
 		/// <summary>
-		/// ¿øÇÏ´Â ¿µ¿ª¿¡ ÅØ½ºÆ®¸¦ ±×¸³´Ï´Ù.
-		/// <para>Å©±â: Å©±â´Â Á÷»ç°¢Çü¿¡ ¸Âµµ·Ï ³ª¿À´Âµ¥, ÅØ½ºÆ® ¾È¿¡¼­ »ó´ëÀû Å©±â¸¦ ´Ù¸£°Ô ¼³Á¤ÇÏ°íÀÚ ÇÑ´Ù¸é \a¿Í ´ÃÀÓÃà(x ¶Ç´Â y ¶Ç´Â a. ´ë¹®ÀÚ´Â ÀÎÁ¤ÇÏÁö ¾Ê½À´Ï´Ù.), ±×¸®°í Á¤¼ö ºÎºÐ 1ÀÚ¸® ¼Ò¼ö ºÎºÐ 2ÀÚ¸® ½Ç¼ö¸¦ ÀÔ·ÂÇÕ´Ï´Ù(Áï, ÃÖ´ë »ó´ë Å©±â´Â 9.99/0.01=999¹è). ¿¹¸¦ µé¾î,
-		/// u"¾È³ç\ax2.00ÇÏ¼¼\ay0.40¿ä"¶ó°í ÀÔ·ÂÇÏ¸é "¾È³ç"ÀÇ °¢ ±ÛÀÚ°¡ Å©±â 1x1ÀÌ¶ó°í ÇÒ ¶§ "ÇÏ¼¼"ÀÇ °¢ ±ÛÀÚ Å©±â´Â 2x1, "¿ä"ÀÇ Å©±â´Â 2x0.4°¡ µË´Ï´Ù. \a µÚ 5ÀÚ¸®°¡ À¯È¿ÇÑ °ªÀÌ ¾Æ´Ñ °æ¿ì ±ÛÀÚ Å©±â´Â º¯ÇÏÁö ¾ÊÀ¸¸ç
-		/// 5ÀÚ¸®¸¸Å­Àº ¹«½ÃµË´Ï´Ù. aÃàÀº x,yÃà ¸ðµÎ¸¦ ¼³Á¤ÇÕ´Ï´Ù.</para>
-		/// <para>»ö: ±âº»ÀûÀ¸·Î ¹é»öÀÌ¸ç, content ³»¿ë¿¡¼­ \b¿Í 16Áø ÄÚµå(RGBA ¼ø)¸¦ ÀÌ¿ëÇÏ¿© »öÀ» º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù. ¿¹¸¦ µé¾î, u"¾È³ç\bff0000ffÇÏ¼¼\b00ff00ff¿ä"¶ó°í ÀÔ·ÂÇÏ¸é
-		/// "¾È³ç"Àº ÇÏ¾ç, "ÇÏ¼¼"´Â »¡°­, "¿ä"´Â ÃÊ·Ï»öÀ¸·Î Ãâ·ÂµË´Ï´Ù. ¸¸¾à \b µÚ 8ÀÚ¸®°¡ À¯È¿ÇÏÁö ¾ÊÀº °ªÀ» °¡Áö´Â °æ¿ì »öÀº º¯ÇÏÁö ¾ÊÀ¸¸ç °ªµéÀº ¹«½ÃÇÕ´Ï´Ù.</para>
-		/// <para>ÁÙ¹Ù²Þ: \nÀº ÁÙÀ» ¹Ù²ß´Ï´Ù.</para>
+		/// ì›í•˜ëŠ” ì˜ì—­ì— í…ìŠ¤íŠ¸ë¥¼ ê·¸ë¦½ë‹ˆë‹¤.
+		/// <para>í¬ê¸°: í¬ê¸°ëŠ” ì§ì‚¬ê°í˜•ì— ë§žë„ë¡ ë‚˜ì˜¤ëŠ”ë°, í…ìŠ¤íŠ¸ ì•ˆì—ì„œ ìƒëŒ€ì  í¬ê¸°ë¥¼ ë‹¤ë¥´ê²Œ ì„¤ì •í•˜ê³ ìž í•œë‹¤ë©´ \aì™€ ëŠ˜ìž„ì¶•(x ë˜ëŠ” y ë˜ëŠ” a. ëŒ€ë¬¸ìžëŠ” ì¸ì •í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.), ê·¸ë¦¬ê³  ì •ìˆ˜ ë¶€ë¶„ 1ìžë¦¬ ì†Œìˆ˜ ë¶€ë¶„ 2ìžë¦¬ ì‹¤ìˆ˜ë¥¼ ìž…ë ¥í•©ë‹ˆë‹¤(ì¦‰, ìµœëŒ€ ìƒëŒ€ í¬ê¸°ëŠ” 9.99/0.01=999ë°°). ì˜ˆë¥¼ ë“¤ì–´,
+		/// u"ì•ˆë…•\ax2.00í•˜ì„¸\ay0.40ìš”"ë¼ê³  ìž…ë ¥í•˜ë©´ "ì•ˆë…•"ì˜ ê° ê¸€ìžê°€ í¬ê¸° 1x1ì´ë¼ê³  í•  ë•Œ "í•˜ì„¸"ì˜ ê° ê¸€ìž í¬ê¸°ëŠ” 2x1, "ìš”"ì˜ í¬ê¸°ëŠ” 2x0.4ê°€ ë©ë‹ˆë‹¤. \a ë’¤ 5ìžë¦¬ê°€ ìœ íš¨í•œ ê°’ì´ ì•„ë‹Œ ê²½ìš° ê¸€ìž í¬ê¸°ëŠ” ë³€í•˜ì§€ ì•Šìœ¼ë©°
+		/// 5ìžë¦¬ë§Œí¼ì€ ë¬´ì‹œë©ë‹ˆë‹¤. aì¶•ì€ x,yì¶• ëª¨ë‘ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.</para>
+		/// <para>ìƒ‰: ê¸°ë³¸ì ìœ¼ë¡œ ë°±ìƒ‰ì´ë©°, content ë‚´ìš©ì—ì„œ \bì™€ 16ì§„ ì½”ë“œ(RGBA ìˆœ)ë¥¼ ì´ìš©í•˜ì—¬ ìƒ‰ì„ ë³€ê²½í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ì˜ˆë¥¼ ë“¤ì–´, u"ì•ˆë…•\bff0000ffí•˜ì„¸\b00ff00ffìš”"ë¼ê³  ìž…ë ¥í•˜ë©´
+		/// "ì•ˆë…•"ì€ í•˜ì–‘, "í•˜ì„¸"ëŠ” ë¹¨ê°•, "ìš”"ëŠ” ì´ˆë¡ìƒ‰ìœ¼ë¡œ ì¶œë ¥ë©ë‹ˆë‹¤. ë§Œì•½ \b ë’¤ 8ìžë¦¬ê°€ ìœ íš¨í•˜ì§€ ì•Šì€ ê°’ì„ ê°€ì§€ëŠ” ê²½ìš° ìƒ‰ì€ ë³€í•˜ì§€ ì•Šìœ¼ë©° ê°’ë“¤ì€ ë¬´ì‹œí•©ë‹ˆë‹¤.</para>
+		/// <para>ì¤„ë°”ê¿ˆ: \nì€ ì¤„ì„ ë°”ê¿‰ë‹ˆë‹¤.</para>
 		/// </summary>
-		/// <param name="content">Ç¥½ÃÇÒ ¹®ÀåÀÔ´Ï´Ù.</param>
-		/// <param name="group">ÀüÃ¼ ¹®ÀÚ¿­ÀÇ À§Ä¡´Â ÇÈ¼¿ ´ÜÀ§·Î ´Ù·ïÁö´Âµ¥, ÀÌ¸¦ ¿øÇÏ´Â À§Ä¡/Å©±â·Î º¯È¯ÇÏ´Â Çà·ÄÀÔ´Ï´Ù. getRectNLine()¿¡¼­ °è»êµÈ Á÷»ç°¢Çü ¿µ¿ª°ú ¸ñÇ¥ Á÷»ç°¢Çü ¿µ¿ªÀ» ÀÌ¿ëÇÏ¿© ±¸ÇÕ´Ï´Ù.</param>
-		/// <param name="lineXY">°¢ ¶óÀÎÀÇ ½ÃÀÛÁ¡ÀÔ´Ï´Ù. getRectNLine()¿¡¼­ ÀÚµ¿À¸·Î °è»êµË´Ï´Ù.</param>
-		/// <param name="color">ÀüÃ¼ ÅØ½ºÆ®ÀÇ »ö»óÀ» °áÁ¤ÇÕ´Ï´Ù. ÅØ½ºÆ® ÀÚÃ¼¿¡¼­ °áÁ¤µÈ »ö»ó°ú´Â ¼ººÐº° °öÀ¸·Î ¿¬»êµË´Ï´Ù.</param>
+		/// <param name="content">í‘œì‹œí•  ë¬¸ìž¥ìž…ë‹ˆë‹¤.</param>
+		/// <param name="group">ì „ì²´ ë¬¸ìžì—´ì˜ ìœ„ì¹˜ëŠ” í”½ì…€ ë‹¨ìœ„ë¡œ ë‹¤ë¤„ì§€ëŠ”ë°, ì´ë¥¼ ì›í•˜ëŠ” ìœ„ì¹˜/í¬ê¸°ë¡œ ë³€í™˜í•˜ëŠ” í–‰ë ¬ìž…ë‹ˆë‹¤. getRectNLine()ì—ì„œ ê³„ì‚°ëœ ì§ì‚¬ê°í˜• ì˜ì—­ê³¼ ëª©í‘œ ì§ì‚¬ê°í˜• ì˜ì—­ì„ ì´ìš©í•˜ì—¬ êµ¬í•©ë‹ˆë‹¤.</param>
+		/// <param name="lineXY">ê° ë¼ì¸ì˜ ì‹œìž‘ì ìž…ë‹ˆë‹¤. getRectNLine()ì—ì„œ ìžë™ìœ¼ë¡œ ê³„ì‚°ë©ë‹ˆë‹¤.</param>
+		/// <param name="color">ì „ì²´ í…ìŠ¤íŠ¸ì˜ ìƒ‰ìƒì„ ê²°ì •í•©ë‹ˆë‹¤. í…ìŠ¤íŠ¸ ìžì²´ì—ì„œ ê²°ì •ëœ ìƒ‰ìƒê³¼ëŠ” ì„±ë¶„ë³„ ê³±ìœ¼ë¡œ ì—°ì‚°ë©ë‹ˆë‹¤.</param>
 		void draw(const oastring& content, const mat4& group, const std::vector<vec2>& lineXY, const vec4& color = 1);
 		/// <summary>
-		/// ÁÖ¾îÁø À§Ä¡¸¦ Áß½ÉÀ¸·Î °íÁ¤µÈ Å©±âÀÇ ÅØ½ºÆ®¸¦ ±×¸³´Ï´Ù. (ÅØ½ºÆ®°¡ Â÷ÁöÇÑ ¿µ¿ª¿¡ °ü°è ¾øÀÌ °¢ ±ÛÀÚÀÇ Å©±â°¡ °íÁ¤µÊ)
-		/// <para>Å©±â: Å©±â´Â Á÷»ç°¢Çü¿¡ ¸Âµµ·Ï ³ª¿À´Âµ¥, ÅØ½ºÆ® ¾È¿¡¼­ »ó´ëÀû Å©±â¸¦ ´Ù¸£°Ô ¼³Á¤ÇÏ°íÀÚ ÇÑ´Ù¸é \a¿Í ´ÃÀÓÃà(x ¶Ç´Â y ¶Ç´Â a. ´ë¹®ÀÚ´Â ÀÎÁ¤ÇÏÁö ¾Ê½À´Ï´Ù.), ±×¸®°í Á¤¼ö ºÎºÐ 1ÀÚ¸® ¼Ò¼ö ºÎºÐ 2ÀÚ¸® ½Ç¼ö¸¦ ÀÔ·ÂÇÕ´Ï´Ù. 
-		/// »ó´ëÀû Å©±âÀÇ ¹üÀ§°¡ º¯ÇÏ´õ¶óµµ ±âº»°ªÀÎ 1.0ÀÇ Å©±â´Â º¯ÇÏÁö ¾Ê½À´Ï´Ù. ¿¹¸¦ µé¾î,
-		/// u"¾È³ç\ax2.00ÇÏ¼¼\ay0.40¿ä"¶ó°í ÀÔ·ÂÇÏ¸é "¾È³ç"ÀÇ °¢ ±ÛÀÚ°¡ Å©±â 1x1ÀÌ¶ó°í ÇÒ ¶§ "ÇÏ¼¼"ÀÇ °¢ ±ÛÀÚ Å©±â´Â 2x1, "¿ä"ÀÇ Å©±â´Â 2x0.4°¡ µË´Ï´Ù. \a µÚ 5ÀÚ¸®°¡ À¯È¿ÇÑ °ªÀÌ ¾Æ´Ñ °æ¿ì ±ÛÀÚ Å©±â´Â º¯ÇÏÁö ¾ÊÀ¸¸ç
-		/// 5ÀÚ¸®¸¸Å­Àº ¹«½ÃµË´Ï´Ù. aÃàÀº x,yÃà ¸ðµÎ¸¦ ¼³Á¤ÇÕ´Ï´Ù.</para>
-		/// <para>»ö: ±âº»ÀûÀ¸·Î ¹é»öÀÌ¸ç, content ³»¿ë¿¡¼­ \b¿Í 16Áø ÄÚµå(RGBA ¼ø)¸¦ ÀÌ¿ëÇÏ¿© »öÀ» º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù. ¿¹¸¦ µé¾î, u"¾È³ç\bff0000ffÇÏ¼¼\b00ff00ff¿ä"¶ó°í ÀÔ·ÂÇÏ¸é
-		/// "¾È³ç"Àº ÇÏ¾ç, "ÇÏ¼¼"´Â »¡°­, "¿ä"´Â ÃÊ·Ï»öÀ¸·Î Ãâ·ÂµË´Ï´Ù. ¸¸¾à \b µÚ 8ÀÚ¸®°¡ À¯È¿ÇÏÁö ¾ÊÀº °ªÀ» °¡Áö´Â °æ¿ì »öÀº º¯ÇÏÁö ¾ÊÀ¸¸ç °ªµéÀº ¹«½ÃÇÕ´Ï´Ù.</para>
-		/// <para>ÁÙ¹Ù²Þ: \nÀº ÁÙÀ» ¹Ù²ß´Ï´Ù.</para>
+		/// ì£¼ì–´ì§„ ìœ„ì¹˜ë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ ê³ ì •ëœ í¬ê¸°ì˜ í…ìŠ¤íŠ¸ë¥¼ ê·¸ë¦½ë‹ˆë‹¤. (í…ìŠ¤íŠ¸ê°€ ì°¨ì§€í•œ ì˜ì—­ì— ê´€ê³„ ì—†ì´ ê° ê¸€ìžì˜ í¬ê¸°ê°€ ê³ ì •ë¨)
+		/// <para>í¬ê¸°: í¬ê¸°ëŠ” ì§ì‚¬ê°í˜•ì— ë§žë„ë¡ ë‚˜ì˜¤ëŠ”ë°, í…ìŠ¤íŠ¸ ì•ˆì—ì„œ ìƒëŒ€ì  í¬ê¸°ë¥¼ ë‹¤ë¥´ê²Œ ì„¤ì •í•˜ê³ ìž í•œë‹¤ë©´ \aì™€ ëŠ˜ìž„ì¶•(x ë˜ëŠ” y ë˜ëŠ” a. ëŒ€ë¬¸ìžëŠ” ì¸ì •í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.), ê·¸ë¦¬ê³  ì •ìˆ˜ ë¶€ë¶„ 1ìžë¦¬ ì†Œìˆ˜ ë¶€ë¶„ 2ìžë¦¬ ì‹¤ìˆ˜ë¥¼ ìž…ë ¥í•©ë‹ˆë‹¤. 
+		/// ìƒëŒ€ì  í¬ê¸°ì˜ ë²”ìœ„ê°€ ë³€í•˜ë”ë¼ë„ ê¸°ë³¸ê°’ì¸ 1.0ì˜ í¬ê¸°ëŠ” ë³€í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ì˜ˆë¥¼ ë“¤ì–´,
+		/// u"ì•ˆë…•\ax2.00í•˜ì„¸\ay0.40ìš”"ë¼ê³  ìž…ë ¥í•˜ë©´ "ì•ˆë…•"ì˜ ê° ê¸€ìžê°€ í¬ê¸° 1x1ì´ë¼ê³  í•  ë•Œ "í•˜ì„¸"ì˜ ê° ê¸€ìž í¬ê¸°ëŠ” 2x1, "ìš”"ì˜ í¬ê¸°ëŠ” 2x0.4ê°€ ë©ë‹ˆë‹¤. \a ë’¤ 5ìžë¦¬ê°€ ìœ íš¨í•œ ê°’ì´ ì•„ë‹Œ ê²½ìš° ê¸€ìž í¬ê¸°ëŠ” ë³€í•˜ì§€ ì•Šìœ¼ë©°
+		/// 5ìžë¦¬ë§Œí¼ì€ ë¬´ì‹œë©ë‹ˆë‹¤. aì¶•ì€ x,yì¶• ëª¨ë‘ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.</para>
+		/// <para>ìƒ‰: ê¸°ë³¸ì ìœ¼ë¡œ ë°±ìƒ‰ì´ë©°, content ë‚´ìš©ì—ì„œ \bì™€ 16ì§„ ì½”ë“œ(RGBA ìˆœ)ë¥¼ ì´ìš©í•˜ì—¬ ìƒ‰ì„ ë³€ê²½í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ì˜ˆë¥¼ ë“¤ì–´, u"ì•ˆë…•\bff0000ffí•˜ì„¸\b00ff00ffìš”"ë¼ê³  ìž…ë ¥í•˜ë©´
+		/// "ì•ˆë…•"ì€ í•˜ì–‘, "í•˜ì„¸"ëŠ” ë¹¨ê°•, "ìš”"ëŠ” ì´ˆë¡ìƒ‰ìœ¼ë¡œ ì¶œë ¥ë©ë‹ˆë‹¤. ë§Œì•½ \b ë’¤ 8ìžë¦¬ê°€ ìœ íš¨í•˜ì§€ ì•Šì€ ê°’ì„ ê°€ì§€ëŠ” ê²½ìš° ìƒ‰ì€ ë³€í•˜ì§€ ì•Šìœ¼ë©° ê°’ë“¤ì€ ë¬´ì‹œí•©ë‹ˆë‹¤.</para>
+		/// <para>ì¤„ë°”ê¿ˆ: \nì€ ì¤„ì„ ë°”ê¿‰ë‹ˆë‹¤.</para>
 		/// </summary>
-		/// <param name="content">Ç¥½ÃÇÒ ¹®ÀåÀÔ´Ï´Ù.</param>
-		/// <param name="group">¹®ÀåÀÇ ±âº» Å©±â(Á÷»ç°¢Çü LDWH)ÀÔ´Ï´Ù. getRectNLine()¿¡¼­ ÀÚµ¿À¸·Î °è»êµË´Ï´Ù.</param>
-		/// <param name="lineXY">°¢ ¶óÀÎÀÇ ½ÃÀÛÁ¡ÀÔ´Ï´Ù. getRectNLine()¿¡¼­ ÀÚµ¿À¸·Î °è»êµË´Ï´Ù.</param>
-		/// <param name="ha">¼öÆò Á¤·Ä »óÅÂÀÔ´Ï´Ù.</param>
-		/// <param name="va">¼öÁ÷ Á¤·Ä »óÅÂÀÔ´Ï´Ù.</param>
-		/// <param name="center">Áß½É ÁÂÇ¥ÀÔ´Ï´Ù.</param>
-		/// <param name="size">±ÛÀÚÀÇ Å©±âÀÔ´Ï´Ù. ´Ù¸¥ ÆùÆ®¿¡ ´ëÇØ¼­´Â ÀÌ °ªÀÌ °°´Ù°í ÇÏ¿© °°Àº Å©±â°¡ º¸ÀåµÇÁö ¾Ê½À´Ï´Ù.</param>
-		/// <param name="color">ÀüÃ¼ ÅØ½ºÆ®ÀÇ »ö»óÀ» °áÁ¤ÇÕ´Ï´Ù. ÅØ½ºÆ® ÀÚÃ¼¿¡¼­ °áÁ¤µÈ »ö»ó°ú´Â ¼ººÐº° °öÀ¸·Î ¿¬»êµË´Ï´Ù.</param>
+		/// <param name="content">í‘œì‹œí•  ë¬¸ìž¥ìž…ë‹ˆë‹¤.</param>
+		/// <param name="group">ë¬¸ìž¥ì˜ ê¸°ë³¸ í¬ê¸°(ì§ì‚¬ê°í˜• LDWH)ìž…ë‹ˆë‹¤. getRectNLine()ì—ì„œ ìžë™ìœ¼ë¡œ ê³„ì‚°ë©ë‹ˆë‹¤.</param>
+		/// <param name="lineXY">ê° ë¼ì¸ì˜ ì‹œìž‘ì ìž…ë‹ˆë‹¤. getRectNLine()ì—ì„œ ìžë™ìœ¼ë¡œ ê³„ì‚°ë©ë‹ˆë‹¤.</param>
+		/// <param name="ha">ìˆ˜í‰ ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤.</param>
+		/// <param name="va">ìˆ˜ì§ ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤.</param>
+		/// <param name="center">ì¤‘ì‹¬ ì¢Œí‘œìž…ë‹ˆë‹¤.</param>
+		/// <param name="size">ê¸€ìžì˜ í¬ê¸°ìž…ë‹ˆë‹¤. ë‹¤ë¥¸ í°íŠ¸ì— ëŒ€í•´ì„œëŠ” ì´ ê°’ì´ ê°™ë‹¤ê³  í•˜ì—¬ ê°™ì€ í¬ê¸°ê°€ ë³´ìž¥ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.</param>
+		/// <param name="color">ì „ì²´ í…ìŠ¤íŠ¸ì˜ ìƒ‰ìƒì„ ê²°ì •í•©ë‹ˆë‹¤. í…ìŠ¤íŠ¸ ìžì²´ì—ì„œ ê²°ì •ëœ ìƒ‰ìƒê³¼ëŠ” ì„±ë¶„ë³„ ê³±ìœ¼ë¡œ ì—°ì‚°ë©ë‹ˆë‹¤.</param>
 		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, AlignH ha, AlignV va, const vec2& center = 0.f, float size = 1, const vec4& color = 1.f);
 		/// <summary>
-		/// ÁÖ¾îÁø À§Ä¡¸¦ Áß½ÉÀ¸·Î °íÁ¤µÈ Å©±âÀÇ ÅØ½ºÆ®¸¦ ±×¸®¸ç, Ãß°¡ÀûÀ¸·Î º¯È¯À» Àû¿ëÇÕ´Ï´Ù. (ÅØ½ºÆ®ÀÇ ±æÀÌ¿¡ °ü°è ¾øÀÌ °¢ ±ÛÀÚÀÇ Å©±â°¡ °íÁ¤µÊ)
+		/// ì£¼ì–´ì§„ ìœ„ì¹˜ë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ ê³ ì •ëœ í¬ê¸°ì˜ í…ìŠ¤íŠ¸ë¥¼ ê·¸ë¦¬ë©°, ì¶”ê°€ì ìœ¼ë¡œ ë³€í™˜ì„ ì ìš©í•©ë‹ˆë‹¤. (í…ìŠ¤íŠ¸ì˜ ê¸¸ì´ì— ê´€ê³„ ì—†ì´ ê° ê¸€ìžì˜ í¬ê¸°ê°€ ê³ ì •ë¨)
 		/// </summary>
-		/// <param name="content">Ç¥½ÃÇÒ ¹®ÀåÀÔ´Ï´Ù.</param>
-		/// <param name="group">¹®ÀåÀÇ ±âº» Å©±â(Á÷»ç°¢Çü LDWH)ÀÔ´Ï´Ù. getRectNLine()¿¡¼­ ÀÚµ¿À¸·Î °è»êµË´Ï´Ù.</param>
-		/// <param name="lineXY">°¢ ¶óÀÎÀÇ ½ÃÀÛÁ¡ÀÔ´Ï´Ù. getRectNLine()¿¡¼­ ÀÚµ¿À¸·Î °è»êµË´Ï´Ù.</param>
-		/// <param name="transform">Ãß°¡·Î Àû¿ëÇÒ º¯È¯ÀÔ´Ï´Ù. È¸Àüº¯È¯ÀÌ³ª Å©±âº¯È¯ µîÀ» Àû¿ëÇÑ´Ù¸é, Áß½ÉÁÂÇ¥°¡ ÀÌµ¿ÇÏÁö ¾Êµµ·Ï ÇÏ´Â °ÍÀº ÀÌ ÇÔ¼ö ¹Û¿¡¼­ ÇØ¾ß ÇÒ ÀÏÀÔ´Ï´Ù. (mat4´Â ¾ÆÇÉ º¯È¯¸¸ ÀÖ´Â °ÍÀÌ ¾Æ´Ï±â ¶§¹®¿¡ ÇÔ¼ö ¾È¿¡¼­ º¸Á¤ÇÒ ¼ö ¾øÀ½)</param>
-		/// <param name="ha">¼öÆò Á¤·Ä »óÅÂÀÔ´Ï´Ù.</param>
-		/// <param name="va">¼öÁ÷ Á¤·Ä »óÅÂÀÔ´Ï´Ù.</param>
-		/// <param name="center">Áß½É ÁÂÇ¥ÀÔ´Ï´Ù.</param>
-		/// <param name="size">±ÛÀÚÀÇ Å©±âÀÔ´Ï´Ù. ´Ù¸¥ ÆùÆ®¿¡ ´ëÇØ¼­´Â ÀÌ °ªÀÌ °°´Ù°í ÇÏ¿© °°Àº Å©±â°¡ º¸ÀåµÇÁö ¾Ê½À´Ï´Ù.</param>
-		/// <param name="color">ÀüÃ¼ ÅØ½ºÆ®ÀÇ »ö»óÀ» °áÁ¤ÇÕ´Ï´Ù. ÅØ½ºÆ® ÀÚÃ¼¿¡¼­ °áÁ¤µÈ »ö»ó°ú´Â ¼ººÐº° °öÀ¸·Î ¿¬»êµË´Ï´Ù.</param>
+		/// <param name="content">í‘œì‹œí•  ë¬¸ìž¥ìž…ë‹ˆë‹¤.</param>
+		/// <param name="group">ë¬¸ìž¥ì˜ ê¸°ë³¸ í¬ê¸°(ì§ì‚¬ê°í˜• LDWH)ìž…ë‹ˆë‹¤. getRectNLine()ì—ì„œ ìžë™ìœ¼ë¡œ ê³„ì‚°ë©ë‹ˆë‹¤.</param>
+		/// <param name="lineXY">ê° ë¼ì¸ì˜ ì‹œìž‘ì ìž…ë‹ˆë‹¤. getRectNLine()ì—ì„œ ìžë™ìœ¼ë¡œ ê³„ì‚°ë©ë‹ˆë‹¤.</param>
+		/// <param name="transform">ì¶”ê°€ë¡œ ì ìš©í•  ë³€í™˜ìž…ë‹ˆë‹¤. íšŒì „ë³€í™˜ì´ë‚˜ í¬ê¸°ë³€í™˜ ë“±ì„ ì ìš©í•œë‹¤ë©´, ì¤‘ì‹¬ì¢Œí‘œê°€ ì´ë™í•˜ì§€ ì•Šë„ë¡ í•˜ëŠ” ê²ƒì€ ì´ í•¨ìˆ˜ ë°–ì—ì„œ í•´ì•¼ í•  ì¼ìž…ë‹ˆë‹¤. (mat4ëŠ” ì•„í•€ ë³€í™˜ë§Œ ìžˆëŠ” ê²ƒì´ ì•„ë‹ˆê¸° ë•Œë¬¸ì— í•¨ìˆ˜ ì•ˆì—ì„œ ë³´ì •í•  ìˆ˜ ì—†ìŒ)</param>
+		/// <param name="ha">ìˆ˜í‰ ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤.</param>
+		/// <param name="va">ìˆ˜ì§ ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤.</param>
+		/// <param name="center">ì¤‘ì‹¬ ì¢Œí‘œìž…ë‹ˆë‹¤.</param>
+		/// <param name="size">ê¸€ìžì˜ í¬ê¸°ìž…ë‹ˆë‹¤. ë‹¤ë¥¸ í°íŠ¸ì— ëŒ€í•´ì„œëŠ” ì´ ê°’ì´ ê°™ë‹¤ê³  í•˜ì—¬ ê°™ì€ í¬ê¸°ê°€ ë³´ìž¥ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.</param>
+		/// <param name="color">ì „ì²´ í…ìŠ¤íŠ¸ì˜ ìƒ‰ìƒì„ ê²°ì •í•©ë‹ˆë‹¤. í…ìŠ¤íŠ¸ ìžì²´ì—ì„œ ê²°ì •ëœ ìƒ‰ìƒê³¼ëŠ” ì„±ë¶„ë³„ ê³±ìœ¼ë¡œ ì—°ì‚°ë©ë‹ˆë‹¤.</param>
 		void draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const mat4& transform, AlignH ha, AlignV va, const vec2& center = 0.f, float size = 1, const vec4& color = 1.f);
 
 		/// <summary>
-		/// ÀÌ ºÒ·¯¿Â ÆùÆ®¿¡ ´ëÇÏ¿© ÇØ´ç ¹®ÀåÀÌ Â÷ÁöÇÏ´Â »ó´ëÀû °ø°£, ±×¸®°í °¢ ÇàÀº ¾îµð¼­ ½ÃÀÛÇÒÁö¸¦ ¸®ÅÏÇÕ´Ï´Ù. ÀÌ µÑÀº draw()¿¡¼­ »ç¿ëµË´Ï´Ù.
-		/// Á÷»ç°¢ÇüÀÇ ÁÂÃø »ó´ÜÀº (0,0)À¸·Î °íÁ¤µË´Ï´Ù.
-		/// ±ÛÀÚ »ö ¹× Å©±â º¯°æ¿¡ ´ëÇØ¼­´Â draw() ¼³¸í¿¡¼­ Âü°íÇØ ÁÖ¼¼¿ä.
+		/// ì´ ë¶ˆëŸ¬ì˜¨ í°íŠ¸ì— ëŒ€í•˜ì—¬ í•´ë‹¹ ë¬¸ìž¥ì´ ì°¨ì§€í•˜ëŠ” ìƒëŒ€ì  ê³µê°„, ê·¸ë¦¬ê³  ê° í–‰ì€ ì–´ë””ì„œ ì‹œìž‘í• ì§€ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. ì´ ë‘˜ì€ draw()ì—ì„œ ì‚¬ìš©ë©ë‹ˆë‹¤.
+		/// ì§ì‚¬ê°í˜•ì˜ ì¢Œì¸¡ ìƒë‹¨ì€ (0,0)ìœ¼ë¡œ ê³ ì •ë©ë‹ˆë‹¤.
+		/// ê¸€ìž ìƒ‰ ë° í¬ê¸° ë³€ê²½ì— ëŒ€í•´ì„œëŠ” draw() ì„¤ëª…ì—ì„œ ì°¸ê³ í•´ ì£¼ì„¸ìš”.
 		/// </summary>
-		/// <param name="content">ÃøÁ¤µÉ ¹®Àå</param>
-		/// <param name="lineXY">°¢ ÇàÀÇ ½ÃÀÛÁ¡(°¡Àå ¿ÞÂÊ/¾Æ·§¼±)ÀÌ µé¾î°©´Ï´Ù. ºñ¾î ÀÖÁö ¾Ê¾Ò´ø °æ¿ì ÀÚµ¿À¸·Î ºñ¿ì°í »õ·Î µé¾î°©´Ï´Ù.</param>
-		/// <param name="align">±ÛÀÚ Á¤·Ä »óÅÂÀÔ´Ï´Ù. °¡¿îµ¥/¿ÞÂÊ/¿À¸¥ÂÊÀÌ ÀÖ½À´Ï´Ù.</param>
-		/// <param name="rowGap">Çà°£À» ¼³Á¤ÇÕ´Ï´Ù. ÀÌ °ªÀº ¹®¼­ ÇÁ·Î±×·¥¿¡¼­ Á¦°øÇÏ´Â °Í°ú µ¿ÀÏÇÑ ºñÀ²À» ÀÇ¹ÌÇÏÁö ¾Ê½À´Ï´Ù. ÆùÆ®¿¡ µû¶ó ´Ù¸¦ ¼ö ÀÖÀ¸¹Ç·Î, ¼±È£ÇÏ´Â ¸¸Å­ Á÷Á¢ Á¶ÀýÇØ ÁÖ½Ã´Â °ÍÀÌ ÁÁ½À´Ï´Ù.</param>
-		/// <returns>¹®ÀåÀÌ Â÷ÁöÇÏ´Â Á÷»ç°¢Çü(L-D-W-H)ÀÔ´Ï´Ù. draw()¿¡¼­ »ç¿ëµË´Ï´Ù.</returns>
+		/// <param name="content">ì¸¡ì •ë  ë¬¸ìž¥</param>
+		/// <param name="lineXY">ê° í–‰ì˜ ì‹œìž‘ì (ê°€ìž¥ ì™¼ìª½/ì•„ëž«ì„ )ì´ ë“¤ì–´ê°‘ë‹ˆë‹¤. ë¹„ì–´ ìžˆì§€ ì•Šì•˜ë˜ ê²½ìš° ìžë™ìœ¼ë¡œ ë¹„ìš°ê³  ìƒˆë¡œ ë“¤ì–´ê°‘ë‹ˆë‹¤.</param>
+		/// <param name="align">ê¸€ìž ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤. ê°€ìš´ë°/ì™¼ìª½/ì˜¤ë¥¸ìª½ì´ ìžˆìŠµë‹ˆë‹¤.</param>
+		/// <param name="rowGap">í–‰ê°„ì„ ì„¤ì •í•©ë‹ˆë‹¤. ì´ ê°’ì€ ë¬¸ì„œ í”„ë¡œê·¸ëž¨ì—ì„œ ì œê³µí•˜ëŠ” ê²ƒê³¼ ë™ì¼í•œ ë¹„ìœ¨ì„ ì˜ë¯¸í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. í°íŠ¸ì— ë”°ë¼ ë‹¤ë¥¼ ìˆ˜ ìžˆìœ¼ë¯€ë¡œ, ì„ í˜¸í•˜ëŠ” ë§Œí¼ ì§ì ‘ ì¡°ì ˆí•´ ì£¼ì‹œëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.</param>
+		/// <returns>ë¬¸ìž¥ì´ ì°¨ì§€í•˜ëŠ” ì§ì‚¬ê°í˜•(L-D-W-H)ìž…ë‹ˆë‹¤. draw()ì—ì„œ ì‚¬ìš©ë©ë‹ˆë‹¤.</returns>
 		vec4 getRectNLine(const oastring& content, std::vector<vec2>& lineXY, AlignH align = AlignH::CENTER, float rowGap = 1);
 
 		/// <summary>
-		/// ÀÚµ¿ ÁÙ¹Ù²ÞÀ» \nÀ» »ðÀÔÇÏ¿© Àû¿ëÇÑ ÇüÅÂ·Î ¹®ÀÚ¿­À» ¸®ÅÏÇÕ´Ï´Ù. Á¦ÇÑÀ» ³Ñ¾î°¡´õ¶óµµ ÇÑ Çà¿¡ ÃÖ¼Ò ÇÑ ±ÛÀÚ´Â µé¾î°¡¸ç, ±âÁ¸ÀÇ °³ÇàÀº ±×´ë·Î À¯ÁöµË´Ï´Ù.
-		/// ¾îÀýÂ°·Î ÁÙÀ» ¹Ù²Ù´Â ±â´ÉÀº Á¦°øÇÒ ¿¹Á¤ÀÌ ¾ø½À´Ï´Ù.
+		/// ìžë™ ì¤„ë°”ê¿ˆì„ \nì„ ì‚½ìž…í•˜ì—¬ ì ìš©í•œ í˜•íƒœë¡œ ë¬¸ìžì—´ì„ ë¦¬í„´í•©ë‹ˆë‹¤. ì œí•œì„ ë„˜ì–´ê°€ë”ë¼ë„ í•œ í–‰ì— ìµœì†Œ í•œ ê¸€ìžëŠ” ë“¤ì–´ê°€ë©°, ê¸°ì¡´ì˜ ê°œí–‰ì€ ê·¸ëŒ€ë¡œ ìœ ì§€ë©ë‹ˆë‹¤.
+		/// ì–´ì ˆì§¸ë¡œ ì¤„ì„ ë°”ê¾¸ëŠ” ê¸°ëŠ¥ì€ ì œê³µí•  ì˜ˆì •ì´ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="content">¹®ÀÚ¿­</param>
-		/// <param name="maxwidth">ÃÖ´ë ÆøÀÔ´Ï´Ù. ´ÜÀ§´Â pxÀÌÁö¸¸ ºÒ·¯¿Â resolution, ÆùÆ® Á¾·ù µî¿¡ µû¶ó ±× ÀÇ¹Ì°¡ ´Þ¶óÁö¹Ç·Î(ÇÏ³ªÀÇ Font °´Ã¼¿¡ ´ëÇÏ¿©´Â µ¿ÀÏ) Á÷Á¢ ÇÊ¿äÇÑ ¸¸Å­ Àû¿ëÇÏ´Â °ÍÀÌ ¸Â½À´Ï´Ù.</param>
+		/// <param name="content">ë¬¸ìžì—´</param>
+		/// <param name="maxwidth">ìµœëŒ€ í­ìž…ë‹ˆë‹¤. ë‹¨ìœ„ëŠ” pxì´ì§€ë§Œ ë¶ˆëŸ¬ì˜¨ resolution, í°íŠ¸ ì¢…ë¥˜ ë“±ì— ë”°ë¼ ê·¸ ì˜ë¯¸ê°€ ë‹¬ë¼ì§€ë¯€ë¡œ(í•˜ë‚˜ì˜ Font ê°ì²´ì— ëŒ€í•˜ì—¬ëŠ” ë™ì¼) ì§ì ‘ í•„ìš”í•œ ë§Œí¼ ì ìš©í•˜ëŠ” ê²ƒì´ ë§žìŠµë‹ˆë‹¤.</param>
 		oastring cutLine(const oastring& content, float maxwidth);
 	private:
 		struct charTex {

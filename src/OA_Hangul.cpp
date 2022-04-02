@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -13,12 +13,12 @@ namespace onart {
     constexpr size_t NOTFOUND = -1;
 
     constexpr bool isPiece(char16_t c) {
-        return c >= u'¤¡' && c <= u'¤Ó';
+        return c >= u'ã„±' && c <= u'ã…£';
     }
     
     constexpr int checkPiece(char16_t c) {
-        if (c >= u'¤¡' && c <= u'¤¾') return 1;
-        else if (c >= u'¤¿' && c <= u'¤Ó')return -1;
+        if (c >= u'ã„±' && c <= u'ã…') return 1;
+        else if (c >= u'ã…' && c <= u'ã…£')return -1;
         else return 0;
     }
     
@@ -27,90 +27,90 @@ namespace onart {
     }
 
     size_t hIndex(char16_t c) {
-        c -= u'¤¡';
+        c -= u'ã„±';
         if (c < 0 || c>29)return NOTFOUND;
         return H_HEAD[c];
     }
 
     size_t mIndex(char16_t c) {
-        c -= u'¤¿';
+        c -= u'ã…';
         if (c < 0 || c>20)return NOTFOUND;
         return c;
     }
 
     size_t tIndex(char16_t c) {
-        c -= u'¤¡';
+        c -= u'ã„±';
         if (c < 0 || c>29)return NOTFOUND;
         return H_TAIL[c];
     }
 
     /// <summary>
-    /// ÀÚÀ½+ÀÚÀ½
+    /// ììŒ+ììŒ
     /// </summary>
     char16_t cpc(char16_t a, char16_t b) {
         switch (a)
         {
-        case u'¤¡':
-            if (b == u'¤µ') return u'¤£';
+        case u'ã„±':
+            if (b == u'ã……') return u'ã„³';
             break;
-        case u'¤¤':
-            if (b == u'¤¸') return u'¤¥';
-            else if (b == u'¤¾')return u'¤¦';
+        case u'ã„´':
+            if (b == u'ã…ˆ') return u'ã„µ';
+            else if (b == u'ã…')return u'ã„¶';
             break;
-        case u'¤©':
+        case u'ã„¹':
             switch (b)
             {
-            case u'¤¡': return u'¤ª';
-            case u'¤±': return u'¤«';
-            case u'¤²': return u'¤¬';
-            case u'¤µ': return u'¤­';
-            case u'¤¼': return u'¤®';
-            case u'¤½': return u'¤¯';
-            case u'¤¾': return u'¤°';
+            case u'ã„±': return u'ã„º';
+            case u'ã…': return u'ã„»';
+            case u'ã…‚': return u'ã„¼';
+            case u'ã……': return u'ã„½';
+            case u'ã…Œ': return u'ã„¾';
+            case u'ã…': return u'ã„¿';
+            case u'ã…': return u'ã…€';
             }
             break;
-        case u'¤²':
-            if (b == '¤µ')return '¤´';
+        case u'ã…‚':
+            if (b == 'ã……')return 'ã…„';
         }
         return b;
     }
 
     /// <summary>
-    /// ¸ğÀ½+¸ğÀ½
+    /// ëª¨ìŒ+ëª¨ìŒ
     /// </summary>
     char16_t vpv(char16_t a, char16_t b) {
         switch (a)
         {
-        case u'¤Ç':
+        case u'ã…—':
             switch (b)
             {
-            case u'¤¿': return u'¤È';
-            case u'¤À': return u'¤É';
-            case u'¤Ó': return u'¤Ê';
+            case u'ã…': return u'ã…˜';
+            case u'ã…': return u'ã…™';
+            case u'ã…£': return u'ã…š';
             }
             break;
-        case u'¤Ì':
+        case u'ã…œ':
             switch (b) {
-                case u'¤Ã': return u'¤Í';
-                case u'¤Ä': return u'¤Î';
-                case u'¤Ó': return u'¤Ï';
+                case u'ã…“': return u'ã…';
+                case u'ã…”': return u'ã…';
+                case u'ã…£': return u'ã…Ÿ';
             }
             break;
-        case u'¤Ñ':
-            if (b == u'¤Ó') return u'¤Ò';
+        case u'ã…¡':
+            if (b == u'ã…£') return u'ã…¢';
         }
         return b;
     }
 
     /// <summary>
-    /// ÀÚÀ½+¸ğÀ½
+    /// ììŒ+ëª¨ìŒ
     /// </summary>
     char16_t cpv(char16_t c, char16_t v) {
-        return u'°¡' + (char16_t)hIndex(c) * 588 + (char16_t)mIndex(v) * 28;
+        return u'ê°€' + (char16_t)hIndex(c) * 588 + (char16_t)mIndex(v) * 28;
     }
 
     /// <summary>
-    /// ±ÛÀÚ+¹ŞÄ§
+    /// ê¸€ì+ë°›ì¹¨
     /// </summary>
     char16_t lpc(char16_t l, char16_t c) {
         return l + (char16_t)tIndex(c);
@@ -188,7 +188,7 @@ namespace onart {
                 else { st = hState::K; }
                 break;
             case hState::R:
-                if (typ == 1) { // ÀÚÀ½+ÀÚÀ½ ½Ãµµ
+                if (typ == 1) { // ììŒ+ììŒ ì‹œë„
                     char16_t nw = cpc(prev.top(), c);
                     if (nw == c) {
                         buf.top() = c;
@@ -202,7 +202,7 @@ namespace onart {
                         content[cursor] = nw;
                     }
                 }
-                else {  // ÀÚÀ½+¸ğÀ½
+                else {  // ììŒ+ëª¨ìŒ
                     char16_t nw = cpv(prev.top(), c);
                     buf.push(c);
                     prev.push(nw);
@@ -211,13 +211,13 @@ namespace onart {
                 }
                 break;
             case hState::K:
-                if (typ == 1) { // »õ·Î ÀÚÀ½
+                if (typ == 1) { // ìƒˆë¡œ ììŒ
                     buf.top() = c;
                     prev.top() = c;
                     content.insert(++cursor, 1, c);
                     st = hState::R;
                 }
-                else {  // ¸ğÀ½+¸ğÀ½ ½Ãµµ
+                else {  // ëª¨ìŒ+ëª¨ìŒ ì‹œë„
                     char16_t nw = vpv(prev.top(), c);
                     if (nw == c) {
                         buf.top() = c;
@@ -237,18 +237,18 @@ namespace onart {
                 clearBuffers();
                 buf.push(c);
                 prev.push(c);
-                if (typ == 1) st = hState::R;   // »õ·Î ÀÚÀ½
-                else st = hState::K;            // »õ·Î ¸ğÀ½
+                if (typ == 1) st = hState::R;   // ìƒˆë¡œ ììŒ
+                else st = hState::K;            // ìƒˆë¡œ ëª¨ìŒ
                 break;
             case hState::RT:
-                if (typ == 1) { // »õ·Î ÀÚÀ½
+                if (typ == 1) { // ìƒˆë¡œ ììŒ
                     clearBuffers();
                     buf.push(c);
                     prev.push(c);
                     content.insert(++cursor, 1, c);
                     st = hState::R;
                 }
-                else {  // µÚ ÀÚÀ½¿¡¼­ ÇÏ³ª ¶¼¼­ ÇÕÄ§
+                else {  // ë’¤ ììŒì—ì„œ í•˜ë‚˜ ë–¼ì„œ í•©ì¹¨
                     char16_t latter = buf.top(); buf.pop();
                     char16_t former = buf.top();
                     content[cursor++] = former;
@@ -263,7 +263,7 @@ namespace onart {
                 }
                 break;
             case hState::RK:
-                if (typ == 1) { // ¹ŞÄ§ ½Ãµµ
+                if (typ == 1) { // ë°›ì¹¨ ì‹œë„
                     if (tIndex(c) != NOTFOUND) {
                         clearBuffers();
                         buf.push(c);
@@ -278,9 +278,9 @@ namespace onart {
                         st = hState::RKR;
                     }
                 }
-                else {  // ¸ğÀ½ ÇÕÃ¼ ½Ãµµ
+                else {  // ëª¨ìŒ í•©ì²´ ì‹œë„
                     char16_t nw = vpv(buf.top(), c);
-                    if (nw == c) {  // ½ÇÆĞ
+                    if (nw == c) {  // ì‹¤íŒ¨
                         clearBuffers();
                         buf.push(c);
                         prev.push(c);
@@ -299,7 +299,7 @@ namespace onart {
                 }
                 break;
             case hState::RML:
-                if (typ == 1) { // ¹ŞÄ§ ½Ãµµ
+                if (typ == 1) { // ë°›ì¹¨ ì‹œë„
                     if (tIndex(c) != NOTFOUND) {
                         clearBuffers();
                         content.insert(++cursor, 1, c);
@@ -315,7 +315,7 @@ namespace onart {
                         st = hState::RMLR;
                     }
                 }
-                else {  // »õ·Î ¸ğÀ½
+                else {  // ìƒˆë¡œ ëª¨ìŒ
                     clearBuffers();
                     content.insert(++cursor, 1, c);
                     buf.push(c);
@@ -327,14 +327,14 @@ namespace onart {
                 if (typ == 1) {
                     char16_t fr = buf.top();
                     char16_t nw = cpc(fr, c);
-                    if (nw == c) {  // »õ·Î ÀÚÀ½
+                    if (nw == c) {  // ìƒˆë¡œ ììŒ
                         clearBuffers();
                         buf.push(c);
                         prev.push(c);
                         content.insert(++cursor, 1, c);
                         st = hState::R;
                     }
-                    else {  // ÀÚÀ½ ÇÕÄ§
+                    else {  // ììŒ í•©ì¹¨
                         char16_t former = prev.top(); prev.pop();
                         char16_t next = lpc(prev.top(), nw);
                         prev.push(former);
@@ -344,7 +344,7 @@ namespace onart {
                         st = hState::RKFR;
                     }
                 }
-                else {  // ¿¬À½
+                else {  // ì—°ìŒ
                     char16_t nc = buf.top();
                     char16_t next = cpv(nc, c);
                     prev.pop();
@@ -359,14 +359,14 @@ namespace onart {
                 }
                 break;
             case hState::RKFR:
-                if (typ == 1) { // »õ·Î ÀÚÀ½
+                if (typ == 1) { // ìƒˆë¡œ ììŒ
                     clearBuffers();
                     buf.push(c);
                     prev.push(c);
                     content.insert(++cursor, 1, c);
                     st = hState::R;
                 }
-                else {  // ¿¬À½
+                else {  // ì—°ìŒ
                     char16_t nc = buf.top();
                     char16_t next = cpv(nc, c);
                     prev.pop();
@@ -383,14 +383,14 @@ namespace onart {
             case hState::RMLR:
                 if (typ == 1) {
                     char16_t nw = cpc(buf.top(), c);
-                    if (nw == c) {  // »õ·Î ÀÚÀ½
+                    if (nw == c) {  // ìƒˆë¡œ ììŒ
                         clearBuffers();
                         buf.push(c);
                         prev.push(c);
                         content.insert(++cursor, 1, c);
                         st = hState::R;
                     }
-                    else {  // ÀÚÀ½+ÀÚÀ½
+                    else {  // ììŒ+ììŒ
                         char16_t former = prev.top(); prev.pop();
                         char16_t next = lpc(prev.top(), nw);
                         prev.push(former);
@@ -400,7 +400,7 @@ namespace onart {
                         st = hState::RMLFR;
                     }
                 }
-                else {  // ¿¬À½
+                else {  // ì—°ìŒ
                     char16_t nc = buf.top();
                     char16_t next = cpv(nc, c);
                     prev.pop();
@@ -415,14 +415,14 @@ namespace onart {
                 }
                 break;
             case hState::RMLFR:
-                if (typ == 1) { // »õ·Î ÀÚÀ½
+                if (typ == 1) { // ìƒˆë¡œ ììŒ
                     clearBuffers();
                     buf.push(c);
                     prev.push(c);
                     content.insert(++cursor, 1, c);
                     st = hState::R;
                 }
-                else {  // ¿¬À½
+                else {  // ì—°ìŒ
                     char16_t nc = buf.top();
                     char16_t next = cpv(nc, c);
                     prev.pop();

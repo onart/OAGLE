@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -18,8 +18,8 @@ namespace onart {
 	namespace Memory
 	{
 		/// <summary>
-		/// collect(false)¸¦ ÀûÀıÇÑ ¼ø¼­·Î È£ÃâÇÕ´Ï´Ù.
-		/// collect()µéÀº ¾ö¹ĞÈ÷ ¸»ÇØ garbage collectionÀº ¾Æ´Õ´Ï´Ù.
+		/// collect(false)ë¥¼ ì ì ˆí•œ ìˆœì„œë¡œ í˜¸ì¶œí•©ë‹ˆë‹¤.
+		/// collect()ë“¤ì€ ì—„ë°€íˆ ë§í•´ garbage collectionì€ ì•„ë‹™ë‹ˆë‹¤.
 		/// </summary>
 		inline void collect() {
 			Audio::Source::collect();

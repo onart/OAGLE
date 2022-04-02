@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -8,35 +8,35 @@
 #ifndef __OAGLE_SIMD_H__
 #define __OAGLE_SIMD_H__
 
-// º¤ÅÍ¿Í Çà·Ä ¿¬»ê ¾Æ·¡¿¡¼­ ÀÛµ¿ÇÏ±â À§ÇÑ SIMD ¶óÀÌºê·¯¸®ÀÔ´Ï´Ù. ÄÄÆÄÀÏ ½Ã »ç¿ëÇÏÁö ¾ÊÀ¸·Á¸é OAGLE_NOSIMD¸¦ Á¤ÀÇÇØ ÁÖ¼¼¿ä.
-// ÀÌ ÇÔ¼öµéÀº °æ°è °Ë»ç¸¦ ÇÏÁö ¾Ê½À´Ï´Ù. ÀÎµ¦½º [3]±îÁö »ç¿ëÇÏ¹Ç·Î, Segmentation fault ¹ß»ı¿¡ À¯ÀÇÇØ ÁÖ¼¼¿ä.
+// ë²¡í„°ì™€ í–‰ë ¬ ì—°ì‚° ì•„ë˜ì—ì„œ ì‘ë™í•˜ê¸° ìœ„í•œ SIMD ë¼ì´ë¸ŒëŸ¬ë¦¬ì…ë‹ˆë‹¤. ì»´íŒŒì¼ ì‹œ ì‚¬ìš©í•˜ì§€ ì•Šìœ¼ë ¤ë©´ OAGLE_NOSIMDë¥¼ ì •ì˜í•´ ì£¼ì„¸ìš”.
+// ì´ í•¨ìˆ˜ë“¤ì€ ê²½ê³„ ê²€ì‚¬ë¥¼ í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ì¸ë±ìŠ¤ [3]ê¹Œì§€ ì‚¬ìš©í•˜ë¯€ë¡œ, Segmentation fault ë°œìƒì— ìœ ì˜í•´ ì£¼ì„¸ìš”.
 
 #include <cstring>
 
 namespace onart {
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’</param>
 	template <class T>
 	inline void set4(T* vec, T val) {
 		vec[0] = val; vec[1] = val; vec[2] = val; vec[3] = val;
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’ë“¤</param>
 	template <class T>
 	inline void set4(T* vec, const T* val) {
 		vec[0] = val[0]; vec[1] = val[1]; vec[2] = val[2]; vec[3] = val[3];
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ ¿øÇÏ´Â ¸¸Å­ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ ì›í•˜ëŠ” ë§Œí¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
 	template<class T>
 	inline void setAll(T* vec, T val, size_t size) {
@@ -50,7 +50,7 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ ¿øÇÏ´Â ¸¸Å­ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù. memcpy()¸¦ ±×´ë·Î »ç¿ëÇÕ´Ï´Ù. ¸Å°³º¯¼ö size´Â ¹ÙÀÌÆ® ´ÜÀ§°¡ ¾Æ´Ñ ¿ø¼ÒÀÇ ¼öÀÓ¿¡ ÁÖÀÇÇÏ¼¼¿ä.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ ì›í•˜ëŠ” ë§Œí¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤. memcpy()ë¥¼ ê·¸ëŒ€ë¡œ ì‚¬ìš©í•©ë‹ˆë‹¤. ë§¤ê°œë³€ìˆ˜ sizeëŠ” ë°”ì´íŠ¸ ë‹¨ìœ„ê°€ ì•„ë‹Œ ì›ì†Œì˜ ìˆ˜ì„ì— ì£¼ì˜í•˜ì„¸ìš”.
 	/// </summary>
 	template<class T>
 	inline void setAll(T* vec, const T* val, size_t size) {
@@ -58,27 +58,27 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’</param>
 	template<class T>
 	inline void add4(T* vec, T val) {
 		vec[0] += val; vec[1] += val; vec[2] += val; vec[3] += val;
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’ë“¤</param>
 	template <class T>
 	inline void add4(T* vec, const T* val) {
 		vec[0] += val[0]; vec[1] += val[1]; vec[2] += val[2]; vec[3] += val[3];
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡ ¿øÇÏ´Â ¸¸Å­ ¿øÇÏ´Â °ªÀ» ´õÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì— ì›í•˜ëŠ” ë§Œí¼ ì›í•˜ëŠ” ê°’ì„ ë”í•©ë‹ˆë‹¤.
 	/// </summary>
 	template<class T>
 	inline void addAll(T* vec, T val, size_t size) {
@@ -92,11 +92,11 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡ ´Ù¸¥ ¹è¿­À» ´©ÀûÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì— ë‹¤ë¥¸ ë°°ì—´ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ªµé</param>
-	/// <param name="size">¹è¿­ Å©±â</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’ë“¤</param>
+	/// <param name="size">ë°°ì—´ í¬ê¸°</param>
 	template<class T>
 	inline void addAll(T* vec, const T* val, size_t size) {
 		size_t i = 4;
@@ -109,27 +109,27 @@ namespace onart {
 	}	
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec"> ¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ª</param>
+	/// <param name="vec"> ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’</param>
 	template<class T>
 	inline void sub4(T* vec, T val) {
 		vec[0] -= val; vec[1] -= val; vec[2] -= val; vec[3] -= val;
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’ë“¤</param>
 	template <class T>
 	inline void sub4(T* vec, const T* val) {
 		vec[0] -= val[0]; vec[1] -= val[1]; vec[2] -= val[2]; vec[3] -= val[3];
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ ¿øÇÏ´Â ¸¸Å­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ ì›í•˜ëŠ” ë§Œí¼ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
 	template<class T>
 	inline void subAll(T* vec, T val, size_t size) {
@@ -143,11 +143,11 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡¼­ ´Ù¸¥ ¹è¿­À» »®´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì—ì„œ ë‹¤ë¥¸ ë°°ì—´ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">»¬ °ªµé</param>
-	/// <param name="size">¹è¿­ Å©±â</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëº„ ê°’ë“¤</param>
+	/// <param name="size">ë°°ì—´ í¬ê¸°</param>
 	template<class T>
 	inline void subAll(T* vec, const T* val, size_t size) {
 		size_t i = 4;
@@ -160,27 +160,27 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’</param>
 	template<class T>
 	inline void mul4(T* vec, T val) {
 		vec[0] *= val; vec[1] *= val; vec[2] *= val; vec[3] *= val;
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’ë“¤</param>
 	template <class T>
 	inline void mul4(T* vec, const T* val) {
 		vec[0] *= val[0]; vec[1] *= val[1]; vec[2] *= val[2]; vec[3] *= val[3];
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡ ¿øÇÏ´Â ¸¸Å­ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì— ì›í•˜ëŠ” ë§Œí¼ ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
 	template<class T>
 	inline void mulAll(T* vec, T val, size_t size) {
@@ -194,11 +194,11 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­¿¡ ´Ù¸¥ ¹è¿­À» ¼ººĞº°·Î °öÇÕ´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì— ë‹¤ë¥¸ ë°°ì—´ì„ ì„±ë¶„ë³„ë¡œ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ªµé</param>
-	/// <param name="size">¹è¿­ Å©±â</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’ë“¤</param>
+	/// <param name="size">ë°°ì—´ í¬ê¸°</param>
 	template<class T>
 	inline void mulAll(T* vec, const T* val, size_t size) {
 		size_t i = 4;
@@ -211,27 +211,27 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­ÀÇ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ³ª´¯´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì˜ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ª´©´Â °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë‚˜ëˆ„ëŠ” ê°’</param>
 	template<class T>
 	inline void div4(T* vec, T val) {
 		vec[0] /= val; vec[1] /= val; vec[2] /= val; vec[3] /= val;
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­ÀÇ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ³ª´¯´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì˜ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ª´©´Â °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë‚˜ëˆ„ëŠ” ê°’ë“¤</param>
 	template <class T>
 	inline void div4(T* vec, const T* val) {
 		vec[0] /= val[0]; vec[1] /= val[1]; vec[2] /= val[2]; vec[3] /= val[3];
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­À» ¿øÇÏ´Â ¸¸Å­ ¿øÇÏ´Â °ªÀ¸·Î ³ª´¯´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì„ ì›í•˜ëŠ” ë§Œí¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
 	template<class T>
 	inline void divAll(T* vec, T val, size_t size) {
@@ -245,11 +245,11 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­À» ´Ù¸¥ ¹è¿­ÀÇ ¼ººĞº°·Î ³ª´¯´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì„ ë‹¤ë¥¸ ë°°ì—´ì˜ ì„±ë¶„ë³„ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ª´©´Â °ªµé</param>
-	/// <param name="size">¹è¿­ Å©±â</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë‚˜ëˆ„ëŠ” ê°’ë“¤</param>
+	/// <param name="size">ë°°ì—´ í¬ê¸°</param>
 	template<class T>
 	inline void divAll(T* vec, const T* val, size_t size) {
 		size_t i = 4;
@@ -262,7 +262,7 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// Æ¯Á¤ Å¸ÀÔÀÇ ¹è¿­ÀÇ 4°³ÀÇ °ªÀ» ÀÚ¸¨´Ï´Ù.
+	/// íŠ¹ì • íƒ€ì…ì˜ ë°°ì—´ì˜ 4ê°œì˜ ê°’ì„ ìë¦…ë‹ˆë‹¤.
 	/// </summary>
 	template <class T>
 	inline void clamp4(T* vec, T min, T max) {
@@ -291,10 +291,10 @@ namespace onart {
 	#include <cstdint>
 namespace onart {
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’</param>
 	template<>
 	inline void set4<float>(float* vec, float val) {
 		__m128 b = _mm_set_ps1(val);
@@ -302,10 +302,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’ë“¤</param>
 	template<>
 	inline void set4<float>(float* vec, const float* val) {
 		__m128 b = _mm_loadu_ps(val);
@@ -313,7 +313,7 @@ namespace onart {
 	}
 	
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­À» ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì„ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
 	template<>
 	inline void setAll<float>(float* vec, float val, size_t size) {
@@ -327,10 +327,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’</param>
 	template<>
 	inline void add4<float>(float* vec, float val) {
 		__m128 b = _mm_add_ps(_mm_loadu_ps(vec), _mm_set_ps1(val));
@@ -338,10 +338,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’ë“¤</param>
 	template<>
 	inline void add4<float>(float* vec, const float* val) {
 		__m128 b = _mm_add_ps(_mm_loadu_ps(vec), _mm_loadu_ps(val));
@@ -349,10 +349,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’</param>
 	template<>
 	inline void sub4<float>(float* vec, float val) {
 		__m128 b = _mm_sub_ps(_mm_loadu_ps(vec), _mm_set_ps1(val));
@@ -360,10 +360,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’ë“¤</param>
 	template<>
 	inline void sub4<float>(float* vec, const float* val) {
 		__m128 b = _mm_sub_ps(_mm_loadu_ps(vec), _mm_loadu_ps(val));
@@ -371,10 +371,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’</param>
 	template<>
 	inline void mul4<float>(float* vec, float val) {
 		__m128 b = _mm_mul_ps(_mm_loadu_ps(vec), _mm_set_ps1(val));
@@ -382,10 +382,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’ë“¤</param>
 	template<>
 	inline void mul4<float>(float* vec, const float* val) {
 		__m128 b = _mm_mul_ps(_mm_loadu_ps(vec), _mm_loadu_ps(val));
@@ -393,10 +393,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ³ª´¯´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ª´©´Â °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë‚˜ëˆ„ëŠ” ê°’</param>
 	template<>
 	inline void div4<float>(float* vec, float val) {
 		__m128 b = _mm_div_ps(_mm_loadu_ps(vec), _mm_set_ps1(val));
@@ -404,10 +404,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ³ª´¯´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ª´©´Â °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë‚˜ëˆ„ëŠ” ê°’ë“¤</param>
 	template<>
 	inline void div4<float>(float* vec, const float* val) {
 		__m128 b = _mm_div_ps(_mm_loadu_ps(vec), _mm_loadu_ps(val));
@@ -415,7 +415,7 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ ¾Õ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÀÚ¸¨´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ ì• 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ìë¦…ë‹ˆë‹¤.
 	/// </summary>
 	template<>
 	inline void clamp4<float>(float* vec, float min, float max) {
@@ -426,7 +426,7 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ½Ç¼ö ¹è¿­¿¡¼­ ¾Õ 4°³¿¡ ¾çÀÇ Á¦°ö±ÙÀ» ÃëÇÑ °ªÀ» ÀúÀåÇÕ´Ï´Ù. À½¼ö °Ë»ç´Â ÇÏÁö ¾Ê°í nanÀ¸·Î º¯ÇÕ´Ï´Ù.
+	/// ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ ì• 4ê°œì— ì–‘ì˜ ì œê³±ê·¼ì„ ì·¨í•œ ê°’ì„ ì €ì¥í•©ë‹ˆë‹¤. ìŒìˆ˜ ê²€ì‚¬ëŠ” í•˜ì§€ ì•Šê³  nanìœ¼ë¡œ ë³€í•©ë‹ˆë‹¤.
 	/// </summary>
 	inline void sqrt4(float* vec) {
 		__m128 m = _mm_loadu_ps(vec);
@@ -435,10 +435,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’</param>
 	template<>
 	inline void set4<double>(double* vec, double val) {
 		__m128d b = _mm_set1_pd(val);
@@ -447,10 +447,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’ë“¤</param>
 	template<>
 	inline void set4<double>(double* vec, const double* val) {
 		__m128d b = _mm_loadu_pd(val);
@@ -460,10 +460,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’</param>
 	template<>
 	inline void add4<double>(double* vec, double val) {
 		__m128d b = _mm_add_pd(_mm_loadu_pd(vec), _mm_set1_pd(val)); 
@@ -473,10 +473,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’ë“¤</param>
 	template<>
 	inline void add4<double>(double* vec, const double* val) {
 		__m128d b = _mm_add_pd(_mm_loadu_pd(vec), _mm_loadu_pd(val));
@@ -486,10 +486,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec"> ¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ª</param>
+	/// <param name="vec"> ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’</param>
 	template<>
 	inline void sub4<double>(double* vec, double val) {
 		__m128d b = _mm_sub_pd(_mm_loadu_pd(vec), _mm_set1_pd(val));
@@ -499,10 +499,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­¿¡¼­ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec"> ¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ªµé</param>
+	/// <param name="vec"> ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’ë“¤</param>
 	template<>
 	inline void sub4<double>(double* vec, const double* val) {
 		__m128d b = _mm_sub_pd(_mm_loadu_pd(vec), _mm_loadu_pd(val));
@@ -512,10 +512,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’</param>
 	template<>
 	inline void mul4<double>(double* vec, double val) {
 		__m128d b = _mm_mul_pd(_mm_loadu_pd(vec), _mm_set1_pd(val));
@@ -525,10 +525,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’ë“¤</param>
 	template<>
 	inline void mul4<double>(double* vec, const double* val) {
 		__m128d b = _mm_mul_pd(_mm_loadu_pd(vec), _mm_loadu_pd(val));
@@ -538,10 +538,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­ÀÇ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ³ª´¯´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì˜ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ª´©´Â °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë‚˜ëˆ„ëŠ” ê°’</param>
 	template<>
 	inline void div4<double>(double* vec, double val) {
 		__m128d b = _mm_div_pd(_mm_loadu_pd(vec), _mm_set1_pd(val));
@@ -551,10 +551,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­ÀÇ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ³ª´¯´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì˜ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ë‚˜ëˆ•ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ª´©´Â °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë‚˜ëˆ„ëŠ” ê°’ë“¤</param>
 	template<>
 	inline void div4<double>(double* vec, const double* val) {
 		__m128d b = _mm_div_pd(_mm_loadu_pd(vec), _mm_loadu_pd(val));
@@ -564,7 +564,7 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ÀÌÁß Á¤¹Ğµµ ½Ç¼ö ¹è¿­¿¡¼­ ¾Õ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÀÚ¸¨´Ï´Ù.
+	/// ì´ì¤‘ ì •ë°€ë„ ì‹¤ìˆ˜ ë°°ì—´ì—ì„œ ì• 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ìë¦…ë‹ˆë‹¤.
 	/// </summary>
 	template<>
 	inline void clamp4<double>(double* vec, double min, double max) {
@@ -578,10 +578,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’</param>
 	template<>
 	inline void set4<int32_t>(int32_t* vec, int32_t val) {
 		__m128i b = _mm_set1_epi32(val);
@@ -589,10 +589,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’ë“¤</param>
 	template<>
 	inline void set4<int32_t>(int32_t* vec, const int32_t* val) {
 		__m128i b = _mm_loadu_si128((__m128i*)val);
@@ -600,10 +600,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’</param>
 	template<>
 	inline void add4<int32_t>(int32_t* vec, int32_t val) {
 		__m128i b = _mm_add_epi32(_mm_loadu_si128((__m128i*)vec), _mm_set1_epi32(val));
@@ -611,10 +611,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’ë“¤</param>
 	template<>
 	inline void add4<int32_t>(int32_t* vec, const int32_t* val) {
 		__m128i b = _mm_add_epi32(_mm_loadu_si128((__m128i*)vec), _mm_loadu_si128((__m128i*)val));
@@ -622,10 +622,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­ÀÇ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec"> ¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ª</param>
+	/// <param name="vec"> ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’</param>
 	template<>
 	inline void sub4<int32_t>(int32_t* vec, int32_t val) {
 		__m128i b = _mm_sub_epi32(_mm_loadu_si128((__m128i*)vec), _mm_set1_epi32(val));
@@ -633,10 +633,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­ÀÇ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec"> ¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ªµé</param>
+	/// <param name="vec"> ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’ë“¤</param>
 	template<>
 	inline void sub4<int32_t>(int32_t* vec, const int32_t* val) {
 		__m128i b = _mm_sub_epi32(_mm_loadu_si128((__m128i*)vec), _mm_loadu_si128((__m128i*)val));
@@ -644,10 +644,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù. ´Ü, ÇÏÀ§ 16ºñÆ®³¢¸®¸¸ °öÇÏ¹Ç·Î ÁÖÀÇÇÏ¼¼¿ä.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤. ë‹¨, í•˜ìœ„ 16ë¹„íŠ¸ë¼ë¦¬ë§Œ ê³±í•˜ë¯€ë¡œ ì£¼ì˜í•˜ì„¸ìš”.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’</param>
 	template<>
 	inline void mul4<int32_t>(int32_t* vec, int32_t val) {
 		__m128i b = _mm_mullo_epi16(_mm_loadu_si128((__m128i*)vec), _mm_set1_epi32(val));
@@ -655,10 +655,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® Á¤¼ö ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù. ´Ü, ÇÏÀ§ 16ºñÆ®³¢¸®¸¸ °öÇÏ¹Ç·Î ÁÖÀÇÇÏ¼¼¿ä.
+	/// 32ë¹„íŠ¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤. ë‹¨, í•˜ìœ„ 16ë¹„íŠ¸ë¼ë¦¬ë§Œ ê³±í•˜ë¯€ë¡œ ì£¼ì˜í•˜ì„¸ìš”.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’ë“¤</param>
 	template<>
 	inline void mul4<int32_t>(int32_t* vec, const int32_t* val) {
 		__m128i b = _mm_mullo_epi16(_mm_loadu_si128((__m128i*)vec), _mm_loadu_si128((__m128i*)val));
@@ -672,10 +672,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’</param>
 	template<>
 	inline void set4<uint32_t>(uint32_t* vec, uint32_t val) {
 		__m128i b = _mm_set1_epi32(val);
@@ -683,10 +683,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­¿¡¼­ 4°³¸¦ ¿øÇÏ´Â °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì—ì„œ 4ê°œë¥¼ ì›í•˜ëŠ” ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">³ÖÀ» °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ë„£ì„ ê°’ë“¤</param>
 	template<>
 	inline void set4<uint32_t>(uint32_t* vec, const uint32_t* val) {
 		__m128i b = _mm_loadu_si128((__m128i*)val);
@@ -694,10 +694,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’</param>
 	template<>
 	inline void add4<uint32_t>(uint32_t* vec, uint32_t val) {
 		__m128i b = _mm_add_epi32(_mm_loadu_si128((__m128i*)vec), _mm_set1_epi32(val));
@@ -705,10 +705,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­¿¡ 4°³¿¡ ¿øÇÏ´Â °ªÀ» ´©ÀûÇÕ´Ï´Ù.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì— 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ëˆ„ì í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">´©ÀûÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ëˆ„ì í•  ê°’ë“¤</param>
 	template<>
 	inline void add4<uint32_t>(uint32_t* vec, const uint32_t* val) {
 		__m128i b = _mm_add_epi32(_mm_loadu_si128((__m128i*)vec), _mm_loadu_si128((__m128i*)val));
@@ -716,10 +716,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­ÀÇ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec"> ¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ª</param>
+	/// <param name="vec"> ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’</param>
 	template<>
 	inline void sub4<uint32_t>(uint32_t* vec, uint32_t val) {
 		__m128i b = _mm_sub_epi32(_mm_loadu_si128((__m128i*)vec), _mm_set1_epi32(val));
@@ -727,10 +727,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­ÀÇ 4°³¿¡¼­ ¿øÇÏ´Â °ªÀ» »®´Ï´Ù.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì—ì„œ ì›í•˜ëŠ” ê°’ì„ ëºë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="vec"> ¹è¿­</param>
-	/// <param name="val">°¨»êÇÒ °ªµé</param>
+	/// <param name="vec"> ë°°ì—´</param>
+	/// <param name="val">ê°ì‚°í•  ê°’ë“¤</param>
 	template<>
 	inline void sub4<uint32_t>(uint32_t* vec, const uint32_t* val) {
 		__m128i b = _mm_sub_epi32(_mm_loadu_si128((__m128i*)vec), _mm_loadu_si128((__m128i*)val));
@@ -738,10 +738,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù. ´Ü, ÇÏÀ§ 16ºñÆ®³¢¸®¸¸ °öÇÏ¹Ç·Î ÁÖÀÇÇÏ¼¼¿ä.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤. ë‹¨, í•˜ìœ„ 16ë¹„íŠ¸ë¼ë¦¬ë§Œ ê³±í•˜ë¯€ë¡œ ì£¼ì˜í•˜ì„¸ìš”.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ª</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’</param>
 	template<>
 	inline void mul4<uint32_t>(uint32_t* vec, uint32_t val) {
 		__m128i b = _mm_mullo_epi16(_mm_loadu_si128((__m128i*)vec), _mm_set1_epi32(val));
@@ -749,10 +749,10 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// 32ºñÆ® ºñºÎÈ£ Á¤¼ö ¹è¿­ÀÇ 4°³¿¡ ¿øÇÏ´Â °ªÀ» °öÇÕ´Ï´Ù. ´Ü, ÇÏÀ§ 16ºñÆ®³¢¸®¸¸ °öÇÏ¹Ç·Î ÁÖÀÇÇÏ¼¼¿ä.
+	/// 32ë¹„íŠ¸ ë¹„ë¶€í˜¸ ì •ìˆ˜ ë°°ì—´ì˜ 4ê°œì— ì›í•˜ëŠ” ê°’ì„ ê³±í•©ë‹ˆë‹¤. ë‹¨, í•˜ìœ„ 16ë¹„íŠ¸ë¼ë¦¬ë§Œ ê³±í•˜ë¯€ë¡œ ì£¼ì˜í•˜ì„¸ìš”.
 	/// </summary>
-	/// <param name="vec">¹è¿­</param>
-	/// <param name="val">°öÇÒ °ªµé</param>
+	/// <param name="vec">ë°°ì—´</param>
+	/// <param name="val">ê³±í•  ê°’ë“¤</param>
 	template<>
 	inline void mul4<uint32_t>(uint32_t* vec, const uint32_t* val) {
 		__m128i b = _mm_mullo_epi16(_mm_loadu_si128((__m128i*)vec), _mm_loadu_si128((__m128i*)val));

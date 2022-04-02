@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -18,111 +18,111 @@
 
 namespace onart {
 	/// <summary>
-	/// ÀÏºÎ ¹°¸® ¹ýÄ¢À» Àû¿ë¹Þ´Â ÁúÁ¡ÀÔ´Ï´Ù. Æ®·£½ºÆû¿¡ ¿îµ¿ ¹ýÄ¢À» Àû¿ëÇÏ´Â ÇüÅÂ°¡ µÇ´Âµ¥, ¼º´É»ó ·çÆ® Æ®·£½ºÆû¿¡¸¸ ºÎÂøÇÏ´Â °ÍÀ» °­ÇÏ°Ô ±ÇÀåÇÕ´Ï´Ù.
+	/// ì¼ë¶€ ë¬¼ë¦¬ ë²•ì¹™ì„ ì ìš©ë°›ëŠ” ì§ˆì ìž…ë‹ˆë‹¤. íŠ¸ëžœìŠ¤í¼ì— ìš´ë™ ë²•ì¹™ì„ ì ìš©í•˜ëŠ” í˜•íƒœê°€ ë˜ëŠ”ë°, ì„±ëŠ¥ìƒ ë£¨íŠ¸ íŠ¸ëžœìŠ¤í¼ì—ë§Œ ë¶€ì°©í•˜ëŠ” ê²ƒì„ ê°•í•˜ê²Œ ê¶Œìž¥í•©ë‹ˆë‹¤.
 	/// </summary>
 	class PointMass {
 	public:
 		/// <summary>
-		/// ÁúÁ¡À» »ý¼ºÇÕ´Ï´Ù.
+		/// ì§ˆì ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="tr">¹°¸®ÀûÀ¸·Î ¿òÁ÷ÀÌ°Ô ÇÒ Æ®·£½ºÆû °´Ã¼ÀÔ´Ï´Ù. nullÀÌ¸é ÀÇ¹Ì°¡ ¾øÀ¸¹Ç·Î ÂüÁ¶ÀÚ¸¦ »ç¿ëÇÕ´Ï´Ù.</param>
+		/// <param name="tr">ë¬¼ë¦¬ì ìœ¼ë¡œ ì›€ì§ì´ê²Œ í•  íŠ¸ëžœìŠ¤í¼ ê°ì²´ìž…ë‹ˆë‹¤. nullì´ë©´ ì˜ë¯¸ê°€ ì—†ìœ¼ë¯€ë¡œ ì°¸ì¡°ìžë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.</param>
 		PointMass(Transform& tr);
 		virtual ~PointMass();
 		/// <summary>
-		/// ¸Å ÇÁ·¹ÀÓ ¹°¸® ¹ýÄ¢À» Àû¿ëÇÕ´Ï´Ù.
+		/// ë§¤ í”„ë ˆìž„ ë¬¼ë¦¬ ë²•ì¹™ì„ ì ìš©í•©ë‹ˆë‹¤.
 		/// </summary>
 		void Update();
 		/// <summary>
-		/// ¸Å ÇÁ·¹ÀÓ ¹°¸® ¹ýÄ¢À» Àû¿ëÇÕ´Ï´Ù. ÀÌ°ÍÀº °³Ã¼ÀÇ ·ÎÄÃ ½Ã°£ Èå¸§À» À§ÇØ ÁØºñµÈ ÇÔ¼öÀÔ´Ï´Ù. ¸Å°³º¯¼ö°¡ ¾ø´Â Update()¿Í ÀÌ°Í Áß ÇÏ³ª¸¸À» ¼±ÅÃÇÕ´Ï´Ù.
+		/// ë§¤ í”„ë ˆìž„ ë¬¼ë¦¬ ë²•ì¹™ì„ ì ìš©í•©ë‹ˆë‹¤. ì´ê²ƒì€ ê°œì²´ì˜ ë¡œì»¬ ì‹œê°„ íë¦„ì„ ìœ„í•´ ì¤€ë¹„ëœ í•¨ìˆ˜ìž…ë‹ˆë‹¤. ë§¤ê°œë³€ìˆ˜ê°€ ì—†ëŠ” Update()ì™€ ì´ê²ƒ ì¤‘ í•˜ë‚˜ë§Œì„ ì„ íƒí•©ë‹ˆë‹¤.
 		/// </summary>
 		void Update(float dt);
 		/// <summary>
-		/// °³Ã¼¸¦ ¼ø°£ °¡¼Ó½ÃÅµ´Ï´Ù. ¼Óµµ º¯È­·®Àº Áú·®¿¡ ¹Ýºñ·ÊÇÕ´Ï´Ù.
-		/// Á¢ÃË ½Ã°£ µî¿¡ ºñ·ÊÇÏ´Â Áö¼ÓÀû Èû °¡ÇÏ±â´Â addForce ÇÔ¼ö¸¦ ÀÌ¿ëÇÏ¼¼¿ä.
+		/// ê°œì²´ë¥¼ ìˆœê°„ ê°€ì†ì‹œí‚µë‹ˆë‹¤. ì†ë„ ë³€í™”ëŸ‰ì€ ì§ˆëŸ‰ì— ë°˜ë¹„ë¡€í•©ë‹ˆë‹¤.
+		/// ì ‘ì´‰ ì‹œê°„ ë“±ì— ë¹„ë¡€í•˜ëŠ” ì§€ì†ì  íž˜ ê°€í•˜ê¸°ëŠ” addForce í•¨ìˆ˜ë¥¼ ì´ìš©í•˜ì„¸ìš”.
 		/// </summary>
 		void impulse(const vec3&);
 		/// <summary>
-		/// °³Ã¼¸¦ ¼ø°£ °¡¼Ó½ÃÅµ´Ï´Ù. ¼Óµµ º¯È­·®Àº Áú·®¿¡ °ü°è ¾øÀÌ ÁÖ¾îÁø ¸¸Å­ÀÔ´Ï´Ù.
-		/// Á¢ÃË ½Ã°£ µî¿¡ ºñ·ÊÇÏ´Â Áö¼ÓÀû Èû °¡ÇÏ±â´Â addForce ÇÔ¼ö¸¦ ÀÌ¿ëÇÏ¼¼¿ä.
+		/// ê°œì²´ë¥¼ ìˆœê°„ ê°€ì†ì‹œí‚µë‹ˆë‹¤. ì†ë„ ë³€í™”ëŸ‰ì€ ì§ˆëŸ‰ì— ê´€ê³„ ì—†ì´ ì£¼ì–´ì§„ ë§Œí¼ìž…ë‹ˆë‹¤.
+		/// ì ‘ì´‰ ì‹œê°„ ë“±ì— ë¹„ë¡€í•˜ëŠ” ì§€ì†ì  íž˜ ê°€í•˜ê¸°ëŠ” addForce í•¨ìˆ˜ë¥¼ ì´ìš©í•˜ì„¸ìš”.
 		/// </summary>
 		void accelerate(const vec3&);
 		/// <summary>
-		/// ÇöÀç ÇÁ·¹ÀÓ¿¡ ÈûÀ» °¡ÇÕ´Ï´Ù.
+		/// í˜„ìž¬ í”„ë ˆìž„ì— íž˜ì„ ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addForce(const vec3&);
 		/// <summary>
-		/// Áö¼ÓÀûÀ¸·Î ÈûÀ» °¡ÇÕ´Ï´Ù. °¡¼Óµµ´Â Áú·®¿¡ ¹Ýºñ·ÊÇÕ´Ï´Ù.
-		/// ÁÖ°í ÀÖ´ø ÈûÀ» ¾ø¾Ö·Á¸é µ¿ÀÏÇÑ ÇÔ¼ö¿¡ ¹Ý´ë ¹æÇâÀÇ º¤ÅÍ¸¦ ÁÖ¸é µË´Ï´Ù. Ç×·Â°ú °°ÀÌ »ó¼ö°¡ ¾Æ´Ñ Èû¿¡ ´ëÇØ¼­´Â Èû ¹ß»ý±â¸¦ »ç¿ëÇÕ´Ï´Ù.
+		/// ì§€ì†ì ìœ¼ë¡œ íž˜ì„ ê°€í•©ë‹ˆë‹¤. ê°€ì†ë„ëŠ” ì§ˆëŸ‰ì— ë°˜ë¹„ë¡€í•©ë‹ˆë‹¤.
+		/// ì£¼ê³  ìžˆë˜ íž˜ì„ ì—†ì• ë ¤ë©´ ë™ì¼í•œ í•¨ìˆ˜ì— ë°˜ëŒ€ ë°©í–¥ì˜ ë²¡í„°ë¥¼ ì£¼ë©´ ë©ë‹ˆë‹¤. í•­ë ¥ê³¼ ê°™ì´ ìƒìˆ˜ê°€ ì•„ë‹Œ íž˜ì— ëŒ€í•´ì„œëŠ” íž˜ ë°œìƒê¸°ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addConstantForce(const vec3&);
 		/// <summary>
-		/// Áö¼ÓÀûÀ¸·Î ÈûÀ» °¡ÇÕ´Ï´Ù. °¡¼Óµµ´Â Áú·®¿¡ °ü°è ¾øÀÌ ÁÖ¾îÁø ¸¸Å­ÀÔ´Ï´Ù. ¿¹¸¦ µé¾î Áß·ÂÀ» ÀÌ·¸°Ô Àû¿ëÇÕ´Ï´Ù.
-		/// ÁÖ°í ÀÖ´ø ÈûÀ» ¾ø¾Ö·Á¸é µ¿ÀÏÇÑ ÇÔ¼ö¿¡ ¹Ý´ë ¹æÇâÀÇ º¤ÅÍ¸¦ ÁÖ¸é µË´Ï´Ù.
+		/// ì§€ì†ì ìœ¼ë¡œ íž˜ì„ ê°€í•©ë‹ˆë‹¤. ê°€ì†ë„ëŠ” ì§ˆëŸ‰ì— ê´€ê³„ ì—†ì´ ì£¼ì–´ì§„ ë§Œí¼ìž…ë‹ˆë‹¤. ì˜ˆë¥¼ ë“¤ì–´ ì¤‘ë ¥ì„ ì´ë ‡ê²Œ ì ìš©í•©ë‹ˆë‹¤.
+		/// ì£¼ê³  ìžˆë˜ íž˜ì„ ì—†ì• ë ¤ë©´ ë™ì¼í•œ í•¨ìˆ˜ì— ë°˜ëŒ€ ë°©í–¥ì˜ ë²¡í„°ë¥¼ ì£¼ë©´ ë©ë‹ˆë‹¤.
 		/// </summary>
 		void addAbsoluteForce(const vec3&);
 		/// <summary>
-		/// ÇöÀç ÇÁ·¹ÀÓÀÇ °¡¼Óµµ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// í˜„ìž¬ í”„ë ˆìž„ì˜ ê°€ì†ë„ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		/// <returns></returns>
 		vec3 getAcceleration();
 		/// <summary>
-		/// ¼Óµµ¸¦ °­Á¦·Î ÁöÁ¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ê°•ì œë¡œ ì§€ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setVelocity(const vec3& v) { velocity = v; }
 		/// <summary>
-		/// xÃà ¼Óµµ¸¦ °­Á¦·Î ÁöÁ¤ÇÕ´Ï´Ù.
+		/// xì¶• ì†ë„ë¥¼ ê°•ì œë¡œ ì§€ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setVelocityX(float x) { velocity.x = x; }
 		/// <summary>
-		/// yÃà ¼Óµµ¸¦ °­Á¦·Î ÁöÁ¤ÇÕ´Ï´Ù.
+		/// yì¶• ì†ë„ë¥¼ ê°•ì œë¡œ ì§€ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setVelocityY(float y) { velocity.y = y; }
 		/// <summary>
-		/// zÃà ¼Óµµ¸¦ °­Á¦·Î ÁöÁ¤ÇÕ´Ï´Ù.
+		/// zì¶• ì†ë„ë¥¼ ê°•ì œë¡œ ì§€ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setVelocityZ(float z) { velocity.z = z; }
 		/// <summary>
-		/// ÇöÀç ¼Óµµ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// í˜„ìž¬ ì†ë„ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getVelocity() const { return velocity; }
 		/// <summary>
-		/// ¿ªÁú·®À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì—­ì§ˆëŸ‰ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float getInverseMass() const { return inverseMass; }
 		/// <summary>
-		/// ÇöÀç À§Ä¡¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// í˜„ìž¬ ìœ„ì¹˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getPosition() { return tr.getGlobalPosition(); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setPosition(const vec3& p) { tr.setPosition(p); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç xÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ xì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setPositionX(float x) { tr.setPositionX(x); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç yÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ yì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setPositionY(float y) { tr.setPositionY(y); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç zÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ zì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setPositionZ(float z) { tr.setPositionZ(z); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç À§Ä¡¸¦ °­Á¦·Î º¯È­½ÃÅµ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ë³€í™”ì‹œí‚µë‹ˆë‹¤.
 		/// </summary>
 		inline void addPosition(const vec3& p) { tr.addPosition(p); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç xÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ xì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addPositionX(float x) { tr.addPositionX(x); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç yÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ yì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addPositionY(float y) { tr.addPositionY(y); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç zÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ zì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addPositionZ(float z) { tr.addPositionZ(z); }
 	protected:
@@ -136,98 +136,98 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// ÀÏºÎ ¹°¸® ¹ýÄ¢À» Àû¿ë¹Þ´Â ÁúÁ¡ÀÔ´Ï´Ù. Æ®·£½ºÆû¿¡ ¿îµ¿ ¹ýÄ¢À» Àû¿ëÇÏ´Â ÇüÅÂ°¡ µÇ´Âµ¥, ¼º´É»ó ·çÆ® Æ®·£½ºÆû¿¡¸¸ ºÎÂøÇÏ´Â °ÍÀ» °­ÇÏ°Ô ±ÇÀåÇÕ´Ï´Ù.
+	/// ì¼ë¶€ ë¬¼ë¦¬ ë²•ì¹™ì„ ì ìš©ë°›ëŠ” ì§ˆì ìž…ë‹ˆë‹¤. íŠ¸ëžœìŠ¤í¼ì— ìš´ë™ ë²•ì¹™ì„ ì ìš©í•˜ëŠ” í˜•íƒœê°€ ë˜ëŠ”ë°, ì„±ëŠ¥ìƒ ë£¨íŠ¸ íŠ¸ëžœìŠ¤í¼ì—ë§Œ ë¶€ì°©í•˜ëŠ” ê²ƒì„ ê°•í•˜ê²Œ ê¶Œìž¥í•©ë‹ˆë‹¤.
 	/// </summary>
 	class PointMass2D {
 	public:
 		/// <summary>
-		/// ÁúÁ¡À» »ý¼ºÇÕ´Ï´Ù.
+		/// ì§ˆì ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="tr">¹°¸®ÀûÀ¸·Î ¿òÁ÷ÀÌ°Ô ÇÒ Æ®·£½ºÆû °´Ã¼ÀÔ´Ï´Ù. nullÀÌ¸é ÀÇ¹Ì°¡ ¾øÀ¸¹Ç·Î ÂüÁ¶ÀÚ¸¦ »ç¿ëÇÕ´Ï´Ù.</param>
+		/// <param name="tr">ë¬¼ë¦¬ì ìœ¼ë¡œ ì›€ì§ì´ê²Œ í•  íŠ¸ëžœìŠ¤í¼ ê°ì²´ìž…ë‹ˆë‹¤. nullì´ë©´ ì˜ë¯¸ê°€ ì—†ìœ¼ë¯€ë¡œ ì°¸ì¡°ìžë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.</param>
 		PointMass2D(Transform& tr);
 		virtual ~PointMass2D();
 		/// <summary>
-		/// ¸Å ÇÁ·¹ÀÓ ¹°¸® ¹ýÄ¢À» Àû¿ëÇÕ´Ï´Ù.
+		/// ë§¤ í”„ë ˆìž„ ë¬¼ë¦¬ ë²•ì¹™ì„ ì ìš©í•©ë‹ˆë‹¤.
 		/// </summary>
 		void Update();
 		/// <summary>
-		/// ¸Å ÇÁ·¹ÀÓ ¹°¸® ¹ýÄ¢À» Àû¿ëÇÕ´Ï´Ù. ÀÌ°ÍÀº °³Ã¼ÀÇ ·ÎÄÃ ½Ã°£ Èå¸§À» À§ÇØ ÁØºñµÈ ÇÔ¼öÀÔ´Ï´Ù. ¸Å°³º¯¼ö°¡ ¾ø´Â Update()¿Í ÀÌ°Í Áß ÇÏ³ª¸¸À» ¼±ÅÃÇÕ´Ï´Ù.
+		/// ë§¤ í”„ë ˆìž„ ë¬¼ë¦¬ ë²•ì¹™ì„ ì ìš©í•©ë‹ˆë‹¤. ì´ê²ƒì€ ê°œì²´ì˜ ë¡œì»¬ ì‹œê°„ íë¦„ì„ ìœ„í•´ ì¤€ë¹„ëœ í•¨ìˆ˜ìž…ë‹ˆë‹¤. ë§¤ê°œë³€ìˆ˜ê°€ ì—†ëŠ” Update()ì™€ ì´ê²ƒ ì¤‘ í•˜ë‚˜ë§Œì„ ì„ íƒí•©ë‹ˆë‹¤.
 		/// </summary>
 		void Update(float dt);
 		/// <summary>
-		/// °³Ã¼¸¦ ¼ø°£ °¡¼Ó½ÃÅµ´Ï´Ù. ¼Óµµ º¯È­·®Àº Áú·®¿¡ ¹Ýºñ·ÊÇÕ´Ï´Ù.
-		/// Á¢ÃË ½Ã°£ µî¿¡ ºñ·ÊÇÏ´Â Áö¼ÓÀû Èû °¡ÇÏ±â´Â addForce ÇÔ¼ö¸¦ ÀÌ¿ëÇÏ¼¼¿ä.
+		/// ê°œì²´ë¥¼ ìˆœê°„ ê°€ì†ì‹œí‚µë‹ˆë‹¤. ì†ë„ ë³€í™”ëŸ‰ì€ ì§ˆëŸ‰ì— ë°˜ë¹„ë¡€í•©ë‹ˆë‹¤.
+		/// ì ‘ì´‰ ì‹œê°„ ë“±ì— ë¹„ë¡€í•˜ëŠ” ì§€ì†ì  íž˜ ê°€í•˜ê¸°ëŠ” addForce í•¨ìˆ˜ë¥¼ ì´ìš©í•˜ì„¸ìš”.
 		/// </summary>
 		void impulse(const vec2&);
 		/// <summary>
-		/// °³Ã¼¸¦ ¼ø°£ °¡¼Ó½ÃÅµ´Ï´Ù. ¼Óµµ º¯È­·®Àº Áú·®¿¡ °ü°è ¾øÀÌ ÁÖ¾îÁø ¸¸Å­ÀÔ´Ï´Ù.
-		/// Á¢ÃË ½Ã°£ µî¿¡ ºñ·ÊÇÏ´Â Áö¼ÓÀû Èû °¡ÇÏ±â´Â addForce ÇÔ¼ö¸¦ ÀÌ¿ëÇÏ¼¼¿ä.
+		/// ê°œì²´ë¥¼ ìˆœê°„ ê°€ì†ì‹œí‚µë‹ˆë‹¤. ì†ë„ ë³€í™”ëŸ‰ì€ ì§ˆëŸ‰ì— ê´€ê³„ ì—†ì´ ì£¼ì–´ì§„ ë§Œí¼ìž…ë‹ˆë‹¤.
+		/// ì ‘ì´‰ ì‹œê°„ ë“±ì— ë¹„ë¡€í•˜ëŠ” ì§€ì†ì  íž˜ ê°€í•˜ê¸°ëŠ” addForce í•¨ìˆ˜ë¥¼ ì´ìš©í•˜ì„¸ìš”.
 		/// </summary>
 		void accelerate(const vec2&);
 		/// <summary>
-		/// ÇöÀç ÇÁ·¹ÀÓ¿¡ ÈûÀ» °¡ÇÕ´Ï´Ù.
+		/// í˜„ìž¬ í”„ë ˆìž„ì— íž˜ì„ ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addForce(const vec2&);
 		/// <summary>
-		/// Áö¼ÓÀûÀ¸·Î ÈûÀ» °¡ÇÕ´Ï´Ù. °¡¼Óµµ´Â Áú·®¿¡ ¹Ýºñ·ÊÇÕ´Ï´Ù.
-		/// ÁÖ°í ÀÖ´ø ÈûÀ» ¾ø¾Ö·Á¸é µ¿ÀÏÇÑ ÇÔ¼ö¿¡ ¹Ý´ë ¹æÇâÀÇ º¤ÅÍ¸¦ ÁÖ¸é µË´Ï´Ù. Ç×·Â°ú °°ÀÌ »ó¼ö°¡ ¾Æ´Ñ Èû¿¡ ´ëÇØ¼­´Â Èû ¹ß»ý±â¸¦ »ç¿ëÇÕ´Ï´Ù.
+		/// ì§€ì†ì ìœ¼ë¡œ íž˜ì„ ê°€í•©ë‹ˆë‹¤. ê°€ì†ë„ëŠ” ì§ˆëŸ‰ì— ë°˜ë¹„ë¡€í•©ë‹ˆë‹¤.
+		/// ì£¼ê³  ìžˆë˜ íž˜ì„ ì—†ì• ë ¤ë©´ ë™ì¼í•œ í•¨ìˆ˜ì— ë°˜ëŒ€ ë°©í–¥ì˜ ë²¡í„°ë¥¼ ì£¼ë©´ ë©ë‹ˆë‹¤. í•­ë ¥ê³¼ ê°™ì´ ìƒìˆ˜ê°€ ì•„ë‹Œ íž˜ì— ëŒ€í•´ì„œëŠ” íž˜ ë°œìƒê¸°ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addConstantForce(const vec2&);
 		/// <summary>
-		/// Áö¼ÓÀûÀ¸·Î ÈûÀ» °¡ÇÕ´Ï´Ù. °¡¼Óµµ´Â Áú·®¿¡ °ü°è ¾øÀÌ ÁÖ¾îÁø ¸¸Å­ÀÔ´Ï´Ù. ¿¹¸¦ µé¾î Áß·ÂÀ» ÀÌ·¸°Ô Àû¿ëÇÕ´Ï´Ù.
-		/// ÁÖ°í ÀÖ´ø ÈûÀ» ¾ø¾Ö·Á¸é µ¿ÀÏÇÑ ÇÔ¼ö¿¡ ¹Ý´ë ¹æÇâÀÇ º¤ÅÍ¸¦ ÁÖ¸é µË´Ï´Ù.
+		/// ì§€ì†ì ìœ¼ë¡œ íž˜ì„ ê°€í•©ë‹ˆë‹¤. ê°€ì†ë„ëŠ” ì§ˆëŸ‰ì— ê´€ê³„ ì—†ì´ ì£¼ì–´ì§„ ë§Œí¼ìž…ë‹ˆë‹¤. ì˜ˆë¥¼ ë“¤ì–´ ì¤‘ë ¥ì„ ì´ë ‡ê²Œ ì ìš©í•©ë‹ˆë‹¤.
+		/// ì£¼ê³  ìžˆë˜ íž˜ì„ ì—†ì• ë ¤ë©´ ë™ì¼í•œ í•¨ìˆ˜ì— ë°˜ëŒ€ ë°©í–¥ì˜ ë²¡í„°ë¥¼ ì£¼ë©´ ë©ë‹ˆë‹¤.
 		/// </summary>
 		void addAbsoluteForce(const vec2&);
 		/// <summary>
-		/// ÇöÀç ÇÁ·¹ÀÓÀÇ °¡¼Óµµ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// í˜„ìž¬ í”„ë ˆìž„ì˜ ê°€ì†ë„ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		vec2 getAcceleration();
 		/// <summary>
-		/// ¼Óµµ¸¦ °­Á¦·Î ÁöÁ¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ê°•ì œë¡œ ì§€ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setVelocity(const vec2& v) { velocity = v; }
 		/// <summary>
-		/// xÃà ¼Óµµ¸¦ °­Á¦·Î ÁöÁ¤ÇÕ´Ï´Ù.
+		/// xì¶• ì†ë„ë¥¼ ê°•ì œë¡œ ì§€ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setVelocityX(float x) { velocity.x = x; }
 		/// <summary>
-		/// yÃà ¼Óµµ¸¦ °­Á¦·Î ÁöÁ¤ÇÕ´Ï´Ù.
+		/// yì¶• ì†ë„ë¥¼ ê°•ì œë¡œ ì§€ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setVelocityY(float y) { velocity.y = y; }
 		/// <summary>
-		/// ÇöÀç ¼Óµµ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// í˜„ìž¬ ì†ë„ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec2& getVelocity() const { return velocity; }
 		/// <summary>
-		/// ¿ªÁú·®À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì—­ì§ˆëŸ‰ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float getInverseMass() const { return inverseMass; }
 		/// <summary>
-		/// ÇöÀç À§Ä¡¸¦ ¸®ÅÏÇÕ´Ï´Ù. 2DÁö¸¸ vec3 Å¸ÀÔÀÔ´Ï´Ù.
+		/// í˜„ìž¬ ìœ„ì¹˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. 2Dì§€ë§Œ vec3 íƒ€ìž…ìž…ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getPosition() const { return tr.getGlobalPosition(); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setPosition(const vec2& p) { tr.setPosition(p); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç xÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ xì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setPositionX(float x) { tr.setPositionX(x); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç yÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ yì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setPositionY(float y) { tr.setPositionY(y); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç À§Ä¡¸¦ °­Á¦·Î º¯È­½ÃÅµ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ë³€í™”ì‹œí‚µë‹ˆë‹¤.
 		/// </summary>
 		inline void addPosition(const vec3& p) { tr.addPosition(p); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç xÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ xì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addPositionX(float x) { tr.addPositionX(x); }
 		/// <summary>
-		/// ¼Óµµ¸¦ À¯ÁöÇÑ Ã¤·Î ÇöÀç yÃà À§Ä¡¸¦ °­Á¦·Î ¼³Á¤ÇÕ´Ï´Ù.
+		/// ì†ë„ë¥¼ ìœ ì§€í•œ ì±„ë¡œ í˜„ìž¬ yì¶• ìœ„ì¹˜ë¥¼ ê°•ì œë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addPositionY(float y) { tr.addPositionY(y); }
 	protected:

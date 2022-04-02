@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -44,7 +44,7 @@ extern "C" {
 #include <mutex>
 #include <condition_variable>
 
-/// ÀÌÂÊ »ó¼öµéÀº portaudio ¶óÀÌºê·¯¸®¿¡¼­ ´ÜÀÏ ½ºÆ®¸²À» »ç¿ëÇÏ±â À§ÇØ ¸®»ùÇÃÇÒ ±âÁØÀÌ µË´Ï´Ù. ¿©±â ÀÖ´Â ÀÎÀÚµéÀ» ¹Ù²Ù´Â °æ¿ì ¹öÆÛ¸µ ½Ã ¿¬»êµµ ¹Ù²ã¾ß ÇÕ´Ï´Ù. (»ı°¢º¸´Ù º¹Àâ)
+/// ì´ìª½ ìƒìˆ˜ë“¤ì€ portaudio ë¼ì´ë¸ŒëŸ¬ë¦¬ì—ì„œ ë‹¨ì¼ ìŠ¤íŠ¸ë¦¼ì„ ì‚¬ìš©í•˜ê¸° ìœ„í•´ ë¦¬ìƒ˜í”Œí•  ê¸°ì¤€ì´ ë©ë‹ˆë‹¤. ì—¬ê¸° ìˆëŠ” ì¸ìë“¤ì„ ë°”ê¾¸ëŠ” ê²½ìš° ë²„í¼ë§ ì‹œ ì—°ì‚°ë„ ë°”ê¿”ì•¼ í•©ë‹ˆë‹¤. (ìƒê°ë³´ë‹¤ ë³µì¡)
 constexpr int FF_RESAMPLE_FORMAT = AVSampleFormat::AV_SAMPLE_FMT_FLT;
 constexpr int PA_SAMPLE_FORMAT = paFloat32;
 constexpr int STD_CHANNEL_COUNT = 2;
@@ -63,8 +63,8 @@ namespace onart {
 	const int& Audio::Stream::activeCount = Audio::Stream::activeStreamCount;
 	bool Audio::noup = true;
 
-	static std::condition_variable aCV, iCV;	// aCV: ¿Àµğ¿À ¾÷µ¥ÀÌÆ® Á¶°Çº¯¼ö, iCV: ¿Àµğ¿À ÀÎÅÍ·´Æ® Á¶°Çº¯¼ö
-	static std::mutex audioMutex, interMutex;	// audioMutex: ¿Àµğ¿À ¾÷µ¥ÀÌÆ® ¹ÂÅØ½º, interMutex: ¿Àµğ¿À ÀÎÅÍ·´Æ® ¹ÂÅØ½º
+	static std::condition_variable aCV, iCV;	// aCV: ì˜¤ë””ì˜¤ ì—…ë°ì´íŠ¸ ì¡°ê±´ë³€ìˆ˜, iCV: ì˜¤ë””ì˜¤ ì¸í„°ëŸ½íŠ¸ ì¡°ê±´ë³€ìˆ˜
+	static std::mutex audioMutex, interMutex;	// audioMutex: ì˜¤ë””ì˜¤ ì—…ë°ì´íŠ¸ ë®¤í…ìŠ¤, interMutex: ì˜¤ë””ì˜¤ ì¸í„°ëŸ½íŠ¸ ë®¤í…ìŠ¤
 	bool Audio::wait = false;
 
 	static class RingBuffer {
@@ -74,10 +74,10 @@ namespace onart {
 		void addComplete();
 		void read(void* out, unsigned long count);
 	private:
-		STD_SAMPLE_FORMAT body[RINGBUFFER_SIZE] = { 0, };	// ¾à 6ÇÁ·¹ÀÓ ºĞ·®
-		unsigned long readIndex = 0;	// Äİ¹é¿¡¼­ ÀĞ´Â ±âÁØ
-		unsigned long limitIndex = 0;	// ¾²±â Á¦ÇÑ ±âÁØ
-		unsigned long writeIndex = 0;	// ¾²±â ½ÃÀÛÁ¡
+		STD_SAMPLE_FORMAT body[RINGBUFFER_SIZE] = { 0, };	// ì•½ 6í”„ë ˆì„ ë¶„ëŸ‰
+		unsigned long readIndex = 0;	// ì½œë°±ì—ì„œ ì½ëŠ” ê¸°ì¤€
+		unsigned long limitIndex = 0;	// ì“°ê¸° ì œí•œ ê¸°ì¤€
+		unsigned long writeIndex = 0;	// ì“°ê¸° ì‹œì‘ì 
 		bool isFirst = true;
 	} ringBuffer;
 
@@ -91,7 +91,7 @@ namespace onart {
 		}
 	}
 
-	void RingBuffer::addComplete() {	// +-1·Î ÀÚ¸£°í ÀÎµ¦½º ¸ÂÃã
+	void RingBuffer::addComplete() {	// +-1ë¡œ ìë¥´ê³  ì¸ë±ìŠ¤ ë§ì¶¤
 		isFirst = true;
 		if (limitIndex == writeIndex) return;
 		if (limitIndex > writeIndex) {
@@ -155,7 +155,7 @@ namespace onart {
 	}
 
 	/// <summary>
-	/// ffmpegÀÌ wav ÆÄÀÏÀ» ¸¸³ª¸é ÀÚµ¿À¸·Î ¾È ÇØ ÁÖ±æ·¡ µû·Î Ãß°¡
+	/// ffmpegì´ wav íŒŒì¼ì„ ë§Œë‚˜ë©´ ìë™ìœ¼ë¡œ ì•ˆ í•´ ì£¼ê¸¸ë˜ ë”°ë¡œ ì¶”ê°€
 	/// </summary>
 	union WavFile {
 		char header[44];
@@ -185,26 +185,26 @@ namespace onart {
 	void Audio::init() {
 		PaError err = Pa_Initialize();
 		if (err != PaErrorCode::paNoError) {
-			fprintf(stderr, "\n¿Àµğ¿À ÃÊ±âÈ­¿¡ ½ÇÆĞÇß½À´Ï´Ù.\n%s\n", Pa_GetErrorText(err));
+			fprintf(stderr, "\nì˜¤ë””ì˜¤ ì´ˆê¸°í™”ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
 		err = Pa_OpenDefaultStream(&masterStream, 0, 2, PA_SAMPLE_FORMAT, STD_SAMPLE_RATE, paFramesPerBufferUnspecified, Audio::playCallback, nullptr);
 		if (err != PaErrorCode::paNoError) {
-			fprintf(stderr, "\n¿Àµğ¿À ½ºÆ®¸² ÃÊ±âÈ­¿¡ ½ÇÆĞÇß½À´Ï´Ù.\n%s\n", Pa_GetErrorText(err));
+			fprintf(stderr, "\nì˜¤ë””ì˜¤ ìŠ¤íŠ¸ë¦¼ ì´ˆê¸°í™”ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
 		
 		err = Pa_StartStream(masterStream);
 		if (err != PaErrorCode::paNoError) {
-			fprintf(stderr, "\n¿Àµğ¿À ½ºÆ®¸² ½ÃÀÛ¿¡ ½ÇÆĞÇß½À´Ï´Ù.\n%s\n", Pa_GetErrorText(err));
+			fprintf(stderr, "\nì˜¤ë””ì˜¤ ìŠ¤íŠ¸ë¦¼ ì‹œì‘ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n%s\n", Pa_GetErrorText(err));
 			return;
 		}
 #ifndef _DEBUG
-		av_log_set_level(AV_LOG_QUIET);	// ¾î¶² ÀÌÀ¯µç ffmpeg ¶óÀÌºê·¯¸®ÀÇ ·Î±×¸¦ º¸·Á¸é µğ¹ö±× ¸ğµå·Î ÄÄÆÄÀÏÇÏ°Å³ª, ÀÌ ÁÙÀ» ÁÖ¼®Ã³¸®ÇÏ¸é µË´Ï´Ù.
+		av_log_set_level(AV_LOG_QUIET);	// ì–´ë–¤ ì´ìœ ë“  ffmpeg ë¼ì´ë¸ŒëŸ¬ë¦¬ì˜ ë¡œê·¸ë¥¼ ë³´ë ¤ë©´ ë””ë²„ê·¸ ëª¨ë“œë¡œ ì»´íŒŒì¼í•˜ê±°ë‚˜, ì´ ì¤„ì„ ì£¼ì„ì²˜ë¦¬í•˜ë©´ ë©ë‹ˆë‹¤.
 #endif // !_DEBUG
 		if constexpr (!OA_AUDIO_NOTHREAD) {
 			std::thread aud(audioThread);
-			aud.detach();	// µ¥¸ó½º·¹µå
+			aud.detach();	// ë°ëª¬ìŠ¤ë ˆë“œ
 		}
 		system("cls");
 	}
@@ -241,7 +241,7 @@ namespace onart {
 	int Audio::Source::MemorySource::request(int req, unsigned char* buf) {
 		if (size <= cursor) return AVERROR_EOF;
 		uint64_t nextCursor = cursor + (uint64_t)req;
-		if (nextCursor < cursor) {	// ¿À¹öÇÃ·Î
+		if (nextCursor < cursor) {	// ì˜¤ë²„í”Œë¡œ
 			return -1;
 		}
 		else if (nextCursor > size) {
@@ -260,7 +260,7 @@ namespace onart {
 			cursor = (uint64_t)pos;
 			break;
 		case SEEK_CUR:
-			cursor += (uint64_t)pos;	// int¿Í uint´Â Ç¥Çö ¹× ´õÇÏ´Â ¹æ½ÄÀÌ °°À½
+			cursor += (uint64_t)pos;	// intì™€ uintëŠ” í‘œí˜„ ë° ë”í•˜ëŠ” ë°©ì‹ì´ ê°™ìŒ
 			break;
 		case SEEK_END:
 			cursor = size + (uint64_t)pos;
@@ -295,7 +295,7 @@ namespace onart {
 		fmt->pb = ioContext;
 		fmt->flags |= AVFMT_FLAG_CUSTOM_IO;
 		if (avformat_open_input(&fmt, "", nullptr, nullptr) < 0) {
-			fprintf(stderr, "µğ¸ÖÆ¼ÇÃ·º½Ì¿¡ ½ÇÆĞÇß½À´Ï´Ù. ÆÄÀÏÀ» ´Ù½Ã Á¡°ËÇØ ÁÖ¼¼¿ä.\n");
+			fprintf(stderr, "ë””ë©€í‹°í”Œë ‰ì‹±ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. íŒŒì¼ì„ ë‹¤ì‹œ ì ê²€í•´ ì£¼ì„¸ìš”.\n");
 			av_free(ioContext);
 			delete msrc;
 			
@@ -314,7 +314,7 @@ namespace onart {
 
 		AVSampleFormat inputFormat = cctx->sample_fmt;
 		if (inputFormat < AVSampleFormat::AV_SAMPLE_FMT_U8 || inputFormat > AVSampleFormat::AV_SAMPLE_FMT_S64P) {
-			fprintf(stderr, "Áö¿øÇÏÁö ¾Ê´Â »ùÇÃ Çü½ÄÀÔ´Ï´Ù. ÆÄÀÏÀ» º¯È¯ÇÏ´Â °ÍÀ» °í·ÁÇØ ÁÖ¼¼¿ä.\n");
+			fprintf(stderr, "ì§€ì›í•˜ì§€ ì•ŠëŠ” ìƒ˜í”Œ í˜•ì‹ì…ë‹ˆë‹¤. íŒŒì¼ì„ ë³€í™˜í•˜ëŠ” ê²ƒì„ ê³ ë ¤í•´ ì£¼ì„¸ìš”.\n");
 			avformat_close_input(&fmt);
 			return nullptr;
 		}
@@ -370,7 +370,7 @@ namespace onart {
 			) {
 			resampler = swr_alloc_set_opts(nullptr, AV_CH_LAYOUT_STEREO, (AVSampleFormat)FF_RESAMPLE_FORMAT, STD_SAMPLE_RATE, cctx->channel_layout, inputFormat, sampleRate, 0, nullptr);
 			if (swr_init(resampler) < 0) {
-				fprintf(stderr, "¸®»ùÇÃ·¯ ÃÊ±âÈ­¿¡ ½ÇÆĞÇß½À´Ï´Ù. ¼Ò½º°¡ ·ÎµåµÇÁö ¾Ê½À´Ï´Ù.\n");
+				fprintf(stderr, "ë¦¬ìƒ˜í”ŒëŸ¬ ì´ˆê¸°í™”ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ì†ŒìŠ¤ê°€ ë¡œë“œë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
 				avformat_close_input(&fmt);
 				return nullptr;
 			}
@@ -385,21 +385,21 @@ namespace onart {
 
 	bool Audio::Source::initDemux(AVFormatContext* fmt) {
 		if (avformat_find_stream_info(fmt, nullptr) < 0) {
-			fprintf(stderr, "½ºÆ®¸² Á¤º¸¸¦ ¾òÁö ¸øÇß½À´Ï´Ù.\n");
+			fprintf(stderr, "ìŠ¤íŠ¸ë¦¼ ì •ë³´ë¥¼ ì–»ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\n");
 			return false;
 		}
 		if (fmt->nb_streams <= 0) {
-			fprintf(stderr, "À½¼º ÆÄÀÏÀÌ À¯È¿ÇÏÁö ¾ÊÀº °Í °°½À´Ï´Ù. ´Ù½Ã ÇÑ ¹ø È®ÀÎÇØ ÁÖ¼¼¿ä.\n");
+			fprintf(stderr, "ìŒì„± íŒŒì¼ì´ ìœ íš¨í•˜ì§€ ì•Šì€ ê²ƒ ê°™ìŠµë‹ˆë‹¤. ë‹¤ì‹œ í•œ ë²ˆ í™•ì¸í•´ ì£¼ì„¸ìš”.\n");
 			return false;
 		}
 		AVCodecID cid = fmt->streams[0]->codecpar->codec_id;
 		if (cid < AVCodecID::AV_CODEC_ID_FIRST_AUDIO || cid>AVCodecID::AV_CODEC_ID_MSNSIREN) {
-			fprintf(stderr, "À½¼º ÆÄÀÏÀÌ À¯È¿ÇÏÁö ¾ÊÀº °Í °°½À´Ï´Ù. ´Ù½Ã ÇÑ ¹ø È®ÀÎÇØ ÁÖ¼¼¿ä.\n");
+			fprintf(stderr, "ìŒì„± íŒŒì¼ì´ ìœ íš¨í•˜ì§€ ì•Šì€ ê²ƒ ê°™ìŠµë‹ˆë‹¤. ë‹¤ì‹œ í•œ ë²ˆ í™•ì¸í•´ ì£¼ì„¸ìš”.\n");
 			return false;
 		}
 		const AVCodec* codec = avcodec_find_decoder(cid);
 		if (!codec) {
-			fprintf(stderr, "Áö¿øÇÏÁö ¾Ê´Â Çü½ÄÀÎ °Í °°½À´Ï´Ù. ´Ù¸¥ Çü½ÄÀ¸·Î º¯È¯ÇØ ÁÖ¼¼¿ä.\n");
+			fprintf(stderr, "ì§€ì›í•˜ì§€ ì•ŠëŠ” í˜•ì‹ì¸ ê²ƒ ê°™ìŠµë‹ˆë‹¤. ë‹¤ë¥¸ í˜•ì‹ìœ¼ë¡œ ë³€í™˜í•´ ì£¼ì„¸ìš”.\n");
 			return false;
 		}
 		fmt->audio_codec = codec;
@@ -413,7 +413,7 @@ namespace onart {
 
 		AVFormatContext* fmt = avformat_alloc_context();
 		if (avformat_open_input(&fmt, file.c_str(), nullptr, nullptr) < 0) {
-			fprintf(stderr, "À½¼º ÆÄÀÏÀÌ ¾ø°Å³ª ·Îµå¿¡ ½ÇÆĞÇß½À´Ï´Ù.\n");
+			fprintf(stderr, "ìŒì„± íŒŒì¼ì´ ì—†ê±°ë‚˜ ë¡œë“œì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n");
 			if (fmt)avformat_close_input(&fmt);
 			return nullptr;
 		}
@@ -433,7 +433,7 @@ namespace onart {
 		AVSampleFormat inputFormat = cctx->sample_fmt;
 
 		if (inputFormat < AVSampleFormat::AV_SAMPLE_FMT_U8 || inputFormat > AVSampleFormat::AV_SAMPLE_FMT_S64P) {
-			fprintf(stderr, "Áö¿øÇÏÁö ¾Ê´Â »ùÇÃ Çü½ÄÀÔ´Ï´Ù. ÆÄÀÏÀ» º¯È¯ÇÏ´Â °ÍÀ» °í·ÁÇØ ÁÖ¼¼¿ä.\n");
+			fprintf(stderr, "ì§€ì›í•˜ì§€ ì•ŠëŠ” ìƒ˜í”Œ í˜•ì‹ì…ë‹ˆë‹¤. íŒŒì¼ì„ ë³€í™˜í•˜ëŠ” ê²ƒì„ ê³ ë ¤í•´ ì£¼ì„¸ìš”.\n");
 			avformat_close_input(&fmt);
 			return nullptr;
 		}
@@ -494,7 +494,7 @@ namespace onart {
 			) {
 			resampler = swr_alloc_set_opts(nullptr, AV_CH_LAYOUT_STEREO, (AVSampleFormat)FF_RESAMPLE_FORMAT, STD_SAMPLE_RATE, cctx->channel_layout, inputFormat, sampleRate, 0, nullptr);
 			if (swr_init(resampler) < 0) {
-				fprintf(stderr, "¸®»ùÇÃ·¯ ÃÊ±âÈ­¿¡ ½ÇÆĞÇß½À´Ï´Ù. ¼Ò½º°¡ ·ÎµåµÇÁö ¾Ê½À´Ï´Ù.\n");
+				fprintf(stderr, "ë¦¬ìƒ˜í”ŒëŸ¬ ì´ˆê¸°í™”ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ì†ŒìŠ¤ê°€ ë¡œë“œë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
 				avformat_close_input(&fmt);
 				return nullptr;
 			}
@@ -529,9 +529,9 @@ namespace onart {
 
 	int Audio::Source::getFrame(int frameNumber, float** dst) {
 		if (frameNumber >= frameCount || frameNumber < 0) {
-			return -1;	// ¹İº¹ÀÌ¸é Ã¹ ÇÁ·¹ÀÓ(0¹ø)À» ¿äÃ», ¾Æ´Ï¸é Á¾·á. À½ÀÇ °ªÀ» ¹Ş¾Æ °´Ã¼ÀÇ Á¦°Å¸¦ À¯µµÇÏ±âµµ ÇÔ
+			return -1;	// ë°˜ë³µì´ë©´ ì²« í”„ë ˆì„(0ë²ˆ)ì„ ìš”ì²­, ì•„ë‹ˆë©´ ì¢…ë£Œ. ìŒì˜ ê°’ì„ ë°›ì•„ ê°ì²´ì˜ ì œê±°ë¥¼ ìœ ë„í•˜ê¸°ë„ í•¨
 		}
-		// [¾ğÁ¨°¡ ´ÜÀÏ seek·Î ¼öÁ¤. timestamp ÇÊ¿ä]
+		// [ì–¸ì  ê°€ ë‹¨ì¼ seekë¡œ ìˆ˜ì •. timestamp í•„ìš”]
 		AVPacket pkt;
 		static int recentFrame = 0;
 		if (frameNumber != recentFrame + 1) {
@@ -542,7 +542,7 @@ namespace onart {
 			}
 		}
 		recentFrame = frameNumber;
-		// [¾ğÁ¨°¡ ´ÜÀÏ seek·Î ¼öÁ¤]
+		// [ì–¸ì  ê°€ ë‹¨ì¼ seekë¡œ ìˆ˜ì •]
 		AVFrame* frm = av_frame_alloc();
 		if (av_read_frame(ctx, &pkt) == 0) {
 			int i = avcodec_send_packet(cdc, &pkt);
@@ -600,14 +600,14 @@ namespace onart {
 		}
 	}
 
-	/// "PCM"À» Àç»ıÇÏµµ·Ï ÇÏ´Â Äİ¹é ÇÔ¼ö
+	/// "PCM"ì„ ì¬ìƒí•˜ë„ë¡ í•˜ëŠ” ì½œë°± í•¨ìˆ˜
 	int Audio::playCallback(const void* input, void* output, unsigned long frameCount,
 		const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData) {
 		if constexpr(OA_AUDIO_WAIT_ON_DRAG)
 		if (wait) { memset(output, 0, frameCount * STD_CHANNEL_COUNT * sizeof(STD_SAMPLE_FORMAT)); return PaStreamCallbackResult::paContinue; }
 		ringBuffer.read(output, frameCount * STD_CHANNEL_COUNT);
 		iCV.notify_one();
-		return PaStreamCallbackResult::paContinue;	// Á¤Áö ½ÅÈ£ ¿Ü¿¡ Á¤ÁöÇÏÁö ¾ÊÀ½
+		return PaStreamCallbackResult::paContinue;	// ì •ì§€ ì‹ í˜¸ ì™¸ì— ì •ì§€í•˜ì§€ ì•ŠìŒ
 	}
 
 	Audio::Stream::Stream(Source* src, bool loop)
@@ -639,7 +639,7 @@ namespace onart {
 
 	void Audio::Source::update() {
 		bool reap = false;
-		size_t sz = playing.size();	// Áß°£ »ğÀÔµÈ °ÍÀº ´ÙÀ½ ¾÷µ¥ÀÌÆ®¿¡ Àû¿ë (Å¸ÀÌ¹Ö»ó ±×·² °¡´É¼ºÀº Èñ¹Ú)
+		size_t sz = playing.size();	// ì¤‘ê°„ ì‚½ì…ëœ ê²ƒì€ ë‹¤ìŒ ì—…ë°ì´íŠ¸ì— ì ìš© (íƒ€ì´ë°ìƒ ê·¸ëŸ´ ê°€ëŠ¥ì„±ì€ í¬ë°•)
 		for (size_t i = 0; i < sz; i++) {
 			auto& strm = playing[i];
 			if (strm->update()) {
@@ -662,14 +662,14 @@ namespace onart {
 		}
 	}
 
-	bool Audio::Stream::update() {	// ¸®ÅÏ°ª: true ¸®ÅÏ ½Ã ¸Ş¸ğ¸® ¼ö°ÅµÊ(¼Ò¸ê)
+	bool Audio::Stream::update() {	// ë¦¬í„´ê°’: true ë¦¬í„´ ì‹œ ë©”ëª¨ë¦¬ ìˆ˜ê±°ë¨(ì†Œë©¸)
 		if (stopped) return false;
 		unsigned long need = ringBuffer.writable();
 		bool isOver = false;
 		while (restSamples < need) {
 			STD_SAMPLE_FORMAT* temp;
 			int count = src->getFrame(nextFrame++, &temp);
-			if (count == -1) {	// À½¿ø ³¡±îÁö Àç»ıÇÔ
+			if (count == -1) {	// ìŒì› ëê¹Œì§€ ì¬ìƒí•¨
 				if (loop) nextFrame = 0;
 				else {
 					isOver = true;

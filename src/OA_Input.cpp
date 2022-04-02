@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -31,8 +31,8 @@ namespace onart::Input {
 
 	vec2 relativeCursorPos() {
 		vec2 rpos(mousePos);
-		rpos.x -= vp_ldwh[0];	rpos.y -= vp_ldwh[1];					// ºäÆ÷Æ® ÁÂÃø»ó´Ü ÁÂÇ¥¸¦ (0,0)À¸·Î ÇÏµµ·Ï ÆòÇàÀÌµ¿ (ÀÏ¹İÀûÀÎ È­¸é Å©±â ¹üÀ§¿¡¼­´Â Àı´ë ¿ÀÂ÷°¡ »ı±âÁö ¾ÊÀ½)
-		rpos.x /= vp_ldwh[2];	rpos.y /= vp_ldwh[3];					// ºäÆ÷Æ® ¿ìÃøÇÏ´Ü ÁÂÇ¥¸¦ (1,1)·Î ÇÏµµ·Ï ¼öÃà
+		rpos.x -= vp_ldwh[0];	rpos.y -= vp_ldwh[1];					// ë·°í¬íŠ¸ ì¢Œì¸¡ìƒë‹¨ ì¢Œí‘œë¥¼ (0,0)ìœ¼ë¡œ í•˜ë„ë¡ í‰í–‰ì´ë™ (ì¼ë°˜ì ì¸ í™”ë©´ í¬ê¸° ë²”ìœ„ì—ì„œëŠ” ì ˆëŒ€ ì˜¤ì°¨ê°€ ìƒê¸°ì§€ ì•ŠìŒ)
+		rpos.x /= vp_ldwh[2];	rpos.y /= vp_ldwh[3];					// ë·°í¬íŠ¸ ìš°ì¸¡í•˜ë‹¨ ì¢Œí‘œë¥¼ (1,1)ë¡œ í•˜ë„ë¡ ìˆ˜ì¶•
 		return rpos;
 	}
 

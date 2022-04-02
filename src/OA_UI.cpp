@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -127,14 +127,14 @@ namespace onart::UI {
 		const bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
 		switch (st)
 		{
-		case 0:	// ±âº»
+		case 0:	// ê¸°ë³¸
 			if (isOver) onMouseOver();
 			break;
-		case 1:	// ¸¶¿ì½º ¿À¹ö ÈÄ
+		case 1:	// ë§ˆìš°ìŠ¤ ì˜¤ë²„ í›„
 			if (!isOver) onMouseLeft();
 			else if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) onMouseDown();
 			break;
-		case 2:	// ¸¶¿ì½º ´Ù¿î ÈÄ
+		case 2:	// ë§ˆìš°ìŠ¤ ë‹¤ìš´ í›„
 			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
 				if (isOver) {
 					if (onClick) (*onClick)();
@@ -261,22 +261,22 @@ namespace onart::UI {
 		const bool var = st % 2;
 		switch (st)
 		{
-		case 0:	// off ±âº»
-		case 1:	// on ±âº»
+		case 0:	// off ê¸°ë³¸
+		case 1:	// on ê¸°ë³¸
 			if (isOver)onMouseOver(var);
 			break;
-		case 2:	// off ¿À¹ö
-		case 3: // on ¿À¹ö
+		case 2:	// off ì˜¤ë²„
+		case 3: // on ì˜¤ë²„
 			if (!isOver)onMouseLeft(var);
 			else if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) onMouseDown(var);
 			break;
-		case 4:	// off ´Ù¿î
-		case 5: // on ´Ù¿î
+		case 4:	// off ë‹¤ìš´
+		case 5: // on ë‹¤ìš´
 			if (Input::isKeyReleasedNow(Input::MouseKeyCode::left)) {
 				if (isOver) {
 					if (onClick) {						
-						if (st % 2)	(*onClick)(&var);	// ÀÌÁ¦ ÄÑÁü
-						else (*onClick)();	// ÀÌÁ¦ ²¨Áü
+						if (st % 2)	(*onClick)(&var);	// ì´ì œ ì¼œì§
+						else (*onClick)();	// ì´ì œ êº¼ì§
 					}
 					onMouseOver(!var);
 				}
@@ -424,7 +424,7 @@ namespace onart::UI {
 		const bool isOnBar = pos.x >= barArea.left && pos.x <= barArea.left + barArea.width && pos.y >= barArea.down && pos.y <= barArea.down + barArea.height;
 		switch (st)
 		{
-		case 0:	// ±âº»
+		case 0:	// ê¸°ë³¸
 			if (isOnHandle) {
 				color = baseColor * vec4(vec3(0.8f), 1);
 				st = 1;
@@ -436,7 +436,7 @@ namespace onart::UI {
 				}
 			}
 			break;
-		case 1:	// ¼ÕÀâÀÌ À§ Ä¿¼­
+		case 1:	// ì†ìž¡ì´ ìœ„ ì»¤ì„œ
 			if (isOnHandle) {
 				if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
 					onHolding(pos.x);
@@ -452,7 +452,7 @@ namespace onart::UI {
 				}
 			}
 			break;
-		case 2:	// ¼ÕÀâÀÌ¸¦ Àâ°í ÀÖ´Â Ä¿¼­
+		case 2:	// ì†ìž¡ì´ë¥¼ ìž¡ê³  ìžˆëŠ” ì»¤ì„œ
 			onHolding(pos.x);
 			break;
 		default:
@@ -466,7 +466,7 @@ namespace onart::UI {
 		const bool isOnBar = pos.x >= barArea.left && pos.x <= barArea.left + barArea.width && pos.y >= barArea.down && pos.y <= barArea.down + barArea.height;
 		switch (st)
 		{
-		case 0:	// ±âº»
+		case 0:	// ê¸°ë³¸
 			if (isOnHandle) {
 				color = baseColor * vec4(vec3(0.8f), 1);
 				st = 1;
@@ -478,7 +478,7 @@ namespace onart::UI {
 				}
 			}
 			break;
-		case 1:	// ¼ÕÀâÀÌ À§ Ä¿¼­
+		case 1:	// ì†ìž¡ì´ ìœ„ ì»¤ì„œ
 			if (isOnHandle) {
 				if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
 					onHolding(pos.y);
@@ -494,7 +494,7 @@ namespace onart::UI {
 				}
 			}
 			break;
-		case 2:	// ¼ÕÀâÀÌ¸¦ Àâ°í ÀÖ´Â Ä¿¼­
+		case 2:	// ì†ìž¡ì´ë¥¼ ìž¡ê³  ìžˆëŠ” ì»¤ì„œ
 			onHolding(pos.y);
 			break;
 		default:

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -23,61 +23,61 @@ extern onart::Camera mainCamera;
 namespace onart {
 
 	class Entity;
-#ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY ¸ÅÅ©·Î¸¦ Á¤ÀÇÇÑ °æ¿ì Á¤¼ö Å°¸¦ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
+#ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY ë§¤í¬ë¡œë¥¼ ì •ì˜í•œ ê²½ìš° ì •ìˆ˜ í‚¤ë¥¼ ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 	using EntityKey = int;
 #else
 	using EntityKey = std::string;
 #endif
 	/// <summary>
-	/// °ÔÀÓ¿¡ Ç¥½ÃµÇ´Â ¾ÀÀÔ´Ï´Ù.
+	/// ê²Œì„ì— í‘œì‹œë˜ëŠ” ì”¬ì…ë‹ˆë‹¤.
 	/// </summary>
 	class Scene
 	{
 	public:
 		/// <summary>
-		/// ÇöÀç ¿­·Á ÀÖ´Â ¾ÀÀÔ´Ï´Ù. °ÔÀÓ¿¡´Â ÇÑ ¹ø¿¡ ÇÏ³ªÀÇ ¾À¸¸ ¿­·Á ÀÖÀ» ¼ö ÀÖ½À´Ï´Ù.
+		/// í˜„ì¬ ì—´ë ¤ ìˆëŠ” ì”¬ì…ë‹ˆë‹¤. ê²Œì„ì—ëŠ” í•œ ë²ˆì— í•˜ë‚˜ì˜ ì”¬ë§Œ ì—´ë ¤ ìˆì„ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 		/// </summary>
 		static Scene* currentScene;
 		/// <summary>
-		/// ÀÀ¿ë °èÃş¿¡¼­ »ç¿ëÇÒ ÀÏ ¾ø´Â ÇÔ¼öÀÔ´Ï´Ù.
+		/// ì‘ìš© ê³„ì¸µì—ì„œ ì‚¬ìš©í•  ì¼ ì—†ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 		/// </summary>
 		void update();
 		/// <summary>
-		/// ÀÀ¿ë °èÃş¿¡¼­ »ç¿ëÇÒ ÀÏ ¾ø´Â ÇÔ¼öÀÔ´Ï´Ù.
+		/// ì‘ìš© ê³„ì¸µì—ì„œ ì‚¬ìš©í•  ì¼ ì—†ëŠ” í•¨ìˆ˜ì…ë‹ˆë‹¤.
 		/// </summary>
 		void render();
 		/// <summary>
-		/// ¾À¿¡ °³Ã¼¸¦ Ãß°¡ÇÕ´Ï´Ù.
+		/// ì”¬ì— ê°œì²´ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addEntity(Entity*);
 
 		inline int getSceneId() { return id; }
 		/// <summary>
-		/// ¾À¿¡¼­ ¸Å ÇÁ·¹ÀÓ¸¶´Ù È£ÃâµË´Ï´Ù. Ç×»ó ¾À ³» °³Ã¼ÀÇ Update()º¸´Ù ¸ÕÀú ½ÇÇàµË´Ï´Ù.
+		/// ì”¬ì—ì„œ ë§¤ í”„ë ˆì„ë§ˆë‹¤ í˜¸ì¶œë©ë‹ˆë‹¤. í•­ìƒ ì”¬ ë‚´ ê°œì²´ì˜ Update()ë³´ë‹¤ ë¨¼ì € ì‹¤í–‰ë©ë‹ˆë‹¤.
 		/// </summary>
 		virtual void Update() = 0;
 		/// <summary>
-		/// ¾À Æ÷ÀÎÅÍ¸¦ ÅëÇØ ÀÌº¥Æ®¸¦ ¹ßµ¿ÇÒ ¼ö ÀÖ½À´Ï´Ù.
+		/// ì”¬ í¬ì¸í„°ë¥¼ í†µí•´ ì´ë²¤íŠ¸ë¥¼ ë°œë™í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="idx">°¢ ¾À¸¶´Ù ¹èÁ¤µÈ ÀÌº¥Æ® ¹øÈ£</param>
+		/// <param name="idx">ê° ì”¬ë§ˆë‹¤ ë°°ì •ëœ ì´ë²¤íŠ¸ ë²ˆí˜¸</param>
 		virtual void actEvent(int idx);
 		/// <summary>
-		/// ¾ÀÀ» ÃÊ±âÈ­ÇÕ´Ï´Ù. ÁÖ·Î »õ °³Ã¼¸¦ »ı¼ºÇÕ´Ï´Ù.
+		/// ì”¬ì„ ì´ˆê¸°í™”í•©ë‹ˆë‹¤. ì£¼ë¡œ ìƒˆ ê°œì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		virtual void init() = 0;
 		/// <summary>
-		/// Ä«¸Ş¶óÀÇ ÀÌµ¿À» Á¦ÇÑÇÕ´Ï´Ù. Ä«¸Ş¶óÀÇ ÀÌÀü ÇÁ·¹ÀÓ À§Ä¡¿Í ÇöÀç ÇÁ·¹ÀÓ¿¡ »õ·Î ÀÚ¸®ÇÏ·Á´Â À§Ä¡¸¦ ÀÔ·Â¹Ş¾Æ Ä«¸Ş¶ó°¡ ½ÇÁ¦·Î ÀÖ¾î¾ß ÇÒ À§Ä¡¸¦ ¸®ÅÏÇÕ´Ï´Ù.
-		/// ¿À¹ö¶óÀÌµùÇÏÁö ¾Ê´Â °æ¿ì, ¹«Á¦ÇÑÀ¸·Î °£ÁÖµË´Ï´Ù.
+		/// ì¹´ë©”ë¼ì˜ ì´ë™ì„ ì œí•œí•©ë‹ˆë‹¤. ì¹´ë©”ë¼ì˜ ì´ì „ í”„ë ˆì„ ìœ„ì¹˜ì™€ í˜„ì¬ í”„ë ˆì„ì— ìƒˆë¡œ ìë¦¬í•˜ë ¤ëŠ” ìœ„ì¹˜ë¥¼ ì…ë ¥ë°›ì•„ ì¹´ë©”ë¼ê°€ ì‹¤ì œë¡œ ìˆì–´ì•¼ í•  ìœ„ì¹˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
+		/// ì˜¤ë²„ë¼ì´ë”©í•˜ì§€ ì•ŠëŠ” ê²½ìš°, ë¬´ì œí•œìœ¼ë¡œ ê°„ì£¼ë©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="currentCameraPos">ÀÌÀü ÇÁ·¹ÀÓÀÇ Ä«¸Ş¶ó À§Ä¡</param>
-		/// <param name="desiredCameraPos">ÇöÀç ÇÁ·¹ÀÓ¿¡ Ä«¸Ş¶ó°¡ ÀÚ¸®ÇÏ·Á´Â À§Ä¡</param>
-		/// <returns>ÇöÀç ¾À¿¡¼­ÀÇ Á¦ÇÑÀÌ Àû¿ëµÈ ÀÌÈÄ ÇöÀç ÇÁ·¹ÀÓ¿¡ Ä«¸Ş¶ó°¡ ÀÚ¸®ÇÏ´Â À§Ä¡</returns>
+		/// <param name="currentCameraPos">ì´ì „ í”„ë ˆì„ì˜ ì¹´ë©”ë¼ ìœ„ì¹˜</param>
+		/// <param name="desiredCameraPos">í˜„ì¬ í”„ë ˆì„ì— ì¹´ë©”ë¼ê°€ ìë¦¬í•˜ë ¤ëŠ” ìœ„ì¹˜</param>
+		/// <returns>í˜„ì¬ ì”¬ì—ì„œì˜ ì œí•œì´ ì ìš©ëœ ì´í›„ í˜„ì¬ í”„ë ˆì„ì— ì¹´ë©”ë¼ê°€ ìë¦¬í•˜ëŠ” ìœ„ì¹˜</returns>
 		virtual vec3 constrainCamera(const vec3& currentCameraPos, const vec3& desiredCameraPos);
 		static struct __dropentity{
 			friend class Entity;
 		private:
 			/// <summary>
-			/// ÀÌ°ÍÀº ¾À¿¡¼­ °³Ã¼¸¦ Á¦¿ÜÇÕ´Ï´Ù. °³Ã¼ÀÇ ¸Ş¸ğ¸®°¡ ÇØÁ¦µÇÁö´Â ¾ÊÀ¸¸ç, °³Ã¼°¡ ¼Ò¸êÇÒ ¶§´Â ÀÌ ÇÔ¼öµµ ÀÚµ¿À¸·Î È£ÃâµË´Ï´Ù.
+			/// ì´ê²ƒì€ ì”¬ì—ì„œ ê°œì²´ë¥¼ ì œì™¸í•©ë‹ˆë‹¤. ê°œì²´ì˜ ë©”ëª¨ë¦¬ê°€ í•´ì œë˜ì§€ëŠ” ì•Šìœ¼ë©°, ê°œì²´ê°€ ì†Œë©¸í•  ë•ŒëŠ” ì´ í•¨ìˆ˜ë„ ìë™ìœ¼ë¡œ í˜¸ì¶œë©ë‹ˆë‹¤.
 			/// </summary>
 			static void dropEntity(Entity*);
 		}__drop;
@@ -85,18 +85,18 @@ namespace onart {
 	protected:
 		int id;
 		/// <summary>
-		/// °ÔÀÓ ½ÇÇà ÀÌÈÄ Èå¸¥ ½Ã°£(ÃÊ)ÀÔ´Ï´Ù.
+		/// ê²Œì„ ì‹¤í–‰ ì´í›„ íë¥¸ ì‹œê°„(ì´ˆ)ì…ë‹ˆë‹¤.
 		/// </summary>
 		static const float& tp;
 		/// <summary>
-		/// ÀÌÀü ÇÁ·¹ÀÓ°ú ÇöÀç ÇÁ·¹ÀÓ °£ÀÇ ½Ã°£ °£°İ(ÃÊ)ÀÔ´Ï´Ù.
+		/// ì´ì „ í”„ë ˆì„ê³¼ í˜„ì¬ í”„ë ˆì„ ê°„ì˜ ì‹œê°„ ê°„ê²©(ì´ˆ)ì…ë‹ˆë‹¤.
 		/// </summary>
 		static const float& dt;
 		/// <summary>
-		/// ´Ù¸¥ ¾ÀÀ¸·Î ÀüÈ¯ÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ì”¬ìœ¼ë¡œ ì „í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		void change(Scene* other);
-		// +´Ù¼öÀÇ ±¤¿ø
+		// +ë‹¤ìˆ˜ì˜ ê´‘ì›
 	private:	
 		std::vector<Entity*> entities;
 		std::multimap<float, size_t> renderOrder;

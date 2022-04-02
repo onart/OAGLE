@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -28,7 +28,7 @@ namespace onart {
 
 	Font* Font::load(const std::string& file, const std::vector<oachar>& v, float resolution, const std::string& name) {
 		if (v.size() == 0) {
-			fprintf(stderr, "ÅØ½ºÃ³¸¦ ¸¸µé ¹®ÀÚ°¡ ÀÔ·ÂµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n");
+			fprintf(stderr, "í…ìŠ¤ì²˜ë¥¼ ë§Œë“¤ ë¬¸ìê°€ ì…ë ¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\n");
 			return nullptr;
 		}
 		std::string fn(name);
@@ -41,7 +41,7 @@ namespace onart {
 		FILE* fp;
 		fopen_s(&fp, file.c_str(), "rb");
 		if (!fp) {
-			fprintf(stderr, "%s: ÆùÆ® ÆÄÀÏÀ» Ã£À» ¼ö ¾ø½À´Ï´Ù.\n", file.c_str());
+			fprintf(stderr, "%s: í°íŠ¸ íŒŒì¼ì„ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n", file.c_str());
 			return nullptr;
 		}
 		fseek(fp, 0, SEEK_END);
@@ -59,7 +59,7 @@ namespace onart {
 
 	Font* Font::load(const unsigned char* dat, const std::string& name, const std::vector<oachar>& v, float resolution) {
 		if (v.size() == 0) {
-			fprintf(stderr,"ÅØ½ºÃ³¸¦ ¸¸µé ¹®ÀÚ°¡ ÀÔ·ÂµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n");
+			fprintf(stderr,"í…ìŠ¤ì²˜ë¥¼ ë§Œë“¤ ë¬¸ìê°€ ì…ë ¥ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.\n");
 			return nullptr;
 		}
 		if (list.find(name) != list.end()) {
@@ -68,7 +68,7 @@ namespace onart {
 		stbtt_fontinfo info;
 		int c = stbtt_InitFont(&info, dat, 0);
 		if (c == 0) {
-			fprintf(stderr,"ÆùÆ® ÆÄÀÏÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.\n");
+			fprintf(stderr,"í°íŠ¸ íŒŒì¼ì´ ìœ íš¨í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n");
 			return nullptr;
 		}
 		std::set<oachar> vset(v.begin(), v.end());
@@ -104,7 +104,7 @@ namespace onart {
 			int width, height, bearingX, bearingY, advance;
 			unsigned char* bitmap = stbtt_GetCodepointBitmap(fi, 0, yScale, c, &width, &height, &bearingX, &bearingY);
 			if (!bitmap) {
-				fprintf(stderr, "°æ°í: À¯´ÏÄÚµå 0x%x ¹®ÀÚ´Â ÆùÆ®¿¡ ¾ø¾î¼­ ·ÎµåµÇÁö ¾Ê½À´Ï´Ù.\n", c);
+				fprintf(stderr, "ê²½ê³ : ìœ ë‹ˆì½”ë“œ 0x%x ë¬¸ìëŠ” í°íŠ¸ì— ì—†ì–´ì„œ ë¡œë“œë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n", c);
 				continue;
 			}
 			unsigned tex;
@@ -209,14 +209,14 @@ namespace onart {
 		cdraw(content, lineXY, color);
 	}
 
-	float Font::parseSize(const oastring& str, int start) {	// start´Â Á¤¼ö ÀÚ¸®¸¦ °¡¸®Å°µµ·Ï ÁÖ¾îÁü
+	float Font::parseSize(const oastring& str, int start) {	// startëŠ” ì •ìˆ˜ ìë¦¬ë¥¼ ê°€ë¦¬í‚¤ë„ë¡ ì£¼ì–´ì§
 		if (str[start + 1] == u'.' && isdigit(str[start]) && isdigit(str[start + 2]) && isdigit(str[start + 3])) {
 			return (float)(str[start] - u'0') + (str[start + 2] - u'0') * 0.1f + (str[start + 3] - u'0') * 0.01f;
 		}
 		return -1;
 	}
 
-	vec4 Font::parseColor(const oastring& str, int start) {	// start´Â 8ÀÚ¸® Áß Ã³À½À» °¡¸®Å°µµ·Ï ÁÖ¾îÁü
+	vec4 Font::parseColor(const oastring& str, int start) {	// startëŠ” 8ìë¦¬ ì¤‘ ì²˜ìŒì„ ê°€ë¦¬í‚¤ë„ë¡ ì£¼ì–´ì§
 		char* er = nullptr;
 		char* hx = new char[9];	hx[8] = 0;
 		char* p = hx;
@@ -236,13 +236,13 @@ namespace onart {
 
 	vec4 Font::getRectNLine(const oastring& content, std::vector<vec2>& lineXY, AlignH align, float rowGap) {
 		lineXY.clear();
-		vec4 totalLDWH;	// ÃÖÁ¾ Á÷»ç°¢Çü º¯È¯¿ë
+		vec4 totalLDWH;	// ìµœì¢… ì§ì‚¬ê°í˜• ë³€í™˜ìš©
 		float curW = 0, curH = resolution;
 		float curx = 1, cury = 1;
-		// º£ÀÌ½º Á¤»ç°¢ÇüÀº xy [-0.5,0.5] ¹üÀ§, z=0
-		// °¢ ¶óÀÎ ±æÀÌ(px)¸¦ Àé´Ù
+		// ë² ì´ìŠ¤ ì •ì‚¬ê°í˜•ì€ xy [-0.5,0.5] ë²”ìœ„, z=0
+		// ê° ë¼ì¸ ê¸¸ì´(px)ë¥¼ ì°ë‹¤
 		int charCount = (int)content.size();
-		bool regular = false;	// ¶óÀÎÀÇ Ã¹ ±ÛÀÚ°¡ ¾ÆÁ÷ ³ª¿ÀÁö ¾ÊÀº °æ¿ì
+		bool regular = false;	// ë¼ì¸ì˜ ì²« ê¸€ìê°€ ì•„ì§ ë‚˜ì˜¤ì§€ ì•Šì€ ê²½ìš°
 		for (int i = 0; i < charCount; i++) {
 			oachar c = content[i];
 			switch (c)
@@ -295,7 +295,7 @@ namespace onart {
 		totalLDWH.height += curH;
 		totalLDWH.down = -totalLDWH.height;
 		lineXY.push_back(vec2(curW, totalLDWH.down));
-		// ¶óÀÎº° Ã¹ ±ÛÀÚÀÇ x, y ¿ÀÇÁ¼ÂÀ» Á¤ÇÑ´Ù(ÀüÃ¼½ºÄÉÀÏ Á¦¿Ü)
+		// ë¼ì¸ë³„ ì²« ê¸€ìì˜ x, y ì˜¤í”„ì…‹ì„ ì •í•œë‹¤(ì „ì²´ìŠ¤ì¼€ì¼ ì œì™¸)
 		switch (align)
 		{
 		case AlignH::CENTER:

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -52,8 +52,8 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// µÎ ¹°Ã¼ÀÇ ¿©·¯ Á¢ÃËÀÌ µ¿½Ã ¹ß»ıÇÑ °æ¿ì ÀûÀıÈ÷ Ã³¸®ÇÕ´Ï´Ù.
-	/// ½ÃÀÛÇÏ±â Àü¿¡ setMaximumRepCount()¸¦ ÇÑ ¹øÀº È£ÃâÇØ¾ß ÇÕ´Ï´Ù.
+	/// ë‘ ë¬¼ì²´ì˜ ì—¬ëŸ¬ ì ‘ì´‰ì´ ë™ì‹œ ë°œìƒí•œ ê²½ìš° ì ì ˆíˆ ì²˜ë¦¬í•©ë‹ˆë‹¤.
+	/// ì‹œì‘í•˜ê¸° ì „ì— setMaximumRepCount()ë¥¼ í•œ ë²ˆì€ í˜¸ì¶œí•´ì•¼ í•©ë‹ˆë‹¤.
 	/// </summary>
 	class ContactResolver {
 	protected:
@@ -75,13 +75,13 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 2°³ ¹°Ã¼¸¦ ¹­¾î µÎ´Â ¿¬°áÃ¼ÀÔ´Ï´Ù.
+	/// 2ê°œ ë¬¼ì²´ë¥¼ ë¬¶ì–´ ë‘ëŠ” ì—°ê²°ì²´ì…ë‹ˆë‹¤.
 	/// </summary>
 	class MatterLink :public ContactGenerator {
 	public:
 		PointMass* matter[2];
 		/// <summary>
-		/// ÇÊ¿äÇÑ °æ¿ì Á¢ÃËÀ» »ı¼ºÇÕ´Ï´Ù. Á¢ÃËÀÌ »ı¼ºµÈ °æ¿ì 1À» ¸®ÅÏÇÏ¸ç, ¾Æ´Ñ °æ¿ì 0À» ¸®ÅÏÇÕ´Ï´Ù. ÁÖ¾îÁø contact¿¡ °ªÀ» Ã¤¿ó´Ï´Ù.
+		/// í•„ìš”í•œ ê²½ìš° ì ‘ì´‰ì„ ìƒì„±í•©ë‹ˆë‹¤. ì ‘ì´‰ì´ ìƒì„±ëœ ê²½ìš° 1ì„ ë¦¬í„´í•˜ë©°, ì•„ë‹Œ ê²½ìš° 0ì„ ë¦¬í„´í•©ë‹ˆë‹¤. ì£¼ì–´ì§„ contactì— ê°’ì„ ì±„ì›ë‹ˆë‹¤.
 		/// </summary>
 		virtual unsigned addContact(Contact* contact, unsigned limit) = 0;
 	protected:
@@ -89,13 +89,13 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 2°³ ¹°Ã¼¸¦ ¹­¾î µÎ´Â ¿¬°áÃ¼ÀÔ´Ï´Ù.
+	/// 2ê°œ ë¬¼ì²´ë¥¼ ë¬¶ì–´ ë‘ëŠ” ì—°ê²°ì²´ì…ë‹ˆë‹¤.
 	/// </summary>
 	class MatterLink2D : public ContactGenerator2D {
 	public:
 		PointMass2D* matter[2];
 		/// <summary>
-		/// ÇÊ¿äÇÑ °æ¿ì Á¢ÃËÀ» »ı¼ºÇÕ´Ï´Ù. Á¢ÃËÀÌ »ı¼ºµÈ °æ¿ì 1À» ¸®ÅÏÇÏ¸ç, ¾Æ´Ñ °æ¿ì 0À» ¸®ÅÏÇÕ´Ï´Ù. ÁÖ¾îÁø contact¿¡ °ªÀ» Ã¤¿ó´Ï´Ù.
+		/// í•„ìš”í•œ ê²½ìš° ì ‘ì´‰ì„ ìƒì„±í•©ë‹ˆë‹¤. ì ‘ì´‰ì´ ìƒì„±ëœ ê²½ìš° 1ì„ ë¦¬í„´í•˜ë©°, ì•„ë‹Œ ê²½ìš° 0ì„ ë¦¬í„´í•©ë‹ˆë‹¤. ì£¼ì–´ì§„ contactì— ê°’ì„ ì±„ì›ë‹ˆë‹¤.
 		/// </summary>
 		virtual unsigned addContact(Contact2D* contact, unsigned limit) = 0;
 	protected:
@@ -103,51 +103,51 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 2°³ ¹°Ã¼¸¦ °­¼º ²öÀ¸·Î ¿¬°áÇÕ´Ï´Ù.
+	/// 2ê°œ ë¬¼ì²´ë¥¼ ê°•ì„± ëˆìœ¼ë¡œ ì—°ê²°í•©ë‹ˆë‹¤.
 	/// </summary>
 	class MatterCable : public MatterLink {
 	public:
 		const float maxLen;
 		const float restitution;
 		/// <summary>
-		/// ²ö À¯Áö¿¡ ÇÊ¿äÇÑ °æ¿ì Á¢ÃËÀ» »ı¼ºÇÕ´Ï´Ù. Á¢ÃËÀÌ »ı¼ºµÈ °æ¿ì 1À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ëˆ ìœ ì§€ì— í•„ìš”í•œ ê²½ìš° ì ‘ì´‰ì„ ìƒì„±í•©ë‹ˆë‹¤. ì ‘ì´‰ì´ ìƒì„±ëœ ê²½ìš° 1ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		unsigned addContact(Contact* contact, unsigned limit);
 	};
 
 	/// <summary>
-	/// 2°³ ¹°Ã¼¸¦ °­¼º ¸·´ë·Î ¿¬°áÇÕ´Ï´Ù.
+	/// 2ê°œ ë¬¼ì²´ë¥¼ ê°•ì„± ë§‰ëŒ€ë¡œ ì—°ê²°í•©ë‹ˆë‹¤.
 	/// </summary>
 	class MatterRod :public MatterLink {
 	public:
 		const float length;
 		/// <summary>
-		/// ²ö À¯Áö¿¡ ÇÊ¿äÇÑ °æ¿ì Á¢ÃËÀ» »ı¼ºÇÕ´Ï´Ù. Á¢ÃËÀÌ »ı¼ºµÈ °æ¿ì 1À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ëˆ ìœ ì§€ì— í•„ìš”í•œ ê²½ìš° ì ‘ì´‰ì„ ìƒì„±í•©ë‹ˆë‹¤. ì ‘ì´‰ì´ ìƒì„±ëœ ê²½ìš° 1ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		unsigned addContact(Contact* contact, unsigned limit);
 	};
 
 	/// <summary>
-	/// 2°³ ¹°Ã¼¸¦ °­¼º ²öÀ¸·Î ¿¬°áÇÕ´Ï´Ù.
+	/// 2ê°œ ë¬¼ì²´ë¥¼ ê°•ì„± ëˆìœ¼ë¡œ ì—°ê²°í•©ë‹ˆë‹¤.
 	/// </summary>
 	class MatterCable2D : public MatterLink2D {
 	public:
 		const float maxLen;
 		const float restitution;
 		/// <summary>
-		/// ²ö À¯Áö¿¡ ÇÊ¿äÇÑ °æ¿ì Á¢ÃËÀ» »ı¼ºÇÕ´Ï´Ù. Á¢ÃËÀÌ »ı¼ºµÈ °æ¿ì 1À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ëˆ ìœ ì§€ì— í•„ìš”í•œ ê²½ìš° ì ‘ì´‰ì„ ìƒì„±í•©ë‹ˆë‹¤. ì ‘ì´‰ì´ ìƒì„±ëœ ê²½ìš° 1ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		unsigned addContact(Contact2D* contact, unsigned limit);
 	};
 
 	/// <summary>
-	/// 2°³ ¹°Ã¼¸¦ °­¼º ¸·´ë·Î ¿¬°áÇÕ´Ï´Ù.
+	/// 2ê°œ ë¬¼ì²´ë¥¼ ê°•ì„± ë§‰ëŒ€ë¡œ ì—°ê²°í•©ë‹ˆë‹¤.
 	/// </summary>
 	class MatterRod2D :public MatterLink2D {
 	public:
 		const float length;
 		/// <summary>
-		/// ²ö À¯Áö¿¡ ÇÊ¿äÇÑ °æ¿ì Á¢ÃËÀ» »ı¼ºÇÕ´Ï´Ù. Á¢ÃËÀÌ »ı¼ºµÈ °æ¿ì 1À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ëˆ ìœ ì§€ì— í•„ìš”í•œ ê²½ìš° ì ‘ì´‰ì„ ìƒì„±í•©ë‹ˆë‹¤. ì ‘ì´‰ì´ ìƒì„±ëœ ê²½ìš° 1ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		unsigned addContact(Contact2D* contact, unsigned limit);
 	};

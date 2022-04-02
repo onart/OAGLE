@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -17,7 +17,7 @@ namespace onart {
 	class PointMass;
 	class PointMass2D;
 	/// <summary>
-	/// ¸Å ÇÁ·¹ÀÓ ÈûÀ» Áö¼ÓÀûÀ¸·Î °¡ÇÕ´Ï´Ù. Áß·Â °°Àº °ÅÀÇ »ó¼öÀÎ ÈûÀÌ ¾Æ´Ñ Ç×·Â µî¿¡ ´ëÇÏ¿© »ç¿ëÇÕ´Ï´Ù.
+	/// ë§¤ í”„ë ˆì„ í˜ì„ ì§€ì†ì ìœ¼ë¡œ ê°€í•©ë‹ˆë‹¤. ì¤‘ë ¥ ê°™ì€ ê±°ì˜ ìƒìˆ˜ì¸ í˜ì´ ì•„ë‹Œ í•­ë ¥ ë“±ì— ëŒ€í•˜ì—¬ ì‚¬ìš©í•©ë‹ˆë‹¤.
 	/// </summary>
 	class ForceGenerator {
 	public:
@@ -26,7 +26,7 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// ¸Å ÇÁ·¹ÀÓ ÈûÀ» Áö¼ÓÀûÀ¸·Î °¡ÇÕ´Ï´Ù. Áß·Â °°Àº °ÅÀÇ »ó¼öÀÎ ÈûÀÌ ¾Æ´Ñ Ç×·Â µî¿¡ ´ëÇÏ¿© »ç¿ëÇÕ´Ï´Ù.
+	/// ë§¤ í”„ë ˆì„ í˜ì„ ì§€ì†ì ìœ¼ë¡œ ê°€í•©ë‹ˆë‹¤. ì¤‘ë ¥ ê°™ì€ ê±°ì˜ ìƒìˆ˜ì¸ í˜ì´ ì•„ë‹Œ í•­ë ¥ ë“±ì— ëŒ€í•˜ì—¬ ì‚¬ìš©í•©ë‹ˆë‹¤.
 	/// </summary>
 	class ForceGenerator2D {
 	public:
@@ -35,7 +35,7 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// ÀÌ°ÍÀº Èû ¹ß»ı±âÀÇ ÇÑ ¿¹ÀÔ´Ï´Ù. °è¼ö 2°³¸¦ ¹Ì¸® Á¤ÇØ µÎ°í Ç×·ÂÀ» Àû¿ëÇÕ´Ï´Ù.
+	/// ì´ê²ƒì€ í˜ ë°œìƒê¸°ì˜ í•œ ì˜ˆì…ë‹ˆë‹¤. ê³„ìˆ˜ 2ê°œë¥¼ ë¯¸ë¦¬ ì •í•´ ë‘ê³  í•­ë ¥ì„ ì ìš©í•©ë‹ˆë‹¤.
 	/// </summary>
 	class DragGenerator :public ForceGenerator {
 	public:
@@ -46,7 +46,7 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// °è¼ö 2°³¸¦ ¹Ì¸® Á¤ÇØ µÎ°í Ç×·ÂÀ» Àû¿ëÇÕ´Ï´Ù.
+	/// ê³„ìˆ˜ 2ê°œë¥¼ ë¯¸ë¦¬ ì •í•´ ë‘ê³  í•­ë ¥ì„ ì ìš©í•©ë‹ˆë‹¤.
 	/// </summary>
 	class DragGenerator2D :public ForceGenerator2D {
 	public:
@@ -57,8 +57,8 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// ÈÅ ¹ıÄ¢À» µû¸£´Â ÈûÀ» ÀÛ¿ëÇÕ´Ï´Ù. 2°³ ¹°Ã¼¿¡ °¢°¢ ¿¬°áÇØ¾ß ÇÕ´Ï´Ù. ÀÌ¿¡ µû¶ó, ¾ÈÀüÇÑ »ç¿ëÀ» À§ÇØ¼­´Â wrapper°¡ ÇÊ¼öºÒ°¡°áÇÕ´Ï´Ù.
-	/// ÇÑÂÊÀ» °íÁ¤ÇÏ·Á¸é ¹«ÇÑ´ë Áú·®À» »ç¿ëÇÕ´Ï´Ù.
+	/// í›… ë²•ì¹™ì„ ë”°ë¥´ëŠ” í˜ì„ ì‘ìš©í•©ë‹ˆë‹¤. 2ê°œ ë¬¼ì²´ì— ê°ê° ì—°ê²°í•´ì•¼ í•©ë‹ˆë‹¤. ì´ì— ë”°ë¼, ì•ˆì „í•œ ì‚¬ìš©ì„ ìœ„í•´ì„œëŠ” wrapperê°€ í•„ìˆ˜ë¶ˆê°€ê²°í•©ë‹ˆë‹¤.
+	/// í•œìª½ì„ ê³ ì •í•˜ë ¤ë©´ ë¬´í•œëŒ€ ì§ˆëŸ‰ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
 	/// </summary>
 	class HookeSpring : public ForceGenerator {
 	public:
@@ -71,8 +71,8 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// ÈÅ ¹ıÄ¢À» µû¸£´Â ÈûÀ» ÀÛ¿ëÇÕ´Ï´Ù. 2°³ ¹°Ã¼¿¡ °¢°¢ ¿¬°áÇØ¾ß ÇÕ´Ï´Ù. ÀÌ¿¡ µû¶ó, ¾ÈÀüÇÑ »ç¿ëÀ» À§ÇØ¼­´Â wrapper°¡ ÇÊ¼öºÒ°¡°áÇÕ´Ï´Ù.
-	/// ÇÑÂÊÀ» °íÁ¤ÇÏ·Á¸é ¹«ÇÑ´ë Áú·®À» »ç¿ëÇÕ´Ï´Ù.
+	/// í›… ë²•ì¹™ì„ ë”°ë¥´ëŠ” í˜ì„ ì‘ìš©í•©ë‹ˆë‹¤. 2ê°œ ë¬¼ì²´ì— ê°ê° ì—°ê²°í•´ì•¼ í•©ë‹ˆë‹¤. ì´ì— ë”°ë¼, ì•ˆì „í•œ ì‚¬ìš©ì„ ìœ„í•´ì„œëŠ” wrapperê°€ í•„ìˆ˜ë¶ˆê°€ê²°í•©ë‹ˆë‹¤.
+	/// í•œìª½ì„ ê³ ì •í•˜ë ¤ë©´ ë¬´í•œëŒ€ ì§ˆëŸ‰ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
 	/// </summary>
 	class HookeSpring2D :public ForceGenerator2D {
 	public:
@@ -85,7 +85,7 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// ÈÅ ¹ıÄ¢¿¡¼­ ´ç±â´Â Èû¸¸ ÀÛ¿ëÇÕ´Ï´Ù. 2°³ ¹°Ã¼¿¡ °¢°¢ ¿¬°áÇØ¾ß ÇÕ´Ï´Ù. ÀÌ¿¡ µû¶ó, ¾ÈÀüÇÑ »ç¿ëÀ» À§ÇØ¼­´Â wrapper°¡ ÇÊ¼öºÒ°¡°áÇÕ´Ï´Ù.
+	/// í›… ë²•ì¹™ì—ì„œ ë‹¹ê¸°ëŠ” í˜ë§Œ ì‘ìš©í•©ë‹ˆë‹¤. 2ê°œ ë¬¼ì²´ì— ê°ê° ì—°ê²°í•´ì•¼ í•©ë‹ˆë‹¤. ì´ì— ë”°ë¼, ì•ˆì „í•œ ì‚¬ìš©ì„ ìœ„í•´ì„œëŠ” wrapperê°€ í•„ìˆ˜ë¶ˆê°€ê²°í•©ë‹ˆë‹¤.
 	/// </summary>
 	class HookeBungee: public ForceGenerator {
 	public:

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -23,7 +23,7 @@ namespace onart {
 	class ContactGenerator;
 	class ContactGenerator2D;
 	/// <summary>
-	/// ÁúÁ¡À¸·Î ±¸¼ºµÈ ¼¼°èÀÔ´Ï´Ù. ÀÀ¿ë ´Ü°è¿¡¼­ ´Ù·ç¾îÁöÁö ¾Ê½À´Ï´Ù.
+	/// ì§ˆì ìœ¼ë¡œ êµ¬ì„±ëœ ì„¸ê³„ì…ë‹ˆë‹¤. ì‘ìš© ë‹¨ê³„ì—ì„œ ë‹¤ë£¨ì–´ì§€ì§€ ì•ŠìŠµë‹ˆë‹¤.
 	/// </summary>
 	class PointMassSystem
 	{
@@ -42,7 +42,7 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 2D ÁúÁ¡À¸·Î ±¸¼ºµÈ ¼¼°èÀÔ´Ï´Ù. ÀÀ¿ë ´Ü°è¿¡¼­ ´Ù·ç¾îÁöÁö ¾Ê½À´Ï´Ù.
+	/// 2D ì§ˆì ìœ¼ë¡œ êµ¬ì„±ëœ ì„¸ê³„ì…ë‹ˆë‹¤. ì‘ìš© ë‹¨ê³„ì—ì„œ ë‹¤ë£¨ì–´ì§€ì§€ ì•ŠìŠµë‹ˆë‹¤.
 	/// </summary>
 	class PointMassSystem2D {
 	public:

@@ -1,10 +1,10 @@
-#include "OA_TestEntity.h"
+ï»¿#include "OA_TestEntity.h"
 #include "OA_Material.h"
 #include "OA_Camera.h"
 #include "OA_Window.h"
 namespace onart {
 	TestEntity::TestEntity() :Entity("2danim", Transform(), false, false, true) {
-		pAnimation anim1 = Animation2D::make("µ¹·ÁÂ÷±â", true,
+		pAnimation anim1 = Animation2D::make("ëŒë ¤ì°¨ê¸°", true,
 			{ Keypoint<pTexture>{0,Material::genTextureFromFile("2danim.png")} },
 			{
 				Keypoint<vec4>{0,vec4(253,441,223,288) },
@@ -13,7 +13,7 @@ namespace onart {
 				Keypoint<vec4>{0.3f,vec4(1136,462,227,294) },
 				Keypoint<vec4>{0.6f,vec4(253,441,223,288) },
 			},
-			// ÇÇ¹ş ºÎºĞ. ÁÖ¾îÁø ±×¸²(2danim.png)¸¦ ±âÁØÀ¸·Î ¹ß²ŞÄ¡¸¦ Áß½ÉÀ¸·Î ¼³Á¤ÇßÀ¸¸ç ÀÌ´Â ÀÌµ¿/È¸Àü/½ºÄÉÀÏ¸µÀÇ Áß½ÉÀÌ µÊ
+			// í”¼ë²— ë¶€ë¶„. ì£¼ì–´ì§„ ê·¸ë¦¼(2danim.png)ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë°œê¿ˆì¹˜ë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ ì„¤ì •í–ˆìœ¼ë©° ì´ëŠ” ì´ë™/íšŒì „/ìŠ¤ì¼€ì¼ë§ì˜ ì¤‘ì‹¬ì´ ë¨
 			{
 				vec2(110,16),
 				vec2(119,12),
@@ -22,7 +22,7 @@ namespace onart {
 				vec2(110,16),
 			});
 		addAnim(anim1);
-		pAnimation anim2 = UIAnimation::make("uµ¹", true,
+		pAnimation anim2 = UIAnimation::make("uëŒ", true,
 			{ Keypoint<pTexture>{0,Material::genTextureFromFile("2danim.png")} },
 			{
 				Keypoint<vec4>{0,vec4(253,441,223,288) },
@@ -31,7 +31,7 @@ namespace onart {
 				Keypoint<vec4>{0.3f,vec4(1136,462,227,294) },
 				Keypoint<vec4>{0.6f,vec4(253,441,223,288) },
 			},
-			// ÇÇ¹ş ºÎºĞ. ÁÖ¾îÁø ±×¸²(2danim.png)¸¦ ±âÁØÀ¸·Î ¹ß²ŞÄ¡¸¦ Áß½ÉÀ¸·Î ¼³Á¤ÇßÀ¸¸ç ÀÌ´Â ÀÌµ¿/È¸Àü/½ºÄÉÀÏ¸µÀÇ Áß½ÉÀÌ µÊ
+			// í”¼ë²— ë¶€ë¶„. ì£¼ì–´ì§„ ê·¸ë¦¼(2danim.png)ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ë°œê¿ˆì¹˜ë¥¼ ì¤‘ì‹¬ìœ¼ë¡œ ì„¤ì •í–ˆìœ¼ë©° ì´ëŠ” ì´ë™/íšŒì „/ìŠ¤ì¼€ì¼ë§ì˜ ì¤‘ì‹¬ì´ ë¨
 			{
 				vec2(110,16),
 				vec2(119,12),

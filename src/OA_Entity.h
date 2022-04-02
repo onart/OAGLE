@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -26,134 +26,134 @@ namespace onart {
 	class Model;
 	class Scene;
 	/// <summary>
-	/// °ÔÀÓ ¼Ó ¼¼»ó¿¡ Á¸ÀçÇÏ´Â °³Ã¼µéÀÔ´Ï´Ù.
+	/// ê²Œìž„ ì† ì„¸ìƒì— ì¡´ìž¬í•˜ëŠ” ê°œì²´ë“¤ìž…ë‹ˆë‹¤.
 	/// </summary>
 	class Entity
 	{
 	public:
-#ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY ¸ÅÅ©·Î¸¦ Á¤ÀÇÇÑ °æ¿ì Á¤¼ö Å°¸¦ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
+#ifdef OA_USE_INT_AS_KEY	// OA_USE_INT_AS_KEY ë§¤í¬ë¡œë¥¼ ì •ì˜í•œ ê²½ìš° ì •ìˆ˜ í‚¤ë¥¼ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 		using EntityKey = int;
 #else
-		using EntityKey = std::string;	// const char*·Î º¯°æ ¿¹Á¤
+		using EntityKey = std::string;	// const char*ë¡œ ë³€ê²½ ì˜ˆì •
 #endif
 		/// <summary>
-		/// °³Ã¼¸¦ »ý¼ºÇÕ´Ï´Ù. Æ¯º°È÷ ¸Å ÇÁ·¹ÀÓ ¾÷µ¥ÀÌÆ®ÇÒ ³»¿ëÀÌ ¾ø´Â °³Ã¼´Â »ó¼Ó ¾øÀÌ ±×´ë·Î »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
-		/// <para>½ºÇÁ¶óÀÌÆ® È¤Àº ¸ðµ¨: addAnim(), setModel()·Î Á¤ÇÕ´Ï´Ù.</para>
-		/// <para>»ó¼ÓÇÒ ¶§: isFixed=trueÀÎ °æ¿ì Ä«¸Þ¶óÀÇ ¿µÇâÀ» ¹ÞÁö ¾Ê½À´Ï´Ù. (ÀÌ´Â [-1,1]^3¿¡ µé¾î°¥ Á¤µµ·Î ÃàÃ´À» ¸ÂÃç¾ß ÇÑ´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù)</para>
+		/// ê°œì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. íŠ¹ë³„ížˆ ë§¤ í”„ë ˆìž„ ì—…ë°ì´íŠ¸í•  ë‚´ìš©ì´ ì—†ëŠ” ê°œì²´ëŠ” ìƒì† ì—†ì´ ê·¸ëŒ€ë¡œ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+		/// <para>ìŠ¤í”„ë¼ì´íŠ¸ í˜¹ì€ ëª¨ë¸: addAnim(), setModel()ë¡œ ì •í•©ë‹ˆë‹¤.</para>
+		/// <para>ìƒì†í•  ë•Œ: isFixed=trueì¸ ê²½ìš° ì¹´ë©”ë¼ì˜ ì˜í–¥ì„ ë°›ì§€ ì•ŠìŠµë‹ˆë‹¤. (ì´ëŠ” [-1,1]^3ì— ë“¤ì–´ê°ˆ ì •ë„ë¡œ ì¶•ì²™ì„ ë§žì¶°ì•¼ í•œë‹¤ëŠ” ì˜ë¯¸ìž…ë‹ˆë‹¤)</para>
 		/// </summary>
-		/// <param name="k">°³Ã¼ÀÇ ÀÌ¸§(È¤Àº id)ÀÔ´Ï´Ù. ±âº»ÀûÀ¸·Î std::string Å¸ÀÔÀÌÁö¸¸ OA_USE_INT_AS_KEY ¸ÅÅ©·Î »ç¿ë ½Ã int·Î »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.</param>
-		/// <param name="transform">°³Ã¼ÀÇ À§Ä¡, Å©±â, È¸ÀüÀ» ³ªÅ¸³À´Ï´Ù.</param>
-		/// <param name="isFixed">Ä«¸Þ¶óÀÇ ÀÌµ¿¿¡ ¿µÇâÀ» ¹Þ´Â ¿©ºÎ¸¦ ¼³Á¤ÇÕ´Ï´Ù. false°¡ ¿µÇâÀ» ¾È ¹Þ´Â´Ù´Â ¶æÀ¸·Î, 2D, 3D ¸ðµÎ °¡´ÉÇÕ´Ï´Ù.</param>
-		/// <param name="responseContinuously">trueÀÎ °æ¿ì ¾Ö´Ï¸ÞÀÌ¼Ç ÁøÇà »óÅÂ¿¡ ´ëÇÏ¿© ¿¬¼ÓÀûÀ¸·Î ¹ÝÀÀÇÕ´Ï´Ù.</param>
-		/// <param name="isTranslucent">¸ðµ¨ ¹× ¾Ö´Ï¸ÞÀÌ¼Ç Áß ÇÏ³ª¶óµµ Åõ¸í¼ºÀÌ Á¶±ÝÀÌ¶óµµ ÀÖ´Â °æ¿ì true·Î ¼³Á¤ÇÕ´Ï´Ù.</param>
+		/// <param name="k">ê°œì²´ì˜ ì´ë¦„(í˜¹ì€ id)ìž…ë‹ˆë‹¤. ê¸°ë³¸ì ìœ¼ë¡œ std::string íƒ€ìž…ì´ì§€ë§Œ OA_USE_INT_AS_KEY ë§¤í¬ë¡œ ì‚¬ìš© ì‹œ intë¡œ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.</param>
+		/// <param name="transform">ê°œì²´ì˜ ìœ„ì¹˜, í¬ê¸°, íšŒì „ì„ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.</param>
+		/// <param name="isFixed">ì¹´ë©”ë¼ì˜ ì´ë™ì— ì˜í–¥ì„ ë°›ëŠ” ì—¬ë¶€ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤. falseê°€ ì˜í–¥ì„ ì•ˆ ë°›ëŠ”ë‹¤ëŠ” ëœ»ìœ¼ë¡œ, 2D, 3D ëª¨ë‘ ê°€ëŠ¥í•©ë‹ˆë‹¤.</param>
+		/// <param name="responseContinuously">trueì¸ ê²½ìš° ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ ìƒíƒœì— ëŒ€í•˜ì—¬ ì—°ì†ì ìœ¼ë¡œ ë°˜ì‘í•©ë‹ˆë‹¤.</param>
+		/// <param name="isTranslucent">ëª¨ë¸ ë° ì• ë‹ˆë©”ì´ì…˜ ì¤‘ í•˜ë‚˜ë¼ë„ íˆ¬ëª…ì„±ì´ ì¡°ê¸ˆì´ë¼ë„ ìžˆëŠ” ê²½ìš° trueë¡œ ì„¤ì •í•©ë‹ˆë‹¤.</param>
 		Entity(const EntityKey& k, const Transform& transform, bool isFixed = false, bool responseContinuously = false, bool isTranslucent = false);
 		/// <summary>
-		/// °³Ã¼¸¦ »ý¼ºÇÕ´Ï´Ù. Æ¯º°È÷ ¸Å ÇÁ·¹ÀÓ ¾÷µ¥ÀÌÆ®ÇÒ ³»¿ëÀÌ ¾ø´Â °³Ã¼´Â »ó¼Ó ¾øÀÌ ±×´ë·Î »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
-		/// <para>½ºÇÁ¶óÀÌÆ® È¤Àº ¸ðµ¨: addAnim(), setModel()·Î Á¤ÇÕ´Ï´Ù.</para>
-		/// <para>»ó¼ÓÇÒ ¶§: isFixed=trueÀÎ °æ¿ì Ä«¸Þ¶óÀÇ ¿µÇâÀ» ¹ÞÁö ¾Ê½À´Ï´Ù. (ÀÌ´Â [-1,1]^3¿¡ µé¾î°¥ Á¤µµ·Î ÃàÃ´À» ¸ÂÃç¾ß ÇÑ´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù)</para>
+		/// ê°œì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. íŠ¹ë³„ížˆ ë§¤ í”„ë ˆìž„ ì—…ë°ì´íŠ¸í•  ë‚´ìš©ì´ ì—†ëŠ” ê°œì²´ëŠ” ìƒì† ì—†ì´ ê·¸ëŒ€ë¡œ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+		/// <para>ìŠ¤í”„ë¼ì´íŠ¸ í˜¹ì€ ëª¨ë¸: addAnim(), setModel()ë¡œ ì •í•©ë‹ˆë‹¤.</para>
+		/// <para>ìƒì†í•  ë•Œ: isFixed=trueì¸ ê²½ìš° ì¹´ë©”ë¼ì˜ ì˜í–¥ì„ ë°›ì§€ ì•ŠìŠµë‹ˆë‹¤. (ì´ëŠ” [-1,1]^3ì— ë“¤ì–´ê°ˆ ì •ë„ë¡œ ì¶•ì²™ì„ ë§žì¶°ì•¼ í•œë‹¤ëŠ” ì˜ë¯¸ìž…ë‹ˆë‹¤)</para>
 		/// </summary>
-		/// <param name="k">°³Ã¼ÀÇ ÀÌ¸§(È¤Àº id)ÀÔ´Ï´Ù. ±âº»ÀûÀ¸·Î std::string Å¸ÀÔÀÌÁö¸¸ OA_USE_INT_AS_KEY ¸ÅÅ©·Î »ç¿ë ½Ã int·Î »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.</param>
-		/// <param name="anim0">±âº» ¿ÜÇüÀ» Á¤ÇÕ´Ï´Ù. ÇüÅÂ´Â ÀÖÀ¸³ª ¾÷µ¥ÀÌÆ® ÇÔ¼ö´Â ÇÊ¿ä ¾øÀ» ¶§ À¯¿ëÇÕ´Ï´Ù.</param>
-		/// <param name="transform">°³Ã¼ÀÇ À§Ä¡, Å©±â, È¸ÀüÀ» ³ªÅ¸³À´Ï´Ù.</param>
-		/// <param name="isFixed">Ä«¸Þ¶óÀÇ ÀÌµ¿¿¡ ¿µÇâÀ» ¹Þ´Â ¿©ºÎ¸¦ ¼³Á¤ÇÕ´Ï´Ù. false°¡ ¿µÇâÀ» ¾È ¹Þ´Â´Ù´Â ¶æÀ¸·Î, 2D, 3D ¸ðµÎ °¡´ÉÇÕ´Ï´Ù.</param>
-		/// <param name="responseContinuously">trueÀÎ °æ¿ì ¾Ö´Ï¸ÞÀÌ¼Ç ÁøÇà »óÅÂ¿¡ ´ëÇÏ¿© ¿¬¼ÓÀûÀ¸·Î ¹ÝÀÀÇÕ´Ï´Ù.</param>
-		/// <param name="isTranslucent">¾Ö´Ï¸ÞÀÌ¼Ç¿¡ Åõ¸í¼ºÀÌ Á¶±ÝÀÌ¶óµµ ÀÖ´Â °æ¿ì true·Î ¼³Á¤ÇÕ´Ï´Ù.</param>
+		/// <param name="k">ê°œì²´ì˜ ì´ë¦„(í˜¹ì€ id)ìž…ë‹ˆë‹¤. ê¸°ë³¸ì ìœ¼ë¡œ std::string íƒ€ìž…ì´ì§€ë§Œ OA_USE_INT_AS_KEY ë§¤í¬ë¡œ ì‚¬ìš© ì‹œ intë¡œ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.</param>
+		/// <param name="anim0">ê¸°ë³¸ ì™¸í˜•ì„ ì •í•©ë‹ˆë‹¤. í˜•íƒœëŠ” ìžˆìœ¼ë‚˜ ì—…ë°ì´íŠ¸ í•¨ìˆ˜ëŠ” í•„ìš” ì—†ì„ ë•Œ ìœ ìš©í•©ë‹ˆë‹¤.</param>
+		/// <param name="transform">ê°œì²´ì˜ ìœ„ì¹˜, í¬ê¸°, íšŒì „ì„ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.</param>
+		/// <param name="isFixed">ì¹´ë©”ë¼ì˜ ì´ë™ì— ì˜í–¥ì„ ë°›ëŠ” ì—¬ë¶€ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤. falseê°€ ì˜í–¥ì„ ì•ˆ ë°›ëŠ”ë‹¤ëŠ” ëœ»ìœ¼ë¡œ, 2D, 3D ëª¨ë‘ ê°€ëŠ¥í•©ë‹ˆë‹¤.</param>
+		/// <param name="responseContinuously">trueì¸ ê²½ìš° ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ ìƒíƒœì— ëŒ€í•˜ì—¬ ì—°ì†ì ìœ¼ë¡œ ë°˜ì‘í•©ë‹ˆë‹¤.</param>
+		/// <param name="isTranslucent">ì• ë‹ˆë©”ì´ì…˜ì— íˆ¬ëª…ì„±ì´ ì¡°ê¸ˆì´ë¼ë„ ìžˆëŠ” ê²½ìš° trueë¡œ ì„¤ì •í•©ë‹ˆë‹¤.</param>
 		Entity(const EntityKey& k, const Transform& transform, pAnimation& anim0, bool isFixed = false, bool responseContinuously = false, bool isTranslucent = true);
 		/// <summary>
-		/// °³Ã¼¸¦ »ý¼ºÇÕ´Ï´Ù. Æ¯º°È÷ ¸Å ÇÁ·¹ÀÓ ¾÷µ¥ÀÌÆ®ÇÒ ³»¿ëÀÌ ¾ø´Â °³Ã¼´Â »ó¼Ó ¾øÀÌ ±×´ë·Î »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
-		/// <para>½ºÇÁ¶óÀÌÆ® È¤Àº ¸ðµ¨: addAnim(), setModel()·Î Á¤ÇÕ´Ï´Ù.</para>
-		/// <para>»ó¼ÓÇÒ ¶§: isFixed=trueÀÎ °æ¿ì Ä«¸Þ¶óÀÇ ¿µÇâÀ» ¹ÞÁö ¾Ê½À´Ï´Ù. (ÀÌ´Â [-1,1]^3¿¡ µé¾î°¥ Á¤µµ·Î ÃàÃ´À» ¸ÂÃç¾ß ÇÑ´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù)</para>
+		/// ê°œì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. íŠ¹ë³„ížˆ ë§¤ í”„ë ˆìž„ ì—…ë°ì´íŠ¸í•  ë‚´ìš©ì´ ì—†ëŠ” ê°œì²´ëŠ” ìƒì† ì—†ì´ ê·¸ëŒ€ë¡œ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+		/// <para>ìŠ¤í”„ë¼ì´íŠ¸ í˜¹ì€ ëª¨ë¸: addAnim(), setModel()ë¡œ ì •í•©ë‹ˆë‹¤.</para>
+		/// <para>ìƒì†í•  ë•Œ: isFixed=trueì¸ ê²½ìš° ì¹´ë©”ë¼ì˜ ì˜í–¥ì„ ë°›ì§€ ì•ŠìŠµë‹ˆë‹¤. (ì´ëŠ” [-1,1]^3ì— ë“¤ì–´ê°ˆ ì •ë„ë¡œ ì¶•ì²™ì„ ë§žì¶°ì•¼ í•œë‹¤ëŠ” ì˜ë¯¸ìž…ë‹ˆë‹¤)</para>
 		/// </summary>
-		/// <param name="k">°³Ã¼ÀÇ ÀÌ¸§(È¤Àº id)ÀÔ´Ï´Ù. ±âº»ÀûÀ¸·Î std::string Å¸ÀÔÀÌÁö¸¸ OA_USE_INT_AS_KEY ¸ÅÅ©·Î »ç¿ë ½Ã int·Î »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.</param>
-		/// <param name="transform">°³Ã¼ÀÇ À§Ä¡, Å©±â, È¸ÀüÀ» ³ªÅ¸³À´Ï´Ù.</param>
-		/// <param name="model">±âº» ¿ÜÇüÀ» Á¤ÇÕ´Ï´Ù. ÇüÅÂ´Â ÀÖÀ¸³ª ¾÷µ¥ÀÌÆ® ÇÔ¼ö´Â ÇÊ¿ä ¾øÀ» ¶§ À¯¿ëÇÕ´Ï´Ù.</param>
-		/// <param name="isFixed">Ä«¸Þ¶óÀÇ ÀÌµ¿¿¡ ¿µÇâÀ» ¹Þ´Â ¿©ºÎ¸¦ ¼³Á¤ÇÕ´Ï´Ù. false°¡ ¿µÇâÀ» ¾È ¹Þ´Â´Ù´Â ¶æÀ¸·Î, 2D, 3D ¸ðµÎ °¡´ÉÇÕ´Ï´Ù.</param>
-		/// <param name="responseContinuously">trueÀÎ °æ¿ì ¾Ö´Ï¸ÞÀÌ¼Ç ÁøÇà »óÅÂ¿¡ ´ëÇÏ¿© ¿¬¼ÓÀûÀ¸·Î ¹ÝÀÀÇÕ´Ï´Ù.</param>
-		/// <param name="isTranslucent">¸ðµ¨ ÅØ½ºÃ³¿¡ Åõ¸í¼ºÀÌ Á¶±ÝÀÌ¶óµµ ÀÖ´Â °æ¿ì true·Î ¼³Á¤ÇÕ´Ï´Ù.</param>
+		/// <param name="k">ê°œì²´ì˜ ì´ë¦„(í˜¹ì€ id)ìž…ë‹ˆë‹¤. ê¸°ë³¸ì ìœ¼ë¡œ std::string íƒ€ìž…ì´ì§€ë§Œ OA_USE_INT_AS_KEY ë§¤í¬ë¡œ ì‚¬ìš© ì‹œ intë¡œ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.</param>
+		/// <param name="transform">ê°œì²´ì˜ ìœ„ì¹˜, í¬ê¸°, íšŒì „ì„ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.</param>
+		/// <param name="model">ê¸°ë³¸ ì™¸í˜•ì„ ì •í•©ë‹ˆë‹¤. í˜•íƒœëŠ” ìžˆìœ¼ë‚˜ ì—…ë°ì´íŠ¸ í•¨ìˆ˜ëŠ” í•„ìš” ì—†ì„ ë•Œ ìœ ìš©í•©ë‹ˆë‹¤.</param>
+		/// <param name="isFixed">ì¹´ë©”ë¼ì˜ ì´ë™ì— ì˜í–¥ì„ ë°›ëŠ” ì—¬ë¶€ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤. falseê°€ ì˜í–¥ì„ ì•ˆ ë°›ëŠ”ë‹¤ëŠ” ëœ»ìœ¼ë¡œ, 2D, 3D ëª¨ë‘ ê°€ëŠ¥í•©ë‹ˆë‹¤.</param>
+		/// <param name="responseContinuously">trueì¸ ê²½ìš° ì• ë‹ˆë©”ì´ì…˜ ì§„í–‰ ìƒíƒœì— ëŒ€í•˜ì—¬ ì—°ì†ì ìœ¼ë¡œ ë°˜ì‘í•©ë‹ˆë‹¤.</param>
+		/// <param name="isTranslucent">ëª¨ë¸ í…ìŠ¤ì²˜ì— íˆ¬ëª…ì„±ì´ ì¡°ê¸ˆì´ë¼ë„ ìžˆëŠ” ê²½ìš° trueë¡œ ì„¤ì •í•©ë‹ˆë‹¤.</param>
 		Entity(const EntityKey& k, const Transform& transform, std::shared_ptr<Model>& model, bool isFixed = false, bool responseContinuously = false, bool isTranslucent = false);
 		Entity(const Entity&) = delete;
 		/// <summary>
-		/// À§Ä¡¸¦ ¾ò½À´Ï´Ù. Ä«¸Þ¶ó µî°ú °°ÀÌ ¿ùµå ÁÂÇ¥¸¦ Áö¼ÓÀûÀ¸·Î ÃßÀûÇÏ´Â °ÍÀ» À§ÇØ ¸¸µé¾îÁ³½À´Ï´Ù.
+		/// ìœ„ì¹˜ë¥¼ ì–»ìŠµë‹ˆë‹¤. ì¹´ë©”ë¼ ë“±ê³¼ ê°™ì´ ì›”ë“œ ì¢Œí‘œë¥¼ ì§€ì†ì ìœ¼ë¡œ ì¶”ì í•˜ëŠ” ê²ƒì„ ìœ„í•´ ë§Œë“¤ì–´ì¡ŒìŠµë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getPos() { return transform.getGlobalPosition(); }
 		/// <summary>
-		/// °³Ã¼°¡ activeÇÏ´Ù´Â °ÍÀº update()°¡ ¸Å ÇÁ·¹ÀÓ È£ÃâµÈ´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù.
+		/// ê°œì²´ê°€ activeí•˜ë‹¤ëŠ” ê²ƒì€ update()ê°€ ë§¤ í”„ë ˆìž„ í˜¸ì¶œëœë‹¤ëŠ” ì˜ë¯¸ìž…ë‹ˆë‹¤.
 		/// </summary>
 		bool isActive = true;
 		/// <summary>
-		/// trueÀÎ °æ¿ì¿¡¸¸ °³Ã¼°¡ È­¸é¿¡ ·»´õ¸µµË´Ï´Ù.
+		/// trueì¸ ê²½ìš°ì—ë§Œ ê°œì²´ê°€ í™”ë©´ì— ë Œë”ë§ë©ë‹ˆë‹¤.
 		/// </summary>
 		bool isRendered = true;
 		/// <summary>
-		/// trueÀÎ °æ¿ì ¾À º¯°æ ½Ã °³Ã¼°¡ ÆÄ±«µÇÁö ¾Ê½À´Ï´Ù. ÀÌ °ªÀº ¾ðÁ¦µç º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù.
+		/// trueì¸ ê²½ìš° ì”¬ ë³€ê²½ ì‹œ ê°œì²´ê°€ íŒŒê´´ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ì´ ê°’ì€ ì–¸ì œë“  ë³€ê²½í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 		/// </summary>
 		bool preserveOnSceneChange = false;
 		/// <summary>
-		/// °³Ã¼¿¡ Åõ¸íµµ°¡ Á¶±ÝÀÌ¶óµµ ÀÖ´Â °æ¿ì true·Î ¼³Á¤ÇØ ÁÖ¼¼¿ä. 2D °³Ã¼ÀÇ °æ¿ì ¿ÏÀüÇÑ Á÷»ç°¢Çü ÀÌ¹ÌÁö°¡ ¾Æ´Ï¸é ¸ðµÎ true¿©¾ß ÇÕ´Ï´Ù.
-		/// ¾ÕµÚ ¼ø¼­ º¯°æÀÌ ¾ø´Â 2D °ÔÀÓ(ex: 90µµ Ãø¸é ½ÃÁ¡, 90µµ Á¶°¨ ½ÃÁ¡)¿¡¼­´Â °ÅÀÇ ¸ðµç °³Ã¼¿¡ Åõ¸íµµ°¡ Á¸ÀçÇÏ±â ¶§¹®¿¡ ¼³Á¤ÇÒ ÇÊ¿ä ¾ø½À´Ï´Ù. ÀÌ¶§´Â OAGLE_2DGAME ¸ÅÅ©·Î¸¦ ÀÌ ÆÄÀÏ À§¿¡ Á¤ÀÇÇØ ÁÖ¼¼¿ä. °ÔÀÓ ¼º´ÉÀÌ ´Ù¼Ò ÁÁ¾ÆÁö¸ç ÀÌ »ó¼ö¿¡ ½Å°æ ¾µ ÇÊ¿ä°¡ ¾ø¾îÁý´Ï´Ù.
-		/// 2D °ÔÀÓÀÌ¶óµµ Æ÷ÄÏ¸ó°ú °°ÀÌ ºñ½ºµëÇÑ Á¶°¨ÀÇ °æ¿ì »ç¹°ÀÇ ÀüÈÄ °ü°è°¡ º¯ÇÏ±â ¶§¹®¿¡ OAGLE_2DGAME ¸ÅÅ©·Î¸¦ »ç¿ëÇÏÁö ¾Ê¾Æ¾ß ÇÕ´Ï´Ù. (»ç¿ëÇÒ °æ¿ì Ã³À½¿¡ ¾Õ¿¡ ÀÖ´ø °³Ã¼°¡ µÚ·Î °¥ °æ¿ì Á÷»ç°¢Çü ¿µ¿ª¸¸Å­ °¡·ÁÁü)
+		/// ê°œì²´ì— íˆ¬ëª…ë„ê°€ ì¡°ê¸ˆì´ë¼ë„ ìžˆëŠ” ê²½ìš° trueë¡œ ì„¤ì •í•´ ì£¼ì„¸ìš”. 2D ê°œì²´ì˜ ê²½ìš° ì™„ì „í•œ ì§ì‚¬ê°í˜• ì´ë¯¸ì§€ê°€ ì•„ë‹ˆë©´ ëª¨ë‘ trueì—¬ì•¼ í•©ë‹ˆë‹¤.
+		/// ì•žë’¤ ìˆœì„œ ë³€ê²½ì´ ì—†ëŠ” 2D ê²Œìž„(ex: 90ë„ ì¸¡ë©´ ì‹œì , 90ë„ ì¡°ê° ì‹œì )ì—ì„œëŠ” ê±°ì˜ ëª¨ë“  ê°œì²´ì— íˆ¬ëª…ë„ê°€ ì¡´ìž¬í•˜ê¸° ë•Œë¬¸ì— ì„¤ì •í•  í•„ìš” ì—†ìŠµë‹ˆë‹¤. ì´ë•ŒëŠ” OAGLE_2DGAME ë§¤í¬ë¡œë¥¼ ì´ íŒŒì¼ ìœ„ì— ì •ì˜í•´ ì£¼ì„¸ìš”. ê²Œìž„ ì„±ëŠ¥ì´ ë‹¤ì†Œ ì¢‹ì•„ì§€ë©° ì´ ìƒìˆ˜ì— ì‹ ê²½ ì“¸ í•„ìš”ê°€ ì—†ì–´ì§‘ë‹ˆë‹¤.
+		/// 2D ê²Œìž„ì´ë¼ë„ í¬ì¼“ëª¬ê³¼ ê°™ì´ ë¹„ìŠ¤ë“¬í•œ ì¡°ê°ì˜ ê²½ìš° ì‚¬ë¬¼ì˜ ì „í›„ ê´€ê³„ê°€ ë³€í•˜ê¸° ë•Œë¬¸ì— OAGLE_2DGAME ë§¤í¬ë¡œë¥¼ ì‚¬ìš©í•˜ì§€ ì•Šì•„ì•¼ í•©ë‹ˆë‹¤. (ì‚¬ìš©í•  ê²½ìš° ì²˜ìŒì— ì•žì— ìžˆë˜ ê°œì²´ê°€ ë’¤ë¡œ ê°ˆ ê²½ìš° ì§ì‚¬ê°í˜• ì˜ì—­ë§Œí¼ ê°€ë ¤ì§)
 		/// </summary>
 		const bool isTranslucent;
 		/// <summary>
-		/// °³Ã¼ÀÇ Å°¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ê°œì²´ì˜ í‚¤ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		/// <returns></returns>
 		inline const EntityKey& name() const { return key; }
 		/// <summary>
-		/// Ä«¸Þ¶ó ±âÁØ zÁÂÇ¥¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì¹´ë©”ë¼ ê¸°ì¤€ zì¢Œí‘œë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		float zIndex();
 		/// <summary>
-		/// ÀÀ¿ë ´Ü°è¿¡¼­ »ç¿ëÇÏÁö ¾Ê´Â °ÍÀÌ ÁÁ½À´Ï´Ù.
+		/// ì‘ìš© ë‹¨ê³„ì—ì„œ ì‚¬ìš©í•˜ì§€ ì•ŠëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.
 		/// </summary>
 		void act(int kp, float progress = 0);
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀÇ Æ¯Á¤ Å°Æ÷ÀÎÆ®¸¦ Áö³µÀ» ¶§ °³Ã¼°¡ ÃëÇÒ Çàµ¿ÀÔ´Ï´Ù.
-		/// ÀÌº¥Æ®¸¦ Àü´ÞÇÏ´Â ¿ëµµ·Î »ç¿ëÇÒ ¼öµµ ÀÖÀ¸³ª Å°Æ÷ÀÎÆ® ¹øÈ£¿Í Áßº¹µÇÁö ¾Êµµ·Ï ÀÀ¿ë ´Ü°è¿¡¼­ ÅëÀÏÇÏ´Â ÆíÀÌ ÃßÃµµË´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì˜ íŠ¹ì • í‚¤í¬ì¸íŠ¸ë¥¼ ì§€ë‚¬ì„ ë•Œ ê°œì²´ê°€ ì·¨í•  í–‰ë™ìž…ë‹ˆë‹¤.
+		/// ì´ë²¤íŠ¸ë¥¼ ì „ë‹¬í•˜ëŠ” ìš©ë„ë¡œ ì‚¬ìš©í•  ìˆ˜ë„ ìžˆìœ¼ë‚˜ í‚¤í¬ì¸íŠ¸ ë²ˆí˜¸ì™€ ì¤‘ë³µë˜ì§€ ì•Šë„ë¡ ì‘ìš© ë‹¨ê³„ì—ì„œ í†µì¼í•˜ëŠ” íŽ¸ì´ ì¶”ì²œë©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="kp">ÀÌº¥Æ® ÇÃ·¡±×/Å°Æ÷ÀÎÆ®</param>
+		/// <param name="kp">ì´ë²¤íŠ¸ í”Œëž˜ê·¸/í‚¤í¬ì¸íŠ¸</param>
 		virtual void Act(int kp, float progress = 0);
 		/// <summary>
-		/// ±âº»ÀûÀ¸·Î ÀÀ¿ë °èÃþ¿¡¼­ Á¢±ÙÇÒ ÀÏ ¾ø´Â ÇÔ¼öÀÔ´Ï´Ù. ²À ÇÊ¿äÇÑ °æ¿ì°¡ ¾Æ´Ï¶ó¸é ¿À¹ö¶óÀÌµù ¹× È£ÃâÇÏÁö ¾Ê´Â °ÍÀÌ ÁÁ½À´Ï´Ù.
+		/// ê¸°ë³¸ì ìœ¼ë¡œ ì‘ìš© ê³„ì¸µì—ì„œ ì ‘ê·¼í•  ì¼ ì—†ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤. ê¼­ í•„ìš”í•œ ê²½ìš°ê°€ ì•„ë‹ˆë¼ë©´ ì˜¤ë²„ë¼ì´ë”© ë° í˜¸ì¶œí•˜ì§€ ì•ŠëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.
 		/// </summary>
 		virtual void render();
 		/// <summary>
-		/// ±âº»ÀûÀ¸·Î ÀÀ¿ë °èÃþ¿¡¼­ Á¢±ÙÇÒ ÀÏ ¾ø´Â ÇÔ¼öÀÔ´Ï´Ù. ²À ÇÊ¿äÇÑ °æ¿ì°¡ ¾Æ´Ï¶ó¸é ¿À¹ö¶óÀÌµù ¹× È£ÃâÇÏÁö ¾Ê´Â °ÍÀÌ ÁÁ½À´Ï´Ù.
+		/// ê¸°ë³¸ì ìœ¼ë¡œ ì‘ìš© ê³„ì¸µì—ì„œ ì ‘ê·¼í•  ì¼ ì—†ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤. ê¼­ í•„ìš”í•œ ê²½ìš°ê°€ ì•„ë‹ˆë¼ë©´ ì˜¤ë²„ë¼ì´ë”© ë° í˜¸ì¶œí•˜ì§€ ì•ŠëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.
 		/// </summary>
 		virtual void update();
 		/// <summary>
-		/// Update() ÇÔ¼ö¸¦ ¿À¹ö¶óÀÌµùÇÏ¿© °³Ã¼°¡ ÇÁ·¹ÀÓ¸¶´Ù ÃëÇÏ´Â Çàµ¿À» Á¤ÀÇÇÕ´Ï´Ù.
+		/// Update() í•¨ìˆ˜ë¥¼ ì˜¤ë²„ë¼ì´ë”©í•˜ì—¬ ê°œì²´ê°€ í”„ë ˆìž„ë§ˆë‹¤ ì·¨í•˜ëŠ” í–‰ë™ì„ ì •ì˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		virtual void Update();
 		/// <summary>
-		/// ÇöÀç ¾Ö´Ï¸ÞÀÌ¼Ç Å°¸¦ ÀÐ½À´Ï´Ù. ÀÀ¿ë ´Ü°è¿¡¼­ »ç¿ëÇÒ ÀÏ ¾ø´Â ÇÔ¼öÀÔ´Ï´Ù.
+		/// í˜„ìž¬ ì• ë‹ˆë©”ì´ì…˜ í‚¤ë¥¼ ì½ìŠµë‹ˆë‹¤. ì‘ìš© ë‹¨ê³„ì—ì„œ ì‚¬ìš©í•  ì¼ ì—†ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤.
 		/// </summary>
 		inline int getAnimKey() { return responseContinuously ? -1 : animKp; }
 		/// <summary>
-		/// ÇöÁ¸ °´Ã¼ Áß¿¡¼­ ÇØ´ç Å°¸¦ °¡Áø °ÍµéÀ» Ã£½À´Ï´Ù. ¾ø´Â °æ¿ì ºó º¤ÅÍ¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+		/// í˜„ì¡´ ê°ì²´ ì¤‘ì—ì„œ í•´ë‹¹ í‚¤ë¥¼ ê°€ì§„ ê²ƒë“¤ì„ ì°¾ìŠµë‹ˆë‹¤. ì—†ëŠ” ê²½ìš° ë¹ˆ ë²¡í„°ë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		static std::vector<Entity*> gets(const EntityKey& k);
 		/// <summary>
-		/// ÇöÁ¸ °´Ã¼ Áß¿¡¼­ ÇØ´ç Å°¸¦ °¡Áö°í ¿øÇÏ´Â °³Ã¼ÇüÀÎ °ÍÀ» º¤ÅÍ¿¡ ´ã¾Æ ¸®ÅÏÇÕ´Ï´Ù.
+		/// í˜„ì¡´ ê°ì²´ ì¤‘ì—ì„œ í•´ë‹¹ í‚¤ë¥¼ ê°€ì§€ê³  ì›í•˜ëŠ” ê°œì²´í˜•ì¸ ê²ƒì„ ë²¡í„°ì— ë‹´ì•„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		template <class T>
 		static std::vector<T*> gets(const EntityKey& k);
 		/// <summary>
-		/// ÇöÁ¸ °´Ã¼ Áß¿¡¼­ ÇØ´ç Å°¸¦ °¡Áø °Í Áß °¡Àå ¾ÕÀÇ ÇÏ³ª¸¦ Ã£½À´Ï´Ù. ¾ø´Â °æ¿ì nullptr¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù. ÀÌ Å°¿¡ ´ëÇÏ¿© ÇÏ³ªÀÇ °³Ã¼¸¸ ÀÖÀ» °ÍÀÌ È®½ÇÇÑ °æ¿ì »ç¿ëÇÏ±â¿¡ ÁÁ½À´Ï´Ù.
+		/// í˜„ì¡´ ê°ì²´ ì¤‘ì—ì„œ í•´ë‹¹ í‚¤ë¥¼ ê°€ì§„ ê²ƒ ì¤‘ ê°€ìž¥ ì•žì˜ í•˜ë‚˜ë¥¼ ì°¾ìŠµë‹ˆë‹¤. ì—†ëŠ” ê²½ìš° nullptrë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤. ì´ í‚¤ì— ëŒ€í•˜ì—¬ í•˜ë‚˜ì˜ ê°œì²´ë§Œ ìžˆì„ ê²ƒì´ í™•ì‹¤í•œ ê²½ìš° ì‚¬ìš©í•˜ê¸°ì— ì¢‹ìŠµë‹ˆë‹¤.
 		/// </summary>
 		static Entity* get(const EntityKey& k);
 		/// <summary>
-		/// ÇöÁ¸ °´Ã¼ Áß¿¡¼­ ÇØ´ç Å°¸¦ °¡Áø °Í Áß °¡Àå ¾ÕÀÇ ÇÏ³ª¸¦ Ã£¾Æ ¿øÇÏ´Â °³Ã¼ÇüÀ¸·Î Ä³½ºÆ®ÇÏ¿© ¹ÝÈ¯ÇÕ´Ï´Ù.
-		/// ¾ø°Å³ª °¡Àå ¾ÕÀÇ °ÍÀÌ Å¸ÀÔÀÌ ÀÏÄ¡ÇÏÁö ¾Ê´Â °æ¿ì nullptr¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù. ÀÌ Å°¿¡ ´ëÇÏ¿© ÇÏ³ªÀÇ °³Ã¼¸¸ ÀÖÀ» °ÍÀÌ È®½ÇÇÑ °æ¿ì »ç¿ëÇÏ±â¿¡ ÁÁ½À´Ï´Ù.
+		/// í˜„ì¡´ ê°ì²´ ì¤‘ì—ì„œ í•´ë‹¹ í‚¤ë¥¼ ê°€ì§„ ê²ƒ ì¤‘ ê°€ìž¥ ì•žì˜ í•˜ë‚˜ë¥¼ ì°¾ì•„ ì›í•˜ëŠ” ê°œì²´í˜•ìœ¼ë¡œ ìºìŠ¤íŠ¸í•˜ì—¬ ë°˜í™˜í•©ë‹ˆë‹¤.
+		/// ì—†ê±°ë‚˜ ê°€ìž¥ ì•žì˜ ê²ƒì´ íƒ€ìž…ì´ ì¼ì¹˜í•˜ì§€ ì•ŠëŠ” ê²½ìš° nullptrë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤. ì´ í‚¤ì— ëŒ€í•˜ì—¬ í•˜ë‚˜ì˜ ê°œì²´ë§Œ ìžˆì„ ê²ƒì´ í™•ì‹¤í•œ ê²½ìš° ì‚¬ìš©í•˜ê¸°ì— ì¢‹ìŠµë‹ˆë‹¤.
 		/// </summary>
 		template <class T>
 		inline static T* get(const EntityKey& k) { return dynamic_cast<T*>(get(k)); }
 		/// <summary>
-		/// °³Ã¼¸¦ Á¦°ÅÇÕ´Ï´Ù.
+		/// ê°œì²´ë¥¼ ì œê±°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static void destroy(Entity* e) { delete e; }
 		/// <summary>
-		/// ÇöÁ¸ °´Ã¼ Áß¿¡¼­ ÇØ´ç Å°¸¦ °¡Áö°í ¿øÇÏ´Â °³Ã¼ÇüÀÎ °Í Áß °¡Àå ¾ÕÀÇ ÇÏ³ª¸¦ Ã£¾Æ ¹ÝÈ¯ÇÕ´Ï´Ù. ´Ü ÇÏ³ªµµ ¾ø´Â °æ¿ì nullptr¸¦ ¹ÝÈ¯ÇÕ´Ï´Ù.
+		/// í˜„ì¡´ ê°ì²´ ì¤‘ì—ì„œ í•´ë‹¹ í‚¤ë¥¼ ê°€ì§€ê³  ì›í•˜ëŠ” ê°œì²´í˜•ì¸ ê²ƒ ì¤‘ ê°€ìž¥ ì•žì˜ í•˜ë‚˜ë¥¼ ì°¾ì•„ ë°˜í™˜í•©ë‹ˆë‹¤. ë‹¨ í•˜ë‚˜ë„ ì—†ëŠ” ê²½ìš° nullptrë¥¼ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		template<class T>
 		static T* get2(const EntityKey& k);
@@ -169,40 +169,40 @@ namespace onart {
 		} __scene;
 	protected:
 		/// <summary>
-		/// °³Ã¼ÀÇ À§Ä¡, Å©±â, È¸ÀüÀ» ³ªÅ¸³À´Ï´Ù.
+		/// ê°œì²´ì˜ ìœ„ì¹˜, í¬ê¸°, íšŒì „ì„ ë‚˜íƒ€ëƒ…ë‹ˆë‹¤.
 		/// </summary>
 		Transform transform;
 		/// <summary>
-		/// °³Ã¼ÀÇ ½Ã°¢(timepoint)ÀÔ´Ï´Ù. °³Ã¼°¡ ActiveÇÑ °æ¿ì¿¡¸¸ Áõ°¡ÇÕ´Ï´Ù.
+		/// ê°œì²´ì˜ ì‹œê°(timepoint)ìž…ë‹ˆë‹¤. ê°œì²´ê°€ Activeí•œ ê²½ìš°ì—ë§Œ ì¦ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
 		const float& localTp;
 		/// <summary>
-		/// °³Ã¼ÀÇ ÇöÀç ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂÀÔ´Ï´Ù.
+		/// ê°œì²´ì˜ í˜„ìž¬ ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœìž…ë‹ˆë‹¤.
 		/// </summary>
 		const int& animState;
 		inline void setModel(std::shared_ptr<Model>& model) { this->model = model; }
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼Ç »óÅÂ¸¦ º¯°æÇÕ´Ï´Ù. ÇöÀç Àû¿ë ÁßÀÎ ¹øÈ£¸¦ °í¸£¸é ±× ¾Ö´Ï¸ÞÀÌ¼ÇÀº Ã³À½ºÎÅÍ ´Ù½Ã ½ÃÀÛÇÕ´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ ìƒíƒœë¥¼ ë³€ê²½í•©ë‹ˆë‹¤. í˜„ìž¬ ì ìš© ì¤‘ì¸ ë²ˆí˜¸ë¥¼ ê³ ë¥´ë©´ ê·¸ ì• ë‹ˆë©”ì´ì…˜ì€ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ì‹œìž‘í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setAnim(int idx, float dynamicTps = 1) { as = idx; animKp = 0; animStartTimepoint = tp; animTps = dynamicTps; }
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ÀúÀå ¹è¿­ÀÇ ³¡¿¡ Ãß°¡ÇÕ´Ï´Ù. Ã¹ ¾Ö´Ï¸ÞÀÌ¼ÇÀ» Ãß°¡ÇÒ ¶§ animState´Â 0ÀÌ µË´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ì €ìž¥ ë°°ì—´ì˜ ëì— ì¶”ê°€í•©ë‹ˆë‹¤. ì²« ì• ë‹ˆë©”ì´ì…˜ì„ ì¶”ê°€í•  ë•Œ animStateëŠ” 0ì´ ë©ë‹ˆë‹¤.
 		/// </summary>
 		void addAnim(const std::string& name);
 		/// <summary>
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ÀúÀå ¹è¿­ÀÇ ³¡¿¡ Ãß°¡ÇÕ´Ï´Ù. Ã¹ ¾Ö´Ï¸ÞÀÌ¼ÇÀ» Ãß°¡ÇÒ ¶§ animState´Â 0ÀÌ µË´Ï´Ù. nullptr¸¦ Àü´ÞÇÒ °æ¿ì ÀúÀåµÇÁö ¾Ê½À´Ï´Ù.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ì €ìž¥ ë°°ì—´ì˜ ëì— ì¶”ê°€í•©ë‹ˆë‹¤. ì²« ì• ë‹ˆë©”ì´ì…˜ì„ ì¶”ê°€í•  ë•Œ animStateëŠ” 0ì´ ë©ë‹ˆë‹¤. nullptrë¥¼ ì „ë‹¬í•  ê²½ìš° ì €ìž¥ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		void addAnim(pAnimation&);
 		/// <summary>
-		/// °ÔÀÓÀÌ ½ÇÇàµÈ ÈÄ ÇöÀç ÇÁ·¹ÀÓ¿¡ µé¾î¿À±â±îÁö Èå¸¥ ½Ã°£(ÃÊ)ÀÔ´Ï´Ù.
+		/// ê²Œìž„ì´ ì‹¤í–‰ëœ í›„ í˜„ìž¬ í”„ë ˆìž„ì— ë“¤ì–´ì˜¤ê¸°ê¹Œì§€ íë¥¸ ì‹œê°„(ì´ˆ)ìž…ë‹ˆë‹¤.
 		/// </summary>
 		static const float& tp;
 		/// <summary>
-		/// ÀÌÀü ÇÁ·¹ÀÓ°ú ÇöÀç ÇÁ·¹ÀÓ °£ÀÇ ½Ã°£ °£°Ý(ÃÊ)ÀÔ´Ï´Ù.
+		/// ì´ì „ í”„ë ˆìž„ê³¼ í˜„ìž¬ í”„ë ˆìž„ ê°„ì˜ ì‹œê°„ ê°„ê²©(ì´ˆ)ìž…ë‹ˆë‹¤.
 		/// </summary>
 		static const float& dt;
 		/// <summary>
-		/// °³Ã¼ÀÇ »ö»óÀÔ´Ï´Ù. ¼¯ÀÌ´Â °ÍÀÌ ¾Æ´Ï¶ó ¼ººÐº° °öÇÏ±â·Î °è»êµÇ´Â Á¡ ÁÖÀÇÇÏ¼¼¿ä.
+		/// ê°œì²´ì˜ ìƒ‰ìƒìž…ë‹ˆë‹¤. ì„žì´ëŠ” ê²ƒì´ ì•„ë‹ˆë¼ ì„±ë¶„ë³„ ê³±í•˜ê¸°ë¡œ ê³„ì‚°ë˜ëŠ” ì  ì£¼ì˜í•˜ì„¸ìš”.
 		/// </summary>
 		vec4 color = 1;
 		virtual ~Entity();

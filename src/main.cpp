@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -21,38 +21,38 @@
 #include "OA_Material.h"
 #include "externals/stb_image.h"
 
-// Ã¢ °ü·Ã
+// ì°½ ê´€ë ¨
 GLFWwindow* window = nullptr;
 onart::ivec2 windowSize;
-onart::ivec4 vp_ldwh;	// ÁÂÃø ÇÏ´ÜÀÌ (0,0)
+onart::ivec4 vp_ldwh;	// ì¢Œì¸¡ í•˜ë‹¨ì´ (0,0)
 onart::Camera mainCamera;
 
 void setRatio(unsigned rw, unsigned rh) {
 	mainCamera.ratio.setRatio(rw, rh);
 }
 
-// ÇÁ·¹ÀÓ/½Ã°£
+// í”„ë ˆì„/ì‹œê°„
 int frame = 1;
 float tp = 0, dt;
 
-// ¼ÎÀÌ´õ ÇÁ·Î±×·¥
-onart::Shader program3;		// ºä-ÇÁ·ÎÁ§¼Ç Çà·Ä ¹× ¼ÎÀÌµùÀÇ ¿µÇâÀ» ¹Ş´Â ¼ÎÀÌ´õ ÇÁ·Î±×·¥ÀÔ´Ï´Ù.
-onart::Shader program2;		// ºä-ÇÁ·ÎÁ§¼Ç Çà·Ä ¹× ¼ÎÀÌµùÀÇ ¿µÇâÀ» ¹ŞÁö ¾Ê´Â ¼ÎÀÌ´õ ÇÁ·Î±×·¥ÀÔ´Ï´Ù. °´Ã¼´Â Ç¥ÁØ ºä º¼·ı¿¡ ±×·ÁÁı´Ï´Ù.
+// ì…°ì´ë” í”„ë¡œê·¸ë¨
+onart::Shader program3;		// ë·°-í”„ë¡œì ì…˜ í–‰ë ¬ ë° ì…°ì´ë”©ì˜ ì˜í–¥ì„ ë°›ëŠ” ì…°ì´ë” í”„ë¡œê·¸ë¨ì…ë‹ˆë‹¤.
+onart::Shader program2;		// ë·°-í”„ë¡œì ì…˜ í–‰ë ¬ ë° ì…°ì´ë”©ì˜ ì˜í–¥ì„ ë°›ì§€ ì•ŠëŠ” ì…°ì´ë” í”„ë¡œê·¸ë¨ì…ë‹ˆë‹¤. ê°ì²´ëŠ” í‘œì¤€ ë·° ë³¼ë¥¨ì— ê·¸ë ¤ì§‘ë‹ˆë‹¤.
 
-// ÀÔ·Â
+// ì…ë ¥
 
 /// <summary>
-/// Å°°¡ ´­·È°Å³ª ¶¼ÀÎ ÃÖ±ÙÀÇ ÇÁ·¹ÀÓ ³Ñ¹ö¸¦ ÀúÀåÇÕ´Ï´Ù.
-/// <para>0ÀÎ °æ¿ì ¾Æ¹«·± ÀÇ¹Ìµµ ¾øÀ¸¸ç, ¾ç¼ö NÀÎ °æ¿ì NÇÁ·¹ÀÓÂ°¿¡ Å°°¡ ´­·È´Ù´Â ÀÇ¹ÌÀÌ¸ç, À½¼ö -NÀÎ °æ¿ì NÇÁ·¹ÀÓÂ°¿¡ Å°°¡ ¶¼¿´´Ù´Â ÀÇ¹ÌÀÔ´Ï´Ù.</para>
-/// <para>ÇÁ·¹ÀÓ ³Ñ¹ö°¡ ¾Æ´Ñ Å°°¡ ´­¸° ½Ã°£À» ÀÌ¿ëÇÏ·Á¸é ÀÀ¿ë Ãø¿¡¼­ °ªÀ» ÀúÀåÇÏ´Â ÆíÀÌ ÁÁ½À´Ï´Ù.</para>
+/// í‚¤ê°€ ëˆŒë ¸ê±°ë‚˜ ë–¼ì¸ ìµœê·¼ì˜ í”„ë ˆì„ ë„˜ë²„ë¥¼ ì €ì¥í•©ë‹ˆë‹¤.
+/// <para>0ì¸ ê²½ìš° ì•„ë¬´ëŸ° ì˜ë¯¸ë„ ì—†ìœ¼ë©°, ì–‘ìˆ˜ Nì¸ ê²½ìš° Ní”„ë ˆì„ì§¸ì— í‚¤ê°€ ëˆŒë ¸ë‹¤ëŠ” ì˜ë¯¸ì´ë©°, ìŒìˆ˜ -Nì¸ ê²½ìš° Ní”„ë ˆì„ì§¸ì— í‚¤ê°€ ë–¼ì˜€ë‹¤ëŠ” ì˜ë¯¸ì…ë‹ˆë‹¤.</para>
+/// <para>í”„ë ˆì„ ë„˜ë²„ê°€ ì•„ë‹Œ í‚¤ê°€ ëˆŒë¦° ì‹œê°„ì„ ì´ìš©í•˜ë ¤ë©´ ì‘ìš© ì¸¡ì—ì„œ ê°’ì„ ì €ì¥í•˜ëŠ” í¸ì´ ì¢‹ìŠµë‹ˆë‹¤.</para>
 /// </summary>
 int pressedKey[GLFW_KEY_LAST + 1] = { 0, };
 int pressedMouseKey[GLFW_MOUSE_BUTTON_LAST + 3] = { 0, };
 int keyCount = 0;
 
-onart::ivec2 mousePos;	// ¸¶¿ì½ºÀÇ À§Ä¡¸¦ ÀúÀåÇÕ´Ï´Ù.
+onart::ivec2 mousePos;	// ë§ˆìš°ìŠ¤ì˜ ìœ„ì¹˜ë¥¼ ì €ì¥í•©ë‹ˆë‹¤.
 
-// ÁÖ±â È£Ãâ ÇÔ¼ö (°ÔÀÓ ·çÇÁ)
+// ì£¼ê¸° í˜¸ì¶œ í•¨ìˆ˜ (ê²Œì„ ë£¨í”„)
 void update() {
 	if constexpr (onart::OA_FIX_TIMESCALE) {
 		dt = 1.0f / 60;
@@ -73,7 +73,7 @@ void render() {
 	glfwSwapBuffers(window);
 }
 
-// ÀÌº¥Æ® Äİ¹é ÇÔ¼ö
+// ì´ë²¤íŠ¸ ì½œë°± í•¨ìˆ˜
 
 void keyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -127,7 +127,7 @@ void reshape(GLFWwindow* window, int width, int height) {
 }
 
 /// <summary>
-/// ¸¶¿ì½º ½ºÅ©·Ñ Äİ¹é. ÀÏ¹İ ¸¶¿ì½º ±âÁØ yoffset¸¸ +1(ÈÙ À§·Î) È¤Àº -1ÀÇ °ªÀ» °¡Áı´Ï´Ù.
+/// ë§ˆìš°ìŠ¤ ìŠ¤í¬ë¡¤ ì½œë°±. ì¼ë°˜ ë§ˆìš°ìŠ¤ ê¸°ì¤€ yoffsetë§Œ +1(íœ  ìœ„ë¡œ) í˜¹ì€ -1ì˜ ê°’ì„ ê°€ì§‘ë‹ˆë‹¤.
 /// </summary>
 void scroll(GLFWwindow* window, double xoffset, double yoffset)
 {
@@ -140,7 +140,7 @@ void scroll(GLFWwindow* window, double xoffset, double yoffset)
 }
 
 /// <summary>
-/// °ÔÀÓÀ» Á¾·áÇÕ´Ï´Ù.
+/// ê²Œì„ì„ ì¢…ë£Œí•©ë‹ˆë‹¤.
 /// </summary>
 void exitGame() {
 	glfwSetWindowShouldClose(window, 1);
@@ -149,7 +149,7 @@ void exitGame() {
 
 #ifdef _DEBUG
 /// <summary>
-/// µğ¹ö±× ¸ğµå¿¡ ÇÑÇÏ¿© GL ¿¡·¯ ¹ß»ı ½Ã ³»¿ëÀ» Ãâ·ÂÇÕ´Ï´Ù.
+/// ë””ë²„ê·¸ ëª¨ë“œì— í•œí•˜ì—¬ GL ì—ëŸ¬ ë°œìƒ ì‹œ ë‚´ìš©ì„ ì¶œë ¥í•©ë‹ˆë‹¤.
 /// </summary>
 void GLAPIENTRY
 glErrCallback(GLenum source,
@@ -160,13 +160,13 @@ glErrCallback(GLenum source,
 	const GLchar* message,
 	const void* userParam)
 {
-	fprintf(stderr, "GL Äİ¹é: %s À¯Çü = 0x%x, ½É°¢µµ = 0x%x, ¸Ş½ÃÁö = %s\n",
+	fprintf(stderr, "GL ì½œë°±: %s ìœ í˜• = 0x%x, ì‹¬ê°ë„ = 0x%x, ë©”ì‹œì§€ = %s\n",
 		(type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : ""),
 		type, severity, message);
 }
 #endif
 
-// ÃÊ±âÈ­ ÇÔ¼ö
+// ì´ˆê¸°í™” í•¨ìˆ˜
 bool init() {
 
 	stbi_set_flip_vertically_on_load(true);
@@ -206,9 +206,9 @@ void finalize() {
 	onart::Audio::terminate();
 }
 
-// ÄÜ¼Ö ¼û±è: ¸µÄ¿ ¿É¼Ç - °í±Ş - ÁøÀÔÁ¡ mainCRTStartup, ¸µÄ¿ - ½Ã½ºÅÛ - ÇÏÀ§ ½Ã½ºÅÛ Ã¢(/SUBSYSTEM:WINDOWS)
+// ì½˜ì†” ìˆ¨ê¹€: ë§ì»¤ ì˜µì…˜ - ê³ ê¸‰ - ì§„ì…ì  mainCRTStartup, ë§ì»¤ - ì‹œìŠ¤í…œ - í•˜ìœ„ ì‹œìŠ¤í…œ ì°½(/SUBSYSTEM:WINDOWS)
 int main(int argc, char* argv[]) {
-	std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path());	// µğ¹ö±× ¶Ç´Â ÇÁ·ÎÆÄÀÏ¸µ ½Ã ½ÇÇà ÆÄÀÏ ·çÆ®·Î ÀÌµ¿
+	std::filesystem::current_path(std::filesystem::path(argv[0]).parent_path());	// ë””ë²„ê·¸ ë˜ëŠ” í”„ë¡œíŒŒì¼ë§ ì‹œ ì‹¤í–‰ íŒŒì¼ ë£¨íŠ¸ë¡œ ì´ë™
 	if (!(window = onart::createWindow("OAGLE", 1280, 720))) { 
 		glfwTerminate();
 		return 1;
@@ -227,10 +227,10 @@ int main(int argc, char* argv[]) {
 	glfwSetCursorPosCallback(window, mouseMoved);
 	glfwSetScrollCallback(window, scroll);
 	
-	//glfwSetCharCallback(window, callback);		 // °ÔÀÓÃ¢¿¡ ÀÔ·ÂµÈ ±ÛÀÚÀÇ À¯´ÏÄÚµå °ª void callback(GLFWwindow* window, unsigned code)
-	//glfwSetWindowFocusCallback(window, callback)	 // Ã¢ÀÌ ÀÔ·Â Æ÷Ä¿½º¸¦ ¾ò¾úÀ» ¶§/ÀÒ¾úÀ» ¶§ È£ÃâµË´Ï´Ù. ÀÒÀº °æ¿ì 0, ¾Æ´Ñ °æ¿ì ±× ¿ÜÀÇ °ªÀÌ ÁÖ¾îÁı´Ï´Ù. void callback(GLFWwindow* window, int focused)
-	//glfwSetDropCallback(window, callback);		 // ÆÄÀÏÀ» µå·¡±×ÇÏ¿© Ã¢¿¡ µå·ÓÇÒ °æ¿ì °æ·Î°¡ Àü´ŞµË´Ï´Ù. void callback(GLFWwindow* window, int count, const char** paths)
-	//glfwSetWindowCloseCallback(window, callback)	 // À©µµ¿ì Á¾·á ½ÅÈ£ ¹ß»ı ½Ã Äİ¹éÀ» º¯°æÇÕ´Ï´Ù. void callback(GLFWwindow* window)
+	//glfwSetCharCallback(window, callback);		 // ê²Œì„ì°½ì— ì…ë ¥ëœ ê¸€ìì˜ ìœ ë‹ˆì½”ë“œ ê°’ void callback(GLFWwindow* window, unsigned code)
+	//glfwSetWindowFocusCallback(window, callback)	 // ì°½ì´ ì…ë ¥ í¬ì»¤ìŠ¤ë¥¼ ì–»ì—ˆì„ ë•Œ/ìƒì—ˆì„ ë•Œ í˜¸ì¶œë©ë‹ˆë‹¤. ìƒì€ ê²½ìš° 0, ì•„ë‹Œ ê²½ìš° ê·¸ ì™¸ì˜ ê°’ì´ ì£¼ì–´ì§‘ë‹ˆë‹¤. void callback(GLFWwindow* window, int focused)
+	//glfwSetDropCallback(window, callback);		 // íŒŒì¼ì„ ë“œë˜ê·¸í•˜ì—¬ ì°½ì— ë“œë¡­í•  ê²½ìš° ê²½ë¡œê°€ ì „ë‹¬ë©ë‹ˆë‹¤. void callback(GLFWwindow* window, int count, const char** paths)
+	//glfwSetWindowCloseCallback(window, callback)	 // ìœˆë„ìš° ì¢…ë£Œ ì‹ í˜¸ ë°œìƒ ì‹œ ì½œë°±ì„ ë³€ê²½í•©ë‹ˆë‹¤. void callback(GLFWwindow* window)
 
 	for (frame = 1; !glfwWindowShouldClose(window); frame++) {
 		glfwPollEvents();

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -34,13 +34,13 @@ namespace onart {
 	static ppMesh mRect;
 	
 	/// <summary>
-	/// Á¤·ÄµÈ º¤ÅÍ¿¡ ´ëÇÏ¿© ÇöÀç Å°Æ÷ÀÎÆ®¸¦ °¡¸®Å°´Â ¹İº¹ÀÚ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
-	/// <para>* ÇöÀç ½Ã°¢ÀÌ Ã¹ Å°Æ÷ÀÎÆ®º¸´Ù ÀÛÀº °æ¿ì(Á¤»óÀû »óÈ²ÀÌ¶ó¸é ÀÖ¾î¼­´Â ¾È µÉ ÀÏ) Ã¹ Å°Æ÷ÀÎÆ®¸¦ ¸®ÅÏÇÕ´Ï´Ù.</para>
-	/// <para>* 3D ¾Ö´Ï¸ŞÀÌ¼ÇÀÇ °æ¿ì ¸®ÅÏ°ªÀº º¸°£ ´ë»ó Áß ¾ÕÂÊÀ» ¶æÇÕ´Ï´Ù.</para>
-	/// <para>* (·çÇÁ°¡ ÀÖ´Â ¾Ö´Ï¸ŞÀÌ¼Ç¿¡ ´ëÇÏ¿© ¸¶Áö¸·, Áï end-1 ¹İº¹ÀÚ°¡ ¸®ÅÏµÇ´Â °æ¿ì´Â Á¤»óÀû »óÈ²ÀÌ¶ó¸é ÀÖ¾î¼­´Â ¾È µÊ)</para>
+	/// ì •ë ¬ëœ ë²¡í„°ì— ëŒ€í•˜ì—¬ í˜„ì¬ í‚¤í¬ì¸íŠ¸ë¥¼ ê°€ë¦¬í‚¤ëŠ” ë°˜ë³µìë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
+	/// <para>* í˜„ì¬ ì‹œê°ì´ ì²« í‚¤í¬ì¸íŠ¸ë³´ë‹¤ ì‘ì€ ê²½ìš°(ì •ìƒì  ìƒí™©ì´ë¼ë©´ ìˆì–´ì„œëŠ” ì•ˆ ë  ì¼) ì²« í‚¤í¬ì¸íŠ¸ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.</para>
+	/// <para>* 3D ì• ë‹ˆë©”ì´ì…˜ì˜ ê²½ìš° ë¦¬í„´ê°’ì€ ë³´ê°„ ëŒ€ìƒ ì¤‘ ì•ìª½ì„ ëœ»í•©ë‹ˆë‹¤.</para>
+	/// <para>* (ë£¨í”„ê°€ ìˆëŠ” ì• ë‹ˆë©”ì´ì…˜ì— ëŒ€í•˜ì—¬ ë§ˆì§€ë§‰, ì¦‰ end-1 ë°˜ë³µìê°€ ë¦¬í„´ë˜ëŠ” ê²½ìš°ëŠ” ì •ìƒì  ìƒí™©ì´ë¼ë©´ ìˆì–´ì„œëŠ” ì•ˆ ë¨)</para>
 	/// </summary>
-	/// <param name="ar">Á¤·ÄµÈ Å°Æ÷ÀÎÆ® º¤ÅÍ</param>
-	/// <param name="tp">ÇöÀç ½ÃÁ¡</param>
+	/// <param name="ar">ì •ë ¬ëœ í‚¤í¬ì¸íŠ¸ ë²¡í„°</param>
+	/// <param name="tp">í˜„ì¬ ì‹œì </param>
 	/// <returns></returns>
 	template <class T>
 	inline auto kpNow(const std::vector<Keypoint<T>>& ar, float tp) {
@@ -81,19 +81,19 @@ namespace onart {
 		pAnimation anim = get(name);
 		if (anim) return anim;
 		if (!pivots.empty() && pivots.size() != rects.size()) {
-			fprintf(stderr,"pivots°¡ ºñ¾î ÀÖÁö ¾ÊÀº °æ¿ì rects¿Í pivotsÀÇ ±æÀÌ´Â °°¾Æ¾ß ÇÕ´Ï´Ù.\n");
+			fprintf(stderr,"pivotsê°€ ë¹„ì–´ ìˆì§€ ì•Šì€ ê²½ìš° rectsì™€ pivotsì˜ ê¸¸ì´ëŠ” ê°™ì•„ì•¼ í•©ë‹ˆë‹¤.\n");
 			return pAnimation();
 		}
-		// ½ÃÁ¡¼øÀ¸·Î Á¤·Ä
+		// ì‹œì ìˆœìœ¼ë¡œ ì •ë ¬
 		auto tx(tex);	auto rcts(rects);
 		std::sort(tx.begin(), tx.end());
 		std::sort(rcts.begin(), rcts.end());
 		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
-			fprintf(stderr, "rects´Â ¹İµå½Ã ½ÃÁ¡¼øÀ¸·Î Á¤·ÄµÈ »óÅÂ·Î ÀÔ·ÂµÇ¾î¾ß ÇÕ´Ï´Ù.\n");
+			fprintf(stderr, "rectsëŠ” ë°˜ë“œì‹œ ì‹œì ìˆœìœ¼ë¡œ ì •ë ¬ëœ ìƒíƒœë¡œ ì…ë ¥ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.\n");
 			return pAnimation();
 		}
 		
-		// rect¸¦ »ó´ë°ªÀ¸·Î º¯ÇüÇÏ¿© ÀúÀå
+		// rectë¥¼ ìƒëŒ€ê°’ìœ¼ë¡œ ë³€í˜•í•˜ì—¬ ì €ì¥
 		const bool pv = !pivots.empty();
 		size_t sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
 		std::vector<vec4> sctrz(pivots.size());
@@ -102,7 +102,7 @@ namespace onart {
 			const ivec2& wh = kpNow(tx, timepoint)->value->size;
 			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y) };
 			if (pv) {
-				// pivots¸¦ °¡Áö°í ¿øº» ÇÁ·¹ÀÓ »çÀÌÁî¿¡ ºñ·ÊÇÏ°Ô Å©±â Á¶ÀıÇÏ´Â º¤ÅÍ Ãß°¡
+				// pivotsë¥¼ ê°€ì§€ê³  ì›ë³¸ í”„ë ˆì„ ì‚¬ì´ì¦ˆì— ë¹„ë¡€í•˜ê²Œ í¬ê¸° ì¡°ì ˆí•˜ëŠ” ë²¡í„° ì¶”ê°€
 				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value.z, rects[i].value.w);
 				vec2 xy(rctz[i].value.z, rctz[i].value.w);
 				xy *= vec2((float)wh.x, (float)wh.y) / 1024.0f;
@@ -330,7 +330,7 @@ namespace onart {
 
 	Animation3D::Animation3D(const aiScene* scn, float duration, int tps, bool loop, const std::vector<float>& sig_kp)
 		:Animation(loop, duration, tps), sigKp(sig_kp) {
-		// Á¤Á¡¿¡ ¿µÇâÀ» ÁÖ´Â »Àµé
+		// ì •ì ì— ì˜í–¥ì„ ì£¼ëŠ” ë¼ˆë“¤
 		for (unsigned k = 0; k < scn->mNumMeshes; k++) {
 			aiMesh* m = scn->mMeshes[k];
 			for (unsigned i = 0; i < m->mNumBones; i++) {
@@ -342,11 +342,11 @@ namespace onart {
 			}
 		}
 
-		// »À Æ®¸®
+		// ë¼ˆ íŠ¸ë¦¬
 		globalInverse = oam4(scn->mRootNode->mTransformation.Inverse());
 		readHierarchy(scn->mRootNode, btree);
 
-		// ¾Ö´Ï¸ŞÀÌ¼Ç Å°ÇÁ·¹ÀÓ
+		// ì• ë‹ˆë©”ì´ì…˜ í‚¤í”„ë ˆì„
 		aiAnimation* anim = scn->mAnimations[0];
 		for (unsigned k = 0; k < anim->mNumChannels; k++) {
 			aiNodeAnim* cut = anim->mChannels[k];
@@ -375,11 +375,11 @@ namespace onart {
 		Assimp::Importer importer;
 		const aiScene* scn = importer.ReadFile(file, 0);
 		if (!scn) {
-			printf("\nAssimp ¿À·ù: %s\n", importer.GetErrorString());
+			printf("\nAssimp ì˜¤ë¥˜: %s\n", importer.GetErrorString());
 			return pAnimation();
 		}
 		if (!scn->HasAnimations()) {
-			printf("\nÆÄÀÏ¿¡ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¾ø½À´Ï´Ù.\n");
+			printf("\níŒŒì¼ì— ì• ë‹ˆë©”ì´ì…˜ì´ ì—†ìŠµë‹ˆë‹¤.\n");
 			return pAnimation();
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
@@ -399,11 +399,11 @@ namespace onart {
 
 		const aiScene* scn = importer.ReadFileFromMemory(dat, len, 0, ".dae");
 		if (!scn) {
-			printf("\nAssimp ¿À·ù: %s\n", importer.GetErrorString());
+			printf("\nAssimp ì˜¤ë¥˜: %s\n", importer.GetErrorString());
 			return pAnimation();
 		}
 		if (!scn->HasAnimations()) {
-			printf("\nÆÄÀÏ¿¡ ¾Ö´Ï¸ŞÀÌ¼ÇÀÌ ¾ø½À´Ï´Ù\n");
+			printf("\níŒŒì¼ì— ì• ë‹ˆë©”ì´ì…˜ì´ ì—†ìŠµë‹ˆë‹¤\n");
 			return pAnimation();
 		}
 		aiAnimation* anim0 = scn->mAnimations[0];
@@ -428,7 +428,7 @@ namespace onart {
 				auto p2 = p1 + 1;
 				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
 
-				if (interp < 0) { pos = p1->value; /* ¾Ö´Ï¸ŞÀÌ¼Ç Å°Æ÷ÀÎÆ®°¡ Àß¸ø ÁöÁ¤µÈ (0ºÎÅÍ ½ÃÀÛÇÏÁö ¾Ê´Â) ÄÉÀÌ½º */ }
+				if (interp < 0) { pos = p1->value; /* ì• ë‹ˆë©”ì´ì…˜ í‚¤í¬ì¸íŠ¸ê°€ ì˜ëª» ì§€ì •ëœ (0ë¶€í„° ì‹œì‘í•˜ì§€ ì•ŠëŠ”) ì¼€ì´ìŠ¤ */ }
 				else { pos = lerp(p1->value, p2->value, interp); }
 			}
 		}
@@ -440,7 +440,7 @@ namespace onart {
 			else {
 				auto p2 = p1 + 1;
 				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
-				if (interp < 0) { rotation = p1->value; /* ¾Ö´Ï¸ŞÀÌ¼Ç Å°Æ÷ÀÎÆ®°¡ Àß¸ø ÁöÁ¤µÈ (0ºÎÅÍ ½ÃÀÛÇÏÁö ¾Ê´Â) ÄÉÀÌ½º */ }
+				if (interp < 0) { rotation = p1->value; /* ì• ë‹ˆë©”ì´ì…˜ í‚¤í¬ì¸íŠ¸ê°€ ì˜ëª» ì§€ì •ëœ (0ë¶€í„° ì‹œì‘í•˜ì§€ ì•ŠëŠ”) ì¼€ì´ìŠ¤ */ }
 				else { rotation = slerp(p1->value, p2->value, interp); }
 			}
 		}
@@ -452,7 +452,7 @@ namespace onart {
 			else {
 				auto p2 = p1 + 1;
 				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
-				if (interp < 0) { scale = p1->value; /* ¾Ö´Ï¸ŞÀÌ¼Ç Å°Æ÷ÀÎÆ®°¡ Àß¸ø ÁöÁ¤µÈ (0ºÎÅÍ ½ÃÀÛÇÏÁö ¾Ê´Â) ÄÉÀÌ½º */ }
+				if (interp < 0) { scale = p1->value; /* ì• ë‹ˆë©”ì´ì…˜ í‚¤í¬ì¸íŠ¸ê°€ ì˜ëª» ì§€ì •ëœ (0ë¶€í„° ì‹œì‘í•˜ì§€ ì•ŠëŠ”) ì¼€ì´ìŠ¤ */ }
 				else { scale = lerp(p1->value, p2->value, interp); }
 			}
 		}
@@ -461,12 +461,12 @@ namespace onart {
 
 	void Animation3D::setGlobalTrans(BoneTree& t, const mat4& parent) {
 		mat4 nodeTransform = t.transformation;
-		bool isMoving = keys.find(t.id) != keys.end();	// ¾Ö´Ï¸ŞÀÌ¼Ç Å°Æ÷ÀÎÆ® ¾È¿¡ ÀÖ´Â°¡?
+		bool isMoving = keys.find(t.id) != keys.end();	// ì• ë‹ˆë©”ì´ì…˜ í‚¤í¬ì¸íŠ¸ ì•ˆì— ìˆëŠ”ê°€?
 		if (isMoving) {	
 			nodeTransform = keys[t.id].localTransform;
 		}
 		mat4 global = parent * nodeTransform;
-		bool isBone = t.id >= 0;	// Á¤Á¡¿¡ Á÷Á¢Àû ¿¬°üÀÌ ÀÖ´Â°¡?
+		bool isBone = t.id >= 0;	// ì •ì ì— ì§ì ‘ì  ì—°ê´€ì´ ìˆëŠ”ê°€?
 		if (isBone) {
 			Bone& b = u[t.id];
 			b.uni = globalInverse * global * b.offset;
@@ -554,7 +554,7 @@ namespace onart {
 		// vector<Bone> u;
 		fread(&sz, sizeof(int), 1, fp);
 		u.reserve(sz);
-		mat4* off = (mat4*)malloc(sizeof(mat4) * sz);	// »ı¼ºÀÚ È£Ãâ x
+		mat4* off = (mat4*)malloc(sizeof(mat4) * sz);	// ìƒì„±ì í˜¸ì¶œ x
 		if (!off) exit(1);
 		fread(off, sizeof(mat4), sz, fp);
 		mat4* off2 = off;
@@ -662,19 +662,19 @@ namespace onart {
 		pAnimation anim = get(name);
 		if (anim) return anim;
 		if (!pivots.empty() && pivots.size() != rects.size()) {
-			fprintf(stderr, "pivots°¡ ºñ¾î ÀÖÁö ¾ÊÀº °æ¿ì rects¿Í pivotsÀÇ ±æÀÌ´Â °°¾Æ¾ß ÇÕ´Ï´Ù.\n");
+			fprintf(stderr, "pivotsê°€ ë¹„ì–´ ìˆì§€ ì•Šì€ ê²½ìš° rectsì™€ pivotsì˜ ê¸¸ì´ëŠ” ê°™ì•„ì•¼ í•©ë‹ˆë‹¤.\n");
 			return pAnimation();
 		}
-		// ½ÃÁ¡¼øÀ¸·Î Á¤·Ä
+		// ì‹œì ìˆœìœ¼ë¡œ ì •ë ¬
 		auto tx(tex);	auto rcts(rects);
 		std::sort(tx.begin(), tx.end());
 		std::sort(rcts.begin(), rcts.end());
 		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
-			fprintf(stderr, "rects´Â ¹İµå½Ã ½ÃÁ¡¼øÀ¸·Î Á¤·ÄµÈ »óÅÂ·Î ÀÔ·ÂµÇ¾î¾ß ÇÕ´Ï´Ù.\n");
+			fprintf(stderr, "rectsëŠ” ë°˜ë“œì‹œ ì‹œì ìˆœìœ¼ë¡œ ì •ë ¬ëœ ìƒíƒœë¡œ ì…ë ¥ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.\n");
 			return pAnimation();
 		}
 
-		// rect¸¦ »ó´ë°ªÀ¸·Î º¯ÇüÇÏ¿© ÀúÀå
+		// rectë¥¼ ìƒëŒ€ê°’ìœ¼ë¡œ ë³€í˜•í•˜ì—¬ ì €ì¥
 		const bool pv = !pivots.empty();
 		size_t sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
 		std::vector<vec4> sctrz(pivots.size());
@@ -683,7 +683,7 @@ namespace onart {
 			const ivec2& wh = kpNow(tx, timepoint)->value->size;
 			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh.x, (float)wh.y, (float)wh.x, (float)wh.y) };
 			if (pv) {
-				// pivots¸¦ °¡Áö°í ¿øº» ÇÁ·¹ÀÓ »çÀÌÁî¿¡ ºñ·ÊÇÏ°Ô Å©±â Á¶ÀıÇÏ´Â º¤ÅÍ Ãß°¡
+				// pivotsë¥¼ ê°€ì§€ê³  ì›ë³¸ í”„ë ˆì„ ì‚¬ì´ì¦ˆì— ë¹„ë¡€í•˜ê²Œ í¬ê¸° ì¡°ì ˆí•˜ëŠ” ë²¡í„° ì¶”ê°€
 				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value.z, rects[i].value.w);
 				vec2 xy(rctz[i].value.z, rctz[i].value.w);
 				xy *= vec2((float)wh.x, (float)wh.y) / 1024.0f;

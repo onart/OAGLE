@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -17,8 +17,8 @@ namespace onart {
 	struct Texture;
 
 	/// <summary>
-	/// ÀÚÁÖ »ç¿ëÇÏ´Â UI °³Ã¼¸¦ ¸ð¾Æ µÎ¾ú½À´Ï´Ù. ÀÌ°ÍÀº »ó¼ÓÇÏ°Å³ª ÄÚµå¸¦ ¼öÁ¤ÇØ¼­ È°¿ëÇÒ ¼ö ÀÖÀ¸¸ç ÀÚÃ¼ Á¦¾î´Â ÀÀ¿ë °èÃþ¿¡¼­ UniversalFunctor¸¦ ¸¸µé¾î¼­ ¼öÇàÇØ ÁÖ¼¼¿ä.
-	/// UI °³Ã¼´Â ±âº»ÀûÀ¸·Î ¸¶¿ì½º·Î »ç¿ëÇÕ´Ï´Ù. ÀÌ°ÍÀÇ À§Ä¡°¡ °ãÄ¡´Â °æ¿ì z-index¿¡ ¹«°üÇÏ°Ô ¸ðµÎ ¹ÝÀÀÇÏ¸ç, ÀÌ¿¡ ´ëÇÑ Ã¥ÀÓÀº ¿£ÁøÀÌ ÁöÁö ¾Ê½À´Ï´Ù. EntityÀÇ isActive µîÀ» ÅëÇØ Á¶ÀýÇØ ÁÖ¼¼¿ä.
+	/// ìžì£¼ ì‚¬ìš©í•˜ëŠ” UI ê°œì²´ë¥¼ ëª¨ì•„ ë‘ì—ˆìŠµë‹ˆë‹¤. ì´ê²ƒì€ ìƒì†í•˜ê±°ë‚˜ ì½”ë“œë¥¼ ìˆ˜ì •í•´ì„œ í™œìš©í•  ìˆ˜ ìžˆìœ¼ë©° ìžì²´ ì œì–´ëŠ” ì‘ìš© ê³„ì¸µì—ì„œ UniversalFunctorë¥¼ ë§Œë“¤ì–´ì„œ ìˆ˜í–‰í•´ ì£¼ì„¸ìš”.
+	/// UI ê°œì²´ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ ë§ˆìš°ìŠ¤ë¡œ ì‚¬ìš©í•©ë‹ˆë‹¤. ì´ê²ƒì˜ ìœ„ì¹˜ê°€ ê²¹ì¹˜ëŠ” ê²½ìš° z-indexì— ë¬´ê´€í•˜ê²Œ ëª¨ë‘ ë°˜ì‘í•˜ë©°, ì´ì— ëŒ€í•œ ì±…ìž„ì€ ì—”ì§„ì´ ì§€ì§€ ì•ŠìŠµë‹ˆë‹¤. Entityì˜ isActive ë“±ì„ í†µí•´ ì¡°ì ˆí•´ ì£¼ì„¸ìš”.
 	/// </summary>
 	namespace UI {
 		class UIEntity : public Entity {
@@ -27,98 +27,98 @@ namespace onart {
 			inline UIEntity(const EntityKey& _1, const Transform& _2, bool _3 = true, bool _4 = false, bool _5 = false) : Entity(_1, _2, _3, _4, _5) { }
 			inline UIEntity(const EntityKey& _1, const Transform& _2, pAnimation& _3, bool _4 = true, bool _5 = false, bool _6 = false) : Entity(_1, _2, _3, _4, _5, _6) {}
 			/// <summary>
-			/// °³Ã¼°¡ ÇöÀç ÆÇÁ¤ÀÌ °¡´ÉÇÑ »óÈ²ÀÎÁö È®ÀÎÇÏ±â À§ÇÑ °ªÀÔ´Ï´Ù.
+			/// ê°œì²´ê°€ í˜„ìž¬ íŒì •ì´ ê°€ëŠ¥í•œ ìƒí™©ì¸ì§€ í™•ì¸í•˜ê¸° ìœ„í•œ ê°’ìž…ë‹ˆë‹¤.
 			/// </summary>
 			virtual vec4 clickbox() { return vec4(-100, -100, 200, 200); }
 		};
 
 		/// <summary>
-		/// ÅØ½ºÆ® °³Ã¼ÀÔ´Ï´Ù. ±ÛÀÚº°·Î Å©±â/»ö»óÀ» Á¶Á¤ÇÒ ¼ö ÀÖ½À´Ï´Ù.
-		/// <para>Å©±â: Å©±â´Â Á÷»ç°¢Çü¿¡ ¸Âµµ·Ï ³ª¿À´Âµ¥, ÅØ½ºÆ® ¾È¿¡¼­ »ó´ëÀû Å©±â¸¦ ´Ù¸£°Ô ¼³Á¤ÇÏ°íÀÚ ÇÑ´Ù¸é \a¿Í ´ÃÀÓÃà(x ¶Ç´Â y ¶Ç´Â a. ´ë¹®ÀÚ´Â ÀÎÁ¤ÇÏÁö ¾Ê½À´Ï´Ù.), ±×¸®°í Á¤¼ö ºÎºÐ 1ÀÚ¸® ¼Ò¼ö ºÎºÐ 2ÀÚ¸® ½Ç¼ö¸¦ ÀÔ·ÂÇÕ´Ï´Ù(Áï, ÃÖ´ë »ó´ë Å©±â´Â 9.99/0.01=999¹è). ¿¹¸¦ µé¾î,
-		/// u"¾È³ç\ax2.00ÇÏ¼¼\ay0.40¿ä"¶ó°í ÀÔ·ÂÇÏ¸é "¾È³ç"ÀÇ °¢ ±ÛÀÚ°¡ Å©±â 1x1ÀÌ¶ó°í ÇÒ ¶§ "ÇÏ¼¼"ÀÇ °¢ ±ÛÀÚ Å©±â´Â 2x1, "¿ä"ÀÇ Å©±â´Â 2x0.4°¡ µË´Ï´Ù. \a µÚ 5ÀÚ¸®°¡ À¯È¿ÇÑ °ªÀÌ ¾Æ´Ñ °æ¿ì ±ÛÀÚ Å©±â´Â º¯ÇÏÁö ¾ÊÀ¸¸ç
-		/// 5ÀÚ¸®¸¸Å­Àº ¹«½ÃµË´Ï´Ù. aÃàÀº x,yÃà ¸ðµÎ¸¦ ¼³Á¤ÇÕ´Ï´Ù.</para>
-		/// <para>»ö: ±âº»ÀûÀ¸·Î ¹é»öÀÌ¸ç, content ³»¿ë¿¡¼­ \b¿Í 16Áø ÄÚµå(RGBA ¼ø)¸¦ ÀÌ¿ëÇÏ¿© »öÀ» º¯°æÇÒ ¼ö ÀÖ½À´Ï´Ù. ¿¹¸¦ µé¾î, u"¾È³ç\bff0000ffÇÏ¼¼\b00ff00ff¿ä"¶ó°í ÀÔ·ÂÇÏ¸é
-		/// "¾È³ç"Àº ÇÏ¾ç, "ÇÏ¼¼"´Â »¡°­, "¿ä"´Â ÃÊ·Ï»öÀ¸·Î Ãâ·ÂµË´Ï´Ù. ¸¸¾à \b µÚ 8ÀÚ¸®°¡ À¯È¿ÇÏÁö ¾ÊÀº °ªÀ» °¡Áö´Â °æ¿ì »öÀº º¯ÇÏÁö ¾ÊÀ¸¸ç °ªµéÀº ¹«½ÃÇÕ´Ï´Ù.</para>
-		/// <para>ÁÙ¹Ù²Þ: \nÀº ÁÙÀ» ¹Ù²ß´Ï´Ù.</para>
+		/// í…ìŠ¤íŠ¸ ê°œì²´ìž…ë‹ˆë‹¤. ê¸€ìžë³„ë¡œ í¬ê¸°/ìƒ‰ìƒì„ ì¡°ì •í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+		/// <para>í¬ê¸°: í¬ê¸°ëŠ” ì§ì‚¬ê°í˜•ì— ë§žë„ë¡ ë‚˜ì˜¤ëŠ”ë°, í…ìŠ¤íŠ¸ ì•ˆì—ì„œ ìƒëŒ€ì  í¬ê¸°ë¥¼ ë‹¤ë¥´ê²Œ ì„¤ì •í•˜ê³ ìž í•œë‹¤ë©´ \aì™€ ëŠ˜ìž„ì¶•(x ë˜ëŠ” y ë˜ëŠ” a. ëŒ€ë¬¸ìžëŠ” ì¸ì •í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.), ê·¸ë¦¬ê³  ì •ìˆ˜ ë¶€ë¶„ 1ìžë¦¬ ì†Œìˆ˜ ë¶€ë¶„ 2ìžë¦¬ ì‹¤ìˆ˜ë¥¼ ìž…ë ¥í•©ë‹ˆë‹¤(ì¦‰, ìµœëŒ€ ìƒëŒ€ í¬ê¸°ëŠ” 9.99/0.01=999ë°°). ì˜ˆë¥¼ ë“¤ì–´,
+		/// u"ì•ˆë…•\ax2.00í•˜ì„¸\ay0.40ìš”"ë¼ê³  ìž…ë ¥í•˜ë©´ "ì•ˆë…•"ì˜ ê° ê¸€ìžê°€ í¬ê¸° 1x1ì´ë¼ê³  í•  ë•Œ "í•˜ì„¸"ì˜ ê° ê¸€ìž í¬ê¸°ëŠ” 2x1, "ìš”"ì˜ í¬ê¸°ëŠ” 2x0.4ê°€ ë©ë‹ˆë‹¤. \a ë’¤ 5ìžë¦¬ê°€ ìœ íš¨í•œ ê°’ì´ ì•„ë‹Œ ê²½ìš° ê¸€ìž í¬ê¸°ëŠ” ë³€í•˜ì§€ ì•Šìœ¼ë©°
+		/// 5ìžë¦¬ë§Œí¼ì€ ë¬´ì‹œë©ë‹ˆë‹¤. aì¶•ì€ x,yì¶• ëª¨ë‘ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.</para>
+		/// <para>ìƒ‰: ê¸°ë³¸ì ìœ¼ë¡œ ë°±ìƒ‰ì´ë©°, content ë‚´ìš©ì—ì„œ \bì™€ 16ì§„ ì½”ë“œ(RGBA ìˆœ)ë¥¼ ì´ìš©í•˜ì—¬ ìƒ‰ì„ ë³€ê²½í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ì˜ˆë¥¼ ë“¤ì–´, u"ì•ˆë…•\bff0000ffí•˜ì„¸\b00ff00ffìš”"ë¼ê³  ìž…ë ¥í•˜ë©´
+		/// "ì•ˆë…•"ì€ í•˜ì–‘, "í•˜ì„¸"ëŠ” ë¹¨ê°•, "ìš”"ëŠ” ì´ˆë¡ìƒ‰ìœ¼ë¡œ ì¶œë ¥ë©ë‹ˆë‹¤. ë§Œì•½ \b ë’¤ 8ìžë¦¬ê°€ ìœ íš¨í•˜ì§€ ì•Šì€ ê°’ì„ ê°€ì§€ëŠ” ê²½ìš° ìƒ‰ì€ ë³€í•˜ì§€ ì•Šìœ¼ë©° ê°’ë“¤ì€ ë¬´ì‹œí•©ë‹ˆë‹¤.</para>
+		/// <para>ì¤„ë°”ê¿ˆ: \nì€ ì¤„ì„ ë°”ê¿‰ë‹ˆë‹¤.</para>
 		/// </summary>
 		class Text: public UIEntity {
 		public:
 			/// <summary>
-			/// ÅØ½ºÆ® °³Ã¼¸¦ »ý¼ºÇÕ´Ï´Ù. Æ¯Á¤ Á÷»ç°¢Çü ¹üÀ§¿¡ °íÁ¤µË´Ï´Ù. ÀÌ¸¦ Å×¸é °íÁ¤ UI¿¡ »ç¿ëÇÏ±â¿¡ ÀûÇÕÇÕ´Ï´Ù.
-			/// Á÷»ç°¢Çü ¹üÀ§¿¡ °íÁ¤µÇ±â ¶§¹®¿¡ ¼öÁ÷ Á¤·ÄÀº Á¦°øµÇÁö ¾Ê½À´Ï´Ù.
+			/// í…ìŠ¤íŠ¸ ê°œì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. íŠ¹ì • ì§ì‚¬ê°í˜• ë²”ìœ„ì— ê³ ì •ë©ë‹ˆë‹¤. ì´ë¥¼ í…Œë©´ ê³ ì • UIì— ì‚¬ìš©í•˜ê¸°ì— ì í•©í•©ë‹ˆë‹¤.
+			/// ì§ì‚¬ê°í˜• ë²”ìœ„ì— ê³ ì •ë˜ê¸° ë•Œë¬¸ì— ìˆ˜ì§ ì •ë ¬ì€ ì œê³µë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="key">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëµÉ ÅØ½ºÆ® °³Ã¼ÀÇ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-			/// <param name="font">ÅØ½ºÆ®ÀÇ ¸ð¾çÀÔ´Ï´Ù. ÆÄÀÏ È¤Àº ¸Þ¸ð¸®¿¡¼­ ºÒ·¯¿Ã ¼ö ÀÖ½À´Ï´Ù.</param>
-			/// <param name="content">ÅØ½ºÆ®ÀÇ ³»¿ë ¹× ±ÛÀÚº° Å©±â/»ö»óÀÔ´Ï´Ù. </param>
-			/// <param name="ldwh">ÅØ½ºÆ®¸¦ ÀÌ Á÷»ç°¢Çü(L-D-W-H)¿¡ ¸Â°Ô Ãâ·ÂÇÕ´Ï´Ù.</param>
-			/// <param name="maxWidth">ÃÖ´ë ÆøÀÔ´Ï´Ù. Á÷»ç°¢Çü°ú µ¿ÀÏÇÑ ´ÜÀ§°¡ ¾Æ´Ñ, ºÒ·¯¿Â ÆùÆ®¿¡ ´ëÇÑ ÇÈ¼¿ ´ÜÀ§ÀÔ´Ï´Ù. Á÷Á¢ Á¶ÀýÇÏ¸é¼­ ¿µ¿ªÀ» ¸ÂÃß´Â °ÍÀÌ °­ÇÏ°Ô ±ÇÀåµË´Ï´Ù.</param>
-			/// <param name="fullFit">trueÀÎ °æ¿ì ÁÖ¾îÁø Á÷»ç°¢Çü¿¡ Á¤È®È÷ ¸Â°Ô Ãâ·ÂÇÕ´Ï´Ù. Áï, ±ÛÀÚÀÇ ¿øº» ºñÀ²À» À¯ÁöÇÏÁö ¾Ê½À´Ï´Ù.</param>
-			/// <param name="align">¼öÆò Á¤·Ä »óÅÂÀÔ´Ï´Ù. °¡¿îµ¥/¿ÞÂÊ/¿À¸¥ÂÊ ¿É¼Ç¸¸ °¡´ÉÇÕ´Ï´Ù.</param>
-			/// <param name="rowGap">Çà °£°ÝÀÔ´Ï´Ù. ¹®¼­ ÇÁ·Î±×·¥µé°ú µ¿ÀÏÇÑ ´ÜÀ§·Î Á¦°øµÇ´Â °ÍÀÌ ¾Æ´Ï¹Ç·Î Á÷Á¢ Á¶ÀýÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.</param>
-			/// <param name="color">ÀüÃ¼ÀÇ »öÀÔ´Ï´Ù.</param>
+			/// <param name="key">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©ë  í…ìŠ¤íŠ¸ ê°œì²´ì˜ ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+			/// <param name="font">í…ìŠ¤íŠ¸ì˜ ëª¨ì–‘ìž…ë‹ˆë‹¤. íŒŒì¼ í˜¹ì€ ë©”ëª¨ë¦¬ì—ì„œ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.</param>
+			/// <param name="content">í…ìŠ¤íŠ¸ì˜ ë‚´ìš© ë° ê¸€ìžë³„ í¬ê¸°/ìƒ‰ìƒìž…ë‹ˆë‹¤. </param>
+			/// <param name="ldwh">í…ìŠ¤íŠ¸ë¥¼ ì´ ì§ì‚¬ê°í˜•(L-D-W-H)ì— ë§žê²Œ ì¶œë ¥í•©ë‹ˆë‹¤.</param>
+			/// <param name="maxWidth">ìµœëŒ€ í­ìž…ë‹ˆë‹¤. ì§ì‚¬ê°í˜•ê³¼ ë™ì¼í•œ ë‹¨ìœ„ê°€ ì•„ë‹Œ, ë¶ˆëŸ¬ì˜¨ í°íŠ¸ì— ëŒ€í•œ í”½ì…€ ë‹¨ìœ„ìž…ë‹ˆë‹¤. ì§ì ‘ ì¡°ì ˆí•˜ë©´ì„œ ì˜ì—­ì„ ë§žì¶”ëŠ” ê²ƒì´ ê°•í•˜ê²Œ ê¶Œìž¥ë©ë‹ˆë‹¤.</param>
+			/// <param name="fullFit">trueì¸ ê²½ìš° ì£¼ì–´ì§„ ì§ì‚¬ê°í˜•ì— ì •í™•ížˆ ë§žê²Œ ì¶œë ¥í•©ë‹ˆë‹¤. ì¦‰, ê¸€ìžì˜ ì›ë³¸ ë¹„ìœ¨ì„ ìœ ì§€í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.</param>
+			/// <param name="align">ìˆ˜í‰ ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤. ê°€ìš´ë°/ì™¼ìª½/ì˜¤ë¥¸ìª½ ì˜µì…˜ë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤.</param>
+			/// <param name="rowGap">í–‰ ê°„ê²©ìž…ë‹ˆë‹¤. ë¬¸ì„œ í”„ë¡œê·¸ëž¨ë“¤ê³¼ ë™ì¼í•œ ë‹¨ìœ„ë¡œ ì œê³µë˜ëŠ” ê²ƒì´ ì•„ë‹ˆë¯€ë¡œ ì§ì ‘ ì¡°ì ˆí•´ ì£¼ì‹œê¸° ë°”ëžë‹ˆë‹¤.</param>
+			/// <param name="color">ì „ì²´ì˜ ìƒ‰ìž…ë‹ˆë‹¤.</param>
 			Text(const EntityKey& key, Font* font, const oastring& content, const vec4& ldwh, float maxWidth = INF, bool fullFit = false, AlignH align = AlignH::CENTER, float rowGap = 1, const vec4& color = 1);
 			/// <summary>
-			/// ÅØ½ºÆ® °³Ã¼¸¦ »ý¼ºÇÕ´Ï´Ù. Á÷»ç°¢Çü ¹üÀ§¿¡ °íÁ¤µÇÁö ¾Ê°í Æ¯Á¤ ÁöÁ¡À» Áß½ÉÀ¸·Î ÇÕ´Ï´Ù.
-			/// ÀÌ¸¦ Å×¸é °ÔÀÓ »ó ¹°Ã¼¿¡¼­ ÅØ½ºÆ®°¡ »ý»êµÉ ¶§ »ç¿ëÇÏ±â¿¡ ÀûÇÕÇÕ´Ï´Ù. ÀÌ °æ¿ì Camera::world2screen() ÇÔ¼ö¸¦ Âü°íÇØ ÁÖ¼¼¿ä.
-			/// °ÔÀÓÀÇ ´ëÈ­Ã¢°ú °°ÀÌ ÅØ½ºÆ®ÀÇ Å©±â°¡ ½Ç½Ã°£À¸·Î º¯ÇÏ¸é ¾î»öÇÑ ºÎºÐ¿¡µµ »ç¿ëÇÏ±â ÀûÇÕÇÕ´Ï´Ù. ÀÌ °æ¿ì Á¦ÇÑµÈ ¹üÀ§¿¡ ±ÛÀÚ¸¦ ¸ÂÃß´Â ±â´ÉÀº ¸Å°³º¯¼ö size¿Í maxWidth»ÓÀÔ´Ï´Ù.
+			/// í…ìŠ¤íŠ¸ ê°œì²´ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. ì§ì‚¬ê°í˜• ë²”ìœ„ì— ê³ ì •ë˜ì§€ ì•Šê³  íŠ¹ì • ì§€ì ì„ ì¤‘ì‹¬ìœ¼ë¡œ í•©ë‹ˆë‹¤.
+			/// ì´ë¥¼ í…Œë©´ ê²Œìž„ ìƒ ë¬¼ì²´ì—ì„œ í…ìŠ¤íŠ¸ê°€ ìƒì‚°ë  ë•Œ ì‚¬ìš©í•˜ê¸°ì— ì í•©í•©ë‹ˆë‹¤. ì´ ê²½ìš° Camera::world2screen() í•¨ìˆ˜ë¥¼ ì°¸ê³ í•´ ì£¼ì„¸ìš”.
+			/// ê²Œìž„ì˜ ëŒ€í™”ì°½ê³¼ ê°™ì´ í…ìŠ¤íŠ¸ì˜ í¬ê¸°ê°€ ì‹¤ì‹œê°„ìœ¼ë¡œ ë³€í•˜ë©´ ì–´ìƒ‰í•œ ë¶€ë¶„ì—ë„ ì‚¬ìš©í•˜ê¸° ì í•©í•©ë‹ˆë‹¤. ì´ ê²½ìš° ì œí•œëœ ë²”ìœ„ì— ê¸€ìžë¥¼ ë§žì¶”ëŠ” ê¸°ëŠ¥ì€ ë§¤ê°œë³€ìˆ˜ sizeì™€ maxWidthë¿ìž…ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="key">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëµÉ ÅØ½ºÆ® °³Ã¼ÀÇ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-			/// <param name="font">ÅØ½ºÆ®ÀÇ ¸ð¾çÀÔ´Ï´Ù. ÆÄÀÏ È¤Àº ¸Þ¸ð¸®¿¡¼­ ºÒ·¯¿Ã ¼ö ÀÖ½À´Ï´Ù.</param>
-			/// <param name="content">ÅØ½ºÆ®ÀÇ ³»¿ë ¹× ±ÛÀÚº°/Å©±â/»ö»óÀÔ´Ï´Ù.</param>
-			/// <param name="center">Áß½ÉÀÌ µÇ´Â ÁÂÇ¥ÀÔ´Ï´Ù. °ÔÀÓ È­¸é¿¡¼­ °¡¿îµ¥°¡ (0,0)ÀÌ°í Á¾È¾ Áß ÂªÀº ±æÀÌ°¡ 2ÀÔ´Ï´Ù. centerÀÇ ÀÇ¹Ì´Â ¸Å°³º¯¼ö ha, va¿¡ µû¶ó¼­ ´Þ¶óÁý´Ï´Ù.</param>
-			/// <param name="maxWidth">ÃÖ´ë ÆøÀÔ´Ï´Ù. Á÷»ç°¢Çü°ú µ¿ÀÏÇÑ ´ÜÀ§°¡ ¾Æ´Ñ, ºÒ·¯¿Â ÆùÆ®¿¡ ´ëÇÑ ÇÈ¼¿ ´ÜÀ§ÀÔ´Ï´Ù. Á÷Á¢ Á¶ÀýÇÏ¸é¼­ ¿µ¿ªÀ» ¸ÂÃß´Â °ÍÀÌ °­ÇÏ°Ô ±ÇÀåµË´Ï´Ù.</param>
-			/// <param name="ha">¼öÆò Á¤·Ä »óÅÂÀÔ´Ï´Ù. °¡¿îµ¥/¿ÞÂÊ/¿À¸¥ÂÊ ¿É¼Ç¸¸ °¡´ÉÇÕ´Ï´Ù. Æ¯¼º»ó ¿©·¯ ÇàÀ¸·Î ±¸¼ºµÈ ÅØ½ºÆ®°¡ ¾Æ´Ñ °æ¿ì °¡¿îµ¥ Á¤·Ä°ú µ¿ÀÏÇÕ´Ï´Ù.</param>
-			/// <param name="va">¼öÁ÷ Á¤·Ä »óÅÂÀÔ´Ï´Ù. °¡¿îµ¥/À§ÂÊ/¾Æ·¡ÂÊ ¿É¼Ç¸¸ °¡´ÉÇÕ´Ï´Ù.</param>
-			/// <param name="size">ÅØ½ºÆ®ÀÇ Å©±âÀÔ´Ï´Ù. ´Ù¸¥ ÆùÆ®¶ó¸é °°Àº °ªÀÌ °°Àº Å©±â·Î º¸ÀåµÇÁö ¾Ê½À´Ï´Ù.</param>
-			/// <param name="rowGap">Çà °£°ÝÀÔ´Ï´Ù. ¹®¼­ ÇÁ·Î±×·¥µé°ú µ¿ÀÏÇÑ ´ÜÀ§·Î Á¦°øµÇ´Â °ÍÀÌ ¾Æ´Ï¹Ç·Î Á÷Á¢ Á¶ÀýÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù.</param>
-			/// <param name="color">ÀüÃ¼ÀÇ »öÀÔ´Ï´Ù.</param>
+			/// <param name="key">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©ë  í…ìŠ¤íŠ¸ ê°œì²´ì˜ ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+			/// <param name="font">í…ìŠ¤íŠ¸ì˜ ëª¨ì–‘ìž…ë‹ˆë‹¤. íŒŒì¼ í˜¹ì€ ë©”ëª¨ë¦¬ì—ì„œ ë¶ˆëŸ¬ì˜¬ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.</param>
+			/// <param name="content">í…ìŠ¤íŠ¸ì˜ ë‚´ìš© ë° ê¸€ìžë³„/í¬ê¸°/ìƒ‰ìƒìž…ë‹ˆë‹¤.</param>
+			/// <param name="center">ì¤‘ì‹¬ì´ ë˜ëŠ” ì¢Œí‘œìž…ë‹ˆë‹¤. ê²Œìž„ í™”ë©´ì—ì„œ ê°€ìš´ë°ê°€ (0,0)ì´ê³  ì¢…íš¡ ì¤‘ ì§§ì€ ê¸¸ì´ê°€ 2ìž…ë‹ˆë‹¤. centerì˜ ì˜ë¯¸ëŠ” ë§¤ê°œë³€ìˆ˜ ha, vaì— ë”°ë¼ì„œ ë‹¬ë¼ì§‘ë‹ˆë‹¤.</param>
+			/// <param name="maxWidth">ìµœëŒ€ í­ìž…ë‹ˆë‹¤. ì§ì‚¬ê°í˜•ê³¼ ë™ì¼í•œ ë‹¨ìœ„ê°€ ì•„ë‹Œ, ë¶ˆëŸ¬ì˜¨ í°íŠ¸ì— ëŒ€í•œ í”½ì…€ ë‹¨ìœ„ìž…ë‹ˆë‹¤. ì§ì ‘ ì¡°ì ˆí•˜ë©´ì„œ ì˜ì—­ì„ ë§žì¶”ëŠ” ê²ƒì´ ê°•í•˜ê²Œ ê¶Œìž¥ë©ë‹ˆë‹¤.</param>
+			/// <param name="ha">ìˆ˜í‰ ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤. ê°€ìš´ë°/ì™¼ìª½/ì˜¤ë¥¸ìª½ ì˜µì…˜ë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤. íŠ¹ì„±ìƒ ì—¬ëŸ¬ í–‰ìœ¼ë¡œ êµ¬ì„±ëœ í…ìŠ¤íŠ¸ê°€ ì•„ë‹Œ ê²½ìš° ê°€ìš´ë° ì •ë ¬ê³¼ ë™ì¼í•©ë‹ˆë‹¤.</param>
+			/// <param name="va">ìˆ˜ì§ ì •ë ¬ ìƒíƒœìž…ë‹ˆë‹¤. ê°€ìš´ë°/ìœ„ìª½/ì•„ëž˜ìª½ ì˜µì…˜ë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤.</param>
+			/// <param name="size">í…ìŠ¤íŠ¸ì˜ í¬ê¸°ìž…ë‹ˆë‹¤. ë‹¤ë¥¸ í°íŠ¸ë¼ë©´ ê°™ì€ ê°’ì´ ê°™ì€ í¬ê¸°ë¡œ ë³´ìž¥ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.</param>
+			/// <param name="rowGap">í–‰ ê°„ê²©ìž…ë‹ˆë‹¤. ë¬¸ì„œ í”„ë¡œê·¸ëž¨ë“¤ê³¼ ë™ì¼í•œ ë‹¨ìœ„ë¡œ ì œê³µë˜ëŠ” ê²ƒì´ ì•„ë‹ˆë¯€ë¡œ ì§ì ‘ ì¡°ì ˆí•´ ì£¼ì‹œê¸° ë°”ëžë‹ˆë‹¤.</param>
+			/// <param name="color">ì „ì²´ì˜ ìƒ‰ìž…ë‹ˆë‹¤.</param>
 			Text(const EntityKey& key, Font* font, const oastring& content, const vec2& center, float maxWidth = INF, AlignH ha = AlignH::CENTER, AlignV va = AlignV::CENTER, float size = 1, float rowGap = 1, const vec4& color = 1);
 			/// <summary>
-			/// ÁÖ¾îÁø ¹®ÀÚ¿­·Î ³»¿ëÀ» ¹Ù²ß´Ï´Ù. ±ÛÀÚº° Å©±â/»ö»ó ¿É¼ÇÀº »ý¼ºÀÚ¸¦ ÂüÁ¶ÇÏ¼¼¿ä.
+			/// ì£¼ì–´ì§„ ë¬¸ìžì—´ë¡œ ë‚´ìš©ì„ ë°”ê¿‰ë‹ˆë‹¤. ê¸€ìžë³„ í¬ê¸°/ìƒ‰ìƒ ì˜µì…˜ì€ ìƒì„±ìžë¥¼ ì°¸ì¡°í•˜ì„¸ìš”.
 			/// </summary>
 			void setContent(const oastring&);
 			/// <summary>
-			/// ÁÖ¾îÁø ¹®ÀÚ¿­À» ³»¿ë¿¡ µ¡ºÙÀÔ´Ï´Ù.
+			/// ì£¼ì–´ì§„ ë¬¸ìžì—´ì„ ë‚´ìš©ì— ë§ë¶™ìž…ë‹ˆë‹¤.
 			/// </summary>
 			/// <param name=""></param>
 			void append(const oastring&);
 			/// <summary>
-			/// Á¤·Ä ±âÁØÀ» º¯°æÇÕ´Ï´Ù. °¡¿îµ¥/¿ÞÂÊ/¿À¸¥ÂÊ¸¸ °¡´ÉÇÕ´Ï´Ù.
+			/// ì •ë ¬ ê¸°ì¤€ì„ ë³€ê²½í•©ë‹ˆë‹¤. ê°€ìš´ë°/ì™¼ìª½/ì˜¤ë¥¸ìª½ë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 			/// </summary>
 			void setAlign(AlignH);
 			void render();
 			/// <summary>
-			/// ´Ù¸¥ ºÒ·¯¿Â ÆùÆ®·Î º¯°æÇÕ´Ï´Ù.
+			/// ë‹¤ë¥¸ ë¶ˆëŸ¬ì˜¨ í°íŠ¸ë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
 			/// </summary>
 			inline void setFont(Font* font) { this->font = font; }
 			/// <summary>
-			/// ¹®ÀÚ¿­ ÀüÃ¼ÀÇ »öÀ» ¹Ù²ß´Ï´Ù. ±ÛÀÚº° »ö»ó°ú´Â °öÀ¸·Î Àû¿ëµË´Ï´Ù.
+			/// ë¬¸ìžì—´ ì „ì²´ì˜ ìƒ‰ì„ ë°”ê¿‰ë‹ˆë‹¤. ê¸€ìžë³„ ìƒ‰ìƒê³¼ëŠ” ê³±ìœ¼ë¡œ ì ìš©ë©ë‹ˆë‹¤.
 			/// </summary>
 			inline void setColor(const vec4& color) { this->color = color; }
 			/// <summary>
-			/// Áß½É À§Ä¡¸¦ °í·ÁÇÏ¿© È¸ÀüÀ» ¼³Á¤ÇÕ´Ï´Ù. ±âÁ¸¿¡ ÀÖ´ø ´Ù¸¥ º¯È¯Àº µ¤¾î¾¹´Ï´Ù.
+			/// ì¤‘ì‹¬ ìœ„ì¹˜ë¥¼ ê³ ë ¤í•˜ì—¬ íšŒì „ì„ ì„¤ì •í•©ë‹ˆë‹¤. ê¸°ì¡´ì— ìžˆë˜ ë‹¤ë¥¸ ë³€í™˜ì€ ë®ì–´ì”ë‹ˆë‹¤.
 			/// </summary>
 			void setRotation(const Quaternion&);
 			/// <summary>
-			/// Ãß°¡ º¯È¯À» Àû¿ëÇÕ´Ï´Ù. ±âÁ¸¿¡ ÀÖ´ø ´Ù¸¥ º¯È¯Àº µ¤¾î¾¹´Ï´Ù.
+			/// ì¶”ê°€ ë³€í™˜ì„ ì ìš©í•©ë‹ˆë‹¤. ê¸°ì¡´ì— ìžˆë˜ ë‹¤ë¥¸ ë³€í™˜ì€ ë®ì–´ì”ë‹ˆë‹¤.
 			/// </summary>
 			void setAdditinoalTransform(const mat4&);
 			/// <summary>
-			/// Å©±â/»ö»ó º¯°æÀÇ È®Àå¿­À» Á¦¿ÜÇÑ ÅØ½ºÆ®¸¦ ¾ò½À´Ï´Ù.
+			/// í¬ê¸°/ìƒ‰ìƒ ë³€ê²½ì˜ í™•ìž¥ì—´ì„ ì œì™¸í•œ í…ìŠ¤íŠ¸ë¥¼ ì–»ìŠµë‹ˆë‹¤.
 			/// </summary>
 			inline oastring getPlain() { return plain; }
 			/// <summary>
-			/// ÀÚµ¿ ÁÙ¹Ù²ÞÀÌ ¹Ý¿µµÈ ÅØ½ºÆ® Çà ¼ö¸¦ ¸®ÅÏÇÕ´Ï´Ù. ÃÖ¼Ú°ªÀº 1ÀÔ´Ï´Ù.
+			/// ìžë™ ì¤„ë°”ê¿ˆì´ ë°˜ì˜ëœ í…ìŠ¤íŠ¸ í–‰ ìˆ˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. ìµœì†Ÿê°’ì€ 1ìž…ë‹ˆë‹¤.
 			/// </summary>
 			inline size_t nLines() { return linexy.size(); }
 		private:
 			Font* font;
 			oastring content, plain, input;
-			vec4 color;	// ÀüÃ¼ »ö
-			vec4 ldwh;	// ¹®Àå ±âº» Å©±â
+			vec4 color;	// ì „ì²´ ìƒ‰
+			vec4 ldwh;	// ë¬¸ìž¥ ê¸°ë³¸ í¬ê¸°
 			vec4 targRect;
-			vec2 center;	// ÃÖÁ¾ Áß½É
-			mat4 r2r;	// Á÷»ç°¢Çü °íÁ¤ Àü¿ë
+			vec2 center;	// ìµœì¢… ì¤‘ì‹¬
+			mat4 r2r;	// ì§ì‚¬ê°í˜• ê³ ì • ì „ìš©
 			mat4 additionalTransform;
 			std::vector<vec2> linexy;
 			AlignH halign;	AlignV valign;
@@ -129,53 +129,53 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// ¸¶¿ì½º·Î Å¬¸¯ÇÒ ¼ö ÀÖ´Â ¹öÆ° °³Ã¼ÀÔ´Ï´Ù.
-		/// ±âº»ÀûÀ¸·Î´Â ¸¶¿ì½º ¿Ü¿¡ ¹ÝÀÀÀ» ÇÏÁö ¾ÊÁö¸¸ ¹ÝÀÀ ÇÔ¼ö(¾Ö´Ï¸ÞÀÌ¼Ç Æ®¸®°Å)¸¦ publicÀ¸·Î µÎ¾î ¾À¿¡¼­ Å°º¸µå·Î Á¢±ÙÇÒ ¼ö ÀÖ°Ô ±¸ÇöÀÌ °¡´ÉÇÕ´Ï´Ù.
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ÁÖÁö ¾Ê°í »ý¼ºÇÒ °æ¿ì SCTR ¸Å°³º¯¼ö´Â vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)À¸·Î ÁÖ¾î¾ß ÇÕ´Ï´Ù.
-		/// ¹öÆ°ÀÇ ÀÌ¹ÌÁö·Î´Â UIAnimation ¶Ç´Â FixedSprite°¡ ÃßÃµµË´Ï´Ù.
+		/// ë§ˆìš°ìŠ¤ë¡œ í´ë¦­í•  ìˆ˜ ìžˆëŠ” ë²„íŠ¼ ê°œì²´ìž…ë‹ˆë‹¤.
+		/// ê¸°ë³¸ì ìœ¼ë¡œëŠ” ë§ˆìš°ìŠ¤ ì™¸ì— ë°˜ì‘ì„ í•˜ì§€ ì•Šì§€ë§Œ ë°˜ì‘ í•¨ìˆ˜(ì• ë‹ˆë©”ì´ì…˜ íŠ¸ë¦¬ê±°)ë¥¼ publicìœ¼ë¡œ ë‘ì–´ ì”¬ì—ì„œ í‚¤ë³´ë“œë¡œ ì ‘ê·¼í•  ìˆ˜ ìžˆê²Œ êµ¬í˜„ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ì£¼ì§€ ì•Šê³  ìƒì„±í•  ê²½ìš° SCTR ë§¤ê°œë³€ìˆ˜ëŠ” vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)ìœ¼ë¡œ ì£¼ì–´ì•¼ í•©ë‹ˆë‹¤.
+		/// ë²„íŠ¼ì˜ ì´ë¯¸ì§€ë¡œëŠ” UIAnimation ë˜ëŠ” FixedSpriteê°€ ì¶”ì²œë©ë‹ˆë‹¤.
 		/// </summary>
 		class Button: public UIEntity
 		{
 		public:
 			/// <summary>
-			/// ¹öÆ°À» »ý¼ºÇÕ´Ï´Ù.
+			/// ë²„íŠ¼ì„ ìƒì„±í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="key">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëµÉ °³Ã¼ÀÇ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-			/// <param name="baseSCTR">2D ½ºÇÁ¶óÀÌÆ®/¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °æ¿ì ÀÌ °ªÀº ¾Ö´Ï¸ÞÀÌ¼Ç °´Ã¼ ³»ÀÇ ´ëÇ¥ sctr°ªÀ» ÀÔ·ÂÇÏ¸é µË´Ï´Ù. »ó¼Ó ¶Ç´Â Âü°íÇÏ¿© setModel() °°ÀÌ ÇØ¼­ 3D·Î ¹öÆ°À» ¸¸µé·Á´Â °æ¿ì ¸í½ÃÀû Áö¿øÀº ¿¹Á¤¿¡ ¾øÀ¸¹Ç·Î Á÷Á¢ Á¶ÀýÇØ¾ß ÇÕ´Ï´Ù. ¾Õ 2Â÷¿øÀº x,y scaleÀÌ¸ç µÚ 2Â÷¿øÀº x,y ÀÌµ¿ÀÔ´Ï´Ù.</param>
-			/// <param name="ldwh">¹öÆ°ÀÌ »ç¿ëÇÒ Á÷»ç°¢Çü ¿µ¿ª(LDWH)ÀÔ´Ï´Ù. Á÷»ç°¢ÇüÀÌ ¾Æ´Ñ ¿µ¿ªÀ» ÀÎ½Ä ¹üÀ§·Î ÇÏ°í ½Í´Ù¸é »ó¼ÓÇÏ¿© Update()¸¦ ¿À¹ö¶óÀÌµåÇØ¾ß ÇÕ´Ï´Ù.</param>
-			/// <param name="onClick">¹öÆ° Å¬¸¯ ½Ã ¹ÝÀÀ ÇÔ¼öÀÔ´Ï´Ù. UniversalFunctor Ãß»ó Å¬·¡½º¸¦ »ó¼ÓÇÏ¿© »ç¿ëÇÏ¸ç, Button °´Ã¼´Â ±âº»ÀûÀ¸·Î Àü´Þ ÀÎÀÚ°¡ ¾ø½À´Ï´Ù. nullptr Àü´Þ ½Ã ¾Æ¹« Çàµ¿µµ ÇÏÁö ¾Ê½À´Ï´Ù.</param>
-			/// <param name="normal">±âº» »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é ¹é»ö Á÷»ç°¢ÇüÀÌ ·»´õ¸µµË´Ï´Ù.</param>
-			/// <param name="onOver">¸¶¿ì½º ¿À¹ö »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é normal »óÅÂÀÇ ÀÌ¹ÌÁö°¡ ¾à°£ ¾îµÎ¿öÁý´Ï´Ù.</param>
-			/// <param name="onDown">¸¶¿ì½º ¿ÞÂÊ ¹öÆ°À» ´­·¶À» ¶§ºÎÅÍ ¶¼±â Àü±îÁö »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é normal »óÅÂÀÇ ÀÌ¹ÌÁö°¡ onOverº¸´Ù ¾îµÎ¿öÁý´Ï´Ù.</param>
+			/// <param name="key">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©ë  ê°œì²´ì˜ ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+			/// <param name="baseSCTR">2D ìŠ¤í”„ë¼ì´íŠ¸/ì• ë‹ˆë©”ì´ì…˜ì˜ ê²½ìš° ì´ ê°’ì€ ì• ë‹ˆë©”ì´ì…˜ ê°ì²´ ë‚´ì˜ ëŒ€í‘œ sctrê°’ì„ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤. ìƒì† ë˜ëŠ” ì°¸ê³ í•˜ì—¬ setModel() ê°™ì´ í•´ì„œ 3Dë¡œ ë²„íŠ¼ì„ ë§Œë“¤ë ¤ëŠ” ê²½ìš° ëª…ì‹œì  ì§€ì›ì€ ì˜ˆì •ì— ì—†ìœ¼ë¯€ë¡œ ì§ì ‘ ì¡°ì ˆí•´ì•¼ í•©ë‹ˆë‹¤. ì•ž 2ì°¨ì›ì€ x,y scaleì´ë©° ë’¤ 2ì°¨ì›ì€ x,y ì´ë™ìž…ë‹ˆë‹¤.</param>
+			/// <param name="ldwh">ë²„íŠ¼ì´ ì‚¬ìš©í•  ì§ì‚¬ê°í˜• ì˜ì—­(LDWH)ìž…ë‹ˆë‹¤. ì§ì‚¬ê°í˜•ì´ ì•„ë‹Œ ì˜ì—­ì„ ì¸ì‹ ë²”ìœ„ë¡œ í•˜ê³  ì‹¶ë‹¤ë©´ ìƒì†í•˜ì—¬ Update()ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•´ì•¼ í•©ë‹ˆë‹¤.</param>
+			/// <param name="onClick">ë²„íŠ¼ í´ë¦­ ì‹œ ë°˜ì‘ í•¨ìˆ˜ìž…ë‹ˆë‹¤. UniversalFunctor ì¶”ìƒ í´ëž˜ìŠ¤ë¥¼ ìƒì†í•˜ì—¬ ì‚¬ìš©í•˜ë©°, Button ê°ì²´ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ ì „ë‹¬ ì¸ìžê°€ ì—†ìŠµë‹ˆë‹¤. nullptr ì „ë‹¬ ì‹œ ì•„ë¬´ í–‰ë™ë„ í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.</param>
+			/// <param name="normal">ê¸°ë³¸ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ ë°±ìƒ‰ ì§ì‚¬ê°í˜•ì´ ë Œë”ë§ë©ë‹ˆë‹¤.</param>
+			/// <param name="onOver">ë§ˆìš°ìŠ¤ ì˜¤ë²„ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ normal ìƒíƒœì˜ ì´ë¯¸ì§€ê°€ ì•½ê°„ ì–´ë‘ì›Œì§‘ë‹ˆë‹¤.</param>
+			/// <param name="onDown">ë§ˆìš°ìŠ¤ ì™¼ìª½ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œë¶€í„° ë–¼ê¸° ì „ê¹Œì§€ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ normal ìƒíƒœì˜ ì´ë¯¸ì§€ê°€ onOverë³´ë‹¤ ì–´ë‘ì›Œì§‘ë‹ˆë‹¤.</param>
 			Button(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal = pAnimation(), pAnimation onOver = pAnimation(), pAnimation onDown = pAnimation());
 			/// <summary>
-			/// ¸¶¿ì½º Ä¿¼­°¡ ¹öÆ° À§¿¡ À§Ä¡ÇßÀ» ¶§ÀÇ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿É´Ï´Ù.
+			/// ë§ˆìš°ìŠ¤ ì»¤ì„œê°€ ë²„íŠ¼ ìœ„ì— ìœ„ì¹˜í–ˆì„ ë•Œì˜ ì• ë‹ˆë©”ì´ì…˜ì´ ë‚˜ì˜µë‹ˆë‹¤.
 			/// </summary>
 			virtual void onMouseOver();
 			/// <summary>
-			/// ¸¶¿ì½º Ä¿¼­°¡ ¹öÆ°À¸·ÎºÎÅÍ ¶°³µÀ» ¶§ÀÇ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿É´Ï´Ù.
+			/// ë§ˆìš°ìŠ¤ ì»¤ì„œê°€ ë²„íŠ¼ìœ¼ë¡œë¶€í„° ë– ë‚¬ì„ ë•Œì˜ ì• ë‹ˆë©”ì´ì…˜ì´ ë‚˜ì˜µë‹ˆë‹¤.
 			/// </summary>
 			virtual void onMouseLeft();
 			/// <summary>
-			/// ¸¶¿ì½º ¿ÞÂÊ ¹öÆ°À» ´­·¶À» ¶§ºÎÅÍ ¶¼±â Àü±îÁöÀÇ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿É´Ï´Ù.
+			/// ë§ˆìš°ìŠ¤ ì™¼ìª½ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œë¶€í„° ë–¼ê¸° ì „ê¹Œì§€ì˜ ì• ë‹ˆë©”ì´ì…˜ì´ ë‚˜ì˜µë‹ˆë‹¤.
 			/// </summary>
 			virtual void onMouseDown();
 			/// <summary>
-			/// ¸¶¿ì½º À§Ä¡ ¹× Å¬¸¯ »óÅÂ¸¦ ÆÄ¾ÇÇÏ¿© ¹öÆ°ÀÌ ¹ÝÀÀÇÕ´Ï´Ù. (ÇÁ·¹ÀÓ´ç 1È¸ ÀÚµ¿ È£ÃâµÊ)
+			/// ë§ˆìš°ìŠ¤ ìœ„ì¹˜ ë° í´ë¦­ ìƒíƒœë¥¼ íŒŒì•…í•˜ì—¬ ë²„íŠ¼ì´ ë°˜ì‘í•©ë‹ˆë‹¤. (í”„ë ˆìž„ë‹¹ 1íšŒ ìžë™ í˜¸ì¶œë¨)
 			/// </summary>
 			void Update();
 			/// <summary>
-			/// ¹öÆ°ÀÇ Á÷»ç°¢Çü ¿µ¿ªÀ» º¯°æÇÕ´Ï´Ù.
+			/// ë²„íŠ¼ì˜ ì§ì‚¬ê°í˜• ì˜ì—­ì„ ë³€ê²½í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="newLDWH">ÁÂ-ÇÏ-Æø-³ôÀÌ Çü½Ä Á÷»ç°¢ÇüÀÔ´Ï´Ù.</param>
+			/// <param name="newLDWH">ì¢Œ-í•˜-í­-ë†’ì´ í˜•ì‹ ì§ì‚¬ê°í˜•ìž…ë‹ˆë‹¤.</param>
 			void move(const vec4& newLDWH);
 			inline vec4 clickbox() { return ldwh; }
 			/// <summary>
-			/// ¹öÆ°À» Å¬¸¯ÇßÀ» ¶§ÀÇ ÇÔ¼ö¸¦ È£ÃâÇÕ´Ï´Ù.
+			/// ë²„íŠ¼ì„ í´ë¦­í–ˆì„ ë•Œì˜ í•¨ìˆ˜ë¥¼ í˜¸ì¶œí•©ë‹ˆë‹¤.
 			/// </summary>
 			inline void click() { if (onClick)(*onClick)(); }
 			/// <summary>
-			/// onClick ÇÔ¼ö¸¦ º¯°æÇÕ´Ï´Ù.
+			/// onClick í•¨ìˆ˜ë¥¼ ë³€ê²½í•©ë‹ˆë‹¤.
 			/// </summary>
 			inline void setOnClick(UniversalFunctor* n) { onClick = n; }
 		protected:
@@ -187,50 +187,50 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// ¸¶¿ì½º·Î Å¬¸¯ÇÒ ¼ö ÀÖ´Â ¹öÆ° °³Ã¼ÀÔ´Ï´Ù.
-		/// 1È¸ Å¬¸¯ÇÏ¸é »óÅÂ°¡ º¯ÇÏ°í ´Ù½Ã Å¬¸¯ÇÏ¸é ÀÌÀü »óÅÂ·Î µ¹¾Æ¿É´Ï´Ù. ÇÁ·Î±×·¥ ³»ÀûÀ¸·Î´Â ÃÊ±â »óÅÂ°¡ off, º¯ÇÑ »óÅÂ°¡ onÀÔ´Ï´Ù.
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ÁÖÁö ¾Ê°í »ý¼ºÇÒ °æ¿ì SCTR ¸Å°³º¯¼ö´Â vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)À¸·Î ÁÖ¾î¾ß ÇÕ´Ï´Ù.
-		/// ±âº»ÀûÀ¸·Î´Â ¸¶¿ì½º ¿Ü¿¡ ¹ÝÀÀÀ» ÇÏÁö ¾ÊÁö¸¸ ¹ÝÀÀ ÇÔ¼ö(¾Ö´Ï¸ÞÀÌ¼Ç Æ®¸®°Å)¸¦ publicÀ¸·Î µÎ¾î ¾À¿¡¼­ Å°º¸µå·Î Á¢±ÙÇÒ ¼ö ÀÖ°Ô ±¸ÇöÀÌ °¡´ÉÇÕ´Ï´Ù.
+		/// ë§ˆìš°ìŠ¤ë¡œ í´ë¦­í•  ìˆ˜ ìžˆëŠ” ë²„íŠ¼ ê°œì²´ìž…ë‹ˆë‹¤.
+		/// 1íšŒ í´ë¦­í•˜ë©´ ìƒíƒœê°€ ë³€í•˜ê³  ë‹¤ì‹œ í´ë¦­í•˜ë©´ ì´ì „ ìƒíƒœë¡œ ëŒì•„ì˜µë‹ˆë‹¤. í”„ë¡œê·¸ëž¨ ë‚´ì ìœ¼ë¡œëŠ” ì´ˆê¸° ìƒíƒœê°€ off, ë³€í•œ ìƒíƒœê°€ onìž…ë‹ˆë‹¤.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ì£¼ì§€ ì•Šê³  ìƒì„±í•  ê²½ìš° SCTR ë§¤ê°œë³€ìˆ˜ëŠ” vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)ìœ¼ë¡œ ì£¼ì–´ì•¼ í•©ë‹ˆë‹¤.
+		/// ê¸°ë³¸ì ìœ¼ë¡œëŠ” ë§ˆìš°ìŠ¤ ì™¸ì— ë°˜ì‘ì„ í•˜ì§€ ì•Šì§€ë§Œ ë°˜ì‘ í•¨ìˆ˜(ì• ë‹ˆë©”ì´ì…˜ íŠ¸ë¦¬ê±°)ë¥¼ publicìœ¼ë¡œ ë‘ì–´ ì”¬ì—ì„œ í‚¤ë³´ë“œë¡œ ì ‘ê·¼í•  ìˆ˜ ìžˆê²Œ êµ¬í˜„ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 		/// </summary>
 		class ToggleButton : public UIEntity {
 		public:
 			/// <summary>
-			/// Åä±Û ¹öÆ°À» »ý¼ºÇÕ´Ï´Ù.
+			/// í† ê¸€ ë²„íŠ¼ì„ ìƒì„±í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="key">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëµÉ °³Ã¼ÀÇ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-			/// <param name="baseSCTR">2D ½ºÇÁ¶óÀÌÆ®/¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °æ¿ì ÀÌ °ªÀº ¾Ö´Ï¸ÞÀÌ¼Ç °´Ã¼ ³»ÀÇ ´ëÇ¥ sctr°ªÀ» ÀÔ·ÂÇÏ¸é µË´Ï´Ù. 3D·Î ¹öÆ°À» ¸¸µé·Á´Â °æ¿ì ¸í½ÃÀû Áö¿øÀº ¾ø¾î¼­ Á÷Á¢ Á¶ÀýÇØ¾ß ÇÕ´Ï´Ù. ¾Õ 2Â÷¿øÀº x,y scaleÀÌ¸ç µÚ 2Â÷¿øÀº x,y ÀÌµ¿ÀÔ´Ï´Ù.</param>
-			/// <param name="ldwh">¹öÆ°ÀÌ »ç¿ëÇÒ Á÷»ç°¢Çü ¿µ¿ª(LDWH)ÀÔ´Ï´Ù. Á÷»ç°¢ÇüÀÌ ¾Æ´Ñ ¿µ¿ªÀ» ÀÎ½Ä ¹üÀ§·Î ÇÏ°í ½Í´Ù¸é »ó¼ÓÇÏ¿© Update()¸¦ ¿À¹ö¶óÀÌµåÇØ¾ß ÇÕ´Ï´Ù.</param>
-			/// <param name="onClick">Å¬¸¯ÇßÀ» ½Ã ¹ÝÀÀ ÇÔ¼öÀÔ´Ï´Ù. UniversalFunctor Ãß»ó Å¬·¡½º¸¦ »ó¼ÓÇÏ¿© »ç¿ëÇÏ¸ç, ToggleButton °´Ã¼´Â ±âº»ÀûÀ¸·Î º¯È­ ÈÄÀÇ »óÅÂ°¡ onÀÌ¸é ¾î¶² bool Æ÷ÀÎÅÍ°¡ Àü´ÞµÇ¸ç, offÀÌ¸é nullptr°¡ Àü´ÞµË´Ï´Ù. ¿ªÂüÁ¶·Î °ªÀ» ÀÐ´Â °ÍÀÌ ¾Æ´Ô¿¡ ÁÖÀÇÇÏ¼¼¿ä.</param>
-			/// <param name="normal1">off, ±âº» »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é ¹é»ö Á÷»ç°¢ÇüÀÌ ·»´õ¸µµË´Ï´Ù.</param>
-			/// <param name="normal2">on, ±âº» »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é off »óÅÂÀÇ ÀÌ¹ÌÁöÀÇ green ¼ººÐ¸¸ ³²Àº ÀÌ¹ÌÁö·Î ·»´õ¸µµË´Ï´Ù.</param>
-			/// <param name="onOver1">off, ¸¶¿ì½º ¿À¹ö »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é off, normal »óÅÂÀÇ ÀÌ¹ÌÁö°¡ ¾à°£ ¾îµÎ¿öÁý´Ï´Ù.</param>
-			/// <param name="onOver2">on, ¸¶¿ì½º ¿À¹ö »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é on, normal »óÅÂÀÇ ÀÌ¹ÌÁö°¡ ¾à°£ ¾îµÎ¿öÁý´Ï´Ù.</param>
-			/// <param name="onDown1">off, ¸¶¿ì½º ´Ù¿î »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é off, normal »óÅÂÀÇ ÀÌ¹ÌÁö°¡ onOverº¸´Ù ¾îµÎ¿öÁý´Ï´Ù.</param>
-			/// <param name="onDown2">on, ¸¶¿ì½º ´Ù¿î »óÅÂÀÇ ¾Ö´Ï¸ÞÀÌ¼Ç(ÀÌ¹ÌÁö)ÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾ÊÀ¸¸é on, normal »óÅÂÀÇ ÀÌ¹ÌÁö°¡ onOverº¸´Ù ¾îµÎ¿öÁý´Ï´Ù.</param>
+			/// <param name="key">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©ë  ê°œì²´ì˜ ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+			/// <param name="baseSCTR">2D ìŠ¤í”„ë¼ì´íŠ¸/ì• ë‹ˆë©”ì´ì…˜ì˜ ê²½ìš° ì´ ê°’ì€ ì• ë‹ˆë©”ì´ì…˜ ê°ì²´ ë‚´ì˜ ëŒ€í‘œ sctrê°’ì„ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤. 3Dë¡œ ë²„íŠ¼ì„ ë§Œë“¤ë ¤ëŠ” ê²½ìš° ëª…ì‹œì  ì§€ì›ì€ ì—†ì–´ì„œ ì§ì ‘ ì¡°ì ˆí•´ì•¼ í•©ë‹ˆë‹¤. ì•ž 2ì°¨ì›ì€ x,y scaleì´ë©° ë’¤ 2ì°¨ì›ì€ x,y ì´ë™ìž…ë‹ˆë‹¤.</param>
+			/// <param name="ldwh">ë²„íŠ¼ì´ ì‚¬ìš©í•  ì§ì‚¬ê°í˜• ì˜ì—­(LDWH)ìž…ë‹ˆë‹¤. ì§ì‚¬ê°í˜•ì´ ì•„ë‹Œ ì˜ì—­ì„ ì¸ì‹ ë²”ìœ„ë¡œ í•˜ê³  ì‹¶ë‹¤ë©´ ìƒì†í•˜ì—¬ Update()ë¥¼ ì˜¤ë²„ë¼ì´ë“œí•´ì•¼ í•©ë‹ˆë‹¤.</param>
+			/// <param name="onClick">í´ë¦­í–ˆì„ ì‹œ ë°˜ì‘ í•¨ìˆ˜ìž…ë‹ˆë‹¤. UniversalFunctor ì¶”ìƒ í´ëž˜ìŠ¤ë¥¼ ìƒì†í•˜ì—¬ ì‚¬ìš©í•˜ë©°, ToggleButton ê°ì²´ëŠ” ê¸°ë³¸ì ìœ¼ë¡œ ë³€í™” í›„ì˜ ìƒíƒœê°€ onì´ë©´ ì–´ë–¤ bool í¬ì¸í„°ê°€ ì „ë‹¬ë˜ë©°, offì´ë©´ nullptrê°€ ì „ë‹¬ë©ë‹ˆë‹¤. ì—­ì°¸ì¡°ë¡œ ê°’ì„ ì½ëŠ” ê²ƒì´ ì•„ë‹˜ì— ì£¼ì˜í•˜ì„¸ìš”.</param>
+			/// <param name="normal1">off, ê¸°ë³¸ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ ë°±ìƒ‰ ì§ì‚¬ê°í˜•ì´ ë Œë”ë§ë©ë‹ˆë‹¤.</param>
+			/// <param name="normal2">on, ê¸°ë³¸ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ off ìƒíƒœì˜ ì´ë¯¸ì§€ì˜ green ì„±ë¶„ë§Œ ë‚¨ì€ ì´ë¯¸ì§€ë¡œ ë Œë”ë§ë©ë‹ˆë‹¤.</param>
+			/// <param name="onOver1">off, ë§ˆìš°ìŠ¤ ì˜¤ë²„ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ off, normal ìƒíƒœì˜ ì´ë¯¸ì§€ê°€ ì•½ê°„ ì–´ë‘ì›Œì§‘ë‹ˆë‹¤.</param>
+			/// <param name="onOver2">on, ë§ˆìš°ìŠ¤ ì˜¤ë²„ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ on, normal ìƒíƒœì˜ ì´ë¯¸ì§€ê°€ ì•½ê°„ ì–´ë‘ì›Œì§‘ë‹ˆë‹¤.</param>
+			/// <param name="onDown1">off, ë§ˆìš°ìŠ¤ ë‹¤ìš´ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ off, normal ìƒíƒœì˜ ì´ë¯¸ì§€ê°€ onOverë³´ë‹¤ ì–´ë‘ì›Œì§‘ë‹ˆë‹¤.</param>
+			/// <param name="onDown2">on, ë§ˆìš°ìŠ¤ ë‹¤ìš´ ìƒíƒœì˜ ì• ë‹ˆë©”ì´ì…˜(ì´ë¯¸ì§€)ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•Šìœ¼ë©´ on, normal ìƒíƒœì˜ ì´ë¯¸ì§€ê°€ onOverë³´ë‹¤ ì–´ë‘ì›Œì§‘ë‹ˆë‹¤.</param>
 			ToggleButton(const EntityKey& key, const vec4& baseSCTR, const vec4& ldwh, UniversalFunctor* onClick, pAnimation normal1 = pAnimation(), pAnimation normal2 = pAnimation(), pAnimation onOver1 = pAnimation(), pAnimation onOver2 = pAnimation(), pAnimation onDown1 = pAnimation(), pAnimation onDown2 = pAnimation());
 			/// <summary>
-			/// ¸¶¿ì½º Ä¿¼­°¡ ¹öÆ° À§¿¡ À§Ä¡ÇßÀ» ¶§ÀÇ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿É´Ï´Ù.
+			/// ë§ˆìš°ìŠ¤ ì»¤ì„œê°€ ë²„íŠ¼ ìœ„ì— ìœ„ì¹˜í–ˆì„ ë•Œì˜ ì• ë‹ˆë©”ì´ì…˜ì´ ë‚˜ì˜µë‹ˆë‹¤.
 			/// </summary>
 			virtual void onMouseOver(bool isOn);
 			/// <summary>
-			/// ¸¶¿ì½º Ä¿¼­°¡ ¹öÆ°À¸·ÎºÎÅÍ ¶°³µÀ» ¶§ÀÇ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿É´Ï´Ù.
+			/// ë§ˆìš°ìŠ¤ ì»¤ì„œê°€ ë²„íŠ¼ìœ¼ë¡œë¶€í„° ë– ë‚¬ì„ ë•Œì˜ ì• ë‹ˆë©”ì´ì…˜ì´ ë‚˜ì˜µë‹ˆë‹¤.
 			/// </summary>
 			virtual void onMouseLeft(bool isOn);
 			/// <summary>
-			/// ¸¶¿ì½º ¿ÞÂÊ ¹öÆ°À» ´­·¶À» ¶§ºÎÅÍ ¶¼±â Àü±îÁöÀÇ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿É´Ï´Ù.
+			/// ë§ˆìš°ìŠ¤ ì™¼ìª½ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œë¶€í„° ë–¼ê¸° ì „ê¹Œì§€ì˜ ì• ë‹ˆë©”ì´ì…˜ì´ ë‚˜ì˜µë‹ˆë‹¤.
 			/// </summary>
 			virtual void onMouseDown(bool isOn);
 			/// <summary>
-			/// ¸¶¿ì½º À§Ä¡ ¹× Å¬¸¯ »óÅÂ¸¦ ÆÄ¾ÇÇÏ¿© ¹öÆ°ÀÌ ¹ÝÀÀÇÕ´Ï´Ù. (ÇÁ·¹ÀÓ´ç 1È¸ ÀÚµ¿ È£ÃâµÊ)
+			/// ë§ˆìš°ìŠ¤ ìœ„ì¹˜ ë° í´ë¦­ ìƒíƒœë¥¼ íŒŒì•…í•˜ì—¬ ë²„íŠ¼ì´ ë°˜ì‘í•©ë‹ˆë‹¤. (í”„ë ˆìž„ë‹¹ 1íšŒ ìžë™ í˜¸ì¶œë¨)
 			/// </summary>
 			void Update();
 			/// <summary>
-			/// ¹öÆ°ÀÇ Á÷»ç°¢Çü ¿µ¿ªÀ» º¯°æÇÕ´Ï´Ù.
+			/// ë²„íŠ¼ì˜ ì§ì‚¬ê°í˜• ì˜ì—­ì„ ë³€ê²½í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="newLDWH">ÁÂ-ÇÏ-Æø-³ôÀÌ Çü½Ä Á÷»ç°¢ÇüÀÔ´Ï´Ù.</param>
+			/// <param name="newLDWH">ì¢Œ-í•˜-í­-ë†’ì´ í˜•ì‹ ì§ì‚¬ê°í˜•ìž…ë‹ˆë‹¤.</param>
 			void move(const vec4& newLDWH);
 			/// <summary>
-			/// onClick ÇÔ¼ö¸¦ º¯°æÇÕ´Ï´Ù.
+			/// onClick í•¨ìˆ˜ë¥¼ ë³€ê²½í•©ë‹ˆë‹¤.
 			/// </summary>
 			inline void setOnClick(UniversalFunctor* n) { onClick = n; }
 		protected:
@@ -242,38 +242,38 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// ¸¶¿ì½º·Î ¼öÆòÀ¸·Î ²ø ¼ö ÀÖ´Â ¹öÆ° °³Ã¼ÀÔ´Ï´Ù. 1À» ´ÜÀ§·Î °ª ¾çÀÚÈ­°¡ °¡´ÉÇÕ´Ï´Ù.
-		/// ¾çÀÚÈ­µÇÁö ¾ÊÀº °ÔÀÌÁöÀÇ °ªÀº 0~1ÀÇ float·Î Á¦°øµË´Ï´Ù.
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ÁÖÁö ¾Ê°í »ý¼ºÇÒ °æ¿ì ±×¿¡ ÇØ´çÇÏ´Â SCTR ¸Å°³º¯¼ö´Â vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)À¸·Î ÁÖ¾î¾ß ÇÕ´Ï´Ù.
-		/// Gauge¸¦ »ý¼ºÇÒ °æ¿ì ±× ÀÌ¸§ÀÇ µÚ¿¡ "_bar"¸¦ µ¡ºÙÀÎ ÀÌ¸§À¸·Î ´Ù¸¥ °³Ã¼°¡ ÇÔ²² »ý¼ºµË´Ï´Ù(Å¸ÀÔÀº ±âº» EntityÀÔ´Ï´Ù). ÀÌ´Â Gauge°¡ »ç¶óÁú ¶§ ÀÚµ¿À¸·Î Á¦°ÅµË´Ï´Ù.
-		/// ÀÌ ¶§¹®¿¡, Gauge¸¦ »ý¼ºÇÏ¿© »ç¿ëÇÒ ¶§ ±× µÚ¿¡ "_bar"¸¦ µ¡ºÙÀÎ ÀÌ¸§À» »ç¿ëÇÒ °æ¿ì ±×°ÍÀÌ À¯ÀÏÇÑ °³Ã¼°¡ ¾Æ´Ï¸ç, ¶ÇÇÑ ÀÌ·¸°Ô »ý¼ºµÈ °³Ã¼¸¦ ÀÓÀÇ·Î »èÁ¦ÇÒ °æ¿ì Gauge¿¡ ÀÇÇØ ¼¼±×¸ÕÅ×ÀÌ¼Ç ¿À·ù°¡ ¹ß»ýÇÒ ¼ö ÀÖÀ¸´Ï ÁÖÀÇÇÏ¼¼¿ä.
+		/// ë§ˆìš°ìŠ¤ë¡œ ìˆ˜í‰ìœ¼ë¡œ ëŒ ìˆ˜ ìžˆëŠ” ë²„íŠ¼ ê°œì²´ìž…ë‹ˆë‹¤. 1ì„ ë‹¨ìœ„ë¡œ ê°’ ì–‘ìží™”ê°€ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+		/// ì–‘ìží™”ë˜ì§€ ì•Šì€ ê²Œì´ì§€ì˜ ê°’ì€ 0~1ì˜ floatë¡œ ì œê³µë©ë‹ˆë‹¤.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ì£¼ì§€ ì•Šê³  ìƒì„±í•  ê²½ìš° ê·¸ì— í•´ë‹¹í•˜ëŠ” SCTR ë§¤ê°œë³€ìˆ˜ëŠ” vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)ìœ¼ë¡œ ì£¼ì–´ì•¼ í•©ë‹ˆë‹¤.
+		/// Gaugeë¥¼ ìƒì„±í•  ê²½ìš° ê·¸ ì´ë¦„ì˜ ë’¤ì— "_bar"ë¥¼ ë§ë¶™ì¸ ì´ë¦„ìœ¼ë¡œ ë‹¤ë¥¸ ê°œì²´ê°€ í•¨ê»˜ ìƒì„±ë©ë‹ˆë‹¤(íƒ€ìž…ì€ ê¸°ë³¸ Entityìž…ë‹ˆë‹¤). ì´ëŠ” Gaugeê°€ ì‚¬ë¼ì§ˆ ë•Œ ìžë™ìœ¼ë¡œ ì œê±°ë©ë‹ˆë‹¤.
+		/// ì´ ë•Œë¬¸ì—, Gaugeë¥¼ ìƒì„±í•˜ì—¬ ì‚¬ìš©í•  ë•Œ ê·¸ ë’¤ì— "_bar"ë¥¼ ë§ë¶™ì¸ ì´ë¦„ì„ ì‚¬ìš©í•  ê²½ìš° ê·¸ê²ƒì´ ìœ ì¼í•œ ê°œì²´ê°€ ì•„ë‹ˆë©°, ë˜í•œ ì´ë ‡ê²Œ ìƒì„±ëœ ê°œì²´ë¥¼ ìž„ì˜ë¡œ ì‚­ì œí•  ê²½ìš° Gaugeì— ì˜í•´ ì„¸ê·¸ë¨¼í…Œì´ì…˜ ì˜¤ë¥˜ê°€ ë°œìƒí•  ìˆ˜ ìžˆìœ¼ë‹ˆ ì£¼ì˜í•˜ì„¸ìš”.
 		/// </summary>
 		class GaugeH : public UIEntity {
 		public:
 			/// <summary>
-			/// °ÔÀÌÁö¸¦ »ý¼ºÇÕ´Ï´Ù. »ý¼º Á÷ÈÄ °ÔÀÌÁö´Â ¿À¸¥ÂÊ ³¡¿¡ °¡ ÀÖ½À´Ï´Ù.
+			/// ê²Œì´ì§€ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. ìƒì„± ì§í›„ ê²Œì´ì§€ëŠ” ì˜¤ë¥¸ìª½ ëì— ê°€ ìžˆìŠµë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="key">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-			/// <param name="barSCTR">2D ½ºÇÁ¶óÀÌÆ®/¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °æ¿ì ÀÌ °ªÀº ¸·´ë ¾Ö´Ï¸ÞÀÌ¼Ç °´Ã¼ ³»ÀÇ ´ëÇ¥ sctr°ªÀ» ÀÔ·ÂÇÏ¸é µË´Ï´Ù.</param>
-			/// <param name="handleSCTR">2D ½ºÇÁ¶óÀÌÆ®/¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °æ¿ì ÀÌ °ªÀº ¼ÕÀâÀÌ ¾Ö´Ï¸ÞÀÌ¼Ç °´Ã¼ ³»ÀÇ ´ëÇ¥ sctr°ªÀ» ÀÔ·ÂÇÏ¸é µË´Ï´Ù.</param>
-			/// <param name="barLdwh">°ÔÀÌÁöÀÇ ¸·´ë°¡ Â÷ÁöÇÏ´Â Á÷»ç°¢Çü ¿µ¿ªÀÔ´Ï´Ù.</param>
-			/// <param name="handleSize">°ÔÀÌÁöÀÇ ¼ÕÀâÀÌÀÇ Å©±âÀÔ´Ï´Ù. Å©±â 1Àº °ÔÀÌÁö ¸·´ëÀÇ ³ôÀÌ¿Í µ¿ÀÏÇÕ´Ï´Ù.</param>
-			/// <param name="length">°ÔÀÌÁö°¡ °¡Áú ¼ö ÀÖ´Â °ªÀÇ ¼öÀÔ´Ï´Ù. 1 ÀÌÇÏ°¡ ÀÔ·ÂµÇ´Â °æ¿ì °ÔÀÌÁö´Â 0°ú 1 »çÀÌÀÇ float °ªÀ» °¡Áö¸ç ±× ÀÌ»óÀÇ °æ¿ì 0ºÎÅÍ ½ÃÀÛÇÏ´Â int °ªÀ» °¡Áö°Ô µË´Ï´Ù. (ex: length 3ÀÎ °æ¿ì 0,1,2)</param>
-			/// <param name="onScroll">µå·¡±×ÇÒ ¶§ È£ÃâµÇ´Â ÇÔ¼öÀÔ´Ï´Ù. length°¡ 1 ÀÌÇÏÀÎ °æ¿ì ¸Å°³º¯¼ö´Â float*ÇüÀÔ´Ï´Ù. length°¡ 2 ÀÌ»óÀÎ °æ¿ì ¸Å°³º¯¼ö´Â int*ÇüÀÔ´Ï´Ù.</param>
-			/// <param name="margin">¾ç ³¡¿¡ µé¾î°¥ ¿©À¯ °ø°£ÀÔ´Ï´Ù. °ÔÀÌÁö ¼ÕÀâÀÌÀÇ Áß½ÉÀº ÀÌ ¿©À¯ °ø°£±îÁö °¡Áö ¾Ê½À´Ï´Ù. ÀÌ °ªÀº 0º¸´Ù ÀÛ°Å³ª 0.495º¸´Ù Å©¸é ÀÚµ¿À¸·Î Àß¸³´Ï´Ù.</param>
-			/// <param name="isContinuous">trueÀÎ °æ¿ì °ÔÀÌÁö°¡ ¿òÁ÷ÀÓ¿¡ µû¶ó ¿¬¼ÓÀ¸·Î ¹ÝÀÀ ÇÔ¼ö°¡ È£ÃâµÇ°í falseÀÎ °æ¿ì ¸¶¿ì½º¸¦ ¶ÃÀ» ¶§¿¡¸¸ ¹ÝÀÀ ÇÔ¼ö°¡ È£ÃâµË´Ï´Ù.</param>
-			/// <param name="handle">¼ÕÀâÀÌ ÀÌ¹ÌÁö(¾Ö´Ï¸ÞÀÌ¼Ç)ÀÔ´Ï´Ù.</param>
-			/// <param name="bar">¸·´ë ÀÌ¹ÌÁö(¾Ö´Ï¸ÞÀÌ¼Ç)ÀÔ´Ï´Ù.</param>
+			/// <param name="key">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+			/// <param name="barSCTR">2D ìŠ¤í”„ë¼ì´íŠ¸/ì• ë‹ˆë©”ì´ì…˜ì˜ ê²½ìš° ì´ ê°’ì€ ë§‰ëŒ€ ì• ë‹ˆë©”ì´ì…˜ ê°ì²´ ë‚´ì˜ ëŒ€í‘œ sctrê°’ì„ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤.</param>
+			/// <param name="handleSCTR">2D ìŠ¤í”„ë¼ì´íŠ¸/ì• ë‹ˆë©”ì´ì…˜ì˜ ê²½ìš° ì´ ê°’ì€ ì†ìž¡ì´ ì• ë‹ˆë©”ì´ì…˜ ê°ì²´ ë‚´ì˜ ëŒ€í‘œ sctrê°’ì„ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤.</param>
+			/// <param name="barLdwh">ê²Œì´ì§€ì˜ ë§‰ëŒ€ê°€ ì°¨ì§€í•˜ëŠ” ì§ì‚¬ê°í˜• ì˜ì—­ìž…ë‹ˆë‹¤.</param>
+			/// <param name="handleSize">ê²Œì´ì§€ì˜ ì†ìž¡ì´ì˜ í¬ê¸°ìž…ë‹ˆë‹¤. í¬ê¸° 1ì€ ê²Œì´ì§€ ë§‰ëŒ€ì˜ ë†’ì´ì™€ ë™ì¼í•©ë‹ˆë‹¤.</param>
+			/// <param name="length">ê²Œì´ì§€ê°€ ê°€ì§ˆ ìˆ˜ ìžˆëŠ” ê°’ì˜ ìˆ˜ìž…ë‹ˆë‹¤. 1 ì´í•˜ê°€ ìž…ë ¥ë˜ëŠ” ê²½ìš° ê²Œì´ì§€ëŠ” 0ê³¼ 1 ì‚¬ì´ì˜ float ê°’ì„ ê°€ì§€ë©° ê·¸ ì´ìƒì˜ ê²½ìš° 0ë¶€í„° ì‹œìž‘í•˜ëŠ” int ê°’ì„ ê°€ì§€ê²Œ ë©ë‹ˆë‹¤. (ex: length 3ì¸ ê²½ìš° 0,1,2)</param>
+			/// <param name="onScroll">ë“œëž˜ê·¸í•  ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤. lengthê°€ 1 ì´í•˜ì¸ ê²½ìš° ë§¤ê°œë³€ìˆ˜ëŠ” float*í˜•ìž…ë‹ˆë‹¤. lengthê°€ 2 ì´ìƒì¸ ê²½ìš° ë§¤ê°œë³€ìˆ˜ëŠ” int*í˜•ìž…ë‹ˆë‹¤.</param>
+			/// <param name="margin">ì–‘ ëì— ë“¤ì–´ê°ˆ ì—¬ìœ  ê³µê°„ìž…ë‹ˆë‹¤. ê²Œì´ì§€ ì†ìž¡ì´ì˜ ì¤‘ì‹¬ì€ ì´ ì—¬ìœ  ê³µê°„ê¹Œì§€ ê°€ì§€ ì•ŠìŠµë‹ˆë‹¤. ì´ ê°’ì€ 0ë³´ë‹¤ ìž‘ê±°ë‚˜ 0.495ë³´ë‹¤ í¬ë©´ ìžë™ìœ¼ë¡œ ìž˜ë¦½ë‹ˆë‹¤.</param>
+			/// <param name="isContinuous">trueì¸ ê²½ìš° ê²Œì´ì§€ê°€ ì›€ì§ìž„ì— ë”°ë¼ ì—°ì†ìœ¼ë¡œ ë°˜ì‘ í•¨ìˆ˜ê°€ í˜¸ì¶œë˜ê³  falseì¸ ê²½ìš° ë§ˆìš°ìŠ¤ë¥¼ ë—ì„ ë•Œì—ë§Œ ë°˜ì‘ í•¨ìˆ˜ê°€ í˜¸ì¶œë©ë‹ˆë‹¤.</param>
+			/// <param name="handle">ì†ìž¡ì´ ì´ë¯¸ì§€(ì• ë‹ˆë©”ì´ì…˜)ìž…ë‹ˆë‹¤.</param>
+			/// <param name="bar">ë§‰ëŒ€ ì´ë¯¸ì§€(ì• ë‹ˆë©”ì´ì…˜)ìž…ë‹ˆë‹¤.</param>
 			GaugeH(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin = 0.05f, bool isContinuous = false, pAnimation handle = pAnimation(), pAnimation bar = pAnimation());
 			~GaugeH();
 			/// <summary>
-			/// ¸¶¿ì½º À§Ä¡ ¹× Å¬¸¯ »óÅÂ¸¦ ÆÄ¾ÇÇÏ¿© °ÔÀÌÁö°¡ ¹ÝÀÀÇÕ´Ï´Ù. (ÇÁ·¹ÀÓ´ç 1È¸ ÀÚµ¿ È£ÃâµÊ)
+			/// ë§ˆìš°ìŠ¤ ìœ„ì¹˜ ë° í´ë¦­ ìƒíƒœë¥¼ íŒŒì•…í•˜ì—¬ ê²Œì´ì§€ê°€ ë°˜ì‘í•©ë‹ˆë‹¤. (í”„ë ˆìž„ë‹¹ 1íšŒ ìžë™ í˜¸ì¶œë¨)
 			/// </summary>
 			void Update();
 			void render();
 			/// <summary>
-			/// °ÔÀÌÁö°¡ °¡Áø °ªÀ» ¼³Á¤ÇÕ´Ï´Ù. ¸Å°³º¯¼ö´Â floatÀÌÁö¸¸ ÀÌ»ê(discrete) °ÔÀÌÁö·Î ¼³Á¤Çß´õ¶óµµ ±×´ë·Î »ç¿ëÇÏ¸é µË´Ï´Ù.
-			/// ¹üÀ§¸¦ ³Ñ´Â °ªÀÌ µé¾î¿À¸é ÀÚµ¿À¸·Î Àß¸³´Ï´Ù.
+			/// ê²Œì´ì§€ê°€ ê°€ì§„ ê°’ì„ ì„¤ì •í•©ë‹ˆë‹¤. ë§¤ê°œë³€ìˆ˜ëŠ” floatì´ì§€ë§Œ ì´ì‚°(discrete) ê²Œì´ì§€ë¡œ ì„¤ì •í–ˆë”ë¼ë„ ê·¸ëŒ€ë¡œ ì‚¬ìš©í•˜ë©´ ë©ë‹ˆë‹¤.
+			/// ë²”ìœ„ë¥¼ ë„˜ëŠ” ê°’ì´ ë“¤ì–´ì˜¤ë©´ ìžë™ìœ¼ë¡œ ìž˜ë¦½ë‹ˆë‹¤.
 			/// </summary>
 			inline void setValue(float v) { if (length != 1)v /= length - 1; onHolding(leftmost + (rightmost - leftmost) * v); }
 		protected:
@@ -301,36 +301,36 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// ¸¶¿ì½º·Î ¼öÁ÷À¸·Î ²ø ¼ö ÀÖ´Â ¹öÆ° °³Ã¼ÀÔ´Ï´Ù. 1À» ´ÜÀ§·Î °ª ¾çÀÚÈ­°¡ °¡´ÉÇÕ´Ï´Ù.
-		/// ¾çÀÚÈ­µÇÁö ¾ÊÀº °ÔÀÌÁöÀÇ °ªÀº 0~1ÀÇ float·Î Á¦°øµË´Ï´Ù.
-		/// ¾Ö´Ï¸ÞÀÌ¼ÇÀ» ÁÖÁö ¾Ê°í »ý¼ºÇÒ °æ¿ì ±×¿¡ ÇØ´çÇÏ´Â SCTR ¸Å°³º¯¼ö´Â vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)À¸·Î ÁÖ¾î¾ß ÇÕ´Ï´Ù.
-		/// Gauge¸¦ »ý¼ºÇÒ °æ¿ì ±× ÀÌ¸§ÀÇ µÚ¿¡ "_bar"¸¦ µ¡ºÙÀÎ ÀÌ¸§À¸·Î ´Ù¸¥ °³Ã¼°¡ ÇÔ²² »ý¼ºµË´Ï´Ù(Å¸ÀÔÀº ±âº» EntityÀÔ´Ï´Ù). ÀÌ´Â Gauge°¡ »ç¶óÁú ¶§ ÀÚµ¿À¸·Î Á¦°ÅµË´Ï´Ù.
-		/// ÀÌ ¶§¹®¿¡, Gauge¸¦ »ý¼ºÇÏ¿© »ç¿ëÇÒ ¶§ ±× µÚ¿¡ "_bar"¸¦ µ¡ºÙÀÎ ÀÌ¸§À» »ç¿ëÇÒ °æ¿ì ±×°ÍÀÌ À¯ÀÏÇÑ °³Ã¼°¡ ¾Æ´Ï¸ç, ¶ÇÇÑ ÀÌ·¸°Ô »ý¼ºµÈ °³Ã¼¸¦ ÀÓÀÇ·Î »èÁ¦ÇÒ °æ¿ì Gauge¿¡ ÀÇÇØ ¼¼±×¸ÕÅ×ÀÌ¼Ç ¿À·ù°¡ ¹ß»ýÇÒ ¼ö ÀÖÀ¸´Ï ÁÖÀÇÇÏ¼¼¿ä.
+		/// ë§ˆìš°ìŠ¤ë¡œ ìˆ˜ì§ìœ¼ë¡œ ëŒ ìˆ˜ ìžˆëŠ” ë²„íŠ¼ ê°œì²´ìž…ë‹ˆë‹¤. 1ì„ ë‹¨ìœ„ë¡œ ê°’ ì–‘ìží™”ê°€ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+		/// ì–‘ìží™”ë˜ì§€ ì•Šì€ ê²Œì´ì§€ì˜ ê°’ì€ 0~1ì˜ floatë¡œ ì œê³µë©ë‹ˆë‹¤.
+		/// ì• ë‹ˆë©”ì´ì…˜ì„ ì£¼ì§€ ì•Šê³  ìƒì„±í•  ê²½ìš° ê·¸ì— í•´ë‹¹í•˜ëŠ” SCTR ë§¤ê°œë³€ìˆ˜ëŠ” vec4(-1.0f / 1024, -1.0f / 1024, 0, 0)ìœ¼ë¡œ ì£¼ì–´ì•¼ í•©ë‹ˆë‹¤.
+		/// Gaugeë¥¼ ìƒì„±í•  ê²½ìš° ê·¸ ì´ë¦„ì˜ ë’¤ì— "_bar"ë¥¼ ë§ë¶™ì¸ ì´ë¦„ìœ¼ë¡œ ë‹¤ë¥¸ ê°œì²´ê°€ í•¨ê»˜ ìƒì„±ë©ë‹ˆë‹¤(íƒ€ìž…ì€ ê¸°ë³¸ Entityìž…ë‹ˆë‹¤). ì´ëŠ” Gaugeê°€ ì‚¬ë¼ì§ˆ ë•Œ ìžë™ìœ¼ë¡œ ì œê±°ë©ë‹ˆë‹¤.
+		/// ì´ ë•Œë¬¸ì—, Gaugeë¥¼ ìƒì„±í•˜ì—¬ ì‚¬ìš©í•  ë•Œ ê·¸ ë’¤ì— "_bar"ë¥¼ ë§ë¶™ì¸ ì´ë¦„ì„ ì‚¬ìš©í•  ê²½ìš° ê·¸ê²ƒì´ ìœ ì¼í•œ ê°œì²´ê°€ ì•„ë‹ˆë©°, ë˜í•œ ì´ë ‡ê²Œ ìƒì„±ëœ ê°œì²´ë¥¼ ìž„ì˜ë¡œ ì‚­ì œí•  ê²½ìš° Gaugeì— ì˜í•´ ì„¸ê·¸ë¨¼í…Œì´ì…˜ ì˜¤ë¥˜ê°€ ë°œìƒí•  ìˆ˜ ìžˆìœ¼ë‹ˆ ì£¼ì˜í•˜ì„¸ìš”.
 		/// </summary>
 		class GaugeV : public UIEntity {
 		public:
 			/// <summary>
-			/// °ÔÀÌÁö¸¦ »ý¼ºÇÕ´Ï´Ù. »ý¼º Á÷ÈÄ °ÔÀÌÁö´Â ¿À¸¥ÂÊ ³¡¿¡ °¡ ÀÖ½À´Ï´Ù.
+			/// ê²Œì´ì§€ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. ìƒì„± ì§í›„ ê²Œì´ì§€ëŠ” ì˜¤ë¥¸ìª½ ëì— ê°€ ìžˆìŠµë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="key">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-			/// <param name="barSCTR">2D ½ºÇÁ¶óÀÌÆ®/¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °æ¿ì ÀÌ °ªÀº ¸·´ë ¾Ö´Ï¸ÞÀÌ¼Ç °´Ã¼ ³»ÀÇ ´ëÇ¥ sctr°ªÀ» ÀÔ·ÂÇÏ¸é µË´Ï´Ù.</param>
-			/// <param name="handleSCTR">2D ½ºÇÁ¶óÀÌÆ®/¾Ö´Ï¸ÞÀÌ¼ÇÀÇ °æ¿ì ÀÌ °ªÀº ¼ÕÀâÀÌ ¾Ö´Ï¸ÞÀÌ¼Ç °´Ã¼ ³»ÀÇ ´ëÇ¥ sctr°ªÀ» ÀÔ·ÂÇÏ¸é µË´Ï´Ù.</param>
-			/// <param name="barLdwh">°ÔÀÌÁöÀÇ ¸·´ë°¡ Â÷ÁöÇÏ´Â Á÷»ç°¢Çü ¿µ¿ªÀÔ´Ï´Ù.</param>
-			/// <param name="handleSize">°ÔÀÌÁöÀÇ ¼ÕÀâÀÌÀÇ Å©±âÀÔ´Ï´Ù. Å©±â 1Àº °ÔÀÌÁö ¸·´ëÀÇ Æø°ú µ¿ÀÏÇÕ´Ï´Ù.</param>
-			/// <param name="length">°ÔÀÌÁö°¡ °¡Áú ¼ö ÀÖ´Â °ªÀÇ ¼öÀÔ´Ï´Ù. 1 ÀÌÇÏ°¡ ÀÔ·ÂµÇ´Â °æ¿ì °ÔÀÌÁö´Â 0°ú 1 »çÀÌÀÇ float °ªÀ» °¡Áö¸ç ±× ÀÌ»óÀÇ °æ¿ì 0ºÎÅÍ ½ÃÀÛÇÏ´Â int °ªÀ» °¡Áö°Ô µË´Ï´Ù. (ex: length 3ÀÎ °æ¿ì 0,1,2)</param>
-			/// <param name="onScroll">µå·¡±×ÇÒ ¶§ È£ÃâµÇ´Â ÇÔ¼öÀÔ´Ï´Ù. length°¡ 1 ÀÌÇÏÀÎ °æ¿ì ¸Å°³º¯¼ö´Â float*ÇüÀÔ´Ï´Ù. length°¡ 2 ÀÌ»óÀÎ °æ¿ì ¸Å°³º¯¼ö´Â int*ÇüÀÔ´Ï´Ù.</param>
-			/// <param name="margin">¾ç ³¡¿¡ µé¾î°¥ ¿©À¯ °ø°£ÀÔ´Ï´Ù. °ÔÀÌÁö ¼ÕÀâÀÌÀÇ Áß½ÉÀº ÀÌ ¿©À¯ °ø°£±îÁö °¡Áö ¾Ê½À´Ï´Ù. ÀÌ °ªÀº 0º¸´Ù ÀÛ°Å³ª 0.495º¸´Ù Å©¸é ÀÚµ¿À¸·Î Àß¸³´Ï´Ù.</param>
-			/// <param name="isContinuous">trueÀÎ °æ¿ì °ÔÀÌÁö°¡ ¿òÁ÷ÀÓ¿¡ µû¶ó ¿¬¼ÓÀ¸·Î ¹ÝÀÀ ÇÔ¼ö°¡ È£ÃâµÇ°í falseÀÎ °æ¿ì ¸¶¿ì½º¸¦ ¶ÃÀ» ¶§¿¡¸¸ ¹ÝÀÀ ÇÔ¼ö°¡ È£ÃâµË´Ï´Ù.</param>
-			/// <param name="handle">¼ÕÀâÀÌ ÀÌ¹ÌÁö(¾Ö´Ï¸ÞÀÌ¼Ç)ÀÔ´Ï´Ù.</param>
-			/// <param name="bar">¸·´ë ÀÌ¹ÌÁö(¾Ö´Ï¸ÞÀÌ¼Ç)ÀÔ´Ï´Ù.</param>
+			/// <param name="key">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+			/// <param name="barSCTR">2D ìŠ¤í”„ë¼ì´íŠ¸/ì• ë‹ˆë©”ì´ì…˜ì˜ ê²½ìš° ì´ ê°’ì€ ë§‰ëŒ€ ì• ë‹ˆë©”ì´ì…˜ ê°ì²´ ë‚´ì˜ ëŒ€í‘œ sctrê°’ì„ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤.</param>
+			/// <param name="handleSCTR">2D ìŠ¤í”„ë¼ì´íŠ¸/ì• ë‹ˆë©”ì´ì…˜ì˜ ê²½ìš° ì´ ê°’ì€ ì†ìž¡ì´ ì• ë‹ˆë©”ì´ì…˜ ê°ì²´ ë‚´ì˜ ëŒ€í‘œ sctrê°’ì„ ìž…ë ¥í•˜ë©´ ë©ë‹ˆë‹¤.</param>
+			/// <param name="barLdwh">ê²Œì´ì§€ì˜ ë§‰ëŒ€ê°€ ì°¨ì§€í•˜ëŠ” ì§ì‚¬ê°í˜• ì˜ì—­ìž…ë‹ˆë‹¤.</param>
+			/// <param name="handleSize">ê²Œì´ì§€ì˜ ì†ìž¡ì´ì˜ í¬ê¸°ìž…ë‹ˆë‹¤. í¬ê¸° 1ì€ ê²Œì´ì§€ ë§‰ëŒ€ì˜ í­ê³¼ ë™ì¼í•©ë‹ˆë‹¤.</param>
+			/// <param name="length">ê²Œì´ì§€ê°€ ê°€ì§ˆ ìˆ˜ ìžˆëŠ” ê°’ì˜ ìˆ˜ìž…ë‹ˆë‹¤. 1 ì´í•˜ê°€ ìž…ë ¥ë˜ëŠ” ê²½ìš° ê²Œì´ì§€ëŠ” 0ê³¼ 1 ì‚¬ì´ì˜ float ê°’ì„ ê°€ì§€ë©° ê·¸ ì´ìƒì˜ ê²½ìš° 0ë¶€í„° ì‹œìž‘í•˜ëŠ” int ê°’ì„ ê°€ì§€ê²Œ ë©ë‹ˆë‹¤. (ex: length 3ì¸ ê²½ìš° 0,1,2)</param>
+			/// <param name="onScroll">ë“œëž˜ê·¸í•  ë•Œ í˜¸ì¶œë˜ëŠ” í•¨ìˆ˜ìž…ë‹ˆë‹¤. lengthê°€ 1 ì´í•˜ì¸ ê²½ìš° ë§¤ê°œë³€ìˆ˜ëŠ” float*í˜•ìž…ë‹ˆë‹¤. lengthê°€ 2 ì´ìƒì¸ ê²½ìš° ë§¤ê°œë³€ìˆ˜ëŠ” int*í˜•ìž…ë‹ˆë‹¤.</param>
+			/// <param name="margin">ì–‘ ëì— ë“¤ì–´ê°ˆ ì—¬ìœ  ê³µê°„ìž…ë‹ˆë‹¤. ê²Œì´ì§€ ì†ìž¡ì´ì˜ ì¤‘ì‹¬ì€ ì´ ì—¬ìœ  ê³µê°„ê¹Œì§€ ê°€ì§€ ì•ŠìŠµë‹ˆë‹¤. ì´ ê°’ì€ 0ë³´ë‹¤ ìž‘ê±°ë‚˜ 0.495ë³´ë‹¤ í¬ë©´ ìžë™ìœ¼ë¡œ ìž˜ë¦½ë‹ˆë‹¤.</param>
+			/// <param name="isContinuous">trueì¸ ê²½ìš° ê²Œì´ì§€ê°€ ì›€ì§ìž„ì— ë”°ë¼ ì—°ì†ìœ¼ë¡œ ë°˜ì‘ í•¨ìˆ˜ê°€ í˜¸ì¶œë˜ê³  falseì¸ ê²½ìš° ë§ˆìš°ìŠ¤ë¥¼ ë—ì„ ë•Œì—ë§Œ ë°˜ì‘ í•¨ìˆ˜ê°€ í˜¸ì¶œë©ë‹ˆë‹¤.</param>
+			/// <param name="handle">ì†ìž¡ì´ ì´ë¯¸ì§€(ì• ë‹ˆë©”ì´ì…˜)ìž…ë‹ˆë‹¤.</param>
+			/// <param name="bar">ë§‰ëŒ€ ì´ë¯¸ì§€(ì• ë‹ˆë©”ì´ì…˜)ìž…ë‹ˆë‹¤.</param>
 			GaugeV(const EntityKey& key, const vec4& barSCTR, const vec4& handleSCTR, const vec4& barLdwh, const vec2& handleSize, short length, UniversalFunctor* onScroll, float margin = 0.05f, bool isContinuous = false, pAnimation handle = pAnimation(), pAnimation bar = pAnimation());
 			~GaugeV();
 			void onHolding(float y);
 			void Update();
 			void render();
 			/// <summary>
-			/// °ÔÀÌÁö°¡ °¡Áø °ªÀ» ¼³Á¤ÇÕ´Ï´Ù. ¸Å°³º¯¼ö´Â floatÀÌÁö¸¸ ÀÌ»ê(discrete) °ÔÀÌÁö·Î ¼³Á¤Çß´õ¶óµµ ±×´ë·Î »ç¿ëÇÏ¸é µË´Ï´Ù.
-			/// ¹üÀ§¸¦ ³Ñ´Â °ªÀÌ µé¾î¿À¸é ÀÚµ¿À¸·Î Àß¸³´Ï´Ù.
+			/// ê²Œì´ì§€ê°€ ê°€ì§„ ê°’ì„ ì„¤ì •í•©ë‹ˆë‹¤. ë§¤ê°œë³€ìˆ˜ëŠ” floatì´ì§€ë§Œ ì´ì‚°(discrete) ê²Œì´ì§€ë¡œ ì„¤ì •í–ˆë”ë¼ë„ ê·¸ëŒ€ë¡œ ì‚¬ìš©í•˜ë©´ ë©ë‹ˆë‹¤.
+			/// ë²”ìœ„ë¥¼ ë„˜ëŠ” ê°’ì´ ë“¤ì–´ì˜¤ë©´ ìžë™ìœ¼ë¡œ ìž˜ë¦½ë‹ˆë‹¤.
 			/// </summary>
 			inline void setValue(float v) { if (length != 1)v /= length - 1; onHolding(bottommost + (topmost - bottommost) * v); }
 		protected:
@@ -355,26 +355,26 @@ namespace onart {
 		};
 		
 		/// <summary>
-		/// Á¼Àº °ø°£¿¡ UI °³Ã¼µéÀ» Æ÷ÇÔÇÏ¸ç À§Ä¡¸¦ º¯°æÇÏ¿© Á¢±ÙÇÕ´Ï´Ù. º¸ÀÌÁö ¾Ê°Ô µÈ °³Ã¼µéÀº Å¬¸¯ µî ¾×¼ÇÀÌ ¸ÔÈ÷Áö ¾Ê½À´Ï´Ù.
+		/// ì¢ì€ ê³µê°„ì— UI ê°œì²´ë“¤ì„ í¬í•¨í•˜ë©° ìœ„ì¹˜ë¥¼ ë³€ê²½í•˜ì—¬ ì ‘ê·¼í•©ë‹ˆë‹¤. ë³´ì´ì§€ ì•Šê²Œ ëœ ê°œì²´ë“¤ì€ í´ë¦­ ë“± ì•¡ì…˜ì´ ë¨¹ížˆì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		class Slider : public UIEntity {
 		public:
 			/// <summary>
-			/// ½½¶óÀÌ´õ¸¦ »ý¼ºÇÕ´Ï´Ù. ÃÊ±â¿¡´Â ÁÂÃø »ó´Ü¿¡ ²À ºÙ¾î ÀÖ½À´Ï´Ù.
+			/// ìŠ¬ë¼ì´ë”ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. ì´ˆê¸°ì—ëŠ” ì¢Œì¸¡ ìƒë‹¨ì— ê¼­ ë¶™ì–´ ìžˆìŠµë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="key">°³Ã¼ ÀÌ¸§ÀÔ´Ï´Ù.</param>
-			/// <param name="area">½½¶óÀÌ´õ°¡ Â÷ÁöÇÒ °íÁ¤ ¿µ¿ªÀÔ´Ï´Ù.</param>
-			/// <param name="size">½½¶óÀÌ´õÀÇ ³í¸®Àû °ø°£ÀÇ °¡·Î/¼¼·Î Å©±âÀÔ´Ï´Ù.</param>
-			/// <param name="component">½½¶óÀÌ´õ¿¡ Æ÷ÇÔµÉ °³Ã¼µéÀÔ´Ï´Ù. Á¸Àç ÀÌÀ¯ ÀÚÃ¼¿¡ µû¶ó, ÀÌ °³Ã¼µéÀº ½½¶óÀÌ´õ°¡ Á¦°ÅµÉ ¶§ ¸ðµÎ Á¦°ÅµË´Ï´Ù. ÀÌ´Â ¿©±â µé¾î°¡´Â °³Ã¼µéÀº sceneÀÇ entities¿¡ Æ÷ÇÔµÇÁö ¾Ê¾Æ¾ß ÇÑ´Ù´Â ÀÇ¹Ì¿Í °°½À´Ï´Ù.</param>
+			/// <param name="key">ê°œì²´ ì´ë¦„ìž…ë‹ˆë‹¤.</param>
+			/// <param name="area">ìŠ¬ë¼ì´ë”ê°€ ì°¨ì§€í•  ê³ ì • ì˜ì—­ìž…ë‹ˆë‹¤.</param>
+			/// <param name="size">ìŠ¬ë¼ì´ë”ì˜ ë…¼ë¦¬ì  ê³µê°„ì˜ ê°€ë¡œ/ì„¸ë¡œ í¬ê¸°ìž…ë‹ˆë‹¤.</param>
+			/// <param name="component">ìŠ¬ë¼ì´ë”ì— í¬í•¨ë  ê°œì²´ë“¤ìž…ë‹ˆë‹¤. ì¡´ìž¬ ì´ìœ  ìžì²´ì— ë”°ë¼, ì´ ê°œì²´ë“¤ì€ ìŠ¬ë¼ì´ë”ê°€ ì œê±°ë  ë•Œ ëª¨ë‘ ì œê±°ë©ë‹ˆë‹¤. ì´ëŠ” ì—¬ê¸° ë“¤ì–´ê°€ëŠ” ê°œì²´ë“¤ì€ sceneì˜ entitiesì— í¬í•¨ë˜ì§€ ì•Šì•„ì•¼ í•œë‹¤ëŠ” ì˜ë¯¸ì™€ ê°™ìŠµë‹ˆë‹¤.</param>
 			Slider(const EntityKey& key, const vec4& area, const vec2& size, const std::vector<UIEntity*>& component);
 			inline vec2 getPos() { return pos; }
 			inline vec4 clickbox() { return area; }
 			/// <summary>
-			/// ½½¶óÀÌ´õ°¡ º¸¿©ÁÙ À§Ä¡¸¦ º¯°æÇÕ´Ï´Ù. »ý¼º ½Ã Àû¿ëÇÑ ¹üÀ§¸¦ ³Ñ¾î°¡Áö ¾Êµµ·Ï ÀÚµ¿ Á¶ÀýµË´Ï´Ù.
+			/// ìŠ¬ë¼ì´ë”ê°€ ë³´ì—¬ì¤„ ìœ„ì¹˜ë¥¼ ë³€ê²½í•©ë‹ˆë‹¤. ìƒì„± ì‹œ ì ìš©í•œ ë²”ìœ„ë¥¼ ë„˜ì–´ê°€ì§€ ì•Šë„ë¡ ìžë™ ì¡°ì ˆë©ë‹ˆë‹¤.
 			/// </summary>
 			void setPos(const vec2&);
-			void Update();	// ¸ÞÀÎ ÀÌ½´: º¯°æÇÏ±â
-			void render();	// clickbox°¡ °ãÄ¡´Â °Í¸¸ render
+			void Update();	// ë©”ì¸ ì´ìŠˆ: ë³€ê²½í•˜ê¸°
+			void render();	// clickboxê°€ ê²¹ì¹˜ëŠ” ê²ƒë§Œ render
 			~Slider();
 		private:
 			vec4 area;
@@ -384,14 +384,14 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// ÅØ½ºÆ®¸¦ Æ÷ÇÔÇÏ´Â µå·Ó´Ù¿î ¸®½ºÆ®ÀÔ´Ï´Ù.
+		/// í…ìŠ¤íŠ¸ë¥¼ í¬í•¨í•˜ëŠ” ë“œë¡­ë‹¤ìš´ ë¦¬ìŠ¤íŠ¸ìž…ë‹ˆë‹¤.
 		/// </summary>
 		class Dropdown :public UIEntity {
 			
 		};
 
 		/// <summary>
-		/// ÅØ½ºÆ®¸¦ ÀÔ·Â¹Þ´Â ÀÎÅÍÆäÀÌ½ºÀÔ´Ï´Ù.
+		/// í…ìŠ¤íŠ¸ë¥¼ ìž…ë ¥ë°›ëŠ” ì¸í„°íŽ˜ì´ìŠ¤ìž…ë‹ˆë‹¤.
 		/// </summary>
 		class InputField : public UIEntity {
 

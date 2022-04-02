@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -12,9 +12,9 @@
 
 namespace onart {
 	/// <summary>
-	/// ÀÌ ÇÁ·Î±×·¥¿¡¼­ »ç¿ëµÉ ¸ğµç ÆãÅÍÀÇ ÇüÅÂÀÔ´Ï´Ù. ¸Å°³º¯¼ö´Â ±âº» const void* ÇÑ °³ÀÌ¸ç »çÀü ¾à¼ÓÀÌ µÈ ±âÁØ ¿øÇÏ´Â ¸¸Å­ »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
-	/// ±âº»°ªÀÌ nullptr·Î Á¸ÀçÇÏ¹Ç·Î ¸Å°³º¯¼ö°¡ ¾ø´Â °æ¿ì¿¡µµ »ç¿ë °¡´ÉÇÕ´Ï´Ù.
-	/// ´ÙÇü¼ºÀ» È°¿ëÇØ¾ß ÇÏ´Â Æ¯¼º»ó Æ÷ÀÎÅÍ/ÂüÁ¶ÀÚ¸¦ ¾¹´Ï´Ù. Áï, ¹İµå½Ã »ç¿ë ¹üÀ§ ³»¿¡¼­ ¼Ò¸êÇÏÁö ¾Ê´Â °´Ã¼¸¦ »ç¿ëÇØ ÁÖ¼¼¿ä.
+	/// ì´ í”„ë¡œê·¸ë¨ì—ì„œ ì‚¬ìš©ë  ëª¨ë“  í‘í„°ì˜ í˜•íƒœì…ë‹ˆë‹¤. ë§¤ê°œë³€ìˆ˜ëŠ” ê¸°ë³¸ const void* í•œ ê°œì´ë©° ì‚¬ì „ ì•½ì†ì´ ëœ ê¸°ì¤€ ì›í•˜ëŠ” ë§Œí¼ ì‚¬ìš©í•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.
+	/// ê¸°ë³¸ê°’ì´ nullptrë¡œ ì¡´ì¬í•˜ë¯€ë¡œ ë§¤ê°œë³€ìˆ˜ê°€ ì—†ëŠ” ê²½ìš°ì—ë„ ì‚¬ìš© ê°€ëŠ¥í•©ë‹ˆë‹¤.
+	/// ë‹¤í˜•ì„±ì„ í™œìš©í•´ì•¼ í•˜ëŠ” íŠ¹ì„±ìƒ í¬ì¸í„°/ì°¸ì¡°ìë¥¼ ì”ë‹ˆë‹¤. ì¦‰, ë°˜ë“œì‹œ ì‚¬ìš© ë²”ìœ„ ë‚´ì—ì„œ ì†Œë©¸í•˜ì§€ ì•ŠëŠ” ê°ì²´ë¥¼ ì‚¬ìš©í•´ ì£¼ì„¸ìš”.
 	/// </summary>
 	class UniversalFunctor
 	{

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -13,12 +13,12 @@
 
 namespace onart {
 	/// <summary>
-	/// °³Ã¼ÀÇ À§Ä¡, Å©±â, È¸Àü »óÅÂ¸¦ ³ªÅ¸³»´Â Å¬·¡½ºÀÔ´Ï´Ù. (´ÙÇü¼ºÀ» °¡»óÇÔ¼ö Å×ÀÌºí ¶§¹®¿¡ »ç¿ëÇÏÁö ¾Ê°í ¸ğµÎ ÀÎ¶óÀÎ ÇÔ¼öÀÎ ´ë½Å ÀÌ °èÃşÀÇ ÄÚµùÀÌ ¾à°£ ¹ø°Å·Î¿öÁı´Ï´Ù.)
-	/// <para>oaglem.h ¿Ü ´Ù¸¥ Çà·Ä Å¬·¡½º¸¦ »ç¿ëÇÏ´Â °æ¿ì ÀÌ Å¬·¡½º¸¦ ±×´ë·Î »ç¿ëÇÒ ¼ö ¾øÀ» °¡´É¼ºÀÌ ¸Å¿ì ³ô½À´Ï´Ù.</para>
-	/// <para>¸Ç ¾Õ¿¡ d°¡ ºÙÀº setter ¸â¹öÇÔ¼ö´Â ¸Å ÇÁ·¹ÀÓ¸¶´Ù À§Ä¡/È¸Àü/Å©±â Áß µÑ ÀÌ»ó ¾÷µ¥ÀÌÆ®µÉ ¼ö ÀÖ´Â °³Ã¼¿¡ ´ëÇÏ¿© »ç¿ëÇÏ´Â °ÍÀÌ ÁÁ½À´Ï´Ù.</para>
-	/// <para>¸Ç ¾Õ¿¡ d°¡ ºÙÁö ¾ÊÀº setter ¸â¹öÇÔ¼ö´Â ¸Å ÇÁ·¹ÀÓ¸¶´Ù ÁÖ·Î ÇÏ³ª ÀÌÇÏ°¡ ¾÷µ¥ÀÌÆ®µÇ´Â °³Ã¼¿¡ ´ëÇÏ¿© »ç¿ëÇÏ´Â °ÍÀÌ ÁÁ½À´Ï´Ù.</para>
-	/// <para>¾î¶² ¹æ½ÄÀ¸·Î ¾÷µ¥ÀÌÆ®ÇÏµç °á°ú´Â °°À¸¹Ç·Î, ÃÖÀûÈ­°¡ ÃæºĞÇÑ °æ¿ì d°¡ ºÙÀº ¸â¹ö¸¸ »ç¿ëÇÏ´Â °Íµµ ¹æ¹ıÀÔ´Ï´Ù.</para>
-	/// (Áß¿ä) parent°¡ À¯È¿ÇÏÁö ¾ÊÀº Æ÷ÀÎÅÍÀÎ °æ¿ì¿¡ ´ëÇÑ ¿¹¿Ü ÄÉÀÌ½º´Â »óÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù. µû¶ó¼­ TransformÀº À¢¸¸ÇØ¼± EntityÀÇ ¸â¹ö·Î¸¸ »ç¿ëÇÏ¸ç, parent Æ÷ÀÎÅÍ¸¦ »ç¿ëÇÏ´Â °æ¿ì ÀÀ¿ë(Entity ÆÄ»ı) °èÃş¿¡¼­ ¹İµå½Ã ºÎ¸ğ¿ÍÀÇ °ü¸®¸¦ Á÷Á¢ ÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+	/// ê°œì²´ì˜ ìœ„ì¹˜, í¬ê¸°, íšŒì „ ìƒíƒœë¥¼ ë‚˜íƒ€ë‚´ëŠ” í´ë˜ìŠ¤ì…ë‹ˆë‹¤. (ë‹¤í˜•ì„±ì„ ê°€ìƒí•¨ìˆ˜ í…Œì´ë¸” ë•Œë¬¸ì— ì‚¬ìš©í•˜ì§€ ì•Šê³  ëª¨ë‘ ì¸ë¼ì¸ í•¨ìˆ˜ì¸ ëŒ€ì‹  ì´ ê³„ì¸µì˜ ì½”ë”©ì´ ì•½ê°„ ë²ˆê±°ë¡œì›Œì§‘ë‹ˆë‹¤.)
+	/// <para>oaglem.h ì™¸ ë‹¤ë¥¸ í–‰ë ¬ í´ë˜ìŠ¤ë¥¼ ì‚¬ìš©í•˜ëŠ” ê²½ìš° ì´ í´ë˜ìŠ¤ë¥¼ ê·¸ëŒ€ë¡œ ì‚¬ìš©í•  ìˆ˜ ì—†ì„ ê°€ëŠ¥ì„±ì´ ë§¤ìš° ë†’ìŠµë‹ˆë‹¤.</para>
+	/// <para>ë§¨ ì•ì— dê°€ ë¶™ì€ setter ë©¤ë²„í•¨ìˆ˜ëŠ” ë§¤ í”„ë ˆì„ë§ˆë‹¤ ìœ„ì¹˜/íšŒì „/í¬ê¸° ì¤‘ ë‘˜ ì´ìƒ ì—…ë°ì´íŠ¸ë  ìˆ˜ ìˆëŠ” ê°œì²´ì— ëŒ€í•˜ì—¬ ì‚¬ìš©í•˜ëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.</para>
+	/// <para>ë§¨ ì•ì— dê°€ ë¶™ì§€ ì•Šì€ setter ë©¤ë²„í•¨ìˆ˜ëŠ” ë§¤ í”„ë ˆì„ë§ˆë‹¤ ì£¼ë¡œ í•˜ë‚˜ ì´í•˜ê°€ ì—…ë°ì´íŠ¸ë˜ëŠ” ê°œì²´ì— ëŒ€í•˜ì—¬ ì‚¬ìš©í•˜ëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.</para>
+	/// <para>ì–´ë–¤ ë°©ì‹ìœ¼ë¡œ ì—…ë°ì´íŠ¸í•˜ë“  ê²°ê³¼ëŠ” ê°™ìœ¼ë¯€ë¡œ, ìµœì í™”ê°€ ì¶©ë¶„í•œ ê²½ìš° dê°€ ë¶™ì€ ë©¤ë²„ë§Œ ì‚¬ìš©í•˜ëŠ” ê²ƒë„ ë°©ë²•ì…ë‹ˆë‹¤.</para>
+	/// (ì¤‘ìš”) parentê°€ ìœ íš¨í•˜ì§€ ì•Šì€ í¬ì¸í„°ì¸ ê²½ìš°ì— ëŒ€í•œ ì˜ˆì™¸ ì¼€ì´ìŠ¤ëŠ” ìƒì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤. ë”°ë¼ì„œ Transformì€ ì›¬ë§Œí•´ì„  Entityì˜ ë©¤ë²„ë¡œë§Œ ì‚¬ìš©í•˜ë©°, parent í¬ì¸í„°ë¥¼ ì‚¬ìš©í•˜ëŠ” ê²½ìš° ì‘ìš©(Entity íŒŒìƒ) ê³„ì¸µì—ì„œ ë°˜ë“œì‹œ ë¶€ëª¨ì™€ì˜ ê´€ë¦¬ë¥¼ ì§ì ‘ í•˜ì‹œê¸° ë°”ëë‹ˆë‹¤.
 	/// </summary>
 	class Transform
 	{
@@ -30,18 +30,18 @@ namespace onart {
 		vec3 pos;
 		mat4 model;
 
-		vec3 globalScale;	// ºÎ¸ğ¿¡ È¸ÀüÀÌ ÀÖ´Â °æ¿ì, ÀÇ¹Ì°¡ Åğ»ö. ¿ÜºÎ ¼öÁ¤ Á¦°øx
-		vec3 globalPos;		// ¿ÜºÎ ¼öÁ¤ Á¦°ø
-		Quaternion globalRotation;	// ¿ÜºÎ ¼öÁ¤ Á¦°øx
+		vec3 globalScale;	// ë¶€ëª¨ì— íšŒì „ì´ ìˆëŠ” ê²½ìš°, ì˜ë¯¸ê°€ í‡´ìƒ‰. ì™¸ë¶€ ìˆ˜ì • ì œê³µx
+		vec3 globalPos;		// ì™¸ë¶€ ìˆ˜ì • ì œê³µ
+		Quaternion globalRotation;	// ì™¸ë¶€ ìˆ˜ì • ì œê³µx
 		mat4 globalModel;
 		bool ready = false, globalReady = false;
 
 		/// <summary>
-		/// NOTE: ready¸¦ true·Î ¸¸µé ¼ö ÀÖ´Â ÇÔ¼ö´Â TRS()¿Í mat2prs()»ÓÀÌ¾î¾ß ÇÕ´Ï´Ù.
+		/// NOTE: readyë¥¼ trueë¡œ ë§Œë“¤ ìˆ˜ ìˆëŠ” í•¨ìˆ˜ëŠ” TRS()ì™€ mat2prs()ë¿ì´ì–´ì•¼ í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void TRS() { model = mat4::TRS(pos, rotation, scale); ready = true; }
 		/// <summary>
-		/// NOTE: ready¸¦ true·Î ¸¸µé ¼ö ÀÖ´Â ÇÔ¼ö´Â TRS()¿Í mat2prs()»ÓÀÌ¾î¾ß ÇÕ´Ï´Ù.
+		/// NOTE: readyë¥¼ trueë¡œ ë§Œë“¤ ìˆ˜ ìˆëŠ” í•¨ìˆ˜ëŠ” TRS()ì™€ mat2prs()ë¿ì´ì–´ì•¼ í•©ë‹ˆë‹¤.
 		/// </summary>
 		void mat2prs();
 		/// <summary>
@@ -50,80 +50,80 @@ namespace onart {
 		void gmat2prs();
 	public:
 		/// <summary>
-		/// ·ÎÄÃ À§Ä¡/Å©±â/È¸Àü°ú ºÎ¸ğ º¯È¯À» ¸í½ÃÇÏ¿© º¯È¯À» »ı¼ºÇÕ´Ï´Ù.
+		/// ë¡œì»¬ ìœ„ì¹˜/í¬ê¸°/íšŒì „ê³¼ ë¶€ëª¨ ë³€í™˜ì„ ëª…ì‹œí•˜ì—¬ ë³€í™˜ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		Transform(const vec3& pos = 0.f, const vec3& scale = 1.f, const Quaternion& rot = { 1,0,0,0 }, Transform* parent = nullptr);
 		/// <summary>
-		/// º¯È¯À» º¹»çÇÕ´Ï´Ù. ºÎ¸ğ º¯È¯Àº °øÀ¯ÇÏÁö¸¸, ÀÚ½Ä º¯È¯Àº º¹»çÇÏÁö ¾Ê½À´Ï´Ù.
+		/// ë³€í™˜ì„ ë³µì‚¬í•©ë‹ˆë‹¤. ë¶€ëª¨ ë³€í™˜ì€ ê³µìœ í•˜ì§€ë§Œ, ìì‹ ë³€í™˜ì€ ë³µì‚¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		Transform(const Transform& tr);
 		/// <summary>
-		/// ¾ÆÇÉ º¯È¯ Çà·Ä°ú ºÎ¸ğ º¯È¯À» ÁÖ¾î º¯È¯À» »ı¼ºÇÕ´Ï´Ù. ¾ÆÇÉ º¯È¯ÀÌ ¾Æ´Ñ °æ¿ì´Â »óÁ¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.
+		/// ì•„í•€ ë³€í™˜ í–‰ë ¬ê³¼ ë¶€ëª¨ ë³€í™˜ì„ ì£¼ì–´ ë³€í™˜ì„ ìƒì„±í•©ë‹ˆë‹¤. ì•„í•€ ë³€í™˜ì´ ì•„ë‹Œ ê²½ìš°ëŠ” ìƒì •ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.
 		/// </summary>
 		Transform(const mat4& tr, Transform* parent = nullptr);
 		/// <summary>
-		/// ºÎ¸ğ Æ®·£½ºÆûÀ» º¯°æÇÕ´Ï´Ù. nullptr¸¦ ÁÖ¾î µ¶¸³ÇÏ°Å³ª ºÎ¸ğ°¡ º¯°æµÇ´Â °æ¿ì¿¡µµ ±Û·Î¹ú º¯È¯Àº À¯ÁöµË´Ï´Ù.
+		/// ë¶€ëª¨ íŠ¸ëœìŠ¤í¼ì„ ë³€ê²½í•©ë‹ˆë‹¤. nullptrë¥¼ ì£¼ì–´ ë…ë¦½í•˜ê±°ë‚˜ ë¶€ëª¨ê°€ ë³€ê²½ë˜ëŠ” ê²½ìš°ì—ë„ ê¸€ë¡œë²Œ ë³€í™˜ì€ ìœ ì§€ë©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="p">ºÎ¸ğ Æ®·£½ºÆû</param>
+		/// <param name="p">ë¶€ëª¨ íŠ¸ëœìŠ¤í¼</param>
 		void setParent(Transform* p = nullptr);
 		inline Transform* getParent() const { return parent; }
 		/// <summary>
-		/// ÁÖ¾îÁø º¯È¯ÀÌ ÀÚ½Ä Áß¿¡ ÀÖÀ¸¸é Á¦¿ÜÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ë³€í™˜ì´ ìì‹ ì¤‘ì— ìˆìœ¼ë©´ ì œì™¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void excludeChild(Transform* t) { children.erase(std::remove(children.begin(), children.end(), t), children.end()); }
 		/// <summary>
-		/// ÁÖ¾îÁø º¯È¯À» ÀÚ½Ä¿¡ Æ÷ÇÔ½ÃÅµ´Ï´Ù. Áßº¹ Æ÷ÇÔÀº °Ë»çÇÏÁö ¾Ê½À´Ï´Ù.
+		/// ì£¼ì–´ì§„ ë³€í™˜ì„ ìì‹ì— í¬í•¨ì‹œí‚µë‹ˆë‹¤. ì¤‘ë³µ í¬í•¨ì€ ê²€ì‚¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		inline void addChild(Transform* t) { if (t && t != this)children.push_back(t); }
 		/// <summary>
-		/// ÀÚ½Ä º¯È¯ÀÌ ±Û·Î¹ú º¯È¯À» ¸¸µé±â À§ÇØ º¯È¯À» ¹Ş¾Æ°¡¾ß ÇÔÀ» ¶æÇÕ´Ï´Ù. ÀÌ ÇÔ¼ö´Â ÇÊ¿äÇÒ ¶§¸¸ ÀÚµ¿À¸·Î È£ÃâµÇ¹Ç·Î, ÀÀ¿ë¿¡¼­´Â È£ÃâÇØµµ ¿À·ù°¡ ¹ß»ıÇÏÁö ¾ÊÁö¸¸, ¼º´É¸¸ ³ªºüÁö´Â °á°ú¸¦ ¾ò°Ô µË´Ï´Ù.
+		/// ìì‹ ë³€í™˜ì´ ê¸€ë¡œë²Œ ë³€í™˜ì„ ë§Œë“¤ê¸° ìœ„í•´ ë³€í™˜ì„ ë°›ì•„ê°€ì•¼ í•¨ì„ ëœ»í•©ë‹ˆë‹¤. ì´ í•¨ìˆ˜ëŠ” í•„ìš”í•  ë•Œë§Œ ìë™ìœ¼ë¡œ í˜¸ì¶œë˜ë¯€ë¡œ, ì‘ìš©ì—ì„œëŠ” í˜¸ì¶œí•´ë„ ì˜¤ë¥˜ê°€ ë°œìƒí•˜ì§€ ì•Šì§€ë§Œ, ì„±ëŠ¥ë§Œ ë‚˜ë¹ ì§€ëŠ” ê²°ê³¼ë¥¼ ì–»ê²Œ ë©ë‹ˆë‹¤.
 		/// </summary>
 		void globalNotReady();
 		/// <summary>
-		/// ÀÎ°ÔÀÓ(±Û·Î¹ú) ¸ğµ¨ º¯È¯ÀÇ ¿ªÇà·ÄÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì¸ê²Œì„(ê¸€ë¡œë²Œ) ëª¨ë¸ ë³€í™˜ì˜ ì—­í–‰ë ¬ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		mat4 getInverseTransform();
 		/// <summary>
-		/// ÀÎ°ÔÀÓ ¸ğµ¨ 4x4 Çà·ÄÀ» ¸®ÅÏÇÕ´Ï´Ù.
-		/// NOTE: globalReady¸¦ true·Î ¸¸µé ¼ö ÀÖ´Â °÷Àº ¿©±â¿Í setGlobal °è¿­»ÓÀÌ¾î¾ß ÇÕ´Ï´Ù.
+		/// ì¸ê²Œì„ ëª¨ë¸ 4x4 í–‰ë ¬ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
+		/// NOTE: globalReadyë¥¼ trueë¡œ ë§Œë“¤ ìˆ˜ ìˆëŠ” ê³³ì€ ì—¬ê¸°ì™€ setGlobal ê³„ì—´ë¿ì´ì–´ì•¼ í•©ë‹ˆë‹¤.
 		/// </summary>
 		const mat4& getModel();
 		/// <summary>
-		/// Çà·ÄÀ» ÀÌ¿ëÇØ À§Ä¡, È¸Àü, Å©±â¸¦ ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù. ¾ÆÇÉ º¯È¯ÀÌ ¾Æ´Ï°Å³ª ±â¿ïÀÓ º¯È¯(Àü´Ü, shear)ÀÎ °æ¿ì¿¡ ¹ß»ıÇÏ´Â °í·ÁµÇÁö ¾ÊÀº »óÈ²Àº Ã¥ÀÓÁöÁö ¾Ê½À´Ï´Ù.
-		/// ´õ Á¤È®È÷´Â, Ãß°¡ º¯È¯À» °¡ÇÏÁö ¾Ê´Â °æ¿ì ¿øÇÏ´Â º¯È¯´ë·Î ¼öÇàµÇÁö¸¸ Ãß°¡ È¸Àü/º´Áø/Å©±â º¯È¯À» ÇÏ´Â °æ¿ì Ã³À½ º¯È¯°ú ´Ş¶óÁı´Ï´Ù.
+		/// í–‰ë ¬ì„ ì´ìš©í•´ ìœ„ì¹˜, íšŒì „, í¬ê¸°ë¥¼ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤. ì•„í•€ ë³€í™˜ì´ ì•„ë‹ˆê±°ë‚˜ ê¸°ìš¸ì„ ë³€í™˜(ì „ë‹¨, shear)ì¸ ê²½ìš°ì— ë°œìƒí•˜ëŠ” ê³ ë ¤ë˜ì§€ ì•Šì€ ìƒí™©ì€ ì±…ì„ì§€ì§€ ì•ŠìŠµë‹ˆë‹¤.
+		/// ë” ì •í™•íˆëŠ”, ì¶”ê°€ ë³€í™˜ì„ ê°€í•˜ì§€ ì•ŠëŠ” ê²½ìš° ì›í•˜ëŠ” ë³€í™˜ëŒ€ë¡œ ìˆ˜í–‰ë˜ì§€ë§Œ ì¶”ê°€ íšŒì „/ë³‘ì§„/í¬ê¸° ë³€í™˜ì„ í•˜ëŠ” ê²½ìš° ì²˜ìŒ ë³€í™˜ê³¼ ë‹¬ë¼ì§‘ë‹ˆë‹¤.
 		/// </summary>
 		inline void setModel(const mat4& m) { model = m; mat2prs(); globalNotReady(); }
 		/// <summary>
-		/// ±Û·Î¹ú À§Ä¡¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ê¸€ë¡œë²Œ ìœ„ì¹˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getGlobalPosition() { if (!parent)return pos; getModel(); return globalPos; }
 		/// <summary>
-		/// 3D ±Û·Î¹ú À§Ä¡¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// 3D ê¸€ë¡œë²Œ ìœ„ì¹˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getLocalPosition() const { return pos; }
 		/// <summary>
-		/// ±Û·Î¹ú 3D Å©±â ¹èÀ²À» ¸®ÅÏÇÕ´Ï´Ù.
-		/// NOTE: ±Û·Î¹ú ¹èÀ²Àº ºÎ¸ğ º¯È¯ Áß È¸ÀüÀÌ ÀÖÀ¸¸é ÀÇ¹Ì°¡ Å©°Ô Åğ»öµË´Ï´Ù.
+		/// ê¸€ë¡œë²Œ 3D í¬ê¸° ë°°ìœ¨ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
+		/// NOTE: ê¸€ë¡œë²Œ ë°°ìœ¨ì€ ë¶€ëª¨ ë³€í™˜ ì¤‘ íšŒì „ì´ ìˆìœ¼ë©´ ì˜ë¯¸ê°€ í¬ê²Œ í‡´ìƒ‰ë©ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getScale() { if (!parent)return scale; getModel(); return globalScale; }
 		/// <summary>
-		/// ÇöÀç º¯È¯ÀÇ 3D Å©±â ¹èÀ²À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// í˜„ì¬ ë³€í™˜ì˜ 3D í¬ê¸° ë°°ìœ¨ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const vec3& getLocalScale() const { return scale; }
 		/// <summary>
-		/// ±Û·Î¹ú 3D È¸Àü »ç¿ø¼ö¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ê¸€ë¡œë²Œ 3D íšŒì „ ì‚¬ì›ìˆ˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const Quaternion& getRotation() { if (!parent)return rotation; getModel(); return globalRotation; }
 		/// <summary>
-		/// 3D Áö¿ª È¸Àü »ç¿ø¼ö¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// 3D ì§€ì—­ íšŒì „ ì‚¬ì›ìˆ˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline const Quaternion& getLocalRotation() const { return rotation; }
 		/// <summary>
-		/// 3D Å©±â ¹èÀ²À» ¼³Á¤ÇÕ´Ï´Ù.
+		/// 3D í¬ê¸° ë°°ìœ¨ì„ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetScale(const vec3& sc) { scale = sc; ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D Å©±â ¹èÀ²À» ¼³Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D í¬ê¸° ë°°ìœ¨ì„ ì„¤ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setScale(const vec3& sc) {
 			vec3 v = sc / scale;
@@ -149,190 +149,190 @@ namespace onart {
 			globalNotReady();
 		}
 		/// <summary>
-		/// 3D Å©±â ¹èÀ²À» ¼³Á¤ÇÕ´Ï´Ù.
+		/// 3D í¬ê¸° ë°°ìœ¨ì„ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetScale(float x, float y, float z) { dSetScale(vec3(x, y, z)); }
 		/// <summary>
-		/// 3D Å©±â ¹èÀ²À» ¼³Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D í¬ê¸° ë°°ìœ¨ì„ ì„¤ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setScale(float x, float y, float z) { setScale(vec3(x, y, z)); }
 		/// <summary>
-		/// 3D À§Ä¡¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+		/// 3D ìœ„ì¹˜ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetLocalPosition(const vec3& p) { pos = p; ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D À§Ä¡¸¦ ¼³Á¤ÇÕ´Ï´Ù.
+		/// 3D ìœ„ì¹˜ë¥¼ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetLocalPosition(float x, float y, float z) { dSetLocalPosition(vec3(x, y, z)); }
 		/// <summary>
-		/// 3D À§Ä¡¸¦ ¼³Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D ìœ„ì¹˜ë¥¼ ì„¤ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setLocalPosition(const vec3& p) { pos = p; model[3] = p.x; model[7] = p.y; model[11] = p.z; globalNotReady(); }
 		/// <summary>
-		/// 3D À§Ä¡¸¦ ¼³Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D ìœ„ì¹˜ë¥¼ ì„¤ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setLocalPosition(float x, float y, float z) { setLocalPosition(vec3(x, y, z)); }
 		/// <summary>
-		/// ¿ùµå Æ÷Áö¼ÇÀ» Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ í¬ì§€ì…˜ì„ ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void setPosition(const vec3& p);
 		/// <summary>
-		/// ¿ùµå Æ÷Áö¼ÇÀ» º¯È­½ÃÅ°°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ í¬ì§€ì…˜ì„ ë³€í™”ì‹œí‚¤ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addPosition(const vec3& p);
 		/// <summary>
-		/// ¿ùµå XÁÂÇ¥¸¦ Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ Xì¢Œí‘œë¥¼ ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void setPositionX(float x);
 		/// <summary>
-		/// ¿ùµå YÁÂÇ¥¸¦ Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ Yì¢Œí‘œë¥¼ ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void setPositionY(float y);
 		/// <summary>
-		/// ¿ùµå ZÁÂÇ¥¸¦ Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ Zì¢Œí‘œë¥¼ ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void setPositionZ(float z);
 		/// <summary>
-		/// ¿ùµå XÁÂÇ¥¸¦ ´©ÀûÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ Xì¢Œí‘œë¥¼ ëˆ„ì í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addPositionX(float x);
 		/// <summary>
-		/// ¿ùµå YÁÂÇ¥¸¦ ´©ÀûÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ Yì¢Œí‘œë¥¼ ëˆ„ì í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addPositionY(float y);
 		/// <summary>
-		/// ¿ùµå ZÁÂÇ¥¸¦ ´©ÀûÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì›”ë“œ Zì¢Œí‘œë¥¼ ëˆ„ì í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		void addPositionZ(float z);
 		/// <summary>
-		/// xÁÂÇ¥¸¸ º¯°æÇÕ´Ï´Ù.
+		/// xì¢Œí‘œë§Œ ë³€ê²½í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetLocalPositionX(float x) { pos.x = x; ready = false; globalNotReady(); }
 		/// <summary>
-		/// yÁÂÇ¥¸¸ º¯°æÇÕ´Ï´Ù.
+		/// yì¢Œí‘œë§Œ ë³€ê²½í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetLocalPositionY(float y) { pos.y = y; ready = false; globalNotReady(); }
 		/// <summary>
-		/// zÁÂÇ¥¸¸ º¯°æÇÕ´Ï´Ù.
+		/// zì¢Œí‘œë§Œ ë³€ê²½í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetLocalPositionZ(float z) { pos.z = z; ready = false; globalNotReady(); }
 		/// <summary>
-		/// xÁÂÇ¥¸¸ º¯°æÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// xì¢Œí‘œë§Œ ë³€ê²½í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setLocalPositionX(float x) { pos.x = x; model[3] = x; globalNotReady(); }
 		/// <summary>
-		/// yÁÂÇ¥¸¸ º¯°æÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// yì¢Œí‘œë§Œ ë³€ê²½í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setLocalPositionY(float y) { pos.y = y; model[7] = y; globalNotReady(); }
 		/// <summary>
-		/// zÁÂÇ¥¸¸ º¯°æÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// zì¢Œí‘œë§Œ ë³€ê²½í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setLocalPositionZ(float z) { pos.z = z; model[11] = z; globalNotReady(); }
 		/// <summary>
-		/// ÁÖ¾îÁø °ª¸¸Å­ À§Ä¡¸¦ ÀÌµ¿ÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ê°’ë§Œí¼ ìœ„ì¹˜ë¥¼ ì´ë™í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dAddLocalPosition(const vec3& dp) { pos += dp; ready = false; globalNotReady(); }
 		/// <summary>
-		/// ÁÖ¾îÁø °ª¸¸Å­ À§Ä¡¸¦ ÀÌµ¿ÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ê°’ë§Œí¼ ìœ„ì¹˜ë¥¼ ì´ë™í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dAddLocalPosition(float x, float y, float z) { dAddLocalPosition(vec3(x, y, z)); }
 		/// <summary>
-		/// ÁÖ¾îÁø °ª¸¸Å­ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ê°’ë§Œí¼ ìœ„ì¹˜ë¥¼ ì´ë™í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addLocalPosition(const vec3& p) { pos += p; model[3] += p.x; model[7] += p.y; model[11] += p.z; globalNotReady(); }
 		/// <summary>
-		/// ÁÖ¾îÁø °ª¸¸Å­ À§Ä¡¸¦ ÀÌµ¿ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ê°’ë§Œí¼ ìœ„ì¹˜ë¥¼ ì´ë™í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addLocalPosition(float x, float y, float z) { addLocalPosition(vec3(x, y, z)); }
 		/// <summary>
-		/// xÁÂÇ¥¸¸ ´©ÀûÇÕ´Ï´Ù.
+		/// xì¢Œí‘œë§Œ ëˆ„ì í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dAddLocalPositionX(float x) { pos.x += x; ready = false; globalNotReady(); }
 		/// <summary>
-		/// yÁÂÇ¥¸¸ ´©ÀûÇÕ´Ï´Ù.
+		/// yì¢Œí‘œë§Œ ëˆ„ì í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dAddLocalPositionY(float y) { pos.y += y; ready = false; globalNotReady(); }
 		/// <summary>
-		/// zÁÂÇ¥¸¸ ´©ÀûÇÕ´Ï´Ù.
+		/// zì¢Œí‘œë§Œ ëˆ„ì í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dAddLocalPositionZ(float z) { pos.z += z; ready = false; globalNotReady(); }
 		/// <summary>
-		/// xÁÂÇ¥¸¸ ´©ÀûÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// xì¢Œí‘œë§Œ ëˆ„ì í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addLocalPositionX(float x) { pos.x += x; model[3] += x; globalNotReady(); }
 		/// <summary>
-		/// yÁÂÇ¥¸¸ ´©ÀûÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// yì¢Œí‘œë§Œ ëˆ„ì í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addLocalPositionY(float y) { pos.y += y; model[7] += y; globalNotReady(); }
 		/// <summary>
-		/// zÁÂÇ¥¸¸ ´©ÀûÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// zì¢Œí‘œë§Œ ëˆ„ì í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addLocalPositionZ(float z) { pos.z += z; model[11] += z; globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» ¼³Á¤ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dSetRotation(const Quaternion& q) { rotation = q; ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» ¼³Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì„¤ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setRotation(const Quaternion& q) { rotation = q; TRS(); globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» ¼³Á¤ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì„¤ì •í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="axis">È¸ÀüÃà</param>
-		/// <param name="angle">È¸Àü°¢</param>
+		/// <param name="axis">íšŒì „ì¶•</param>
+		/// <param name="angle">íšŒì „ê°</param>
 		inline void dSetRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle); ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» ¼³Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì„¤ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void setRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle); TRS(); globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» ¼³Á¤ÇÕ´Ï´Ù. ¿À¸¥¼Õ ¹ıÄ¢À» ±â¾ïÇÏ¼¼¿ä.
+		/// 3D íšŒì „ì„ ì„¤ì •í•©ë‹ˆë‹¤. ì˜¤ë¥¸ì† ë²•ì¹™ì„ ê¸°ì–µí•˜ì„¸ìš”.
 		/// </summary>
-		/// <param name="roll">XÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="pitch">YÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="yaw">ZÃà ¹æÇâÀÇ È¸Àü</param>
+		/// <param name="roll">Xì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="pitch">Yì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="yaw">Zì¶• ë°©í–¥ì˜ íšŒì „</param>
 		inline void dSetRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw); ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» ¼³Á¤ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù. ¿À¸¥¼Õ ¹ıÄ¢À» ±â¾ïÇÏ¼¼¿ä.
+		/// 3D íšŒì „ì„ ì„¤ì •í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤. ì˜¤ë¥¸ì† ë²•ì¹™ì„ ê¸°ì–µí•˜ì„¸ìš”.
 		/// </summary>
-		/// <param name="roll">XÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="pitch">YÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="yaw">ZÃà ¹æÇâÀÇ È¸Àü</param>
+		/// <param name="roll">Xì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="pitch">Yì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="yaw">Zì¶• ë°©í–¥ì˜ íšŒì „</param>
 		inline void setRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw); TRS(); globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» Ãß°¡·Î °¡ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì¶”ê°€ë¡œ ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void dAddRotation(const Quaternion& q) { rotation = q * rotation; ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» Ãß°¡·Î °¡ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì¶”ê°€ë¡œ ê°€í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void addRotation(const Quaternion& q) { rotation = q * rotation; TRS(); globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» Ãß°¡·Î °¡ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì¶”ê°€ë¡œ ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="axis">È¸ÀüÃà</param>
-		/// <param name="angle">È¸Àü°¢</param>
+		/// <param name="axis">íšŒì „ì¶•</param>
+		/// <param name="angle">íšŒì „ê°</param>
 		inline void dAddRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle) * rotation; ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» Ãß°¡·Î °¡ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù.
+		/// 3D íšŒì „ì„ ì¶”ê°€ë¡œ ê°€í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="axis">È¸ÀüÃà</param>
-		/// <param name="angle">È¸Àü°¢</param>
+		/// <param name="axis">íšŒì „ì¶•</param>
+		/// <param name="angle">íšŒì „ê°</param>
 		inline void addRotation(const vec3& axis, float angle) { rotation = Quaternion::rotation(axis, angle) * rotation; TRS(); globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» Ãß°¡·Î °¡ÇÕ´Ï´Ù. ¿À¸¥¼Õ ¹ıÄ¢À» ±â¾ïÇÏ¼¼¿ä.
+		/// 3D íšŒì „ì„ ì¶”ê°€ë¡œ ê°€í•©ë‹ˆë‹¤. ì˜¤ë¥¸ì† ë²•ì¹™ì„ ê¸°ì–µí•˜ì„¸ìš”.
 		/// </summary>
-		/// <param name="roll">XÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="pitch">YÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="yaw">ZÃà ¹æÇâÀÇ È¸Àü</param>
+		/// <param name="roll">Xì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="pitch">Yì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="yaw">Zì¶• ë°©í–¥ì˜ íšŒì „</param>
 		inline void dAddRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw) * rotation; ready = false; globalNotReady(); }
 		/// <summary>
-		/// 3D È¸ÀüÀ» Ãß°¡·Î °¡ÇÏ°í ¸ğµ¨ Çà·ÄÀ» ¾÷µ¥ÀÌÆ®ÇÕ´Ï´Ù. ¿À¸¥¼Õ ¹ıÄ¢À» ±â¾ïÇÏ¼¼¿ä.
+		/// 3D íšŒì „ì„ ì¶”ê°€ë¡œ ê°€í•˜ê³  ëª¨ë¸ í–‰ë ¬ì„ ì—…ë°ì´íŠ¸í•©ë‹ˆë‹¤. ì˜¤ë¥¸ì† ë²•ì¹™ì„ ê¸°ì–µí•˜ì„¸ìš”.
 		/// </summary>
-		/// <param name="roll">XÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="pitch">YÃà ¹æÇâÀÇ È¸Àü</param>
-		/// <param name="yaw">ZÃà ¹æÇâÀÇ È¸Àü</param>
+		/// <param name="roll">Xì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="pitch">Yì¶• ë°©í–¥ì˜ íšŒì „</param>
+		/// <param name="yaw">Zì¶• ë°©í–¥ì˜ íšŒì „</param>
 		inline void addRotation(float roll, float pitch, float yaw) { rotation = Quaternion::euler(roll, pitch, yaw) * rotation; TRS(); globalNotReady(); }
 	};
 }

@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -15,7 +15,7 @@
 
 namespace onart {
 	/// <summary>
-	/// ÅØ½ºÃ³ Å¬·¡½ºÀÔ´Ï´Ù. Material::getÀ¸·Î ¾òÀ» ¼ö ÀÖ½À´Ï´Ù.
+	/// í…ìŠ¤ì²˜ í´ëž˜ìŠ¤ìž…ë‹ˆë‹¤. Material::getìœ¼ë¡œ ì–»ì„ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 	/// </summary>
 	struct Texture {
 		friend class Material;
@@ -27,10 +27,10 @@ namespace onart {
 		~Texture();
 	};
 
-	using pTexture = std::shared_ptr<Texture>;	// ÅØ½ºÃ³ Æ÷ÀÎÅÍÀÔ´Ï´Ù.
+	using pTexture = std::shared_ptr<Texture>;	// í…ìŠ¤ì²˜ í¬ì¸í„°ìž…ë‹ˆë‹¤.
 
 	/// <summary>
-	/// ÅØ½ºÃ³¿Í Ç¥¸é ±¤ÅÃ¿¡ ´ëÇÑ Å¬·¡½ºÀÔ´Ï´Ù.
+	/// í…ìŠ¤ì²˜ì™€ í‘œë©´ ê´‘íƒì— ëŒ€í•œ í´ëž˜ìŠ¤ìž…ë‹ˆë‹¤.
 	/// </summary>
 	class Material
 	{
@@ -61,38 +61,38 @@ namespace onart {
 		inline float getRefractiveIndex() const { return refractIdx; }
 
 		/// <summary>
-		/// ÀÌ¹ÌÁö ÆÄÀÏ·ÎºÎÅÍ 2D ÅØ½ºÃ³¸¦ »ý¼ºÇÕ´Ï´Ù. 24ºñÆ®/32ºñÆ®(¾ËÆÄÃ¤³Î) ÀÌ¹ÌÁö¸¸ °¡´ÉÇÕ´Ï´Ù.
-		/// white1x1ÀÌ¶ó´Â ÀÌ¸§Àº ¿¹¾àµÇ¾î ÀÖ½À´Ï´Ù. »ç¿ëÇÏÁö ¸¶¼¼¿ä.
+		/// ì´ë¯¸ì§€ íŒŒì¼ë¡œë¶€í„° 2D í…ìŠ¤ì²˜ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. 24ë¹„íŠ¸/32ë¹„íŠ¸(ì•ŒíŒŒì±„ë„) ì´ë¯¸ì§€ë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+		/// white1x1ì´ë¼ëŠ” ì´ë¦„ì€ ì˜ˆì•½ë˜ì–´ ìžˆìŠµë‹ˆë‹¤. ì‚¬ìš©í•˜ì§€ ë§ˆì„¸ìš”.
 		/// </summary>
-		/// <param name="file">ÆÄÀÏ ÀÌ¸§</param>
-		/// <param name="reset">trueÀÎ °æ¿ì ±âÁ¸ÀÇ µ¿ÀÏ ÀÌ¸§ÀÇ ÅØ½ºÃ³¸¦ Áö¿ì°í »õ·Î »ý¼ºÇÕ´Ï´Ù. ÀÌ¹Ì »ç¿ë ÁßÀÎ ÅØ½ºÃ³ÀÎ °æ¿ì ¸ðµç »ç¿ëÀÌ Á¾·áµÇ¸é ÀÚµ¿À¸·Î ¸Þ¸ð¸®°¡ È¸¼öµË´Ï´Ù.</param>
-		/// <param name="name">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ ÅØ½ºÃ³ ÀÌ¸§(ÀÔ·ÂÇÏÁö ¾Ê´Â °æ¿ì ÆÄÀÏ ÀÌ¸§À» ±×´ë·Î »ç¿ë)</param>
+		/// <param name="file">íŒŒì¼ ì´ë¦„</param>
+		/// <param name="reset">trueì¸ ê²½ìš° ê¸°ì¡´ì˜ ë™ì¼ ì´ë¦„ì˜ í…ìŠ¤ì²˜ë¥¼ ì§€ìš°ê³  ìƒˆë¡œ ìƒì„±í•©ë‹ˆë‹¤. ì´ë¯¸ ì‚¬ìš© ì¤‘ì¸ í…ìŠ¤ì²˜ì¸ ê²½ìš° ëª¨ë“  ì‚¬ìš©ì´ ì¢…ë£Œë˜ë©´ ìžë™ìœ¼ë¡œ ë©”ëª¨ë¦¬ê°€ íšŒìˆ˜ë©ë‹ˆë‹¤.</param>
+		/// <param name="name">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  í…ìŠ¤ì²˜ ì´ë¦„(ìž…ë ¥í•˜ì§€ ì•ŠëŠ” ê²½ìš° íŒŒì¼ ì´ë¦„ì„ ê·¸ëŒ€ë¡œ ì‚¬ìš©)</param>
 		static pTexture genTextureFromFile(const char* file, bool reset = false, const char* name = nullptr);
 		/// <summary>
-		/// ¸Þ¸ð¸®ÀÇ º¯¼ö(ÀÌ¹ÌÁö)·ÎºÎÅÍ 2D ÅØ½ºÃ³¸¦ »ý¼ºÇÕ´Ï´Ù. 24ºñÆ®/32ºñÆ®(¾ËÆÄÃ¤³Î) ÀÌ¹ÌÁö¸¸ °¡´ÉÇÕ´Ï´Ù.
-		/// white1x1ÀÌ¶ó´Â ÀÌ¸§Àº ¿¹¾àµÇ¾î ÀÖ½À´Ï´Ù. »ç¿ëÇÏÁö ¸¶¼¼¿ä.
+		/// ë©”ëª¨ë¦¬ì˜ ë³€ìˆ˜(ì´ë¯¸ì§€)ë¡œë¶€í„° 2D í…ìŠ¤ì²˜ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. 24ë¹„íŠ¸/32ë¹„íŠ¸(ì•ŒíŒŒì±„ë„) ì´ë¯¸ì§€ë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+		/// white1x1ì´ë¼ëŠ” ì´ë¦„ì€ ì˜ˆì•½ë˜ì–´ ìžˆìŠµë‹ˆë‹¤. ì‚¬ìš©í•˜ì§€ ë§ˆì„¸ìš”.
 		/// </summary>
-		/// <param name="bts">ÀÌ¹ÌÁö µ¥ÀÌÅÍÀÔ´Ï´Ù.</param>
-		/// <param name="len">µ¥ÀÌÅÍ ±æÀÌÀÔ´Ï´Ù.</param>
-		/// <param name="name">ÇÁ·Î±×·¥ ³»¿¡¼­ »ç¿ëÇÒ ÅØ½ºÃ³ ÀÌ¸§</param>
-		/// <param name="reset">trueÀÎ °æ¿ì ±âÁ¸ÀÇ µ¿ÀÏ ÀÌ¸§ÀÇ ÅØ½ºÃ³¸¦ Áö¿ì°í »õ·Î »ý¼ºÇÕ´Ï´Ù. ÀÌ¹Ì »ç¿ë ÁßÀÎ ÅØ½ºÃ³ÀÎ °æ¿ì ¸ðµç »ç¿ëÀÌ Á¾·áµÇ¸é ÀÚµ¿À¸·Î ¸Þ¸ð¸®°¡ È¸¼öµË´Ï´Ù.</param>
+		/// <param name="bts">ì´ë¯¸ì§€ ë°ì´í„°ìž…ë‹ˆë‹¤.</param>
+		/// <param name="len">ë°ì´í„° ê¸¸ì´ìž…ë‹ˆë‹¤.</param>
+		/// <param name="name">í”„ë¡œê·¸ëž¨ ë‚´ì—ì„œ ì‚¬ìš©í•  í…ìŠ¤ì²˜ ì´ë¦„</param>
+		/// <param name="reset">trueì¸ ê²½ìš° ê¸°ì¡´ì˜ ë™ì¼ ì´ë¦„ì˜ í…ìŠ¤ì²˜ë¥¼ ì§€ìš°ê³  ìƒˆë¡œ ìƒì„±í•©ë‹ˆë‹¤. ì´ë¯¸ ì‚¬ìš© ì¤‘ì¸ í…ìŠ¤ì²˜ì¸ ê²½ìš° ëª¨ë“  ì‚¬ìš©ì´ ì¢…ë£Œë˜ë©´ ìžë™ìœ¼ë¡œ ë©”ëª¨ë¦¬ê°€ íšŒìˆ˜ë©ë‹ˆë‹¤.</param>
 		static pTexture genTextureFromMemory(unsigned char* bts, unsigned len, const std::string& name, bool reset = false);
 		/// <summary>
-		/// ¹é»ö 1x1 ÅØ½ºÃ³¸¦ »ý¼ºÇÕ´Ï´Ù. ÀÌ¸§Àº "white1x1"ÀÔ´Ï´Ù.
+		/// ë°±ìƒ‰ 1x1 í…ìŠ¤ì²˜ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. ì´ë¦„ì€ "white1x1"ìž…ë‹ˆë‹¤.
 		/// </summary>
 		static void genWhite();
 		/// <summary>
-		/// ÇØ´ç ÀÌ¸§ÀÇ ÅØ½ºÃ³¸¦ Á¦°ÅÇÕ´Ï´Ù. ÇöÀç ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ³ª ¸ðµ¨ µî¿¡¼­ »ç¿ë ÁßÀÎ ÅØ½ºÃ³ÀÇ °æ¿ì ÇØ´ç ¾Ö´Ï¸ÞÀÌ¼Ç/¸ðµ¨ÀÌ ¸ðµÎ ¾ø¾îÁú ¶§ ÀÚµ¿À¸·Î ¾ø¾îÁý´Ï´Ù.
-		/// ¿¹¾àµÈ ÀÌ¸§Àº Á¦°ÅµÇÁö ¾Ê½À´Ï´Ù.
-		/// »ç¿ë ÁßÀÎ ÅØ½ºÃ³°¡ ³²Àº °æ¿ì¶óµµ, ÇØ´ç ÀÌ¸§ÀÇ ÅØ½ºÃ³´Â ´Ù½Ã ·ÎµåÇÏÁö ¾ÊÀ¸¸é Ãß°¡·Î °¡Á®´Ù »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.
+		/// í•´ë‹¹ ì´ë¦„ì˜ í…ìŠ¤ì²˜ë¥¼ ì œê±°í•©ë‹ˆë‹¤. í˜„ìž¬ ì• ë‹ˆë©”ì´ì…˜ì´ë‚˜ ëª¨ë¸ ë“±ì—ì„œ ì‚¬ìš© ì¤‘ì¸ í…ìŠ¤ì²˜ì˜ ê²½ìš° í•´ë‹¹ ì• ë‹ˆë©”ì´ì…˜/ëª¨ë¸ì´ ëª¨ë‘ ì—†ì–´ì§ˆ ë•Œ ìžë™ìœ¼ë¡œ ì—†ì–´ì§‘ë‹ˆë‹¤.
+		/// ì˜ˆì•½ëœ ì´ë¦„ì€ ì œê±°ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+		/// ì‚¬ìš© ì¤‘ì¸ í…ìŠ¤ì²˜ê°€ ë‚¨ì€ ê²½ìš°ë¼ë„, í•´ë‹¹ ì´ë¦„ì˜ í…ìŠ¤ì²˜ëŠ” ë‹¤ì‹œ ë¡œë“œí•˜ì§€ ì•Šìœ¼ë©´ ì¶”ê°€ë¡œ ê°€ì ¸ë‹¤ ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
 		static void drop(const std::string& name);
 		/// <summary>
-		/// »ç¿ëÇÏ°í ÀÖÁö ¾ÊÀº ¸ðµç ÅØ½ºÃ³¸¦ ¸Þ¸ð¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù. »ç¿ëÇÏ°í ÀÖ´Â ÅØ½ºÃ³µµ ¸ðµÎ drop()Ã³·³ »ç¿ë Á¾·á Áï½Ã Á¦°ÅÇÏ·Á´Â °æ¿ì ¸Å°³º¯¼ö¿¡ true¸¦ Àü´ÞÇÕ´Ï´Ù.
+		/// ì‚¬ìš©í•˜ê³  ìžˆì§€ ì•Šì€ ëª¨ë“  í…ìŠ¤ì²˜ë¥¼ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤. ì‚¬ìš©í•˜ê³  ìžˆëŠ” í…ìŠ¤ì²˜ë„ ëª¨ë‘ drop()ì²˜ëŸ¼ ì‚¬ìš© ì¢…ë£Œ ì¦‰ì‹œ ì œê±°í•˜ë ¤ëŠ” ê²½ìš° ë§¤ê°œë³€ìˆ˜ì— trueë¥¼ ì „ë‹¬í•©ë‹ˆë‹¤.
 		/// </summary>
 		static void collect(bool removeUsing = false);
 		/// <summary>
-		/// ÇØ´ç ÀÌ¸§ÀÇ ÅØ½ºÃ³¸¦ °¡Á®¿É´Ï´Ù.
+		/// í•´ë‹¹ ì´ë¦„ì˜ í…ìŠ¤ì²˜ë¥¼ ê°€ì ¸ì˜µë‹ˆë‹¤.
 		/// </summary>
 		static pTexture get(const std::string& name);
 	private:

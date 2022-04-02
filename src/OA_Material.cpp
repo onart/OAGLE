@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -27,7 +27,7 @@ namespace onart {
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
 		if (!data) {
-			fprintf(stderr, "ÅØ½ºÃ³ ·Îµå¿¡ ½ÇÆĞÇß½À´Ï´Ù.\n");
+			fprintf(stderr, "í…ìŠ¤ì²˜ ë¡œë“œì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n");
 			return pTexture();
 		}
 		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
@@ -55,7 +55,7 @@ namespace onart {
 		int width, height, nrChannels;
 		unsigned char* data = stbi_load_from_memory(bts, len, &width, &height, &nrChannels, 0);
 		if (!data) {
-			fprintf(stderr, "ÅØ½ºÃ³ ·Îµå¿¡ ½ÇÆĞÇß½À´Ï´Ù.\n");
+			fprintf(stderr, "í…ìŠ¤ì²˜ ë¡œë“œì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.\n");
 			return pTexture();
 		}
 		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;

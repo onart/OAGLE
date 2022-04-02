@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -21,41 +21,41 @@
 namespace onart {
 
 	/// <summary>
-	/// ·»´õ¸µ ÆÄÀÌÇÁ¶óÀÎÀÇ Á¤Á¡ÀÔ´Ï´Ù.
-	/// <para>¹ý¼± ¸ÅÇÎÀ» À§ÇØ¼­´Â USE_BUMP ¸ÅÅ©·Î°¡ Á¤ÀÇµÇ¾î¾ß ÇÕ´Ï´Ù.</para>
-	/// <para>°üÀý ¾Ö´Ï¸ÞÀÌ¼ÇÀ» À§ÇØ¼­´Â USE_ANIM ¸ÅÅ©·Î°¡ Á¤ÀÇµÇ¾î¾ß ÇÕ´Ï´Ù.</para>
+	/// ë Œë”ë§ íŒŒì´í”„ë¼ì¸ì˜ ì •ì ìž…ë‹ˆë‹¤.
+	/// <para>ë²•ì„  ë§¤í•‘ì„ ìœ„í•´ì„œëŠ” USE_BUMP ë§¤í¬ë¡œê°€ ì •ì˜ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.</para>
+	/// <para>ê´€ì ˆ ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•´ì„œëŠ” USE_ANIM ë§¤í¬ë¡œê°€ ì •ì˜ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.</para>
 	/// </summary>
 	struct Vertex
 	{
 		/// <summary>
-		/// ¸ðµ¨ ³» Á¤Á¡ÀÇ À§Ä¡ÀÔ´Ï´Ù.
+		/// ëª¨ë¸ ë‚´ ì •ì ì˜ ìœ„ì¹˜ìž…ë‹ˆë‹¤.
 		/// </summary>
 		vec3 pos;
 		/// <summary>
-		/// Á¤Á¡¿¡¼­ÀÇ ¹ý¼±ÀÔ´Ï´Ù.
+		/// ì •ì ì—ì„œì˜ ë²•ì„ ìž…ë‹ˆë‹¤.
 		/// </summary>
 		vec3 norm;
 		/// <summary>
-		/// 2D ÅØ½ºÃ³ ÁÂÇ¥ÀÔ´Ï´Ù.
+		/// 2D í…ìŠ¤ì²˜ ì¢Œí‘œìž…ë‹ˆë‹¤.
 		/// </summary>
 		vec2 tc;
 #ifdef USE_BUMP
 		/// <summary>
-		/// ¹ý¼± ¸ÅÇÎÀ» À§ÇÑ Á¢¼± º¤ÅÍÀÔ´Ï´Ù.
+		/// ë²•ì„  ë§¤í•‘ì„ ìœ„í•œ ì ‘ì„  ë²¡í„°ìž…ë‹ˆë‹¤.
 		/// </summary>
 		vec3 tan;
 		/// <summary>
-		/// ¹ý¼± ¸ÅÇÎÀ» À§ÇÑ Á¢¼± º¤ÅÍ¿¡ ¼öÁ÷ÀÌ µÇ´Â º¤ÅÍÀÔ´Ï´Ù. 
+		/// ë²•ì„  ë§¤í•‘ì„ ìœ„í•œ ì ‘ì„  ë²¡í„°ì— ìˆ˜ì§ì´ ë˜ëŠ” ë²¡í„°ìž…ë‹ˆë‹¤. 
 		/// </summary>
 		vec3 bitan;
 #endif // USE_BUMP
 #ifdef USE_ANIM
 		/// <summary>
-		/// °üÀý ¾Ö´Ï¸ÞÀÌ¼ÇÀ» À§ÇÑ »ÀÀÇ ÀÎµ¦½ºÀÔ´Ï´Ù.
+		/// ê´€ì ˆ ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ ë¼ˆì˜ ì¸ë±ìŠ¤ìž…ë‹ˆë‹¤.
 		/// </summary>
 		ivec4 boneIDs = { -1,-1,-1,-1 };
 		/// <summary>
-		/// °üÀý ¾Ö´Ï¸ÞÀÌ¼ÇÀ» À§ÇÑ »ÀÀÇ ¿µÇâ·Â(°¡ÁßÄ¡)ÀÔ´Ï´Ù.
+		/// ê´€ì ˆ ì• ë‹ˆë©”ì´ì…˜ì„ ìœ„í•œ ë¼ˆì˜ ì˜í–¥ë ¥(ê°€ì¤‘ì¹˜)ìž…ë‹ˆë‹¤.
 		/// </summary>
 		vec4 boneWeights = { 0,0,0,0 };
 #endif // USE_ANIM
@@ -63,100 +63,100 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// ±âÃÊ ¸ðµ¨(¸ÞÅÍ¸®¾ó, ¾Ö´Ï¸ÞÀÌ¼Ç µîÀÌ ¾ø´Â °Í)ÀÇ Å¬·¡½ºÀÔ´Ï´Ù.
+	/// ê¸°ì´ˆ ëª¨ë¸(ë©”í„°ë¦¬ì–¼, ì• ë‹ˆë©”ì´ì…˜ ë“±ì´ ì—†ëŠ” ê²ƒ)ì˜ í´ëž˜ìŠ¤ìž…ë‹ˆë‹¤.
 	/// </summary>
 	class Mesh {
 		friend struct std::default_delete<Mesh>;
 		public:
 			/// <summary>
-			/// ±âÃÊ ¸ðµ¨(¸ÞÅÍ¸®¾ó, ¾Ö´Ï¸ÞÀÌ¼Ç µîÀÌ ¾ø´Â °Í)À» ÀÌ¸§À¸·Î Ã£¾Æ¿É´Ï´Ù. ¾ø´Â °æ¿ì nullptr¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+			/// ê¸°ì´ˆ ëª¨ë¸(ë©”í„°ë¦¬ì–¼, ì• ë‹ˆë©”ì´ì…˜ ë“±ì´ ì—†ëŠ” ê²ƒ)ì„ ì´ë¦„ìœ¼ë¡œ ì°¾ì•„ì˜µë‹ˆë‹¤. ì—†ëŠ” ê²½ìš° nullptrë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="name">ºÒ·¯¿Ã ¶§ Á÷Á¢ Á¤ÇÑ ÀÌ¸§</param>
-			/// <returns>¸Þ½ÃÀÇ À§Ä¡¸¦ °¡¸®Å°´Â Æ÷ÀÎÅÍÀÇ ÁÖ¼Ò(Mesh**)</returns>
+			/// <param name="name">ë¶ˆëŸ¬ì˜¬ ë•Œ ì§ì ‘ ì •í•œ ì´ë¦„</param>
+			/// <returns>ë©”ì‹œì˜ ìœ„ì¹˜ë¥¼ ê°€ë¦¬í‚¤ëŠ” í¬ì¸í„°ì˜ ì£¼ì†Œ(Mesh**)</returns>
 			static std::shared_ptr<std::unique_ptr<Mesh>> get(const std::string& name);
 			/// <summary>
-			/// ±âÃÊ ¸ðµ¨(¸ÞÅÍ¸®¾ó, ¾Ö´Ï¸ÞÀÌ¼Ç µîÀÌ ¾ø´Â °Í)À» »õ·Î Ãß°¡ÇÕ´Ï´Ù.
-			/// ´Ü, ¿¹¾àµÈ ÀÌ¸§À» »ç¿ëÇÒ ¼ö ¾øÀ¸¸ç ±× ¿Ü¿¡ ÀÌ¹Ì ÀÖ´Â ÀÌ¸§À» ´ë»óÀ¸·Î ½ÃµµÇÏ¸é ±âÁ¸ ¸ðµ¨À» µ¤¾î¾¹´Ï´Ù.
-			/// µ¤¾î¾²ÀÌ¸é ±âÁ¸ÀÇ ±× ¸ðµ¨À» »ç¿ëÇÏ°í ÀÖ´ø ¸ðµç ¸ðµ¨ÀÌ »õ·Î Ãß°¡ÇÑ °ÍÀ¸·Î ¹Ù²ò´Ï´Ù. ¼º°ø ¿©ºÎ¸¦ ¸®ÅÏÇÕ´Ï´Ù(¸Þ¸ð¸® ºÎÁ· È¤Àº ºôÆ®ÀÎ ÀÌ¸§À» »ç¿ëÇÑ °ÍÀÌ ¾Æ´Ï¸é ¼º°ø).
-			/// <para>¿¹¾àµÈ ÀÌ¸§: rect, circ, sphr, clnd, cubo, icubo, (ºó ¹®ÀÚ¿­)</para>
+			/// ê¸°ì´ˆ ëª¨ë¸(ë©”í„°ë¦¬ì–¼, ì• ë‹ˆë©”ì´ì…˜ ë“±ì´ ì—†ëŠ” ê²ƒ)ì„ ìƒˆë¡œ ì¶”ê°€í•©ë‹ˆë‹¤.
+			/// ë‹¨, ì˜ˆì•½ëœ ì´ë¦„ì„ ì‚¬ìš©í•  ìˆ˜ ì—†ìœ¼ë©° ê·¸ ì™¸ì— ì´ë¯¸ ìžˆëŠ” ì´ë¦„ì„ ëŒ€ìƒìœ¼ë¡œ ì‹œë„í•˜ë©´ ê¸°ì¡´ ëª¨ë¸ì„ ë®ì–´ì”ë‹ˆë‹¤.
+			/// ë®ì–´ì“°ì´ë©´ ê¸°ì¡´ì˜ ê·¸ ëª¨ë¸ì„ ì‚¬ìš©í•˜ê³  ìžˆë˜ ëª¨ë“  ëª¨ë¸ì´ ìƒˆë¡œ ì¶”ê°€í•œ ê²ƒìœ¼ë¡œ ë°”ë€ë‹ˆë‹¤. ì„±ê³µ ì—¬ë¶€ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤(ë©”ëª¨ë¦¬ ë¶€ì¡± í˜¹ì€ ë¹ŒíŠ¸ì¸ ì´ë¦„ì„ ì‚¬ìš©í•œ ê²ƒì´ ì•„ë‹ˆë©´ ì„±ê³µ).
+			/// <para>ì˜ˆì•½ëœ ì´ë¦„: rect, circ, sphr, clnd, cubo, icubo, (ë¹ˆ ë¬¸ìžì—´)</para>
 			/// </summary>
 			static bool add(const std::string& name, const std::vector<Vertex>& v, const std::vector<unsigned>& i);
 			/// <summary>
-			/// ±âÃÊ ¸ðµ¨À» ¸Þ¸ð¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù. »ç¿ë ÁßÀÎ ¸ðµ¨Àº ¹Ù·Î Á¦°ÅµÇÁö ¾Ê°í »ç¿ëÀÌ Á¾·áµÇ¸é¼­ Á¦°ÅµË´Ï´Ù.
-			/// »ç¿ë ÁßÀÌ¶ó¼­ ¹Ù·Î Á¦°ÅµÇÁö ¾ÊÀº ¸ðµ¨µµ getÀ¸·Î ´Ù½Ã ¾òÀ» ¼ö ¾ø½À´Ï´Ù.
+			/// ê¸°ì´ˆ ëª¨ë¸ì„ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤. ì‚¬ìš© ì¤‘ì¸ ëª¨ë¸ì€ ë°”ë¡œ ì œê±°ë˜ì§€ ì•Šê³  ì‚¬ìš©ì´ ì¢…ë£Œë˜ë©´ì„œ ì œê±°ë©ë‹ˆë‹¤.
+			/// ì‚¬ìš© ì¤‘ì´ë¼ì„œ ë°”ë¡œ ì œê±°ë˜ì§€ ì•Šì€ ëª¨ë¸ë„ getìœ¼ë¡œ ë‹¤ì‹œ ì–»ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="name">Á¦°ÅÇÏ·Á´Â ¸ðµ¨ ÀÌ¸§</param>
+			/// <param name="name">ì œê±°í•˜ë ¤ëŠ” ëª¨ë¸ ì´ë¦„</param>
 			static void drop(const std::string& name);
 			/// <summary>
-			/// »ç¿ëÇÏ°í ÀÖÁö ¾ÊÀº ¸Þ½Ã¸¦ ¸ðµÎ ¸Þ¸ð¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù.
-			/// »ç¿ëÇÏ°í ÀÖ´Â ¸Þ½Ã´Â »ç¿ëÀÌ ³¡³ª´Â Áï½Ã ¸Þ¸ð¸®¿¡¼­ È¸¼öÇÒÁö, ±×´ë·Î ³²°ÜµÑÁö ¼±ÅÃÇÒ ¼ö ÀÖ½À´Ï´Ù.
-			/// ºôÆ®ÀÎ ¸Þ½Ã´Â Á¦°ÅµÇÁö ¾Ê½À´Ï´Ù.
+			/// ì‚¬ìš©í•˜ê³  ìžˆì§€ ì•Šì€ ë©”ì‹œë¥¼ ëª¨ë‘ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤.
+			/// ì‚¬ìš©í•˜ê³  ìžˆëŠ” ë©”ì‹œëŠ” ì‚¬ìš©ì´ ëë‚˜ëŠ” ì¦‰ì‹œ ë©”ëª¨ë¦¬ì—ì„œ íšŒìˆ˜í• ì§€, ê·¸ëŒ€ë¡œ ë‚¨ê²¨ë‘˜ì§€ ì„ íƒí•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
+			/// ë¹ŒíŠ¸ì¸ ë©”ì‹œëŠ” ì œê±°ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="removeUsing">trueÀÎ °æ¿ì »ç¿ë ÁßÀÎ ¸Þ½Ãµµ »ç¿ëÀÌ ³¡³ª¸é ¹Ù·Î ¸Þ¸ð¸®¿¡¼­ È¸¼öÇÕ´Ï´Ù.</param>
+			/// <param name="removeUsing">trueì¸ ê²½ìš° ì‚¬ìš© ì¤‘ì¸ ë©”ì‹œë„ ì‚¬ìš©ì´ ëë‚˜ë©´ ë°”ë¡œ ë©”ëª¨ë¦¬ì—ì„œ íšŒìˆ˜í•©ë‹ˆë‹¤.</param>
 			static void collect(bool removeUsing = false);
 			/// <summary>
-			/// Á¤Á¡ ¹è¿­ ¿ÀºêÁ§Æ®ÀÇ id¸¦ ¾ò½À´Ï´Ù.
+			/// ì •ì  ë°°ì—´ ì˜¤ë¸Œì íŠ¸ì˜ idë¥¼ ì–»ìŠµë‹ˆë‹¤.
 			/// </summary>
 			inline unsigned getID() const { return vao; }
 			inline unsigned getVB() const { return vb; }
 			inline unsigned getIB() const { return ib; }
 			/// <summary>
-			/// Á¤Á¡ ¹è¿­ÀÇ ±æÀÌ¸¦ ¾ò½À´Ï´Ù.
+			/// ì •ì  ë°°ì—´ì˜ ê¸¸ì´ë¥¼ ì–»ìŠµë‹ˆë‹¤.
 			/// </summary>			
 			inline unsigned getLength() const { return length; }
 			/// <summary>
-			/// Á÷»ç°¢Çü Á¤Á¡ ¹è¿­ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÕ´Ï´Ù. Àç È£Ãâ ½Ã ¸ðµ¨À» Ã³À½ºÎÅÍ ´Ù½Ã »ý¼ºÇÕ´Ï´Ù.
-			/// ÅØ½ºÃ³ ÀÌ¹ÌÁö´Â ±×´ë·Î Á÷»ç°¢Çü¿¡ µé¾î°©´Ï´Ù.
+			/// ì§ì‚¬ê°í˜• ì •ì  ë°°ì—´ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. ìž¬ í˜¸ì¶œ ì‹œ ëª¨ë¸ì„ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ìƒì„±í•©ë‹ˆë‹¤.
+			/// í…ìŠ¤ì²˜ ì´ë¯¸ì§€ëŠ” ê·¸ëŒ€ë¡œ ì§ì‚¬ê°í˜•ì— ë“¤ì–´ê°‘ë‹ˆë‹¤.
 			/// </summary>
 			static void rectModel();
 			/// <summary>
-			/// ¿ø Á¤Á¡ ¹è¿­ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù. Àç È£Ãâ ½Ã ¸ðµ¨À» Ã³À½ºÎÅÍ ´Ù½Ã »ý¼ºÇÕ´Ï´Ù.
-			/// ÅØ½ºÃ³ ÀÌ¹ÌÁö´Â Á¤»ç°¢Çü ÀÌ¹ÌÁö¿¡ ³»Á¢ÇÏ´Â ¿øÀÔ´Ï´Ù.
+			/// ì› ì •ì  ë°°ì—´ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤. ìž¬ í˜¸ì¶œ ì‹œ ëª¨ë¸ì„ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ìƒì„±í•©ë‹ˆë‹¤.
+			/// í…ìŠ¤ì²˜ ì´ë¯¸ì§€ëŠ” ì •ì‚¬ê°í˜• ì´ë¯¸ì§€ì— ë‚´ì ‘í•˜ëŠ” ì›ìž…ë‹ˆë‹¤.
 			/// </summary>
 			static void circleModel();
 			/// <summary>
-			/// ±¸ Á¤Á¡ ¹è¿­ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù. Àç È£Ãâ ½Ã ¸ðµ¨À» Ã³À½ºÎÅÍ ´Ù½Ã »ý¼ºÇÕ´Ï´Ù.
-			/// ÅØ½ºÃ³ ÀÌ¹ÌÁö´Â Áö±¸º»°ú ¼¼°èÁöµµÀÇ °ü°è¿Í µ¿ÀÏÇÕ´Ï´Ù.
+			/// êµ¬ ì •ì  ë°°ì—´ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤. ìž¬ í˜¸ì¶œ ì‹œ ëª¨ë¸ì„ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ìƒì„±í•©ë‹ˆë‹¤.
+			/// í…ìŠ¤ì²˜ ì´ë¯¸ì§€ëŠ” ì§€êµ¬ë³¸ê³¼ ì„¸ê³„ì§€ë„ì˜ ê´€ê³„ì™€ ë™ì¼í•©ë‹ˆë‹¤.
 			/// </summary>
 			static void sphereModel();
 			/// <summary>
-			/// Á÷À°¸éÃ¼ Á¤Á¡ ¹è¿­ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù. Àç È£Ãâ ½Ã ¸ðµ¨À» Ã³À½ºÎÅÍ ´Ù½Ã »ý¼ºÇÕ´Ï´Ù.
-			/// ÅØ½ºÃ³ ÀÌ¹ÌÁö´Â 4x3 ¹è¿­ÀÇ °¡µæ Âù Á÷»ç°¢ÇüÀÌ ÀÖÀ» ¶§ 1Çà 2¿­ÀÌ »ó,
-			/// 2ÇàÀº °¢°¢ ÁÂ, Àü, ¿ì, ÈÄ,
-			/// 3Çà 2¿­Àº ÇÏ ¹æÇâÀÔ´Ï´Ù.
+			/// ì§ìœ¡ë©´ì²´ ì •ì  ë°°ì—´ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤. ìž¬ í˜¸ì¶œ ì‹œ ëª¨ë¸ì„ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ìƒì„±í•©ë‹ˆë‹¤.
+			/// í…ìŠ¤ì²˜ ì´ë¯¸ì§€ëŠ” 4x3 ë°°ì—´ì˜ ê°€ë“ ì°¬ ì§ì‚¬ê°í˜•ì´ ìžˆì„ ë•Œ 1í–‰ 2ì—´ì´ ìƒ,
+			/// 2í–‰ì€ ê°ê° ì¢Œ, ì „, ìš°, í›„,
+			/// 3í–‰ 2ì—´ì€ í•˜ ë°©í–¥ìž…ë‹ˆë‹¤.
 			/// </summary>
 			static void cuboidModel();
 			/// <summary>
-			/// Á÷À°¸éÃ¼ Á¤Á¡ ¹è¿­ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù. ÅØ½ºÃ³°¡ Á÷À°¸éÃ¼ ³»ºÎ¿¡¼­¸¸ º¸ÀÌµµ·Ï ÇÏ´Â Â÷ÀÌ°¡ ÀÖ½À´Ï´Ù. Àç È£Ãâ ½Ã ¸ðµ¨À» Ã³À½ºÎÅÍ ´Ù½Ã »ý¼ºÇÕ´Ï´Ù.
-			/// ÅØ½ºÃ³ ÀÌ¹ÌÁö´Â 4x3 ¹è¿­ÀÇ °¡µæ Âù Á÷»ç°¢ÇüÀÌ ÀÖÀ» ¶§ 1Çà 2¿­ÀÌ »ó,
-			/// 2ÇàÀº °¢°¢ ÁÂ, Àü, ¿ì, ÈÄ,
-			/// 3Çà 2¿­Àº ÇÏ ¹æÇâÀÔ´Ï´Ù.
+			/// ì§ìœ¡ë©´ì²´ ì •ì  ë°°ì—´ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤. í…ìŠ¤ì²˜ê°€ ì§ìœ¡ë©´ì²´ ë‚´ë¶€ì—ì„œë§Œ ë³´ì´ë„ë¡ í•˜ëŠ” ì°¨ì´ê°€ ìžˆìŠµë‹ˆë‹¤. ìž¬ í˜¸ì¶œ ì‹œ ëª¨ë¸ì„ ì²˜ìŒë¶€í„° ë‹¤ì‹œ ìƒì„±í•©ë‹ˆë‹¤.
+			/// í…ìŠ¤ì²˜ ì´ë¯¸ì§€ëŠ” 4x3 ë°°ì—´ì˜ ê°€ë“ ì°¬ ì§ì‚¬ê°í˜•ì´ ìžˆì„ ë•Œ 1í–‰ 2ì—´ì´ ìƒ,
+			/// 2í–‰ì€ ê°ê° ì¢Œ, ì „, ìš°, í›„,
+			/// 3í–‰ 2ì—´ì€ í•˜ ë°©í–¥ìž…ë‹ˆë‹¤.
 			/// </summary>
 			static void iCuboidModel();
 			/// <summary>
-			/// Á¤Á¡ º¤ÅÍ¿Í ÀÎµ¦½º º¤ÅÍ¸¦ °¡Áö°í Á¤Á¡ ¹öÆÛ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù.
+			/// ì •ì  ë²¡í„°ì™€ ì¸ë±ìŠ¤ ë²¡í„°ë¥¼ ê°€ì§€ê³  ì •ì  ë²„í¼ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="v">Á¤Á¡ º¤ÅÍ</param>
-			/// <param name="i">ÀÎµ¦½º º¤ÅÍ</param>
-			/// <param name="vb">Á¤Á¡ ¹öÆÛ¸¦ ¹ÞÀ» ÁÖ¼Ò</param>
-			/// <param name="ib">ÀÎµ¦½º ¹öÆÛ¸¦ ¹ÞÀ» ÁÖ¼Ò</param>
+			/// <param name="v">ì •ì  ë²¡í„°</param>
+			/// <param name="i">ì¸ë±ìŠ¤ ë²¡í„°</param>
+			/// <param name="vb">ì •ì  ë²„í¼ë¥¼ ë°›ì„ ì£¼ì†Œ</param>
+			/// <param name="ib">ì¸ë±ìŠ¤ ë²„í¼ë¥¼ ë°›ì„ ì£¼ì†Œ</param>
 			/// <returns></returns>
 			static unsigned createVAO(const std::vector<Vertex>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib);
 			/// <summary>
-			/// Á¤Á¡ ¹öÆÛ¿Í ÀÎµ¦½º ¹öÆÛ¸¦ °¡Áö°í Á¤Á¡ ¹öÆÛ ¿ÀºêÁ§Æ®¸¦ »ý¼ºÇÏ°í ¸®ÅÏÇÕ´Ï´Ù.
+			/// ì •ì  ë²„í¼ì™€ ì¸ë±ìŠ¤ ë²„í¼ë¥¼ ê°€ì§€ê³  ì •ì  ë²„í¼ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•˜ê³  ë¦¬í„´í•©ë‹ˆë‹¤.
 			/// </summary>
 			static unsigned createVAO(unsigned vb, unsigned ib);
 			inline Mesh() {}
 		private:
 			inline Mesh(unsigned vb, unsigned ib, unsigned vao, unsigned length) :vb(vb), ib(ib), vao(vao), length(length) {};
-			~Mesh();	// ÇÁ·Î±×·¥ Á¾·á Àü±îÁö ÀÓÀÇ·Î ¸Þ½Ã »èÁ¦ ºÒ°¡´É
+			~Mesh();	// í”„ë¡œê·¸ëž¨ ì¢…ë£Œ ì „ê¹Œì§€ ìž„ì˜ë¡œ ë©”ì‹œ ì‚­ì œ ë¶ˆê°€ëŠ¥
 			unsigned vb = 0, ib = 0, vao = 0;
 			const unsigned length = 0;
 
 			static std::map<std::string, std::shared_ptr<std::unique_ptr<Mesh>>> list;
 	};
 
-	using ppMesh = std::shared_ptr<std::unique_ptr<Mesh>>;	// Mesh Å¬·¡½º¿¡ ´ëÇÑ ÀÌÁß Æ÷ÀÎÅÍÀÔ´Ï´Ù.
+	using ppMesh = std::shared_ptr<std::unique_ptr<Mesh>>;	// Mesh í´ëž˜ìŠ¤ì— ëŒ€í•œ ì´ì¤‘ í¬ì¸í„°ìž…ë‹ˆë‹¤.
 }
 
 #endif // !__OA_VERTEX_H__

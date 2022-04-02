@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -10,7 +10,7 @@
 
 namespace onart {
 	/// <summary>
-	/// Æ¯¼öÇÑ ¸ñÀûÀ» À§ÇØ »ç¿ëÇÒ ¼ö ÀÖ´Â ¿øÇü Å¥ÀÔ´Ï´Ù. ±âº»ÀûÀ¸·Î ¸ðµç ºñÆ®°¡ 0À¸·Î Â÷ ÀÖ½À´Ï´Ù.
+	/// íŠ¹ìˆ˜í•œ ëª©ì ì„ ìœ„í•´ ì‚¬ìš©í•  ìˆ˜ ìžˆëŠ” ì›í˜• íìž…ë‹ˆë‹¤. ê¸°ë³¸ì ìœ¼ë¡œ ëª¨ë“  ë¹„íŠ¸ê°€ 0ìœ¼ë¡œ ì°¨ ìžˆìŠµë‹ˆë‹¤.
 	/// </summary>
 	template <class T, unsigned L>
 	class CircularQueue
@@ -21,29 +21,29 @@ namespace onart {
 	public:
 		CircularQueue();
 		/// <summary>
-		/// Å¥¿¡ ¿ø¼Ò¸¦ º¹»çÇÏ¿© »ðÀÔÇÕ´Ï´Ù.
+		/// íì— ì›ì†Œë¥¼ ë³µì‚¬í•˜ì—¬ ì‚½ìž…í•©ë‹ˆë‹¤.
 		/// </summary>
 		void push(const T&);
 		/// <summary>
-		/// Å¥¿¡ ¿øÇÏ´Â ¼ö¸¸Å­ÀÇ ¿ø¼Ò¸¦ º¹»çÇÏ¿© »ðÀÔÇÕ´Ï´Ù.
+		/// íì— ì›í•˜ëŠ” ìˆ˜ë§Œí¼ì˜ ì›ì†Œë¥¼ ë³µì‚¬í•˜ì—¬ ì‚½ìž…í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="src">º¹»ç ´ë»ó</param>
-		/// <param name="length">º¹»çÇÒ ±æÀÌÀÔ´Ï´Ù. Å¥ ±æÀÌº¸´Ù Å« °æ¿ì Å¥ ±æÀÌ¸¸Å­¸¸ º¹»çÇÕ´Ï´Ù.</param>
+		/// <param name="src">ë³µì‚¬ ëŒ€ìƒ</param>
+		/// <param name="length">ë³µì‚¬í•  ê¸¸ì´ìž…ë‹ˆë‹¤. í ê¸¸ì´ë³´ë‹¤ í° ê²½ìš° í ê¸¸ì´ë§Œí¼ë§Œ ë³µì‚¬í•©ë‹ˆë‹¤.</param>
 		void push(const T* src, unsigned length = L);
 		/// <summary>
-		/// Å¥¿¡¼­ °¡Àå ¾Õ ¿ø¼Ò¸¦ »©¼­ ¸®ÅÏÇÕ´Ï´Ù.
+		/// íì—ì„œ ê°€ìž¥ ì•ž ì›ì†Œë¥¼ ë¹¼ì„œ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		T pop();
 		/// <summary>
-		/// Å¥ÀÇ ³»¿ëÀ» ¼±ÀÔ¼±Ãâ½ÄÀ¸·Î º¹»çÇÕ´Ï´Ù. º¹»çÇÒ ±æÀÌ¸¦ ¸í½ÃÇÏÁö ¾Ê´Â °æ¿ì ÀüÃ¼¸¦ º¹»çÇÕ´Ï´Ù.
+		/// íì˜ ë‚´ìš©ì„ ì„ ìž…ì„ ì¶œì‹ìœ¼ë¡œ ë³µì‚¬í•©ë‹ˆë‹¤. ë³µì‚¬í•  ê¸¸ì´ë¥¼ ëª…ì‹œí•˜ì§€ ì•ŠëŠ” ê²½ìš° ì „ì²´ë¥¼ ë³µì‚¬í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="dst">º¹»çÇØ¼­ ºÙ¿©³ÖÀ» °÷</param>
-		/// <param name="length">º¹»çÇÒ ±æÀÌÀÔ´Ï´Ù. Å¥ ±æÀÌº¸´Ù Å« °æ¿ì Å¥ ÀüÃ¼¸¦ º¹»çÇÕ´Ï´Ù.</param>
+		/// <param name="dst">ë³µì‚¬í•´ì„œ ë¶™ì—¬ë„£ì„ ê³³</param>
+		/// <param name="length">ë³µì‚¬í•  ê¸¸ì´ìž…ë‹ˆë‹¤. í ê¸¸ì´ë³´ë‹¤ í° ê²½ìš° í ì „ì²´ë¥¼ ë³µì‚¬í•©ë‹ˆë‹¤.</param>
 		void copy(T* dst, unsigned length = L);
 	};
 
 	/// <summary>
-	/// Æ¯¼öÇÑ ¸ñÀûÀ» À§ÇØ »ç¿ëÇÒ ¼ö ÀÖ´Â ¿øÇü Å¥ÀÔ´Ï´Ù. ±âº»ÀûÀ¸·Î ¸ðµç ºñÆ®°¡ 0À¸·Î Â÷ ÀÖÀ¸¸ç ±æÀÌ¸¦ ¹Ù²Ù¾î ÀçÈ°¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
+	/// íŠ¹ìˆ˜í•œ ëª©ì ì„ ìœ„í•´ ì‚¬ìš©í•  ìˆ˜ ìžˆëŠ” ì›í˜• íìž…ë‹ˆë‹¤. ê¸°ë³¸ì ìœ¼ë¡œ ëª¨ë“  ë¹„íŠ¸ê°€ 0ìœ¼ë¡œ ì°¨ ìžˆìœ¼ë©° ê¸¸ì´ë¥¼ ë°”ê¾¸ì–´ ìž¬í™œìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	template<class T>
@@ -54,11 +54,11 @@ namespace onart {
 		T* body;
 	public:
 		/// <summary>
-		/// Å¥ÀÇ ±æÀÌ¸¦ ¹Ù²ß´Ï´Ù. ±âÁ¸ÀÇ ¿ø¼Ò´Â À¯ÁöÇÏÁö ¾Ê½À´Ï´Ù.
+		/// íì˜ ê¸¸ì´ë¥¼ ë°”ê¿‰ë‹ˆë‹¤. ê¸°ì¡´ì˜ ì›ì†ŒëŠ” ìœ ì§€í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		void resize(unsigned length);
 		/// <summary>
-		/// ¿øÇÏ´Â ±æÀÌÀÇ Å¥¸¦ µ¿ÀûÀ¸·Î ÇÒ´çÇÏ¿© »ý¼ºÇÕ´Ï´Ù.
+		/// ì›í•˜ëŠ” ê¸¸ì´ì˜ íë¥¼ ë™ì ìœ¼ë¡œ í• ë‹¹í•˜ì—¬ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		CircularQueue(unsigned length);
 		~CircularQueue();

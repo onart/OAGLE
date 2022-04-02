@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -9,15 +9,15 @@
 #define __OAGLEM_H__
 
 /*
-* ¼öÇĞ ÇÔ¼ö
-* ±¸¼º:
+* ìˆ˜í•™ í•¨ìˆ˜
+* êµ¬ì„±:
 * nvec, mat2, mat3, mat4, Quaternion
-* ´Ù¸¥ ¸ğµâ·Î ´ëÃ¼ÇÏ´Â ¹ı:
+* ë‹¤ë¥¸ ëª¨ë“ˆë¡œ ëŒ€ì²´í•˜ëŠ” ë²•:
 *	namespace onart{
-*		using mat4 =(´Ù¸¥¸ğµâ 4x4Çà·Ä);
+*		using mat4 =(ë‹¤ë¥¸ëª¨ë“ˆ 4x4í–‰ë ¬);
 *	}
-* Âü°í: mat4ÀÇ °æ¿ì ÀÌ ¸ğµâ¿¡¼­´Â Çà ¿ì¼± ¼ø¼­ÀÔ´Ï´Ù. Áï uniform Àü´Ş ½Ã ÀüÄ¡¸¦ Àü´ŞÇÏµµ·Ï ¼³Á¤ÇÏ´Âµ¥, À§¿Í °°ÀÌ ´Ù¸¥ mat4¸¦ »ç¿ëÇÏ´Â °æ¿ì
-* shader ÄÚµå¿¡¼­ mat4¸¦ º¸³¾ ¶§ ÀüÄ¡¸¦ Àü´ŞÇÏÁö ¾Êµµ·Ï ÇØ¾ß ÇÕ´Ï´Ù.
+* ì°¸ê³ : mat4ì˜ ê²½ìš° ì´ ëª¨ë“ˆì—ì„œëŠ” í–‰ ìš°ì„  ìˆœì„œì…ë‹ˆë‹¤. ì¦‰ uniform ì „ë‹¬ ì‹œ ì „ì¹˜ë¥¼ ì „ë‹¬í•˜ë„ë¡ ì„¤ì •í•˜ëŠ”ë°, ìœ„ì™€ ê°™ì´ ë‹¤ë¥¸ mat4ë¥¼ ì‚¬ìš©í•˜ëŠ” ê²½ìš°
+* shader ì½”ë“œì—ì„œ mat4ë¥¼ ë³´ë‚¼ ë•Œ ì „ì¹˜ë¥¼ ì „ë‹¬í•˜ì§€ ì•Šë„ë¡ í•´ì•¼ í•©ë‹ˆë‹¤.
 */
 
 #include <cmath>
@@ -36,20 +36,20 @@ constexpr float INF = INFINITY;
 constexpr float _NAN = NAN;
 
 /// <summary>
-/// ¶óµğ¾ÈÀ» ÀÔ·ÂÇÏ¸é µµ ´ÜÀ§·Î º¯°æÇÕ´Ï´Ù.
+/// ë¼ë””ì•ˆì„ ì…ë ¥í•˜ë©´ ë„ ë‹¨ìœ„ë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
 /// </summary>
 constexpr float deg(float rad) { return rad * 180 / PI; }
 /// <summary>
-/// µµ ´ÜÀ§¸¦ ÀÔ·ÂÇÏ¸é ¶óµğ¾ÈÀ¸·Î º¯°æÇÕ´Ï´Ù.
+/// ë„ ë‹¨ìœ„ë¥¼ ì…ë ¥í•˜ë©´ ë¼ë””ì•ˆìœ¼ë¡œ ë³€ê²½í•©ë‹ˆë‹¤.
 /// </summary>
 constexpr float rad(float deg) { return deg / 180 * PI; }
 
 namespace onart {
 	struct Quaternion;
 	/// <summary>
-	/// NÂ÷¿ø º¤ÅÍÀÔ´Ï´Ù. ±æÀÌ¿¡ °ü°è¾øÀÌ »óÈ£ º¯È¯ÀÌ °¡´ÉÇÕ´Ï´Ù.
+	/// Nì°¨ì› ë²¡í„°ì…ë‹ˆë‹¤. ê¸¸ì´ì— ê´€ê³„ì—†ì´ ìƒí˜¸ ë³€í™˜ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <typeparam name="T">º¤ÅÍ ¼ººĞÀÇ Å¸ÀÔÀÔ´Ï´Ù. »çÄ¢ ¿¬»ê ¹× ºÎÈ£ ¹İÀüÀÌ °¡´ÉÇÏ¿©¾ß ÇÕ´Ï´Ù.</typeparam>
+	/// <typeparam name="T">ë²¡í„° ì„±ë¶„ì˜ íƒ€ì…ì…ë‹ˆë‹¤. ì‚¬ì¹™ ì—°ì‚° ë° ë¶€í˜¸ ë°˜ì „ì´ ê°€ëŠ¥í•˜ì—¬ì•¼ í•©ë‹ˆë‹¤.</typeparam>
 	template <unsigned D, class T = float> union nvec {
 		T entry[D];
 		struct { T x, y, z, w; };
@@ -61,75 +61,75 @@ namespace onart {
 		struct { T _x; T yz[2]; };
 		struct { T __x; T yzw[3]; };
 		/// <summary>
-		/// ¿µº¤ÅÍ¸¦ »ı¼ºÇÕ´Ï´Ù.
+		/// ì˜ë²¡í„°ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec() { memset(entry, 0, sizeof(entry)); }
 
 		/// <summary>
-		/// º¤ÅÍÀÇ ¸ğµç °ªÀ» ÇÏ³ªÀÇ °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+		/// ë²¡í„°ì˜ ëª¨ë“  ê°’ì„ í•˜ë‚˜ì˜ ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec(T a) { setAll(entry, a, D > 4 ? D : 4); }
 
 		/// <summary>
-		/// º¤ÅÍÀÇ °ª Áß ¾Õ 2~4°³¸¦ ÃÊ±âÈ­ÇÕ´Ï´Ù.
+		/// ë²¡í„°ì˜ ê°’ ì¤‘ ì• 2~4ê°œë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) {  }
 
 		/// <summary>
-		/// º¹»ç »ı¼ºÀÚÀÔ´Ï´Ù.
+		/// ë³µì‚¬ ìƒì„±ìì…ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec(const nvec<D,T>& v) { memcpy(entry, v.entry, sizeof(entry)); }
 
 		/// <summary>
-		/// ¹è¿­À» ÀÌ¿ëÇÏ¿© º¤ÅÍ¸¦ »ı¼ºÇÕ´Ï´Ù.
+		/// ë°°ì—´ì„ ì´ìš©í•˜ì—¬ ë²¡í„°ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec(const T* v) { memcpy(entry, v, sizeof(entry)); }
 
 		/// <summary>
-		/// ÇÑ Â÷¿ø ³·Àº º¤ÅÍ¸¦ ÀÌ¿ëÇÏ¿© »ı¼ºÇÕ´Ï´Ù.
+		/// í•œ ì°¨ì› ë‚®ì€ ë²¡í„°ë¥¼ ì´ìš©í•˜ì—¬ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="v">ÇÑ Â÷¿ø ³·Àº º¤ÅÍ</param>
-		/// <param name="a">³ª¸ÓÁö ÀÚ¸®¿¡ µé¾î°¡´Â °ª</param>
+		/// <param name="v">í•œ ì°¨ì› ë‚®ì€ ë²¡í„°</param>
+		/// <param name="a">ë‚˜ë¨¸ì§€ ìë¦¬ì— ë“¤ì–´ê°€ëŠ” ê°’</param>
 		inline nvec(const nvec<D - 1, T>& v, T a) { memcpy(entry, v.entry, sizeof(entry) - sizeof(T)); entry[D - 1] = a; }
 
 		/// <summary>
-		/// ´Ù¸¥ Â÷¿øÀÇ º¤ÅÍ¸¦ »ç¿ëÇÏ´Â º¹»ç »ı¼ºÀÚÀÔ´Ï´Ù. °¡±ŞÀû Â÷¿ø Ãà¼Ò¿¡¸¸ »ç¿ëÇÏ´Â °ÍÀÌ ÁÁ½À´Ï´Ù.
+		/// ë‹¤ë¥¸ ì°¨ì›ì˜ ë²¡í„°ë¥¼ ì‚¬ìš©í•˜ëŠ” ë³µì‚¬ ìƒì„±ìì…ë‹ˆë‹¤. ê°€ê¸‰ì  ì°¨ì› ì¶•ì†Œì—ë§Œ ì‚¬ìš©í•˜ëŠ” ê²ƒì´ ì¢‹ìŠµë‹ˆë‹¤.
 		/// </summary>
 		template <unsigned E> inline nvec(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
-		/// º¤ÅÍÀÇ ¸ğµç ¼ººĞÀ» ÇÏ³ªÀÇ °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù. operator=°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ë²¡í„°ì˜ ëª¨ë“  ì„±ë¶„ì„ í•˜ë‚˜ì˜ ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤. operator=ê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline void set(T a) { setAll(entry, a, D > 4 ? D : 4); }
 		
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍÀÇ °ªÀ» º¹»çÇØ ¿É´Ï´Ù. operator=°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì˜ ê°’ì„ ë³µì‚¬í•´ ì˜µë‹ˆë‹¤. operator=ê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		/// <param name="v"></param>
 		inline void set(const nvec& v) { memcpy(entry, v.entry, sizeof(entry));; }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍÀÇ °ªÀ» º¹»çÇØ ¿É´Ï´Ù. operator=°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì˜ ê°’ì„ ë³µì‚¬í•´ ì˜µë‹ˆë‹¤. operator=ê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		template <unsigned E> inline void set(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
-		/// º¤ÅÍÀÇ ¸ğµç ¼ººĞÀ» ÇÏ³ªÀÇ °ªÀ¸·Î ÃÊ±âÈ­ÇÕ´Ï´Ù. set()°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ë²¡í„°ì˜ ëª¨ë“  ì„±ë¶„ì„ í•˜ë‚˜ì˜ ê°’ìœ¼ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤. set()ê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec& operator=(T a) { set(a); return *this; }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍÀÇ °ªÀ» º¹»çÇØ ¿É´Ï´Ù. set()°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì˜ ê°’ì„ ë³µì‚¬í•´ ì˜µë‹ˆë‹¤. set()ê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec& operator=(const nvec& v) { set(v); return *this; }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍÀÇ °ªÀ» º¹»çÇØ ¿É´Ï´Ù. set()°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì˜ ê°’ì„ ë³µì‚¬í•´ ì˜µë‹ˆë‹¤. set()ê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		template <unsigned E> inline nvec& operator=(const nvec<E, T>& v) { set(v); return *this; }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍ¿Í ¼ººĞº° ¿¬»êÀ» Â÷¿ø¼ö°¡ ³·Àº ÂÊÀ» ±âÁØÀ¸·Î ÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì™€ ì„±ë¶„ë³„ ì—°ì‚°ì„ ì°¨ì›ìˆ˜ê°€ ë‚®ì€ ìª½ì„ ê¸°ì¤€ìœ¼ë¡œ í•©ë‹ˆë‹¤.
 		/// </summary>
 		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] += v[i]; return *this; }
 		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] -= v[i]; return *this; }
@@ -137,7 +137,7 @@ namespace onart {
 		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] /= v[i]; return *this; }
 
 		/// <summary>
-		/// º¤ÅÍÀÇ ¸ğµç ¼ººĞ¿¡ ´ëÇÏ¿© ÁÖ¾îÁø °ª°ú ¿¬»êÇÕ´Ï´Ù.
+		/// ë²¡í„°ì˜ ëª¨ë“  ì„±ë¶„ì— ëŒ€í•˜ì—¬ ì£¼ì–´ì§„ ê°’ê³¼ ì—°ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec& operator+=(T a) { add4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] += a; return *this; }
 		inline nvec& operator-=(T a) { sub4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] -= a; return *this; }
@@ -149,13 +149,13 @@ namespace onart {
 		inline nvec operator/(T a) const { auto r(*this); r /= a; return r; }
 
 		/// <summary>
-		/// º¤ÅÍÀÇ ¸ğµç ¼ººĞÀÌ µ¿ÀÏÇÑ °æ¿ì ÂüÀ» ¸®ÅÏÇÕ´Ï´Ù. ´Ù¸¥ Å©±âÀÇ º¤ÅÍ¿ÍÀÇ ºñ±³¸¦ Áö¿øÇÏÁö ¾Ê½À´Ï´Ù.
+		/// ë²¡í„°ì˜ ëª¨ë“  ì„±ë¶„ì´ ë™ì¼í•œ ê²½ìš° ì°¸ì„ ë¦¬í„´í•©ë‹ˆë‹¤. ë‹¤ë¥¸ í¬ê¸°ì˜ ë²¡í„°ì™€ì˜ ë¹„êµë¥¼ ì§€ì›í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		inline bool operator==(const nvec& v) const { return memcmp(entry, v.entry, sizeof(nvec)) == 0; }
 		inline bool operator!=(const nvec& v) const { return !operator==(v); }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍ¿Í ¼ººĞº° ¿¬»êÀ» Â÷¿ø¼ö°¡ ³·Àº ÂÊÀ» ±âÁØÀ¸·Î ÇÕ´Ï´Ù. ¸®ÅÏ Â÷¿ø¼ö´Â Ç×»ó ÁÂº¯°ª°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì™€ ì„±ë¶„ë³„ ì—°ì‚°ì„ ì°¨ì›ìˆ˜ê°€ ë‚®ì€ ìª½ì„ ê¸°ì¤€ìœ¼ë¡œ í•©ë‹ˆë‹¤. ë¦¬í„´ ì°¨ì›ìˆ˜ëŠ” í•­ìƒ ì¢Œë³€ê°’ê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		template <unsigned E> inline nvec operator+(const nvec<E, T>& v) const { auto r(*this); r += v; return r; }
 		template <unsigned E> inline nvec operator-(const nvec<E, T>& v) const { auto r(*this); r -= v; return r; }
@@ -163,37 +163,37 @@ namespace onart {
 		template <unsigned E> inline nvec operator/(const nvec<E, T>& v) const { auto r(*this); r /= v; return r; }
 
 		/// <summary>
-		/// TÇü ¹è¿­·Î »ç¿ëÇÒ ¼ö ÀÖµµ·Ï Æ÷ÀÎÅÍ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// Tí˜• ë°°ì—´ë¡œ ì‚¬ìš©í•  ìˆ˜ ìˆë„ë¡ í¬ì¸í„°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline operator T* () { return &x; }
 		inline operator const T* () const { return &x; }
 
 		/// <summary>
-		/// ¸í½ÃÀû Ä³½ºÆ®°¡ °¡´ÉÇÑ Å¸ÀÔÀÌ¶ó¸é º¤ÅÍµµ ¸í½ÃÀûÀ¸·Î Ä³½ºÆ®°¡ °¡´ÉÇÕ´Ï´Ù.
-		/// ¼ººĞº°·Î Ä³½ºÆ®ÇØ¼­ »õ·Î ¸¸µå´Â °Í°ú ºñ±³ÇÏ¿© Æ¯º°È÷ ¼º´ÉÀû ¸é¿¡¼­ ³ªÀ» ºÎºĞÀº ¾øÀ¸¸ç
-		/// À¯¿¬ÇÑ ÄÚµå¸¸À» À§ÇØ Ãß°¡ÇÏ¿´½À´Ï´Ù.
+		/// ëª…ì‹œì  ìºìŠ¤íŠ¸ê°€ ê°€ëŠ¥í•œ íƒ€ì…ì´ë¼ë©´ ë²¡í„°ë„ ëª…ì‹œì ìœ¼ë¡œ ìºìŠ¤íŠ¸ê°€ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+		/// ì„±ë¶„ë³„ë¡œ ìºìŠ¤íŠ¸í•´ì„œ ìƒˆë¡œ ë§Œë“œëŠ” ê²ƒê³¼ ë¹„êµí•˜ì—¬ íŠ¹ë³„íˆ ì„±ëŠ¥ì  ë©´ì—ì„œ ë‚˜ì„ ë¶€ë¶„ì€ ì—†ìœ¼ë©°
+		/// ìœ ì—°í•œ ì½”ë“œë§Œì„ ìœ„í•´ ì¶”ê°€í•˜ì˜€ìŠµë‹ˆë‹¤.
 		/// </summary>
 		template <class T2> inline operator nvec<D, T2>() const { nvec<D, T2> n; for (unsigned i = 0; i < D; i++) { n[i] = (T2)entry[i]; } return n; }
 
 		/// <summary>
-		/// ºÎÈ£¸¦ ¹İÀü½ÃÄÑ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë¶€í˜¸ë¥¼ ë°˜ì „ì‹œì¼œ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline nvec operator-() const { return (*this) * -1; }
 
 		/// <summary>
-		/// ÀÎµ¦½º ¿¬»êÀÚ
+		/// ì¸ë±ìŠ¤ ì—°ì‚°ì
 		/// </summary>
 		inline T& operator[](ptrdiff_t i) { assert(i < D); return entry[i]; }
 		inline const T& operator[](ptrdiff_t i) const { assert(i < D); return entry[i]; }
 
 		/// <summary>
-		/// º¤ÅÍÀÇ ¹æÇâÀ» À¯ÁöÇÏ°í ±æÀÌ¸¦ 1·Î ¸ÂÃá °ÍÀ» ¸®ÅÏÇÕ´Ï´Ù. Á¤¼ö º¤ÅÍ¿¡¼­´Â »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.
+		/// ë²¡í„°ì˜ ë°©í–¥ì„ ìœ ì§€í•˜ê³  ê¸¸ì´ë¥¼ 1ë¡œ ë§ì¶˜ ê²ƒì„ ë¦¬í„´í•©ë‹ˆë‹¤. ì •ìˆ˜ ë²¡í„°ì—ì„œëŠ” ì‚¬ìš©í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.
 		/// </summary>
 		inline nvec normalize() const { return (*this) / length(); }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍ¿ÍÀÇ ³»ÀûÀ» ¸®ÅÏÇÕ´Ï´Ù. ´Ù¸¥ Â÷¿ø°úÀÇ ¿¬»êÀ» Áö¿øÇÏÁö ¾Ê½À´Ï´Ù.
-		/// dot ÇÔ¼ö¿¡ ºñÇØ Çà·Ä °£ °ö ¹× Çà·Ä x º¤ÅÍ¿¡¼­ »ç¿ëÇÏ±â¿¡ ºü¸¨´Ï´Ù. (¿øÀÎÀº ÆÄ¾Ç ÁßÀÔ´Ï´Ù)
+		/// ë‹¤ë¥¸ ë²¡í„°ì™€ì˜ ë‚´ì ì„ ë¦¬í„´í•©ë‹ˆë‹¤. ë‹¤ë¥¸ ì°¨ì›ê³¼ì˜ ì—°ì‚°ì„ ì§€ì›í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+		/// dot í•¨ìˆ˜ì— ë¹„í•´ í–‰ë ¬ ê°„ ê³± ë° í–‰ë ¬ x ë²¡í„°ì—ì„œ ì‚¬ìš©í•˜ê¸°ì— ë¹ ë¦…ë‹ˆë‹¤. (ì›ì¸ì€ íŒŒì•… ì¤‘ì…ë‹ˆë‹¤)
 		/// </summary>
 		inline T dot2(const nvec& v) const { 
 			auto nv = (*this) * v; T s = 0;
@@ -204,28 +204,28 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍ¿ÍÀÇ ³»ÀûÀ» ¸®ÅÏÇÕ´Ï´Ù. ´Ù¸¥ Â÷¿ø°úÀÇ ¿¬»êÀ» Áö¿øÇÏÁö ¾Ê½À´Ï´Ù.
-		/// dot2 ÇÔ¼ö¿¡ ºñÇØ ´Ü¼øÈ÷ º¤ÅÍ¿¡¼­ »ç¿ëÇÏ±â¿¡ ºü¸¨´Ï´Ù. (¿øÀÎÀº ÆÄ¾Ç ÁßÀÔ´Ï´Ù)
+		/// ë‹¤ë¥¸ ë²¡í„°ì™€ì˜ ë‚´ì ì„ ë¦¬í„´í•©ë‹ˆë‹¤. ë‹¤ë¥¸ ì°¨ì›ê³¼ì˜ ì—°ì‚°ì„ ì§€ì›í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
+		/// dot2 í•¨ìˆ˜ì— ë¹„í•´ ë‹¨ìˆœíˆ ë²¡í„°ì—ì„œ ì‚¬ìš©í•˜ê¸°ì— ë¹ ë¦…ë‹ˆë‹¤. (ì›ì¸ì€ íŒŒì•… ì¤‘ì…ë‹ˆë‹¤)
 		/// </summary>
 		inline T dot(const nvec& v) const { return std::transform_reduce(entry, entry + D, v.entry, (T)0); }
 
 		/// <summary>
-		/// º¤ÅÍ ±æÀÌÀÇ Á¦°öÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë²¡í„° ê¸¸ì´ì˜ ì œê³±ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float length2() const { return dot(*this); }
 
 		/// <summary>
-		/// º¤ÅÍ ±æÀÌ¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë²¡í„° ê¸¸ì´ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float length() const { return sqrtf(length2()); }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍ¿ÍÀÇ °Å¸® Á¦°öÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì™€ì˜ ê±°ë¦¬ ì œê³±ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float distance2(const nvec& v) const { return (*this - v).length2(); }
 
 		/// <summary>
-		/// ´Ù¸¥ º¤ÅÍ¿ÍÀÇ °Å¸®¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë‹¤ë¥¸ ë²¡í„°ì™€ì˜ ê±°ë¦¬ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float distance(const nvec& v) const { return sqrtf(distance(v)); }
 	};
@@ -236,60 +236,60 @@ namespace onart {
 	using dvec2 = nvec<2, double>;			using dvec3 = nvec<3, double>;			using dvec4 = nvec<4, double>;
 
 	/// <summary>
-	/// 2°³ 3Â÷¿ø ½Ç¼ö º¤ÅÍÀÇ ¿ÜÀûÀ» °è»êÇÕ´Ï´Ù.
+	/// 2ê°œ 3ì°¨ì› ì‹¤ìˆ˜ ë²¡í„°ì˜ ì™¸ì ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 	/// </summary>
 	inline vec3 cross(const vec3& a, const vec3& b) { return vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x); }
 
 	/// <summary>
-	/// 2°³ÀÇ º¤ÅÍ¸¦ ¼±Çü º¸°£ÇÕ´Ï´Ù.
+	/// 2ê°œì˜ ë²¡í„°ë¥¼ ì„ í˜• ë³´ê°„í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="a">¼±Çü º¸°£ ´ë»ó 1(t=0¿¡ °¡±î¿ï¼ö·Ï ÀÌ º¤ÅÍ¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="b">¼±Çü º¸°£ ´ë»ó 2(t=1¿¡ °¡±î¿ï¼ö·Ï ÀÌ º¤ÅÍ¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="t">¼±Çü º¸°£ °ª</param>	
+	/// <param name="a">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 1(t=0ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ ë²¡í„°ì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="b">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 2(t=1ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ ë²¡í„°ì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="t">ì„ í˜• ë³´ê°„ ê°’</param>	
 	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, const nvec<D>& t) { return a * (1 - t) + b * t; }
 
 	/// <summary>
-	/// 2°³ÀÇ º¤ÅÍ¸¦ ¼±Çü º¸°£ÇÕ´Ï´Ù.
+	/// 2ê°œì˜ ë²¡í„°ë¥¼ ì„ í˜• ë³´ê°„í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="a">¼±Çü º¸°£ ´ë»ó 1(t=0¿¡ °¡±î¿ï¼ö·Ï ÀÌ º¤ÅÍ¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="b">¼±Çü º¸°£ ´ë»ó 2(t=1¿¡ °¡±î¿ï¼ö·Ï ÀÌ º¤ÅÍ¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="t">¼±Çü º¸°£ °ª</param>
+	/// <param name="a">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 1(t=0ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ ë²¡í„°ì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="b">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 2(t=1ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ ë²¡í„°ì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="t">ì„ í˜• ë³´ê°„ ê°’</param>
 	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, float t) { return a * (1 - t) + b * t; }
 
 	/// <summary>
-	/// 2Â÷¿ø ÀÌ¹ÌÁöÀÇ È¸Àü¿¬»êÀ» À§ÇÑ 2x2 Çà·ÄÀÔ´Ï´Ù. ´Ü, 3Â÷¿ø ¿¬»êÀÇ zÃàÀ» 0À¸·Î °íÁ¤ÇÏ´Â °ÍÀÌ ´õ ÀÏ¹İÀûÀÎ ¹æ¹ıÀÔ´Ï´Ù.
+	/// 2ì°¨ì› ì´ë¯¸ì§€ì˜ íšŒì „ì—°ì‚°ì„ ìœ„í•œ 2x2 í–‰ë ¬ì…ë‹ˆë‹¤. ë‹¨, 3ì°¨ì› ì—°ì‚°ì˜ zì¶•ì„ 0ìœ¼ë¡œ ê³ ì •í•˜ëŠ” ê²ƒì´ ë” ì¼ë°˜ì ì¸ ë°©ë²•ì…ë‹ˆë‹¤.
 	/// </summary>
 	struct mat2 {
 		union { float a[4]; struct { float _11, _12, _21, _22; }; };
 
 		/// <summary>
-		/// ´ÜÀ§Çà·ÄÀ» »ı¼ºÇÕ´Ï´Ù.
+		/// ë‹¨ìœ„í–‰ë ¬ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat2() { _11 = _22 = 1; _12 = _21 = 0; }
 
 		/// <summary>
-		/// Çà ¿ì¼± ¼ø¼­·Î ¸Å°³º¯¼ö¸¦ ÁÖ¾î Çà·ÄÀ» »ı¼ºÇÕ´Ï´Ù.
+		/// í–‰ ìš°ì„  ìˆœì„œë¡œ ë§¤ê°œë³€ìˆ˜ë¥¼ ì£¼ì–´ í–‰ë ¬ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat2(float _11, float _12, float _21, float _22) :_11(_11), _12(_12), _21(_21), _22(_22) { }
 		
 		/// <summary>
-		/// ÀÎµ¦½º ¿¬»êÀÚ
+		/// ì¸ë±ìŠ¤ ì—°ì‚°ì
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
 
 		/// <summary>
-		/// º¹»ç »ı¼º
+		/// ë³µì‚¬ ìƒì„±
 		/// </summary>
 		inline mat2(const mat2& m) { for (int i = 0; i < 4; i++) { a[i] = m[i]; } }
 
 		/// <summary>
-		/// Çà·ÄÀ» ´ÜÀ§Çà·Ä·Î ¹Ù²ß´Ï´Ù.
+		/// í–‰ë ¬ì„ ë‹¨ìœ„í–‰ë ¬ë¡œ ë°”ê¿‰ë‹ˆë‹¤.
 		/// </summary>
 		inline void toI() { _11 = _22 = 1; _12 = _21 = 0; }
 
 		/// <summary>
-		/// ´Ù¸¥ Çà·Ä°ú ¼ººĞº°·Î ´õÇÏ°Å³ª »®´Ï´Ù.
+		/// ë‹¤ë¥¸ í–‰ë ¬ê³¼ ì„±ë¶„ë³„ë¡œ ë”í•˜ê±°ë‚˜ ëºë‹ˆë‹¤.
 		/// </summary>
 		inline mat2& operator+=(const mat2& m) { for (int i = 0; i < 4; i++)a[i] += m[i]; return *this; }
 		inline mat2& operator-=(const mat2& m) { for (int i = 0; i < 4; i++)a[i] -= m[i]; return *this; }
@@ -297,7 +297,7 @@ namespace onart {
 		inline mat2 operator-(const mat2& m) const { auto r = mat2(*this); r -= m; return r; }
 
 		/// <summary>
-		/// Çà·Ä°öÀ» ¼öÇàÇÕ´Ï´Ù.
+		/// í–‰ë ¬ê³±ì„ ìˆ˜í–‰í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat2 operator*(const mat2& m) const {
 			return mat2(
@@ -311,12 +311,12 @@ namespace onart {
 		inline mat2& operator*=(const mat2& m) { return *this = operator*(m); }
 
 		/// <summary>
-		/// º¤ÅÍ¿¡ ¼±Çüº¯È¯À» Àû¿ëÇÏ¿© ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë²¡í„°ì— ì„ í˜•ë³€í™˜ì„ ì ìš©í•˜ì—¬ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline vec2 operator*(const vec2& v) const { return vec2(_11 * v.x + _12 * v.y, _21 * v.x + _22 * v.y); }
 
 		/// <summary>
-		/// Çà·Ä¿¡ ½Ç¼ö¹è¸¦ ÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì— ì‹¤ìˆ˜ë°°ë¥¼ í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat2& operator*=(float f) { for (int i = 0; i < 4; i++) a[i] *= f; }
 		inline mat2 operator*(float f) const { mat2 r(*this); r *= f; return r; }
@@ -324,64 +324,64 @@ namespace onart {
 		inline mat2 operator/(float f) const { mat2 r(*this); r /= f; return r; }
 
 		/// <summary>
-		/// Çà·Ä½ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì‹ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float det() const { return _11 * _22 - _12 * _21; }
 
 		/// <summary>
-		/// ¿ªÇà·ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// ì—­í–‰ë ¬ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat2 inverse() const {
 			float d = det();
-			if (d == 0) printf("%p: ÀÌ Çà·ÄÀº ¿ªÇà·ÄÀÌ ¾ø°Å³ª ¸Å¿ì Å« ¼ººĞÀ» °¡Áı´Ï´Ù. NaN¿¡ ÀÇÇØ ¿¹±âÄ¡ ¸øÇÑ µ¿ÀÛÀÌ ¹ß»ıÇÒ ¼ö ÀÖ½À´Ï´Ù.\n", this);
+			if (d == 0) printf("%p: ì´ í–‰ë ¬ì€ ì—­í–‰ë ¬ì´ ì—†ê±°ë‚˜ ë§¤ìš° í° ì„±ë¶„ì„ ê°€ì§‘ë‹ˆë‹¤. NaNì— ì˜í•´ ì˜ˆê¸°ì¹˜ ëª»í•œ ë™ì‘ì´ ë°œìƒí•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n", this);
 			return mat2(_22, -_12, -_21, _11) / d;
 		}
 
 		/// <summary>
-		/// ÀüÄ¡ Çà·ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// ì „ì¹˜ í–‰ë ¬ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat2 transpose() const { return mat2(_11, _21, _12, _22); }
 
 		/// <summary>
-		/// Çà ¿ì¼± ¼ø¼­·Î µÈ ¹è¿­À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// í–‰ ìš°ì„  ìˆœì„œë¡œ ëœ ë°°ì—´ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline operator float* () { return a; }
 	};
 
 	/// <summary>
-	/// 3Â÷¿ø ¸ğµ¨ÀÇ È¸Àü¿¬»ê È¤Àº 2Â÷¿ø ÀÌ¹ÌÁöÀÇ ¾ÆÇÉ º¯È¯À» À§ÇÑ 3x3 Çà·ÄÀÔ´Ï´Ù.
+	/// 3ì°¨ì› ëª¨ë¸ì˜ íšŒì „ì—°ì‚° í˜¹ì€ 2ì°¨ì› ì´ë¯¸ì§€ì˜ ì•„í•€ ë³€í™˜ì„ ìœ„í•œ 3x3 í–‰ë ¬ì…ë‹ˆë‹¤.
 	/// </summary>
 	struct mat3 {
 		union { float a[9]; struct { float _11, _12, _13, _21, _22, _23, _31, _32, _33; }; };
 
 		/// <summary>
-		/// ´ÜÀ§Çà·ÄÀ» »ı¼ºÇÕ´Ï´Ù.
+		/// ë‹¨ìœ„í–‰ë ¬ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = 1; }
 
 		/// <summary>
-		/// Çà ¿ì¼± ¼ø¼­·Î ¸Å°³º¯¼ö¸¦ ÁÖ¾î Çà·ÄÀ» »ı¼ºÇÕ´Ï´Ù.
+		/// í–‰ ìš°ì„  ìˆœì„œë¡œ ë§¤ê°œë³€ìˆ˜ë¥¼ ì£¼ì–´ í–‰ë ¬ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3(float _11, float _12, float _13, float _21, float _22, float _23, float _31, float _32, float _33) :_11(_11), _12(_12), _13(_13), _21(_21), _22(_22), _23(_23), _31(_31), _32(_32), _33(_33) { }
 
 		/// <summary>
-		/// Çà·ÄÀÇ ¼ººĞÀ» º¹»çÇØ¼­ »ı¼ºÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì˜ ì„±ë¶„ì„ ë³µì‚¬í•´ì„œ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3(const mat3& m) { memcpy(a, m.a, sizeof(a)); }
 
 		/// <summary>
-		/// ÀÎµ¦½º ¿¬»êÀÚ
+		/// ì¸ë±ìŠ¤ ì—°ì‚°ì
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
 
 		/// <summary>
-		/// Çà·ÄÀ» ´ÜÀ§Çà·Ä·Î ¹Ù²ß´Ï´Ù.
+		/// í–‰ë ¬ì„ ë‹¨ìœ„í–‰ë ¬ë¡œ ë°”ê¿‰ë‹ˆë‹¤.
 		/// </summary>
 		inline void toI() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = 1; }
 
 		/// <summary>
-		/// ´Ù¸¥ Çà·Ä°ú ¼ººĞº°·Î ´õÇÏ°Å³ª »®´Ï´Ù.
+		/// ë‹¤ë¥¸ í–‰ë ¬ê³¼ ì„±ë¶„ë³„ë¡œ ë”í•˜ê±°ë‚˜ ëºë‹ˆë‹¤.
 		/// </summary>
 		inline mat3& operator+=(const mat3& m) { for (int i = 0; i < 9; i++)a[i] += m[i]; return *this; }
 		inline mat3& operator-=(const mat3& m) { for (int i = 0; i < 9; i++)a[i] -= m[i]; return *this; }
@@ -389,19 +389,19 @@ namespace onart {
 		inline mat3 operator-(const mat3& m) const { auto r = mat3(*this); r -= m; return r; }
 
 		/// <summary>
-		/// nÇà º¤ÅÍ¸¦ ¸®ÅÏÇÕ´Ï´Ù. 1~3¸¸ ÀÔ·Â °¡´ÉÇÕ´Ï´Ù.
+		/// ní–‰ ë²¡í„°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. 1~3ë§Œ ì…ë ¥ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="i">Çà ÀÎµ¦½º(1 base)</param>
+		/// <param name="i">í–‰ ì¸ë±ìŠ¤(1 base)</param>
 		inline vec3 row(int i) const { assert(i <= 3 && i >= 1); int st = 3 * i - 3; return vec3(a + st); }
 
 		/// <summary>
-		/// n¿­ º¤ÅÍ¸¦ ¸®ÅÏÇÕ´Ï´Ù. 1~4¸¸ ÀÔ·Â °¡´ÉÇÕ´Ï´Ù.
+		/// nì—´ ë²¡í„°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. 1~4ë§Œ ì…ë ¥ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="i">¿­ ÀÎµ¦½º(1 base)</param>
+		/// <param name="i">ì—´ ì¸ë±ìŠ¤(1 base)</param>
 		inline vec3 col(int i) const { assert(i <= 3 && i >= 1); return vec3(a[i - 1], a[i + 2], a[i + 5]); }
 
 		/// <summary>
-		/// Çà·Ä°öÀ» ¼öÇàÇÕ´Ï´Ù.
+		/// í–‰ë ¬ê³±ì„ ìˆ˜í–‰í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3 operator*(const mat3& m) const {
 			mat3 ret;
@@ -416,17 +416,17 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// Çà·Ä°öÀ» ¼öÇàÇÕ´Ï´Ù.
+		/// í–‰ë ¬ê³±ì„ ìˆ˜í–‰í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3& operator*=(const mat3& m) { return *this = operator*(m); }
 
 		/// <summary>
-		/// º¤ÅÍ¿¡ ¼±Çüº¯È¯À» Àû¿ëÇÏ¿© ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë²¡í„°ì— ì„ í˜•ë³€í™˜ì„ ì ìš©í•˜ì—¬ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline vec3 operator*(const vec3& v) const { return vec3(row(1).dot2(v), row(2).dot2(v), row(3).dot2(v)); }
 
 		/// <summary>
-		/// Çà·Ä¿¡ ½Ç¼ö¹è¸¦ ÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì— ì‹¤ìˆ˜ë°°ë¥¼ í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3& operator*=(float f) { mulAll(a, f, 9); return *this; }
 		inline mat3 operator*(float f) const { mat3 r(*this); r *= f; return r; }
@@ -434,21 +434,21 @@ namespace onart {
 		inline mat3 operator/(float f) const { mat3 r(*this); r /= f; return r; }
 
 		/// <summary>
-		/// Çà·Ä½ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì‹ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float det() const { return _11 * (_22 * _33 - _23 * _32) + _12 * (_23 * _31 - _21 * _33) + _13 * (_21 * _32 - _22 * _31); }
 
 		/// <summary>
-		/// Çà·Ä ´ë°¢ ¼ººĞÀÇ ÇÕÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// í–‰ë ¬ ëŒ€ê° ì„±ë¶„ì˜ í•©ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float trace() const { return _11 + _22 + _33; }
 
 		/// <summary>
-		/// ¿ªÇà·ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// ì—­í–‰ë ¬ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3 inverse() const {
 			float d = det();
-			if (d == 0) printf("%p: ÀÌ Çà·ÄÀº ¿ªÇà·ÄÀÌ ¾ø°Å³ª ¸Å¿ì Å« ¼ººĞÀ» °¡Áı´Ï´Ù. NaN¿¡ ÀÇÇØ ¿¹±âÄ¡ ¸øÇÑ µ¿ÀÛÀÌ ¹ß»ıÇÒ ¼ö ÀÖ½À´Ï´Ù.\n", this);
+			if (d == 0) printf("%p: ì´ í–‰ë ¬ì€ ì—­í–‰ë ¬ì´ ì—†ê±°ë‚˜ ë§¤ìš° í° ì„±ë¶„ì„ ê°€ì§‘ë‹ˆë‹¤. NaNì— ì˜í•´ ì˜ˆê¸°ì¹˜ ëª»í•œ ë™ì‘ì´ ë°œìƒí•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n", this);
 			return mat3(
 				(_22 * _33 - _32 * _23), (_13 * _32 - _12 * _33), (_12 * _23 - _13 * _22),
 				(_23 * _31 - _21 * _33), (_11 * _33 - _13 * _31), (_21 * _13 - _11 * _23),
@@ -457,22 +457,22 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// ÀüÄ¡ Çà·ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// ì „ì¹˜ í–‰ë ¬ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat3 transpose() const { return mat3(_11, _21, _31, _12, _22, _32, _13, _23, _33); }
 
 		/// <summary>
-		/// Çà ¿ì¼± ¼ø¼­·Î µÈ ¹è¿­À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// í–‰ ìš°ì„  ìˆœì„œë¡œ ëœ ë°°ì—´ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline operator float* () { return a; }
 
 		/// <summary>
-		/// ÁÂÃø »ó´Ü 2x2 Çà·Ä·Î Ä³½ºÆ®ÇÕ´Ï´Ù.
+		/// ì¢Œì¸¡ ìƒë‹¨ 2x2 í–‰ë ¬ë¡œ ìºìŠ¤íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline operator mat2() { return mat2(_11, _12, _21, _22); }
 
 		/// <summary>
-		/// 2Â÷¿ø º´Áø Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 2ì°¨ì› ë³‘ì§„ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat3 translate(const vec2& t) {
 			return mat3(
@@ -482,7 +482,7 @@ namespace onart {
 			);
 		}
 		/// <summary>
-		/// 2Â÷¿ø º´Áø Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 2ì°¨ì› ë³‘ì§„ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat3 translate(float x, float y) {
 			return mat3(
@@ -493,7 +493,7 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// 2Â÷¿ø Å©±â º¯È¯ Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 2ì°¨ì› í¬ê¸° ë³€í™˜ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat3 scale(const vec2& t) {
 			return mat3(
@@ -503,7 +503,7 @@ namespace onart {
 			);
 		}
 		/// <summary>
-		/// 2Â÷¿ø Å©±â º¯È¯ Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 2ì°¨ì› í¬ê¸° ë³€í™˜ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat3 scale(float x, float y) {
 			return mat3(
@@ -514,7 +514,7 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// ZÃà ±âÁØÀÇ 2Â÷¿ø È¸ÀüÀ» ¸®ÅÏÇÕ´Ï´Ù. X, Y Ãà ¹æÇâÀ» ¿øÇÏ´Â °æ¿ì 3x3 ¾ÆÇÉ º¯È¯ÀÌ ¾Æ´Ñ 4x4 ¾ÆÇÉ º¯È¯À» »ç¿ëÇØ¾ß ÇÕ´Ï´Ù.
+		/// Zì¶• ê¸°ì¤€ì˜ 2ì°¨ì› íšŒì „ì„ ë¦¬í„´í•©ë‹ˆë‹¤. X, Y ì¶• ë°©í–¥ì„ ì›í•˜ëŠ” ê²½ìš° 3x3 ì•„í•€ ë³€í™˜ì´ ì•„ë‹Œ 4x4 ì•„í•€ ë³€í™˜ì„ ì‚¬ìš©í•´ì•¼ í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat3 rotate(float z) {
 			return mat3(
@@ -525,53 +525,53 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// 3Â÷¿ø È¸ÀüÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// 3ì°¨ì› íšŒì „ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="roll">roll(XÃà ¹æÇâ È¸Àü)</param>
-		/// <param name="pitch">pitch(YÃà ¹æÇâ È¸Àü)</param>
-		/// <param name="yaw">yaw(ZÃà ¹æÇâ È¸Àü)</param>
+		/// <param name="roll">roll(Xì¶• ë°©í–¥ íšŒì „)</param>
+		/// <param name="pitch">pitch(Yì¶• ë°©í–¥ íšŒì „)</param>
+		/// <param name="yaw">yaw(Zì¶• ë°©í–¥ íšŒì „)</param>
 		inline static mat3 rotate(float roll, float pitch, float yaw);
 	};
 
 	/// <summary>
-	/// 3Â÷¿ø ¸ğµ¨ÀÇ ¾ÆÇÉ º¯È¯À» À§ÇÑ 4x4 Çà·ÄÀÔ´Ï´Ù.
+	/// 3ì°¨ì› ëª¨ë¸ì˜ ì•„í•€ ë³€í™˜ì„ ìœ„í•œ 4x4 í–‰ë ¬ì…ë‹ˆë‹¤.
 	/// </summary>
 	struct mat4 {
 		union { float a[16]; struct { float _11, _12, _13, _14, _21, _22, _23, _24, _31, _32, _33, _34, _41, _42, _43, _44; }; };
 
 		/// <summary>
-		/// ´ÜÀ§Çà·ÄÀ» »ı¼ºÇÕ´Ï´Ù.
+		/// ë‹¨ìœ„í–‰ë ¬ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = _44 = 1; }
 
 		/// <summary>
-		/// Çà ¿ì¼± ¼ø¼­·Î ¸Å°³º¯¼ö¸¦ ÁÖ¾î Çà·ÄÀ» »ı¼ºÇÕ´Ï´Ù.
+		/// í–‰ ìš°ì„  ìˆœì„œë¡œ ë§¤ê°œë³€ìˆ˜ë¥¼ ì£¼ì–´ í–‰ë ¬ì„ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4(float _11, float _12, float _13, float _14, float _21, float _22, float _23, float _24, float _31, float _32, float _33, float _34, float _41, float _42, float _43, float _44) :_11(_11), _12(_12), _13(_13), _14(_14), _21(_21), _22(_22), _23(_23), _24(_24), _31(_31), _32(_32), _33(_33), _34(_34), _41(_41), _42(_42), _43(_43), _44(_44) { }
 
 		/// <summary>
-		/// Çà·ÄÀÇ ¼ººĞÀ» º¹»çÇØ¼­ »ı¼ºÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì˜ ì„±ë¶„ì„ ë³µì‚¬í•´ì„œ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4(const mat4& m) { memcpy(a, m.a, sizeof(a)); }
 
 		/// <summary>
-		/// ÀÎµ¦½º ¿¬»êÀÚ
+		/// ì¸ë±ìŠ¤ ì—°ì‚°ì
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
 
 		/// <summary>
-		/// Çà·ÄÀ» ´ÜÀ§Çà·Ä·Î ¹Ù²ß´Ï´Ù.
+		/// í–‰ë ¬ì„ ë‹¨ìœ„í–‰ë ¬ë¡œ ë°”ê¿‰ë‹ˆë‹¤.
 		/// </summary>
 		inline void toI() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = _44 = 1; }
 
 		/// <summary>
-		/// ´ÜÀ§Çà·ÄÀÌ¸é true¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë‹¨ìœ„í–‰ë ¬ì´ë©´ trueë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline bool isI() const { return memcmp(mat4().a, a, sizeof(a)) == 0; }
 
 		/// <summary>
-		/// ´Ù¸¥ Çà·Ä°ú ¼ººĞº°·Î ´õÇÏ°Å³ª »®´Ï´Ù.
+		/// ë‹¤ë¥¸ í–‰ë ¬ê³¼ ì„±ë¶„ë³„ë¡œ ë”í•˜ê±°ë‚˜ ëºë‹ˆë‹¤.
 		/// </summary>
 		inline mat4& operator+=(const mat4& m) { add4<float>(a, m.a); add4<float>(a + 4, m.a + 4); add4<float>(a + 8, m.a + 8); add4<float>(a + 12, m.a + 12); return *this; }
 		inline mat4& operator-=(const mat4& m) { sub4<float>(a, m.a); sub4<float>(a + 4, m.a + 4); sub4<float>(a + 8, m.a + 8); sub4<float>(a + 12, m.a + 12); return *this; }
@@ -579,19 +579,19 @@ namespace onart {
 		inline mat4 operator-(const mat4& m) const { auto r = mat4(*this); r -= m; return r; }
 
 		/// <summary>
-		/// nÇà º¤ÅÍ¸¦ ¸®ÅÏÇÕ´Ï´Ù. 1~4¸¸ ÀÔ·Â °¡´ÉÇÕ´Ï´Ù.
+		/// ní–‰ ë²¡í„°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. 1~4ë§Œ ì…ë ¥ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="i">Çà ÀÎµ¦½º(1 base)</param>
+		/// <param name="i">í–‰ ì¸ë±ìŠ¤(1 base)</param>
 		inline vec4 row(int i) const { assert(i <= 4 && i >= 1); int st = 4 * i - 4; vec4 ret; memcpy(ret.entry, a + st, sizeof(ret.entry)); return ret; }
 
 		/// <summary>
-		/// n¿­ º¤ÅÍ¸¦ ¸®ÅÏÇÕ´Ï´Ù. 1~4¸¸ ÀÔ·Â °¡´ÉÇÕ´Ï´Ù.
+		/// nì—´ ë²¡í„°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤. 1~4ë§Œ ì…ë ¥ ê°€ëŠ¥í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="i">¿­ ÀÎµ¦½º(1 base)</param>
+		/// <param name="i">ì—´ ì¸ë±ìŠ¤(1 base)</param>
 		inline vec4 col(int i) const { assert(i <= 4 && i >= 1); return vec4(a[i - 1], a[i + 3], a[i + 7], a[i + 11]); }
 
 		/// <summary>
-		/// Çà·Ä°öÀ» ¼öÇàÇÕ´Ï´Ù.
+		/// í–‰ë ¬ê³±ì„ ìˆ˜í–‰í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4 operator*(const mat4& m) const {
 			mat4 ret;
@@ -606,19 +606,19 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// Çà·Ä°öÀ» ¼öÇàÇÕ´Ï´Ù.
+		/// í–‰ë ¬ê³±ì„ ìˆ˜í–‰í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4& operator*=(const mat4& m) { return *this = operator*(m); }
 
 		/// <summary>
-		/// º¤ÅÍ¿¡ ¼±Çüº¯È¯À» Àû¿ëÇÏ¿© ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë²¡í„°ì— ì„ í˜•ë³€í™˜ì„ ì ìš©í•˜ì—¬ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline vec4 operator*(const vec4& v) const { 
 			return vec4(row(1).dot2(v), row(2).dot2(v), row(3).dot2(v), row(4).dot2(v));
 		}
 
 		/// <summary>
-		/// Çà·Ä¿¡ ½Ç¼ö¹è¸¦ ÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì— ì‹¤ìˆ˜ë°°ë¥¼ í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4& operator*=(float f) { mulAll(a, f, 16); return *this; }
 		inline mat4 operator*(float f) const { mat4 r(*this); r *= f; return r; }
@@ -626,7 +626,7 @@ namespace onart {
 		inline mat4 operator/(float f) const { mat4 r(*this); r /= f; return r; }
 
 		/// <summary>
-		/// Çà·Ä½ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì‹ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float det() const {
 			return 
@@ -639,18 +639,18 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// Çà·ÄÀÇ ´ë°¢¼± ¼ººĞ ÇÕÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// í–‰ë ¬ì˜ ëŒ€ê°ì„  ì„±ë¶„ í•©ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float trace() const { return _11 + _22 + _33 + _44; }
 		
 		/// <summary>
-		/// ÁÂÃø »ó´Ü 3x3 Çà·Ä·Î Ä³½ºÆ®ÇÕ´Ï´Ù.
+		/// ì¢Œì¸¡ ìƒë‹¨ 3x3 í–‰ë ¬ë¡œ ìºìŠ¤íŠ¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline operator mat3() const { return mat3(_11, _12, _13, _21, _22, _23, _31, _32, _33); }
 
 		/// <summary>
-		/// ¾ÆÇÉ º¯È¯ÀÇ ¿ªÇà·ÄÀ» Á¶±İ ´õ È¿À²ÀûÀ¸·Î ±¸ÇÕ´Ï´Ù.
-		/// ÂüÁ¶: mat4::iTRS()
+		/// ì•„í•€ ë³€í™˜ì˜ ì—­í–‰ë ¬ì„ ì¡°ê¸ˆ ë” íš¨ìœ¨ì ìœ¼ë¡œ êµ¬í•©ë‹ˆë‹¤.
+		/// ì°¸ì¡°: mat4::iTRS()
 		/// </summary>
 		inline mat4 affineInverse() const {
 			//https://stackoverflow.com/questions/2624422/efficient-4x4-matrix-inverse-affine-transform
@@ -665,11 +665,11 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// ¿ªÇà·ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// ì—­í–‰ë ¬ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4 inverse() const {
 			float d = det();
-			if (d == 0) printf("%p: ÀÌ Çà·ÄÀº ¿ªÇà·ÄÀÌ ¾ø°Å³ª ¸Å¿ì Å« ¼ººĞÀ» °¡Áı´Ï´Ù. NaN¿¡ ÀÇÇØ ¿¹±âÄ¡ ¸øÇÑ µ¿ÀÛÀÌ ¹ß»ıÇÒ ¼ö ÀÖ½À´Ï´Ù.\n", this);
+			if (d == 0) printf("%p: ì´ í–‰ë ¬ì€ ì—­í–‰ë ¬ì´ ì—†ê±°ë‚˜ ë§¤ìš° í° ì„±ë¶„ì„ ê°€ì§‘ë‹ˆë‹¤. NaNì— ì˜í•´ ì˜ˆê¸°ì¹˜ ëª»í•œ ë™ì‘ì´ ë°œìƒí•  ìˆ˜ ìˆìŠµë‹ˆë‹¤.\n", this);
 			return mat4(
 				(_32 * _43 * _24 - _42 * _33 * _24 + _42 * _23 * _34 - _22 * _43 * _34 - _32 * _23 * _44 + _22 * _33 * _44),
 				(_42 * _33 * _14 - _32 * _43 * _14 - _42 * _13 * _34 + _12 * _43 * _34 + _32 * _13 * _44 - _12 * _33 * _44),
@@ -693,18 +693,18 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// ÀüÄ¡ Çà·ÄÀ» ¹İÈ¯ÇÕ´Ï´Ù.
+		/// ì „ì¹˜ í–‰ë ¬ì„ ë°˜í™˜í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4 transpose() const { return mat4(_11, _21, _31, _41, _12, _22, _32, _42, _13, _23, _33, _43, _14, _24, _34, _44); }
 
 		/// <summary>
-		/// Çà ¿ì¼± ¼ø¼­·Î µÈ ¹è¿­À» ¸®ÅÏÇÕ´Ï´Ù.
+		/// í–‰ ìš°ì„  ìˆœì„œë¡œ ëœ ë°°ì—´ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline operator float* () { return a; }
 		inline operator const float* () const { return a; }
 
 		/// <summary>
-		/// 3Â÷¿ø º´Áø Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 3ì°¨ì› ë³‘ì§„ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat4 translate(const vec3& t) {
 			return mat4(
@@ -715,7 +715,7 @@ namespace onart {
 			);
 		}
 		/// <summary>
-		/// 3Â÷¿ø º´Áø Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 3ì°¨ì› ë³‘ì§„ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat4 translate(float x, float y, float z) {
 			return mat4(
@@ -727,7 +727,7 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// 3Â÷¿ø Å©±â º¯È¯ Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 3ì°¨ì› í¬ê¸° ë³€í™˜ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat4 scale(const vec3& t) {
 			return mat4(
@@ -738,7 +738,7 @@ namespace onart {
 			);
 		}
 		/// <summary>
-		/// 3Â÷¿ø Å©±â º¯È¯ Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 3ì°¨ì› í¬ê¸° ë³€í™˜ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat4 scale(float x, float y, float z) {
 			return mat4(
@@ -750,29 +750,29 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// 3Â÷¿ø È¸Àü Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// 3ì°¨ì› íšŒì „ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat4 rotate(const vec3& axis, float angle);
 
 		/// <summary>
-		/// 3Â÷¿ø È¸Àü Çà·ÄÀ» °è»êÇÕ´Ï´Ù. cf) ¿À¸¥¼Õ ¹ıÄ¢
+		/// 3ì°¨ì› íšŒì „ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤. cf) ì˜¤ë¥¸ì† ë²•ì¹™
 		/// </summary>
-		/// <param name="roll">roll(XÃà ¹æÇâ È¸Àü)</param>
-		/// <param name="pitch">pitch(YÃà ¹æÇâ È¸Àü)</param>
-		/// <param name="yaw">yaw(ZÃà ¹æÇâ È¸Àü)</param>
+		/// <param name="roll">roll(Xì¶• ë°©í–¥ íšŒì „)</param>
+		/// <param name="pitch">pitch(Yì¶• ë°©í–¥ íšŒì „)</param>
+		/// <param name="yaw">yaw(Zì¶• ë°©í–¥ íšŒì „)</param>
 		inline static mat4 rotate(float roll, float pitch, float yaw);
 
 		/// <summary>
-		/// 3Â÷¿ø È¸Àü »ç¿ø¼ö¸¦ Çà·Ä ÇüÅÂ·Î ¸®ÅÏÇÕ´Ï´Ù.
+		/// 3ì°¨ì› íšŒì „ ì‚¬ì›ìˆ˜ë¥¼ í–‰ë ¬ í˜•íƒœë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline static mat4 rotate(const Quaternion& q);
 
 		/// <summary>
-		/// lookAt Çü½ÄÀÇ ºä Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
+		/// lookAt í˜•ì‹ì˜ ë·° í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="eye">´«ÀÇ À§Ä¡</param>
-		/// <param name="at">ÇÇ»çÃ¼ À§Ä¡</param>
-		/// <param name="up">À§ÂÊ ¹æÇâ: È­¸é »ó¿¡¼­ À§ÂÊ ¹æÇâÀÌ ÀÌ º¤ÅÍÀÇ ¹æÇâ°ú ºñ½ÁÇØÁı´Ï´Ù.</param>
+		/// <param name="eye">ëˆˆì˜ ìœ„ì¹˜</param>
+		/// <param name="at">í”¼ì‚¬ì²´ ìœ„ì¹˜</param>
+		/// <param name="up">ìœ„ìª½ ë°©í–¥: í™”ë©´ ìƒì—ì„œ ìœ„ìª½ ë°©í–¥ì´ ì´ ë²¡í„°ì˜ ë°©í–¥ê³¼ ë¹„ìŠ·í•´ì§‘ë‹ˆë‹¤.</param>
 		inline static mat4 lookAt(const vec3& eye, const vec3& at, const vec3& up) {
 			vec3 n = (eye - at).normalize();
 			vec3 u = cross(up, n).normalize();
@@ -785,28 +785,28 @@ namespace onart {
 				);
 		}
 		/// <summary>
-		/// º´Áø, È¸Àü, ¹èÀ² Çà·Ä T, R, S¸¦ ±¸ÇÑ ÈÄ °öÇÏ´Â °Íº¸´Ù Á¶±İ ´õ ºü¸£°Ô °è»êÇÕ´Ï´Ù.
+		/// ë³‘ì§„, íšŒì „, ë°°ìœ¨ í–‰ë ¬ T, R, Së¥¼ êµ¬í•œ í›„ ê³±í•˜ëŠ” ê²ƒë³´ë‹¤ ì¡°ê¸ˆ ë” ë¹ ë¥´ê²Œ ê³„ì‚°í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="translation">º´Áø</param>
-		/// <param name="rotation">È¸Àü</param>
-		/// <param name="scale">¹èÀ²</param>
+		/// <param name="translation">ë³‘ì§„</param>
+		/// <param name="rotation">íšŒì „</param>
+		/// <param name="scale">ë°°ìœ¨</param>
 		inline static mat4 TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale);
 		/// <summary>
-		/// ÁÖ¾îÁø º´Áø, È¸Àü, ¹èÀ²À» Æ÷ÇÔÇÏ´Â ¾ÆÇÉ º¯È¯ÀÇ ¿ªº¯È¯À» ´Ü¼ø°è»êº¸´Ù Á¶±İ ºü¸£°Ô °è»êÇÕ´Ï´Ù. ¿ªº¯È¯ÀÌ ¾ø´Â °æ¿ì(ex: ¹èÀ²¿¡ ¿µÀÌ ÀÖÀ½)
-		/// ºñÁ¤»óÀûÀÎ °ªÀÌ ¸®ÅÏµÉ °ÍÀÔ´Ï´Ù.
+		/// ì£¼ì–´ì§„ ë³‘ì§„, íšŒì „, ë°°ìœ¨ì„ í¬í•¨í•˜ëŠ” ì•„í•€ ë³€í™˜ì˜ ì—­ë³€í™˜ì„ ë‹¨ìˆœê³„ì‚°ë³´ë‹¤ ì¡°ê¸ˆ ë¹ ë¥´ê²Œ ê³„ì‚°í•©ë‹ˆë‹¤. ì—­ë³€í™˜ì´ ì—†ëŠ” ê²½ìš°(ex: ë°°ìœ¨ì— ì˜ì´ ìˆìŒ)
+		/// ë¹„ì •ìƒì ì¸ ê°’ì´ ë¦¬í„´ë  ê²ƒì…ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="translation">º´Áø</param>
-		/// <param name="rotation">È¸Àü</param>
-		/// <param name="scale">¹èÀ²</param>
+		/// <param name="translation">ë³‘ì§„</param>
+		/// <param name="rotation">íšŒì „</param>
+		/// <param name="scale">ë°°ìœ¨</param>
 		inline static mat4 iTRS(const vec3& translation, const Quaternion& rotation, const vec3& scale);
 		/// <summary>
-		/// Ç¥ÁØ ºä º¼·ı Á÷À°¸éÃ¼¿¡ µé¾î¿Ã ´ë»ó »Ô´ë(ÀıµÎÃ¼)¸¦ Á¶ÀıÇÏ´Â Åõ»ç Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
-		/// ¼ø¼ö 2D °ÔÀÓÀ» ¸¸µå´Â °æ¿ì, ´ÜÀ§ Çà·Ä¿¡ aspect¸¸ Àû¿ëÇÏ¸é µË´Ï´Ù.
+		/// í‘œì¤€ ë·° ë³¼ë¥¨ ì§ìœ¡ë©´ì²´ì— ë“¤ì–´ì˜¬ ëŒ€ìƒ ë¿”ëŒ€(ì ˆë‘ì²´)ë¥¼ ì¡°ì ˆí•˜ëŠ” íˆ¬ì‚¬ í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
+		/// ìˆœìˆ˜ 2D ê²Œì„ì„ ë§Œë“œëŠ” ê²½ìš°, ë‹¨ìœ„ í–‰ë ¬ì— aspectë§Œ ì ìš©í•˜ë©´ ë©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="fovy">field of view Y: »Ô´ëÀÇ YÃà ¹æÇâ(È­¸é ±âÁØ ¼¼·Î) ¶óµğ¾È °¢µµÀÔ´Ï´Ù.</param>
-		/// <param name="aspect">Ç¥½Ã ºäÆ÷Æ® ºñÀ²(°¡·Î/¼¼·Î)ÀÔ´Ï´Ù.</param>
-		/// <param name="dnear">»Ô´ë¿¡¼­ °¡Àå °¡±î¿î °Å¸®ÀÔ´Ï´Ù. ÀÌ ÀÌÇÏÀÇ °Å¸®´Â º¸´Â ´«º¸´Ù µÚ¿¡ ÀÖ´Â °ÍÀ¸·Î Ä¨´Ï´Ù.</param>
-		/// <param name="dfar">»Ô´ë¿¡¼­ °¡Àå ¸Õ °Å¸®ÀÔ´Ï´Ù. ÀÌ ÀÌ»óÀÇ °Å¸®´Â º¸ÀÌÁö ¾Ê½À´Ï´Ù.</param>
+		/// <param name="fovy">field of view Y: ë¿”ëŒ€ì˜ Yì¶• ë°©í–¥(í™”ë©´ ê¸°ì¤€ ì„¸ë¡œ) ë¼ë””ì•ˆ ê°ë„ì…ë‹ˆë‹¤.</param>
+		/// <param name="aspect">í‘œì‹œ ë·°í¬íŠ¸ ë¹„ìœ¨(ê°€ë¡œ/ì„¸ë¡œ)ì…ë‹ˆë‹¤.</param>
+		/// <param name="dnear">ë¿”ëŒ€ì—ì„œ ê°€ì¥ ê°€ê¹Œìš´ ê±°ë¦¬ì…ë‹ˆë‹¤. ì´ ì´í•˜ì˜ ê±°ë¦¬ëŠ” ë³´ëŠ” ëˆˆë³´ë‹¤ ë’¤ì— ìˆëŠ” ê²ƒìœ¼ë¡œ ì¹©ë‹ˆë‹¤.</param>
+		/// <param name="dfar">ë¿”ëŒ€ì—ì„œ ê°€ì¥ ë¨¼ ê±°ë¦¬ì…ë‹ˆë‹¤. ì´ ì´ìƒì˜ ê±°ë¦¬ëŠ” ë³´ì´ì§€ ì•ŠìŠµë‹ˆë‹¤.</param>
 		inline static mat4 perspective(float fovy, float aspect, float dnear, float dfar) {
 			mat4 r(
 				1, 0, 0, 0,
@@ -819,11 +819,11 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// ÇÑ Á÷»ç°¢ÇüÀ» ´Ù¸¥ Á÷»ç°¢ÇüÀ¸·Î º¯È¯ÇÏ´Â Çà·ÄÀ» °è»êÇÕ´Ï´Ù. Á÷»ç°¢ÇüÀÇ Çü½ÄÀº ÁÂ-ÇÏ-Æø-³ôÀÌÀÔ´Ï´Ù. z ÁÂÇ¥´Â µ¿ÀÏÇÏ´Ù°í °¡Á¤ÇÏ¿© xy Æò¸é¿¡¼­¸¸ ÀÌµ¿ÇÕ´Ï´Ù.
+		/// í•œ ì§ì‚¬ê°í˜•ì„ ë‹¤ë¥¸ ì§ì‚¬ê°í˜•ìœ¼ë¡œ ë³€í™˜í•˜ëŠ” í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤. ì§ì‚¬ê°í˜•ì˜ í˜•ì‹ì€ ì¢Œ-í•˜-í­-ë†’ì´ì…ë‹ˆë‹¤. z ì¢Œí‘œëŠ” ë™ì¼í•˜ë‹¤ê³  ê°€ì •í•˜ì—¬ xy í‰ë©´ì—ì„œë§Œ ì´ë™í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="r1">º¯È¯ Àü Á÷»ç°¢Çü</param>
-		/// <param name="r2">º¯È¯ ÈÄ Á÷»ç°¢Çü</param>
-		/// <param name="z">Á÷»ç°¢ÇüÀÌ À§Ä¡ÇÒ zÁÂÇ¥(-1ÀÌ °¡Àå °Ñ)</param>
+		/// <param name="r1">ë³€í™˜ ì „ ì§ì‚¬ê°í˜•</param>
+		/// <param name="r2">ë³€í™˜ í›„ ì§ì‚¬ê°í˜•</param>
+		/// <param name="z">ì§ì‚¬ê°í˜•ì´ ìœ„ì¹˜í•  zì¢Œí‘œ(-1ì´ ê°€ì¥ ê²‰)</param>
 		inline static mat4 r2r(const vec4& r1, const vec4& r2, float z = 0) {
 			vec4 sc = r2 / r1;	vec4 tr = r2 - r1 * vec4(sc.z, sc.w);
 			return mat4(
@@ -835,29 +835,29 @@ namespace onart {
 		}
 		
 		/// <summary>
-		/// º» ¿£Áø¿¡¼­ Mesh::get("rect")·Î Á¦°øµÇ´Â ´ÜÀ§ Á÷»ç°¢Çü(Áß½ÉÀÌ 0,0ÀÌ°í ÇÑ º¯ÀÇ ±æÀÌ°¡ 1ÀÎ Á¤»ç°¢Çü)À» ´Ù¸¥ Á÷»ç°¢ÇüÀ¸·Î º¯È¯ÇÏ´Â Çà·ÄÀ» °è»êÇÕ´Ï´Ù.
-		/// Á÷»ç°¢ÇüÀÇ Çü½ÄÀº ÁÂ-ÇÏ-Æø-³ôÀÌÀÔ´Ï´Ù. z ÁÂÇ¥´Â µ¿ÀÏÇÏ´Ù°í °¡Á¤ÇÏ¿© xy Æò¸é¿¡¼­¸¸ ÀÌµ¿ÇÕ´Ï´Ù.
+		/// ë³¸ ì—”ì§„ì—ì„œ Mesh::get("rect")ë¡œ ì œê³µë˜ëŠ” ë‹¨ìœ„ ì§ì‚¬ê°í˜•(ì¤‘ì‹¬ì´ 0,0ì´ê³  í•œ ë³€ì˜ ê¸¸ì´ê°€ 1ì¸ ì •ì‚¬ê°í˜•)ì„ ë‹¤ë¥¸ ì§ì‚¬ê°í˜•ìœ¼ë¡œ ë³€í™˜í•˜ëŠ” í–‰ë ¬ì„ ê³„ì‚°í•©ë‹ˆë‹¤.
+		/// ì§ì‚¬ê°í˜•ì˜ í˜•ì‹ì€ ì¢Œ-í•˜-í­-ë†’ì´ì…ë‹ˆë‹¤. z ì¢Œí‘œëŠ” ë™ì¼í•˜ë‹¤ê³  ê°€ì •í•˜ì—¬ xy í‰ë©´ì—ì„œë§Œ ì´ë™í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="r2">º¯È¯ ÈÄ Á÷»ç°¢Çü</param>
-		/// <param name="z">Á÷»ç°¢ÇüÀÌ À§Ä¡ÇÒ zÁÂÇ¥(-1ÀÌ °¡Àå °Ñ)</param>
+		/// <param name="r2">ë³€í™˜ í›„ ì§ì‚¬ê°í˜•</param>
+		/// <param name="z">ì§ì‚¬ê°í˜•ì´ ìœ„ì¹˜í•  zì¢Œí‘œ(-1ì´ ê°€ì¥ ê²‰)</param>
 		inline static mat4 r2r(const vec4& r2, float z = 0) {
 			return r2r(vec4(-0.5f, -0.5f, 1, 1), r2, z);
 		}
 
 		/// <summary>
-		/// ÇÑ Á÷»ç°¢Çü(L-D-W-H Çü½Ä)À» ´Ù¸¥ Á÷»ç°¢ÇüÀÇ ¾ÈÂÊ¿¡ ¸Â°Ô º¯È¯ÇÕ´Ï´Ù. Áï Áß½ÉÀ» °øÀ¯ÇÏ¸ç, ¿øº» Á÷»ç°¢ÇüÀÇ Á¾È¾ºñ´Â À¯ÁöÇÏ¸é¼­ °¡Àå Å« Á÷»ç°¢ÇüÀÌ µÇµµ·Ï ¸®ÅÏÇÕ´Ï´Ù.
+		/// í•œ ì§ì‚¬ê°í˜•(L-D-W-H í˜•ì‹)ì„ ë‹¤ë¥¸ ì§ì‚¬ê°í˜•ì˜ ì•ˆìª½ì— ë§ê²Œ ë³€í™˜í•©ë‹ˆë‹¤. ì¦‰ ì¤‘ì‹¬ì„ ê³µìœ í•˜ë©°, ì›ë³¸ ì§ì‚¬ê°í˜•ì˜ ì¢…íš¡ë¹„ëŠ” ìœ ì§€í•˜ë©´ì„œ ê°€ì¥ í° ì§ì‚¬ê°í˜•ì´ ë˜ë„ë¡ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="r1">º¯È¯ Àü Á÷»ç°¢Çü</param>
-		/// <param name="r2">º¯È¯ ÈÄ Á÷»ç°¢Çü</param>
-		/// <param name="z">Á÷»ç°¢ÇüÀÌ À§Ä¡ÇÒ zÁÂÇ¥(-1ÀÌ °¡Àå °Ñ)</param>
+		/// <param name="r1">ë³€í™˜ ì „ ì§ì‚¬ê°í˜•</param>
+		/// <param name="r2">ë³€í™˜ í›„ ì§ì‚¬ê°í˜•</param>
+		/// <param name="z">ì§ì‚¬ê°í˜•ì´ ìœ„ì¹˜í•  zì¢Œí‘œ(-1ì´ ê°€ì¥ ê²‰)</param>
 		inline static mat4 r2r2(const vec4& r1, const vec4& r2, float z = 0) {
 			float r = r1.width / r1.height;
 			vec4 targ(r2);
-			if (targ.width < targ.height * r) {	// ¼¼·Î¼±À» ¸ÂÃâ °Í
+			if (targ.width < targ.height * r) {	// ì„¸ë¡œì„ ì„ ë§ì¶œ ê²ƒ
 				targ.down += (targ.height - targ.width / r) / 2;
 				targ.height = targ.width / r;
 			}
-			else {	// °¡·Î¼±À» ¸ÂÃâ °Í
+			else {	// ê°€ë¡œì„ ì„ ë§ì¶œ ê²ƒ
 				targ.left += (targ.width - targ.height * r) / 2;
 				targ.width = targ.height * r;
 			}
@@ -866,7 +866,7 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 3Â÷¿ø È¸Àü µîÀ» Ç¥ÇöÇÏ´Â »ç¿ø¼öÀÔ´Ï´Ù. 1, i, j, k ºÎºĞ¿¡ ÇØ´çÇÏ´Â c1, ci, cj, ck ¸â¹ö¸¦ °¡Áı´Ï´Ù.
+	/// 3ì°¨ì› íšŒì „ ë“±ì„ í‘œí˜„í•˜ëŠ” ì‚¬ì›ìˆ˜ì…ë‹ˆë‹¤. 1, i, j, k ë¶€ë¶„ì— í•´ë‹¹í•˜ëŠ” c1, ci, cj, ck ë©¤ë²„ë¥¼ ê°€ì§‘ë‹ˆë‹¤.
 	/// </summary>
 	struct Quaternion {
 		union {
@@ -875,46 +875,46 @@ namespace onart {
 		};
 
 		/// <summary>
-		/// »ç¿ø¼ö¸¦ »ı¼ºÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="o">½Ç¼öºÎºĞ</param>
-		/// <param name="i">iºÎºĞ</param>
-		/// <param name="j">jºÎºĞ</param>
-		/// <param name="k">kºÎºĞ</param>
+		/// <param name="o">ì‹¤ìˆ˜ë¶€ë¶„</param>
+		/// <param name="i">ië¶€ë¶„</param>
+		/// <param name="j">jë¶€ë¶„</param>
+		/// <param name="k">kë¶€ë¶„</param>
 		inline Quaternion(float o = 1, float i = 0, float j = 0, float k = 0) :c1(o), ci(i), cj(j), ck(k) {};
 
 		/// <summary>
-		/// »ç¿ø¼ö¸¦ º¹»çÇØ¼­ »ı¼ºÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ë¥¼ ë³µì‚¬í•´ì„œ ìƒì„±í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline Quaternion(const Quaternion& q) { set4<float>(&c1, &(q.c1)); }
 
 		/// <summary>
-		/// »ç¿ø¼ö Å©±âÀÇ Á¦°öÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ í¬ê¸°ì˜ ì œê³±ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline float abs2() const { return reinterpret_cast<const vec4*>(this)->length2(); }
 
 		/// <summary>
-		/// »ç¿ø¼ö Å©±â¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ í¬ê¸°ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary
 		inline float abs() const { return sqrtf(abs2()); }
 
 		/// <summary>
-		/// »ç¿ø¼ö°¡ ¹«È¸ÀüÀÎÁö È®ÀÎÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ê°€ ë¬´íšŒì „ì¸ì§€ í™•ì¸í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline bool is1() const { return c1 == 1 && ci == 0 && cj == 0 && ck == 0; }
 
 		/// <summary>
-		/// ÄÓ·¹(°ø¾×)»ç¿ø¼ö¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì¼¤ë ˆ(ê³µì•¡)ì‚¬ì›ìˆ˜ë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline Quaternion conjugate() const { return Quaternion(c1, -ci, -cj, -ck); }
 
 		/// <summary>
-		/// »ç¿ø¼öÀÇ ¿ìÃø¿¡ °öÇÏ¸é 1ÀÌ µÇ´Â °ªÀ» ¸®ÅÏÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ì˜ ìš°ì¸¡ì— ê³±í•˜ë©´ 1ì´ ë˜ëŠ” ê°’ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline Quaternion inverse() const { return conjugate() / abs2(); }
 
 		/// <summary>
-		/// »ç¿ø¼ö °ö¼À ¿¬»êÀÚÀÔ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ ê³±ì…ˆ ì—°ì‚°ìì…ë‹ˆë‹¤.
 		/// </summary>
 		inline Quaternion operator*(const Quaternion& q) const {
 			Quaternion q_c1 = q * c1;
@@ -925,7 +925,7 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// »ç¿ø¼ö °£ »çÄ¢ ¿¬»êÀÔ´Ï´Ù. ¸ğµç ¿¬»êÀº ÀÌ »ç¿ø¼ö¸¦ ±âÁØÀ¸·Î ¿ìÃø¿¡ Àû¿ëµË´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ ê°„ ì‚¬ì¹™ ì—°ì‚°ì…ë‹ˆë‹¤. ëª¨ë“  ì—°ì‚°ì€ ì´ ì‚¬ì›ìˆ˜ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ìš°ì¸¡ì— ì ìš©ë©ë‹ˆë‹¤.
 		/// </summary>
 		inline Quaternion& operator+=(const Quaternion& q) { add4<float>(&c1, &(q.c1)); return *this; }
 		inline Quaternion& operator-=(const Quaternion& q) { sub4<float>(&c1, &(q.c1)); return *this; }
@@ -940,24 +940,24 @@ namespace onart {
 		inline Quaternion operator/(const Quaternion& q) const { Quaternion r(*this); r /= q; return r; }
 
 		/// <summary>
-		/// »ç¿ø¼öÀÇ ºÎÈ£¸¦ ¹İ´ë·Î ÇÕ´Ï´Ù. 180µµ µÚÁıÀº °Í°ú µ¿ÀÏÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ì˜ ë¶€í˜¸ë¥¼ ë°˜ëŒ€ë¡œ í•©ë‹ˆë‹¤. 180ë„ ë’¤ì§‘ì€ ê²ƒê³¼ ë™ì¼í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline Quaternion operator-() const { return Quaternion(-c1, -ci, -cj, -ck); }
 
 		/// <summary>
-		/// »ç¿ø¼ö È¸ÀüÀ» ÇÕÄ¨´Ï´Ù. ±âÁ¸ »ç¿ø¼ö°¡ ¸ÕÀú Àû¿ëµÇ¸ç Å©±â 1ÀÓÀ» È®ÀÎÇÏÁö ¾Ê½À´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ íšŒì „ì„ í•©ì¹©ë‹ˆë‹¤. ê¸°ì¡´ ì‚¬ì›ìˆ˜ê°€ ë¨¼ì € ì ìš©ë˜ë©° í¬ê¸° 1ì„ì„ í™•ì¸í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.
 		/// </summary>
 		inline void compound(const Quaternion& q) { *this = q * (*this); }
 
 		/// <summary>
-		/// »ç¿ø¼ö È¸ÀüÀ» ÇÕÄ¨´Ï´Ù. ±âÁ¸ »ç¿ø¼ö°¡ ¸ÕÀú Àû¿ëµË´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ íšŒì „ì„ í•©ì¹©ë‹ˆë‹¤. ê¸°ì¡´ ì‚¬ì›ìˆ˜ê°€ ë¨¼ì € ì ìš©ë©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="axis">È¸ÀüÃà</param>
-		/// <param name="angle">È¸Àü°¢(¶óµğ¾È)</param>
+		/// <param name="axis">íšŒì „ì¶•</param>
+		/// <param name="angle">íšŒì „ê°(ë¼ë””ì•ˆ)</param>
 		inline void compound(const vec3& axis, float angle) { auto q = rotation(axis, angle); compound(q); }
 
 		/// <summary>
-		/// »ç¿ø¼ö¸¦ È¸Àü Çà·Ä·Î º¯ÇüÇÕ´Ï´Ù.
+		/// ì‚¬ì›ìˆ˜ë¥¼ íšŒì „ í–‰ë ¬ë¡œ ë³€í˜•í•©ë‹ˆë‹¤.
 		/// </summary>
 		inline mat4 toMat4() const {
 
@@ -974,8 +974,8 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// Ã¹ ¼ººĞ¿¡ È¸Àü°¢(¶óµğ¾È), ³ª¸ÓÁö ¼ººĞ¿¡ 3Â÷¿ø È¸ÀüÃàÀ» ´ã¾Æ ¸®ÅÏÇÕ´Ï´Ù.
-		/// ºÎµ¿¼Ò¼öÁ¡ Á¤¹Ğµµ ¹®Á¦¸¦ °í·ÁÇÏ¿© Á¤±ÔÈ­ÇÏ¿© °è»êÇÕ´Ï´Ù. È¸Àü»ç¿ø¼ö°¡ ¾Æ´Ï¶óµµ nanÀÌ ¹ß»ıÇÏÁö ¾ÊÀ¸¹Ç·Î ÁÖÀÇÇÏ¼¼¿ä.
+		/// ì²« ì„±ë¶„ì— íšŒì „ê°(ë¼ë””ì•ˆ), ë‚˜ë¨¸ì§€ ì„±ë¶„ì— 3ì°¨ì› íšŒì „ì¶•ì„ ë‹´ì•„ ë¦¬í„´í•©ë‹ˆë‹¤.
+		/// ë¶€ë™ì†Œìˆ˜ì  ì •ë°€ë„ ë¬¸ì œë¥¼ ê³ ë ¤í•˜ì—¬ ì •ê·œí™”í•˜ì—¬ ê³„ì‚°í•©ë‹ˆë‹¤. íšŒì „ì‚¬ì›ìˆ˜ê°€ ì•„ë‹ˆë¼ë„ nanì´ ë°œìƒí•˜ì§€ ì•Šìœ¼ë¯€ë¡œ ì£¼ì˜í•˜ì„¸ìš”.
 		/// </summary>
 		inline vec4 axis() const {
 			Quaternion ax = *this / abs();
@@ -987,8 +987,8 @@ namespace onart {
 		}
 		
 		/// <summary>
-		/// ÀÌ È¸ÀüÀÇ ¿ÀÀÏ·¯ °¢ (x,y,z¼ø)ÀÇ ÇüÅÂ·Î ¸®ÅÏÇÕ´Ï´Ù.
-		/// ºÎµ¿¼Ò¼öÁ¡ Á¤¹Ğµµ ¹®Á¦¸¦ °í·ÁÇÏ¿© Á¤±ÔÈ­ÇÏ¿© °è»êÇÕ´Ï´Ù. È¸Àü»ç¿ø¼ö°¡ ¾Æ´Ï¶óµµ nanÀÌ ¹ß»ıÇÏÁö ¾ÊÀ¸¹Ç·Î ÁÖÀÇÇÏ¼¼¿ä.
+		/// ì´ íšŒì „ì˜ ì˜¤ì¼ëŸ¬ ê° (x,y,zìˆœ)ì˜ í˜•íƒœë¡œ ë¦¬í„´í•©ë‹ˆë‹¤.
+		/// ë¶€ë™ì†Œìˆ˜ì  ì •ë°€ë„ ë¬¸ì œë¥¼ ê³ ë ¤í•˜ì—¬ ì •ê·œí™”í•˜ì—¬ ê³„ì‚°í•©ë‹ˆë‹¤. íšŒì „ì‚¬ì›ìˆ˜ê°€ ì•„ë‹ˆë¼ë„ nanì´ ë°œìƒí•˜ì§€ ì•Šìœ¼ë¯€ë¡œ ì£¼ì˜í•˜ì„¸ìš”.
 		/// https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_angles_conversion
 		/// </summary>
 		inline vec3 toEuler() const {
@@ -1008,10 +1008,10 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// Ãà°ú °¢ÀÌ ÁÖ¾îÁ³À» ¶§ È¸Àü°ªÀ» ¸®ÅÏÇÕ´Ï´Ù. È¸ÀüÃàÀº Á¤±ÔÈ­°¡ ÀÌ·ç¾îÁı´Ï´Ù.
+		/// ì¶•ê³¼ ê°ì´ ì£¼ì–´ì¡Œì„ ë•Œ íšŒì „ê°’ì„ ë¦¬í„´í•©ë‹ˆë‹¤. íšŒì „ì¶•ì€ ì •ê·œí™”ê°€ ì´ë£¨ì–´ì§‘ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="axis">È¸ÀüÃà</param>
-		/// <param name="angle">È¸Àü°¢(¶óµğ¾È)</param>
+		/// <param name="axis">íšŒì „ì¶•</param>
+		/// <param name="angle">íšŒì „ê°(ë¼ë””ì•ˆ)</param>
 		inline static Quaternion rotation(const vec3& axis, float angle) {
 			float c = cosf(angle / 2), s = sinf(angle / 2);
 			auto nv = axis.normalize() * s;
@@ -1019,12 +1019,12 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// ¿ÀÀÏ·¯ È¸Àü¿¡ ÇØ´çÇÏ´Â »ç¿ø¼ö¸¦ »ı¼ºÇÕ´Ï´Ù. cf) ¿À¸¥¼Õ ¹ıÄ¢
+		/// ì˜¤ì¼ëŸ¬ íšŒì „ì— í•´ë‹¹í•˜ëŠ” ì‚¬ì›ìˆ˜ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. cf) ì˜¤ë¥¸ì† ë²•ì¹™
 		/// <para>https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles</para>
 		/// </summary>
-		/// <param name="roll">roll(XÃà ¹æÇâ È¸Àü)</param>
-		/// <param name="yaw">yaw(ZÃà ¹æÇâ È¸Àü)</param>
-		/// <param name="pitch">pitch(YÃà ¹æÇâ È¸Àü)</param>
+		/// <param name="roll">roll(Xì¶• ë°©í–¥ íšŒì „)</param>
+		/// <param name="yaw">yaw(Zì¶• ë°©í–¥ íšŒì „)</param>
+		/// <param name="pitch">pitch(Yì¶• ë°©í–¥ íšŒì „)</param>
 		inline static Quaternion euler(float roll, float pitch, float yaw) {
 			vec3 cypr(yaw, pitch, roll), sypr(cypr);
 			float cy = cosf(yaw / 2);	float sy = sinf(yaw / 2);
@@ -1037,32 +1037,32 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// »ç¿ø¼öÀÇ ¼±Çü º¸°£À» ¸®ÅÏÇÕ´Ï´Ù.
+	/// ì‚¬ì›ìˆ˜ì˜ ì„ í˜• ë³´ê°„ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="q1">¼±Çü º¸°£ ´ë»ó 1(t=0¿¡ °¡±î¿ï¼ö·Ï ÀÌ°Í¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="q2">¼±Çü º¸°£ ´ë»ó 2(t=1¿¡ °¡±î¿ï¼ö·Ï ÀÌ°Í¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="t">¼±Çü º¸°£ °ª</param>
+	/// <param name="q1">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 1(t=0ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ê²ƒì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="q2">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 2(t=1ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ê²ƒì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="t">ì„ í˜• ë³´ê°„ ê°’</param>
 	inline Quaternion lerp(const Quaternion& q1, const Quaternion& q2, float t) {
 		Quaternion ret = q1 * (1 - t) + q2 * t;
 		return ret / ret.abs();
 	}
 
 	/// <summary>
-	/// »ç¿ø¼öÀÇ ±¸¸é ¼±Çü º¸°£À» ¸®ÅÏÇÕ´Ï´Ù.
+	/// ì‚¬ì›ìˆ˜ì˜ êµ¬ë©´ ì„ í˜• ë³´ê°„ì„ ë¦¬í„´í•©ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="q1">¼±Çü º¸°£ ´ë»ó 1(t=0¿¡ °¡±î¿ï¼ö·Ï ÀÌ°Í¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="q2">¼±Çü º¸°£ ´ë»ó 2(t=1¿¡ °¡±î¿ï¼ö·Ï ÀÌ°Í¿¡ °¡±õ½À´Ï´Ù.)</param>
-	/// <param name="t">¼±Çü º¸°£ °ª</param>
+	/// <param name="q1">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 1(t=0ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ê²ƒì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="q2">ì„ í˜• ë³´ê°„ ëŒ€ìƒ 2(t=1ì— ê°€ê¹Œìš¸ìˆ˜ë¡ ì´ê²ƒì— ê°€ê¹ìŠµë‹ˆë‹¤.)</param>
+	/// <param name="t">ì„ í˜• ë³´ê°„ ê°’</param>
 	inline Quaternion slerp(const Quaternion& q1, const Quaternion& q2, float t) {
 		float Wa, Wb;
 		float costh = reinterpret_cast<const vec4*>(&q1)->dot(*reinterpret_cast<const vec4*>(&q2)) / q1.abs() / q2.abs();
-		// Á¤¹Ğµµ ¿ÀÂ÷·Î ÀÎÇÑ nan ¹æÁö
+		// ì •ë°€ë„ ì˜¤ì°¨ë¡œ ì¸í•œ nan ë°©ì§€
 		if (costh > 1) costh = 1;
 		else if (costh < -1) costh = -1;
 		float theta = acos(costh);
 		float sn = sin(theta);
 
-		// q1=q2ÀÌ°Å³ª 180µµ Â÷ÀÌÀÎ °æ¿ì
+		// q1=q2ì´ê±°ë‚˜ 180ë„ ì°¨ì´ì¸ ê²½ìš°
 		if (sn <= FLT_EPSILON) return q1;
 		Wa = sin((1 - t) * theta) / sn;
 		Wb = sin(t * theta) / sn;
@@ -1076,8 +1076,8 @@ namespace onart {
 	inline mat4 mat4::rotate(float roll, float pitch, float yaw) { return Quaternion::euler(roll, pitch, yaw).toMat4(); }
 	inline mat4 mat4::rotate(const Quaternion& q) { return q.toMat4(); }
 	inline mat4 mat4::TRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
-		// SIMD ¹ÌÀû¿ë ½Ã °ö 30È¸/ÇÕ 6È¸, T*R*S µû·Î ÇÏ´Â °æ¿ì °ö 149È¸/ÇÕ 102È¸
-		// SIMD Àû¿ë ½Ã °ö 15È¸/ÇÕ 6È¸, µû·Î ÇÏ´Â °æ¿ì °ö 44È¸/ÇÕ 102È¸
+		// SIMD ë¯¸ì ìš© ì‹œ ê³± 30íšŒ/í•© 6íšŒ, T*R*S ë”°ë¡œ í•˜ëŠ” ê²½ìš° ê³± 149íšŒ/í•© 102íšŒ
+		// SIMD ì ìš© ì‹œ ê³± 15íšŒ/í•© 6íšŒ, ë”°ë¡œ í•˜ëŠ” ê²½ìš° ê³± 44íšŒ/í•© 102íšŒ
 		mat4 r = rotation.toMat4();
 		vec4 sc(scale);
 		mul4<float>(r.a, sc);
@@ -1090,8 +1090,8 @@ namespace onart {
 	}
 
 	inline mat4 mat4::iTRS(const vec3& translation, const Quaternion& rotation, const vec3& scale) {
-		// SIMD Àû¿ë ½Ã °ö 19È¸/ÇÕ 18È¸
-		mat4 r = rotation.conjugate().toMat4();	// °ø¾×»ç¿ø¼ö=¿ªÈ¸Àü
+		// SIMD ì ìš© ì‹œ ê³± 19íšŒ/í•© 18íšŒ
+		mat4 r = rotation.conjugate().toMat4();	// ê³µì•¡ì‚¬ì›ìˆ˜=ì—­íšŒì „
 		vec3 sc(1); sc /= scale;
 		mul4(r.a, sc.x);
 		mul4(r.a + 4, sc.y);
@@ -1103,18 +1103,18 @@ namespace onart {
 		return r;
 	}
 
-	// ¿¬»êÀÚ Ãß°¡ ¿À¹ö·Îµù
+	// ì—°ì‚°ì ì¶”ê°€ ì˜¤ë²„ë¡œë”©
 	template<unsigned D, class T>inline nvec<D, T> operator+(float f, const nvec<D, T>& v) { return v + f; }
 	template<unsigned D, class T>inline nvec<D, T> operator*(float f, const nvec<D, T>& v) { return v * f; }
 	inline mat4 operator*(float f, const mat4& m) { return m * f; }
 	inline Quaternion operator*(float f, const Quaternion& q) { return q * f; }
 
 	/// <summary>
-	/// ÃÖ´ë/ÃÖ¼Ò Á¦ÇÑÀ» µÎ¾î ÀÚ¸¥ °ªÀ» ¸®ÅÏÇÕ´Ï´Ù. Ã¹ °ªÀº º¹»ç»ı¼ºµÇ´Ï ±âº»ÀÚ·áÇüÀÌ ¾Æ´Ñ °ÍÀ» »ç¿ëÇÒ ¶§´Â ÁÖÀÇÇÏ¼¼¿ä.
+	/// ìµœëŒ€/ìµœì†Œ ì œí•œì„ ë‘ì–´ ìë¥¸ ê°’ì„ ë¦¬í„´í•©ë‹ˆë‹¤. ì²« ê°’ì€ ë³µì‚¬ìƒì„±ë˜ë‹ˆ ê¸°ë³¸ìë£Œí˜•ì´ ì•„ë‹Œ ê²ƒì„ ì‚¬ìš©í•  ë•ŒëŠ” ì£¼ì˜í•˜ì„¸ìš”.
 	/// </summary>
-	/// <param name="t">ÀÚ¸£±â Àü °ª</param>
-	/// <param name="min">ÃÖ¼Ú°ª</param>
-	/// <param name="max">ÃÖ´ñ°ª</param>
+	/// <param name="t">ìë¥´ê¸° ì „ ê°’</param>
+	/// <param name="min">ìµœì†Ÿê°’</param>
+	/// <param name="max">ìµœëŒ“ê°’</param>
 	/// <returns></returns>
 	template<class T>inline T clamp(T t, const T& min, const T& max) {
 		t = t < min ? min : t;
@@ -1123,10 +1123,10 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// Æí¸®ÇÑ µğ¹ö±×¸¦ À§ÇÑ °ª Ãâ·Â ÇÔ¼öÀÔ´Ï´Ù.
+	/// í¸ë¦¬í•œ ë””ë²„ê·¸ë¥¼ ìœ„í•œ ê°’ ì¶œë ¥ í•¨ìˆ˜ì…ë‹ˆë‹¤.
 	/// </summary>
-	/// <param name="v">Ç¥½ÃÇÒ º¯¼ö</param>
-	/// <param name="tag">ÀÌ¸§</param>
+	/// <param name="v">í‘œì‹œí•  ë³€ìˆ˜</param>
+	/// <param name="tag">ì´ë¦„</param>
 	inline void print(const vec2& v, const char* tag = "", char end = '\n') { printf("%s: %f %f%c", tag, v.x, v.y, end); }
 	inline void print(const ivec2& v, const char* tag = "", char end = '\n') { printf("%s: %d %d%c", tag, v.x, v.y, end); }
 	inline void print(const uvec2& v, const char* tag = "", char end = '\n') { printf("%s: %u %u%c", tag, v.x, v.y, end); }

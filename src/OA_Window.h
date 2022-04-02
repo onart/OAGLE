@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -15,12 +15,12 @@ namespace onart {
 	class Animation;
 	namespace window {
 		/// <summary>
-		/// Ä¿¼­ ÀÌ¹ÌÁö ¶Ç´Â ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ¼³Á¤ÇÕ´Ï´Ù. UIAnimation ¶Ç´Â FixedSprite¸¸ °¡´ÉÇÕ´Ï´Ù. ±× ¿ÜÀÇ ¾Ö´Ï¸ŞÀÌ¼Ç ¶Ç´Â nullptr°¡ Àü´ŞµÇ´Â °æ¿ì ±âº» Ä¿¼­·Î µ¹¾Æ¿É´Ï´Ù.
-		/// GLFW ÀÚÃ¼¿¡¼­µµ Ä¿¼­ ÀÌ¹ÌÁö¸¦ ¹Ù²Ù´Â ±â´ÉÀ» Á¦°øÇÏÁö¸¸, ÀÌ ÇÔ¼ö´Â ´ÜÀÏ ¾Ö´Ï¸ŞÀÌ¼ÇÀ» ¼³Á¤ÇÒ ¼ö ÀÖ´Ù´Â Â÷ÀÌ°¡ ÀÖ½À´Ï´Ù. ¸¶¿ì½º Ä¿¼­ÀÇ Å¬¸¯ ÆÇÁ¤Àº ¹°·Ğ ¾Ö´Ï¸ŞÀÌ¼Ç ÇÇ¹ş¿¡ ÀÖ½À´Ï´Ù.
+		/// ì»¤ì„œ ì´ë¯¸ì§€ ë˜ëŠ” ì• ë‹ˆë©”ì´ì…˜ì„ ì„¤ì •í•©ë‹ˆë‹¤. UIAnimation ë˜ëŠ” FixedSpriteë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤. ê·¸ ì™¸ì˜ ì• ë‹ˆë©”ì´ì…˜ ë˜ëŠ” nullptrê°€ ì „ë‹¬ë˜ëŠ” ê²½ìš° ê¸°ë³¸ ì»¤ì„œë¡œ ëŒì•„ì˜µë‹ˆë‹¤.
+		/// GLFW ìì²´ì—ì„œë„ ì»¤ì„œ ì´ë¯¸ì§€ë¥¼ ë°”ê¾¸ëŠ” ê¸°ëŠ¥ì„ ì œê³µí•˜ì§€ë§Œ, ì´ í•¨ìˆ˜ëŠ” ë‹¨ì¼ ì• ë‹ˆë©”ì´ì…˜ì„ ì„¤ì •í•  ìˆ˜ ìˆë‹¤ëŠ” ì°¨ì´ê°€ ìˆìŠµë‹ˆë‹¤. ë§ˆìš°ìŠ¤ ì»¤ì„œì˜ í´ë¦­ íŒì •ì€ ë¬¼ë¡  ì• ë‹ˆë©”ì´ì…˜ í”¼ë²—ì— ìˆìŠµë‹ˆë‹¤.
 		/// </summary>
 		void setCursorImage(const std::shared_ptr<Animation>& p = std::shared_ptr<Animation>(), const vec2& scale = 1);
 		/// <summary>
-		/// Ã¢ÀÇ ÀÌ¸§À» º¯°æÇÕ´Ï´Ù. (°ø»çÁß)
+		/// ì°½ì˜ ì´ë¦„ì„ ë³€ê²½í•©ë‹ˆë‹¤. (ê³µì‚¬ì¤‘)
 		/// </summary>
 		void setWindowTitle(const char*);
 	}

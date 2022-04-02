@@ -1,4 +1,4 @@
-/********************************************************************************
+Ôªø/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -60,7 +60,7 @@ namespace onart {
 	}
 
 	void Camera::setDelay(float s) {
-		constexpr float ln100 = 4.605170185988f;	// Ω«¡¶ ln100∫∏¥Ÿ æ‡ 6.40e-8∏∏≈≠ ≈≠
+		constexpr float ln100 = 4.605170185988f;	// Ïã§Ï†ú ln100Î≥¥Îã§ ÏïΩ 6.40e-8ÎßåÌÅº ÌÅº
 		delay = s ? ln100 / fabs(s) : INFINITY;
 	}
 

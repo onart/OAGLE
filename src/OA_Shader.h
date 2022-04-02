@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -16,16 +16,16 @@ namespace onart {
 
 	class Mesh;
 	/// <summary>
-	/// Á¤Á¡(vertex) ¼ÎÀÌ´õ - Á¶°¢(fragment) ¼ÎÀÌ´õ°¡ ¿¬°áµÈ ÇÁ·Î±×·¥
-	/// <para>ÀÌ Å¬·¡½º´Â ½º·¹µå ¾ÈÀü¼ºÀÌ º¸ÀåµÇÁö ¾Ê½À´Ï´Ù.</para>
-	/// <para>ÀÌ °èÃþ¿¡ ´ëÇÑ ¼öÁ¤ È¤Àº ÀÌ¿ëÀ» ÇÏ·Á´Â °æ¿ì, uniform º¯¼ö´Â const char* Àü¿ª »ó¼ö¸¸ Á¦´ë·Î Ä³½ÌµÉ ¼ö ÀÖÀ½À» ¸í½ÉÇÏ±æ ¹Ù¶ø´Ï´Ù.
-	/// (Âü°í) https://timsong-cpp.github.io/cppwp/lex.string#16
-	/// (¿ä¾à) µ¿ÀÏ È¤Àº ³¡¿¡ Æ÷ÇÔµÇ´Â ¹®ÀÚ¿­ ¸®ÅÍ·²Àº ÄÚµå ¿µ¿ª¿¡¼­ °°Àº °ø°£À» °øÀ¯ÇØµµ µÇÁö¸¸ ÇÊ¼öÀûÀÌÁö´Â ¾Ê´Ù.
-	/// Æ¯È÷ std::string µî¿¡¼­ µ¿ÀûÇÒ´çµÈ ÁÖ¼Ò¸¦ ²ø¾î¿À´Â °æ¿ì ÀÛµ¿Àº ÇÏÁö¸¸ ¼º´ÉÀº ¼º´É´ë·Î ³ªºüÁö°í ¾µµ¥¾ø´Â ¸Þ¸ð¸® Â÷ÁöÀÇ °¡´É¼ºÀÌ ³ô½À´Ï´Ù.</para>
-	/// ÀÌ ÇÁ·ÎÁ§Æ®¿¡¼­´Â GLSL ¼ÎÀÌ´õ ³»ÀÇ ´ÙÂ÷¿ø ¹è¿­¿¡ ´ëÇÑ Ä³½ÌÀ» Á÷Á¢ Áö¿øÇÏÁö ¾Ê°Ú½À´Ï´Ù. ¿¹¸¦ µé¾î shader["var"][2][1] °°Àº °æ¿ì ¹Ýµå½Ã -1ÀÇ À§Ä¡·Î º¸³À´Ï´Ù(=½ÇÆÐ).
-	/// ÀÌ¶§´Â ÀÏ¹Ý uniform º¯¼öÃ³·³ ÀÌ·± ½ÄÀ¸·Î ÇØ ÁÖ½Ã±â ¹Ù¶ø´Ï´Ù. 
+	/// ì •ì (vertex) ì…°ì´ë” - ì¡°ê°(fragment) ì…°ì´ë”ê°€ ì—°ê²°ëœ í”„ë¡œê·¸ëž¨
+	/// <para>ì´ í´ëž˜ìŠ¤ëŠ” ìŠ¤ë ˆë“œ ì•ˆì „ì„±ì´ ë³´ìž¥ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.</para>
+	/// <para>ì´ ê³„ì¸µì— ëŒ€í•œ ìˆ˜ì • í˜¹ì€ ì´ìš©ì„ í•˜ë ¤ëŠ” ê²½ìš°, uniform ë³€ìˆ˜ëŠ” const char* ì „ì—­ ìƒìˆ˜ë§Œ ì œëŒ€ë¡œ ìºì‹±ë  ìˆ˜ ìžˆìŒì„ ëª…ì‹¬í•˜ê¸¸ ë°”ëžë‹ˆë‹¤.
+	/// (ì°¸ê³ ) https://timsong-cpp.github.io/cppwp/lex.string#16
+	/// (ìš”ì•½) ë™ì¼ í˜¹ì€ ëì— í¬í•¨ë˜ëŠ” ë¬¸ìžì—´ ë¦¬í„°ëŸ´ì€ ì½”ë“œ ì˜ì—­ì—ì„œ ê°™ì€ ê³µê°„ì„ ê³µìœ í•´ë„ ë˜ì§€ë§Œ í•„ìˆ˜ì ì´ì§€ëŠ” ì•Šë‹¤.
+	/// íŠ¹ížˆ std::string ë“±ì—ì„œ ë™ì í• ë‹¹ëœ ì£¼ì†Œë¥¼ ëŒì–´ì˜¤ëŠ” ê²½ìš° ìž‘ë™ì€ í•˜ì§€ë§Œ ì„±ëŠ¥ì€ ì„±ëŠ¥ëŒ€ë¡œ ë‚˜ë¹ ì§€ê³  ì“¸ë°ì—†ëŠ” ë©”ëª¨ë¦¬ ì°¨ì§€ì˜ ê°€ëŠ¥ì„±ì´ ë†’ìŠµë‹ˆë‹¤.</para>
+	/// ì´ í”„ë¡œì íŠ¸ì—ì„œëŠ” GLSL ì…°ì´ë” ë‚´ì˜ ë‹¤ì°¨ì› ë°°ì—´ì— ëŒ€í•œ ìºì‹±ì„ ì§ì ‘ ì§€ì›í•˜ì§€ ì•Šê² ìŠµë‹ˆë‹¤. ì˜ˆë¥¼ ë“¤ì–´ shader["var"][2][1] ê°™ì€ ê²½ìš° ë°˜ë“œì‹œ -1ì˜ ìœ„ì¹˜ë¡œ ë³´ëƒ…ë‹ˆë‹¤(=ì‹¤íŒ¨).
+	/// ì´ë•ŒëŠ” ì¼ë°˜ uniform ë³€ìˆ˜ì²˜ëŸ¼ ì´ëŸ° ì‹ìœ¼ë¡œ í•´ ì£¼ì‹œê¸° ë°”ëžë‹ˆë‹¤. 
 	/// <para>shader.uniform("var[1][2]",1); or shader["var[1]"][2]=1; or shader["var[1][2]"]=1;</para>
-	/// (ÀÌ °æ¿ì ¸Þ¸ð¸®¸¦ ¸¹ÀÌ ¸ÔÁö¸¸ ¾îÂ÷ÇÇ ¾È ±×·¡µµ ´ÙÂ÷¿øÀº ¸Þ¸ð¸®¸¦ ¸¹ÀÌ »ç¿ëÇÕ´Ï´Ù.)
+	/// (ì´ ê²½ìš° ë©”ëª¨ë¦¬ë¥¼ ë§Žì´ ë¨¹ì§€ë§Œ ì–´ì°¨í”¼ ì•ˆ ê·¸ëž˜ë„ ë‹¤ì°¨ì›ì€ ë©”ëª¨ë¦¬ë¥¼ ë§Žì´ ì‚¬ìš©í•©ë‹ˆë‹¤.)
 	/// </summary>
 	class Shader
 	{
@@ -54,142 +54,142 @@ namespace onart {
 			static constexpr const char* K_S = "Ks";
 			static constexpr const char* SHININESS = "shininess";
 			/// <summary>
-			/// ÅØ½ºÃ³ Àü´Þ¿ë ÄÚµåÀÔ´Ï´Ù.
-			/// <para>SURFACE0: ±âº» Ç¥¸é ÀÌ¹ÌÁöÀÔ´Ï´Ù.</para>
-			/// <para>ALPHA: Åõ¸íµµ ¸¶½ºÅ© ÀÌ¹ÌÁöÀÔ´Ï´Ù.</para>
-			/// <para>BUMP: ¹ý¼± ¸ÅÇÎÀ» À§ÇÑ ÀÌ¹ÌÁöÀÔ´Ï´Ù.</para>
-			/// <para>SURFACE1: ´ÜÀÏ °³Ã¼¿¡ ´ëÇÏ¿© Ãß°¡ ÀÌ¹ÌÁö°¡ ÇÊ¿äÇÑ °æ¿ì »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù. ´Ü, °¡±ÞÀû º°°³ÀÇ Á¤Á¡ ±×·ìÀ» »ç¿ëÇÏ´Â °ÍÀ» ÃßÃµÇÕ´Ï´Ù.</para>
+			/// í…ìŠ¤ì²˜ ì „ë‹¬ìš© ì½”ë“œìž…ë‹ˆë‹¤.
+			/// <para>SURFACE0: ê¸°ë³¸ í‘œë©´ ì´ë¯¸ì§€ìž…ë‹ˆë‹¤.</para>
+			/// <para>ALPHA: íˆ¬ëª…ë„ ë§ˆìŠ¤í¬ ì´ë¯¸ì§€ìž…ë‹ˆë‹¤.</para>
+			/// <para>BUMP: ë²•ì„  ë§¤í•‘ì„ ìœ„í•œ ì´ë¯¸ì§€ìž…ë‹ˆë‹¤.</para>
+			/// <para>SURFACE1: ë‹¨ì¼ ê°œì²´ì— ëŒ€í•˜ì—¬ ì¶”ê°€ ì´ë¯¸ì§€ê°€ í•„ìš”í•œ ê²½ìš° ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤. ë‹¨, ê°€ê¸‰ì  ë³„ê°œì˜ ì •ì  ê·¸ë£¹ì„ ì‚¬ìš©í•˜ëŠ” ê²ƒì„ ì¶”ì²œí•©ë‹ˆë‹¤.</para>
 			/// </summary>
 			enum class TexCode { SURFACE0 = 0, ALPHA, BUMP, SURFACE1 };
 
 			/// <summary>
-			/// ½ºÅ©¸³Æ® ÆÄÀÏ¿¡¼­ ÀÐ¾î¼­ ÇÁ·Î±×·¥À» »ý¼ºÇÕ´Ï´Ù.
+			/// ìŠ¤í¬ë¦½íŠ¸ íŒŒì¼ì—ì„œ ì½ì–´ì„œ í”„ë¡œê·¸ëž¨ì„ ìƒì„±í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="vert">Á¤Á¡ ¼ÎÀÌ´õ ÆÄÀÏÀÇ °æ·ÎÀÔ´Ï´Ù.</param>
-			/// <param name="frag">Á¶°¢ ¼ÎÀÌ´õ ÆÄÀÏÀÇ °æ·ÎÀÔ´Ï´Ù.</param>
+			/// <param name="vert">ì •ì  ì…°ì´ë” íŒŒì¼ì˜ ê²½ë¡œìž…ë‹ˆë‹¤.</param>
+			/// <param name="frag">ì¡°ê° ì…°ì´ë” íŒŒì¼ì˜ ê²½ë¡œìž…ë‹ˆë‹¤.</param>
 			void initWithFile(const char* vert, const char* frag);
 
 			/// <summary>
-			/// ¹®ÀÚ¿­ º¯¼ö¸¦ ÀÐ¾î¼­ ÇÁ·Î±×·¥À» »ý¼ºÇÕ´Ï´Ù.
+			/// ë¬¸ìžì—´ ë³€ìˆ˜ë¥¼ ì½ì–´ì„œ í”„ë¡œê·¸ëž¨ì„ ìƒì„±í•©ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="vert">Á¤Á¡ ¼ÎÀÌ´õ ½ºÅ©¸³Æ® ¹®ÀÚ¿­ÀÔ´Ï´Ù.</param>
-			/// <param name="frag">Á¶°¢ ¼ÎÀÌ´õ ½ºÅ©¸³Æ® ¹®ÀÚ¿­ÀÔ´Ï´Ù.</param>
+			/// <param name="vert">ì •ì  ì…°ì´ë” ìŠ¤í¬ë¦½íŠ¸ ë¬¸ìžì—´ìž…ë‹ˆë‹¤.</param>
+			/// <param name="frag">ì¡°ê° ì…°ì´ë” ìŠ¤í¬ë¦½íŠ¸ ë¬¸ìžì—´ìž…ë‹ˆë‹¤.</param>
 			void initWithMemory(const char* vert, const char* frag);
 
 			/// <summary>
-			/// ¼ÎÀÌ´õ »ç¿ëÀ» ½ÃÀÛÇÕ´Ï´Ù. ½º·¹µå ¾ÈÀü¼ºÀÌ º¸ÀåµÇÁö ¾ÊÀ½¿¡ À¯ÀÇÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
+			/// ì…°ì´ë” ì‚¬ìš©ì„ ì‹œìž‘í•©ë‹ˆë‹¤. ìŠ¤ë ˆë“œ ì•ˆì „ì„±ì´ ë³´ìž¥ë˜ì§€ ì•ŠìŒì— ìœ ì˜í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.
 			/// </summary>
 			void use();
 
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, bool b);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, int i);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, float f);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, const vec2& v2);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, const vec3& v3);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, const vec4& v4);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, const ivec2& v2);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, const ivec3& v3);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, const ivec4& v4);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
 			void uniform(const char* name, const mat4& m4);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, bool b);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, int i);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, float f);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, const vec2& v);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, const vec3& v);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, const vec4& v);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, const ivec2& v);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, const ivec3& v);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, const ivec4& v);
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ uniform º¯¼ö¸¦ º¸³À´Ï´Ù. (¹è¿­ ¹öÀü)
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— uniform ë³€ìˆ˜ë¥¼ ë³´ëƒ…ë‹ˆë‹¤. (ë°°ì—´ ë²„ì „)
 			/// </summary>
 			void uniform(const char* name, size_t index, const mat4& m);
 
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥¿¡ ÅØ½ºÃ³ Á¤º¸¸¦ º¸³À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì— í…ìŠ¤ì²˜ ì •ë³´ë¥¼ ë³´ëƒ…ë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="tex">ÅØ½ºÃ³ °´Ã¼ÀÔ´Ï´Ù.</param>
-			/// <param name="idx">±×·ÁÁú °´Ã¼¿¡ ´ëÇÏ¿© ¸î ¹øÂ° ÅØ½ºÃ³ÀÏÁö °áÁ¤ÇÕ´Ï´Ù.</param>
+			/// <param name="tex">í…ìŠ¤ì²˜ ê°ì²´ìž…ë‹ˆë‹¤.</param>
+			/// <param name="idx">ê·¸ë ¤ì§ˆ ê°ì²´ì— ëŒ€í•˜ì—¬ ëª‡ ë²ˆì§¸ í…ìŠ¤ì²˜ì¼ì§€ ê²°ì •í•©ë‹ˆë‹¤.</param>
 			void texture(unsigned tex, TexCode idx = TexCode::SURFACE0);
 
 			/// <summary>
-			/// ¼ÎÀÌ´õ ÇÁ·Î±×·¥ÀÇ id¸¦ ¾ò½À´Ï´Ù.
-			/// ¿£Áø¿¡¼­ Ä¸½¶È­µÇÁö ¾ÊÀº ºÎºÐÀ» »ç¿ëÇÒ ¼ö ÀÖ½À´Ï´Ù.
+			/// ì…°ì´ë” í”„ë¡œê·¸ëž¨ì˜ idë¥¼ ì–»ìŠµë‹ˆë‹¤.
+			/// ì—”ì§„ì—ì„œ ìº¡ìŠí™”ë˜ì§€ ì•Šì€ ë¶€ë¶„ì„ ì‚¬ìš©í•  ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 			/// </summary>
 			inline unsigned getID() const { return id; };
 			
 			/// <summary>
-			/// Á¤Á¡ ¹è¿­ °´Ã¼¸¦ ±×¸³´Ï´Ù. ¿£Áø ±¸Á¶»ó uniform Àü´Þº¸´Ù ³ªÁß¿¡ È£ÃâÇÕ´Ï´Ù.
+			/// ì •ì  ë°°ì—´ ê°ì²´ë¥¼ ê·¸ë¦½ë‹ˆë‹¤. ì—”ì§„ êµ¬ì¡°ìƒ uniform ì „ë‹¬ë³´ë‹¤ ë‚˜ì¤‘ì— í˜¸ì¶œí•©ë‹ˆë‹¤.
 			/// </summary>
 			void draw(Mesh& m) const;
 			
 			/// <summary>
-			/// Á¤Á¡ ¹è¿­ °´Ã¼¸¦ ¹ÙÀÎµåÇÕ´Ï´Ù. µ¿ÀÏÇÑ ¸Þ½Ã¸¦ ¿©·¯ ¹ø ±×¸± ¶§ ¾à°£ ¼º´ÉÀÌ ´õ ³ôÀ» °ÍÀÔ´Ï´Ù.
+			/// ì •ì  ë°°ì—´ ê°ì²´ë¥¼ ë°”ì¸ë“œí•©ë‹ˆë‹¤. ë™ì¼í•œ ë©”ì‹œë¥¼ ì—¬ëŸ¬ ë²ˆ ê·¸ë¦´ ë•Œ ì•½ê°„ ì„±ëŠ¥ì´ ë” ë†’ì„ ê²ƒìž…ë‹ˆë‹¤.
 			/// </summary>
 			void bind(Mesh& m);
 
 			/// <summary>
-			/// ¹ÙÀÎµåÇÑ Á¤Á¡ ¹è¿­ °´Ã¼¸¦ ±×¸³´Ï´Ù. end°¡ beginº¸´Ù ÀÛÀº °æ¿ì ¾Æ¹«°Íµµ ±×·ÁÁöÁö ¾Ê½À´Ï´Ù.
+			/// ë°”ì¸ë“œí•œ ì •ì  ë°°ì—´ ê°ì²´ë¥¼ ê·¸ë¦½ë‹ˆë‹¤. endê°€ beginë³´ë‹¤ ìž‘ì€ ê²½ìš° ì•„ë¬´ê²ƒë„ ê·¸ë ¤ì§€ì§€ ì•ŠìŠµë‹ˆë‹¤.
 			/// </summary>
-			/// <param name="begin">¹è¿­ ÀÎµ¦½ºÀÇ ½ÃÀÛÁ¡ÀÔ´Ï´Ù. 0ºÎÅÍ ½ÃÀÛÇÕ´Ï´Ù.</param>
-			/// <param name="count">¹è¿­ ÀÎµ¦½ºÀÇ °³¼öÀÔ´Ï´Ù. ÀÔ·ÂÇÏÁö ¾Ê´Â °æ¿ì ¸¶Áö¸·Á¡±îÁö·Î °£ÁÖµË´Ï´Ù.</param>
+			/// <param name="begin">ë°°ì—´ ì¸ë±ìŠ¤ì˜ ì‹œìž‘ì ìž…ë‹ˆë‹¤. 0ë¶€í„° ì‹œìž‘í•©ë‹ˆë‹¤.</param>
+			/// <param name="count">ë°°ì—´ ì¸ë±ìŠ¤ì˜ ê°œìˆ˜ìž…ë‹ˆë‹¤. ìž…ë ¥í•˜ì§€ ì•ŠëŠ” ê²½ìš° ë§ˆì§€ë§‰ì ê¹Œì§€ë¡œ ê°„ì£¼ë©ë‹ˆë‹¤.</param>
 			void draw(unsigned begin = 0, unsigned count = -1);
 
 			class _uniformSender_ {
@@ -212,11 +212,11 @@ namespace onart {
 			}__uniformSender;
 
 			/// <summary>
-			/// uniform º¯¼ö¸¦ º¸³»±â À§ÇÑ Á÷°üÀû ÀÎÅÍÆäÀÌ½ºÀÔ´Ï´Ù. ÀÌ°Í°ú uniform ÇÔ¼öÀÇ ¼º´É»ó Â÷ÀÌ´Â »ç½Ç»ó ¾øÀ¸¹Ç·Î ÆíÇÑ ´ë·Î »ç¿ëÇÏ¸é µË´Ï´Ù.
-			/// <para>¿ë¹ý: shader["var"]=value;</para>
-			/// °Åµì °­Á¶ÇÏÁö¸¸ std::stringÀÇ c_str()ÇÔ¼ö¸¦ »ç¿ëÇÏ¿© ´ëÀÔÇÒ °æ¿ì ¼º´É°ú ¸Þ¸ð¸® ¸é¿¡¼­ ¸ðµÎ ³ªºüÁö¹Ç·Î Àý´ë ±×·¯Áö ¸¶¼¼¿ä. (¸®ÅÍ·²ÀÌ ÃÖ¼±ÀÌÁö¸¸ Àü¿ª »ó¼öµµ ±¦Âú½À´Ï´Ù)
+			/// uniform ë³€ìˆ˜ë¥¼ ë³´ë‚´ê¸° ìœ„í•œ ì§ê´€ì  ì¸í„°íŽ˜ì´ìŠ¤ìž…ë‹ˆë‹¤. ì´ê²ƒê³¼ uniform í•¨ìˆ˜ì˜ ì„±ëŠ¥ìƒ ì°¨ì´ëŠ” ì‚¬ì‹¤ìƒ ì—†ìœ¼ë¯€ë¡œ íŽ¸í•œ ëŒ€ë¡œ ì‚¬ìš©í•˜ë©´ ë©ë‹ˆë‹¤.
+			/// <para>ìš©ë²•: shader["var"]=value;</para>
+			/// ê±°ë“­ ê°•ì¡°í•˜ì§€ë§Œ std::stringì˜ c_str()í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ì—¬ ëŒ€ìž…í•  ê²½ìš° ì„±ëŠ¥ê³¼ ë©”ëª¨ë¦¬ ë©´ì—ì„œ ëª¨ë‘ ë‚˜ë¹ ì§€ë¯€ë¡œ ì ˆëŒ€ ê·¸ëŸ¬ì§€ ë§ˆì„¸ìš”. (ë¦¬í„°ëŸ´ì´ ìµœì„ ì´ì§€ë§Œ ì „ì—­ ìƒìˆ˜ë„ ê´œì°®ìŠµë‹ˆë‹¤)
 			/// </summary>
-			/// <param name="name">uniform º¯¼ö ÀÌ¸§(¹è¿­ ÀÌ¸§µµ °¡´ÉÇÏ°í ¹è¿­ ÀÎµ¦½º±îÁö ÁÖ´Â °Íµµ °¡´É)</param>
+			/// <param name="name">uniform ë³€ìˆ˜ ì´ë¦„(ë°°ì—´ ì´ë¦„ë„ ê°€ëŠ¥í•˜ê³  ë°°ì—´ ì¸ë±ìŠ¤ê¹Œì§€ ì£¼ëŠ” ê²ƒë„ ê°€ëŠ¥)</param>
 			_uniformSender_& operator[](const char* name);
 
 		private:
@@ -233,8 +233,8 @@ namespace onart {
 	};
 }
 
-/// ¼ÎÀÌ´õ Å¬·¡½º ³»ºÎ¿¡ Á¤ÀÇµÈ static »ó¼ö¸¦ Àü¿ª¿¡¼­ »ç¿ëÇÕ´Ï´Ù. ¹®ÀåÀÇ Çü½ÄÀ» °®Ãá °ÍÀ¸·Î º¸ÀÌ±â À§ÇØ ¸ÅÅ©·Î »ç¿ë µÚ¿¡ ;¸¦ ºÙ¿© ÁÖ¼¼¿ä.
-/// ¼Ò¹®ÀÚ°¡ ´Ù¸¥ ÀÌ¸§°ú °ãÄ¥±îºÁ ºÎ´ã½º·¯¿î °æ¿ì ÀÌ ´ë½Å USE_SHADER_UNIFORM_UPPER¸¦ »ç¿ëÇÕ´Ï´Ù. (¼Ò¹®ÀÚ ¹öÀüÀº °¡µ¶¼ºÀ» À§ÇØ Á¦°øµË´Ï´Ù.)
+/// ì…°ì´ë” í´ëž˜ìŠ¤ ë‚´ë¶€ì— ì •ì˜ëœ static ìƒìˆ˜ë¥¼ ì „ì—­ì—ì„œ ì‚¬ìš©í•©ë‹ˆë‹¤. ë¬¸ìž¥ì˜ í˜•ì‹ì„ ê°–ì¶˜ ê²ƒìœ¼ë¡œ ë³´ì´ê¸° ìœ„í•´ ë§¤í¬ë¡œ ì‚¬ìš© ë’¤ì— ;ë¥¼ ë¶™ì—¬ ì£¼ì„¸ìš”.
+/// ì†Œë¬¸ìžê°€ ë‹¤ë¥¸ ì´ë¦„ê³¼ ê²¹ì¹ ê¹Œë´ ë¶€ë‹´ìŠ¤ëŸ¬ìš´ ê²½ìš° ì´ ëŒ€ì‹  USE_SHADER_UNIFORM_UPPERë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤. (ì†Œë¬¸ìž ë²„ì „ì€ ê°€ë…ì„±ì„ ìœ„í•´ ì œê³µë©ë‹ˆë‹¤.)
 #define USE_SHADER_UNIFORM static constexpr const char* fixed = onart::Shader::FIXED, * model = onart::Shader::MODEL, \
 							* transform = onart::Shader::TRANSFORM, * is2d = onart::Shader::IS2D, \
 							*color=onart::Shader::COLOR, *hasBones=onart::Shader::HAS_BONES,\
@@ -246,8 +246,8 @@ namespace onart {
 							*zoom=onart::Shader::ZOOM, *textGroup=onart::Shader::TEXT_GROUP,\
 							*Ka=onart::Shader::K_A, *Kd=onart::Shader::K_D, *Ks=onart::Shader::K_S,\
 							*shininess=onart::Shader::SHININESS;
-/// ¼ÎÀÌ´õ Å¬·¡½º ³»ºÎ¿¡ Á¤ÀÇµÈ static »ó¼ö¸¦ Àü¿ª¿¡¼­ »ç¿ëÇÕ´Ï´Ù. ¹®ÀåÀÇ Çü½ÄÀ» °®Ãá °ÍÀ¸·Î º¸ÀÌ±â À§ÇØ ¸ÅÅ©·Î »ç¿ë µÚ¿¡ ;¸¦ ºÙ¿© ÁÖ¼¼¿ä.
-/// ¼Ò¹®ÀÚ°¡ ´Ù¸¥ ÀÌ¸§°ú °ãÄ¥±îºÁ ºÎ´ã½º·¯¿î °æ¿ì ÀÌ ¸ÅÅ©·Î¸¦ »ç¿ëÇÕ´Ï´Ù. (¼Ò¹®ÀÚ ¹öÀüÀº °¡µ¶¼ºÀ» À§ÇØ Á¦°øµË´Ï´Ù.)
+/// ì…°ì´ë” í´ëž˜ìŠ¤ ë‚´ë¶€ì— ì •ì˜ëœ static ìƒìˆ˜ë¥¼ ì „ì—­ì—ì„œ ì‚¬ìš©í•©ë‹ˆë‹¤. ë¬¸ìž¥ì˜ í˜•ì‹ì„ ê°–ì¶˜ ê²ƒìœ¼ë¡œ ë³´ì´ê¸° ìœ„í•´ ë§¤í¬ë¡œ ì‚¬ìš© ë’¤ì— ;ë¥¼ ë¶™ì—¬ ì£¼ì„¸ìš”.
+/// ì†Œë¬¸ìžê°€ ë‹¤ë¥¸ ì´ë¦„ê³¼ ê²¹ì¹ ê¹Œë´ ë¶€ë‹´ìŠ¤ëŸ¬ìš´ ê²½ìš° ì´ ë§¤í¬ë¡œë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤. (ì†Œë¬¸ìž ë²„ì „ì€ ê°€ë…ì„±ì„ ìœ„í•´ ì œê³µë©ë‹ˆë‹¤.)
 #define USE_SHADER_UNIFORM_UPPER static constexpr const char* FIXED = onart::Shader::FIXED, * MODEL = onart::Shader::MODEL, \
 							* TRANSFORM = onart::Shader::TRANSFORM, * IS2D = onart::Shader::IS2D, \
 							*COLOR=onart::Shader::COLOR, *HAS_BONES=onart::Shader::HAS_BONES,\

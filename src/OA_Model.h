@@ -1,4 +1,4 @@
-/********************************************************************************
+ï»¿/********************************************************************************
 * 2D/3D OpenGL Game Engine
 * Copyright 2022 onart@github
 * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -22,49 +22,49 @@ namespace onart {
 	class Material;
 	class Shader;
 	/// <summary>
-	/// ÃÖÁ¾ÀûÀ¸·Î È­¸é¿¡ µîÀåÇÒ ¸ğµ¨ Å¬·¡½ºÀÔ´Ï´Ù.
-	/// ÇöÀç ´ÜÀÏ ¸Ş½Ã ¹× ÅØ½ºÃ³¿¡ ´ëÇØ¼­¸¸ ±×¸± ¼ö ÀÖ½À´Ï´Ù.
+	/// ìµœì¢…ì ìœ¼ë¡œ í™”ë©´ì— ë“±ì¥í•  ëª¨ë¸ í´ë˜ìŠ¤ì…ë‹ˆë‹¤.
+	/// í˜„ì¬ ë‹¨ì¼ ë©”ì‹œ ë° í…ìŠ¤ì²˜ì— ëŒ€í•´ì„œë§Œ ê·¸ë¦´ ìˆ˜ ìˆìŠµë‹ˆë‹¤.
 	/// </summary>
 	class Model
 	{
 	public:
 		enum class TexType { AMBIENT, DIFFUSE, SPECULAR, NORMAL };
 		/// <summary>
-		/// ¸Ş¸ğ¸®¿¡¼­ ¸ğµ¨À» ºÒ·¯¿É´Ï´Ù. Mesh °´Ã¼´Â ¸ğµ¨°ú µ¿ÀÏÇÑ ÀÌ¸§À» °¡Áı´Ï´Ù.
+		/// ë©”ëª¨ë¦¬ì—ì„œ ëª¨ë¸ì„ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤. Mesh ê°ì²´ëŠ” ëª¨ë¸ê³¼ ë™ì¼í•œ ì´ë¦„ì„ ê°€ì§‘ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="data">º¯¼ö ÁÖ¼Ò</param>
-		/// <param name="len">µ¥ÀÌÅÍ ±æÀÌ</param>
-		/// <param name="meshName">¸ğµ¨ ÀÌ¸§</param>
-		/// <param name="hint">Çü½Ä ÈùÆ®</param>
+		/// <param name="data">ë³€ìˆ˜ ì£¼ì†Œ</param>
+		/// <param name="len">ë°ì´í„° ê¸¸ì´</param>
+		/// <param name="meshName">ëª¨ë¸ ì´ë¦„</param>
+		/// <param name="hint">í˜•ì‹ íŒíŠ¸</param>
 		static std::shared_ptr<Model> load(const unsigned char* data, size_t len, const std::string& meshName, const char* hint = "");
 		/// <summary>
-		/// ÆÄÀÏ¿¡¼­ ¸ğµ¨À» ºÒ·¯¿É´Ï´Ù. ÀÌ¶§, ¸Ş½Ã ÀÌ¸§Àº ÆÄÀÏ ÀÌ¸§°ú °°°Ô ÀúÀåµË´Ï´Ù.
+		/// íŒŒì¼ì—ì„œ ëª¨ë¸ì„ ë¶ˆëŸ¬ì˜µë‹ˆë‹¤. ì´ë•Œ, ë©”ì‹œ ì´ë¦„ì€ íŒŒì¼ ì´ë¦„ê³¼ ê°™ê²Œ ì €ì¥ë©ë‹ˆë‹¤.
 		/// </summary>
 		static std::shared_ptr<Model> load(const std::string& file);
 		/// <summary>
-		/// ºÒ·¯¿Â ¸ğµ¨¿¡ ÀÌ¸§À¸·Î Á¢±ÙÇÕ´Ï´Ù. ¾ø´Â ÀÌ¸§À¸·Î ½ÃµµÇÒ °æ¿ì nullptr¸¦ ¸®ÅÏÇÕ´Ï´Ù.
+		/// ë¶ˆëŸ¬ì˜¨ ëª¨ë¸ì— ì´ë¦„ìœ¼ë¡œ ì ‘ê·¼í•©ë‹ˆë‹¤. ì—†ëŠ” ì´ë¦„ìœ¼ë¡œ ì‹œë„í•  ê²½ìš° nullptrë¥¼ ë¦¬í„´í•©ë‹ˆë‹¤.
 		/// </summary>		
 		static std::shared_ptr<Model> get(const std::string& name);
 		/// <summary>
-		/// ¸ğµ¨À» ¸Ş¸ğ¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù. »ç¿ë ÁßÀÎ ¸ğµ¨Àº »ç¿ëÀÌ Á¾·áµÈ ÈÄ ¸Ş¸ğ¸®¿¡¼­ Á¦°ÅµÇÁö¸¸, drop() È£Ãâ ÈÄ-Á¦°ÅµÇ±â Àü ±× ¸ğµ¨À» get() ÇÒ ¼ö ¾ø½À´Ï´Ù.
-		/// "»ç¿ë"Àº ¸ğµ¨ÀÇ Æ÷ÀÎÅÍ¸¦ ½ºÄÚÇÁ¿¡ º¸À¯ÇÑ °³Ã¼°¡ ÀÖ´ÂÁö¸¦ ¸»ÇÕ´Ï´Ù.
+		/// ëª¨ë¸ì„ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤. ì‚¬ìš© ì¤‘ì¸ ëª¨ë¸ì€ ì‚¬ìš©ì´ ì¢…ë£Œëœ í›„ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°ë˜ì§€ë§Œ, drop() í˜¸ì¶œ í›„-ì œê±°ë˜ê¸° ì „ ê·¸ ëª¨ë¸ì„ get() í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.
+		/// "ì‚¬ìš©"ì€ ëª¨ë¸ì˜ í¬ì¸í„°ë¥¼ ìŠ¤ì½”í”„ì— ë³´ìœ í•œ ê°œì²´ê°€ ìˆëŠ”ì§€ë¥¼ ë§í•©ë‹ˆë‹¤.
 		/// </summary>
 		static void drop(const std::string& name);
 		/// <summary>
-		/// »ç¿ë ÁßÀÌ ¾Æ´Ñ ¸ğµ¨À» ¸Ş¸ğ¸®¿¡¼­ Á¦°ÅÇÕ´Ï´Ù. »ç¿ë ÁßÀÎ ¸ğµ¨À» drop()Ã³·³ Á¦°ÅÇÏ·Á´Â °æ¿ì ¸Å°³º¯¼ö¿¡ true¸¦ Àü´ŞÇÕ´Ï´Ù.
+		/// ì‚¬ìš© ì¤‘ì´ ì•„ë‹Œ ëª¨ë¸ì„ ë©”ëª¨ë¦¬ì—ì„œ ì œê±°í•©ë‹ˆë‹¤. ì‚¬ìš© ì¤‘ì¸ ëª¨ë¸ì„ drop()ì²˜ëŸ¼ ì œê±°í•˜ë ¤ëŠ” ê²½ìš° ë§¤ê°œë³€ìˆ˜ì— trueë¥¼ ì „ë‹¬í•©ë‹ˆë‹¤.
 		/// </summary>
 		static void collect(bool removeUsing = false);
 		/// <summary>
-		/// ¼ÎÀÌ´õ¿¡ ÀÌ ¸ğµ¨À» ·»´õ¸µÇÕ´Ï´Ù.
+		/// ì…°ì´ë”ì— ì´ ëª¨ë¸ì„ ë Œë”ë§í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="color">»ö»ó(mix°¡ ¾Æ´Ï¶ó *·Î Àû¿ëµË´Ï´Ù.)</param>
+		/// <param name="color">ìƒ‰ìƒ(mixê°€ ì•„ë‹ˆë¼ *ë¡œ ì ìš©ë©ë‹ˆë‹¤.)</param>
 		void render() const;
 		/// <summary>
-		/// ÀÌ¹Ì ºÒ·¯¿Â ¸ğµ¨¿¡ diffuse ÅØ½ºÃ³ ÀÌ¹ÌÁö¸¦ Ãß°¡ÇÕ´Ï´Ù.
+		/// ì´ë¯¸ ë¶ˆëŸ¬ì˜¨ ëª¨ë¸ì— diffuse í…ìŠ¤ì²˜ ì´ë¯¸ì§€ë¥¼ ì¶”ê°€í•©ë‹ˆë‹¤.
 		/// </summary>
-		/// <param name="index">Ã¤¿ï ÀÎµ¦½ºÀÔ´Ï´Ù. µğ¹ö±× ¸ğµåÀÇ ¿À·ù ¸Ş½ÃÁö¿¡¼­ ¾î¶² ¸ğµ¨¿¡ ¾î¶² ÀÎµ¦½º¸¦ Ã¤¿ïÁö È®ÀÎÇØ ÁÖ¼¼¿ä.</param>
-		/// <param name="tex">ÅØ½ºÃ³ÀÔ´Ï´Ù. Material::genTextureFrom... ÇÔ¼öµé¿¡¼­ ¾ò¾î¿Ã ¼ö ÀÖ½À´Ï´Ù.</param>
-		/// <param name="typ">ÅØ½ºÃ³ À¯ÇüÀÔ´Ï´Ù. ÇöÀç ¿£ÁøÀº DIFFUSE, NORMAL¸¸ »ç¿ëÇÕ´Ï´Ù.</param>
+		/// <param name="index">ì±„ìš¸ ì¸ë±ìŠ¤ì…ë‹ˆë‹¤. ë””ë²„ê·¸ ëª¨ë“œì˜ ì˜¤ë¥˜ ë©”ì‹œì§€ì—ì„œ ì–´ë–¤ ëª¨ë¸ì— ì–´ë–¤ ì¸ë±ìŠ¤ë¥¼ ì±„ìš¸ì§€ í™•ì¸í•´ ì£¼ì„¸ìš”.</param>
+		/// <param name="tex">í…ìŠ¤ì²˜ì…ë‹ˆë‹¤. Material::genTextureFrom... í•¨ìˆ˜ë“¤ì—ì„œ ì–»ì–´ì˜¬ ìˆ˜ ìˆìŠµë‹ˆë‹¤.</param>
+		/// <param name="typ">í…ìŠ¤ì²˜ ìœ í˜•ì…ë‹ˆë‹¤. í˜„ì¬ ì—”ì§„ì€ DIFFUSE, NORMALë§Œ ì‚¬ìš©í•©ë‹ˆë‹¤.</param>
 		void addTex(unsigned index, std::shared_ptr<Texture>& tex, TexType typ);
 	private:
 		struct Geometry {
