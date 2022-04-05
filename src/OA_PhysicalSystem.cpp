@@ -13,16 +13,22 @@
 #include "OA_PhysicalSystem.h"
 #include "OA_Contact.h"
 #include "OA_PointMass.h"
+#include "OA_ForceGenerator.h"
 
 #include <algorithm>
+
+extern float dt;
 
 namespace onart {
 	std::vector<PointMass*> PointMassSystem::indiv;
 	std::vector<PointMass2D*> PointMassSystem2D::indiv;
-	std::vector<ForceGenerator*> PointMassSystem::forces;
 	std::vector<ContactGenerator*> PointMassSystem::contacts;
-	std::vector<ForceGenerator2D*> PointMassSystem2D::forces;
 	std::vector<ContactGenerator2D*> PointMassSystem2D::contacts;
+
+	Contact ct3d[maxContact];
+	Contact2D ct2d[maxContact];
+	Contact* PointMassSystem::contactsInThisFrame = ct3d;
+	Contact2D* PointMassSystem2D::contactsInThisFrame = ct2d;
 
 	template <class T>
 	void insort(std::vector<T*>& v, T* e) {
@@ -39,15 +45,53 @@ namespace onart {
 	void PointMassSystem::removeIndividual(PointMass* p) { removeFromSorted(indiv, p); }
 	void PointMassSystem::addContactGenerator(ContactGenerator* p) { insort(contacts, p); }
 	void PointMassSystem::removeContactGenerator(ContactGenerator* p) { removeFromSorted(contacts, p); }
-	void PointMassSystem::addForceGenerator(ForceGenerator* p) { insort(forces, p); }
-	void PointMassSystem::removeForceGenerator(ForceGenerator* p) { removeFromSorted(forces, p); }
 
 	void PointMassSystem2D::addIndividual(PointMass2D* p) { insort(indiv, p); }
 	void PointMassSystem2D::removeIndividual(PointMass2D* p) { removeFromSorted(indiv, p); }
 	void PointMassSystem2D::addContactGenerator(ContactGenerator2D* p) { insort(contacts, p); }
 	void PointMassSystem2D::removeContactGenerator(ContactGenerator2D* p) { removeFromSorted(contacts, p); }
-	void PointMassSystem2D::addForceGenerator(ForceGenerator2D* p) { insort(forces, p); }
-	void PointMassSystem2D::removeForceGenerator(ForceGenerator2D* p) { removeFromSorted(forces, p); }
 
-	
+	unsigned PointMassSystem::generateContacts() {
+		unsigned limit = maxContact;
+		Contact* thisContact = contactsInThisFrame;
+		for (ContactGenerator* g : contacts) {
+			unsigned used = g->addContact(thisContact, limit);
+			thisContact += used;
+			if (limit <= used) { limit -= used; break; }
+			limit -= used;
+		}
+		return maxContact - limit;
+	}
+
+	unsigned PointMassSystem2D::generateContacts() {
+		unsigned limit = maxContact;
+		Contact2D* thisContact = contactsInThisFrame;
+		for (ContactGenerator2D* g : contacts) {
+			unsigned used = g->addContact(thisContact, limit);
+			thisContact += used;
+			if (limit <= used) { limit -= used; break; }
+			limit -= used;
+		}
+		return maxContact - limit;
+	}
+
+	void PointMassSystem::Update() {
+		R_ForcePoint::Update();
+		for (PointMass* pm : indiv) {
+			pm->Update();
+		}
+		unsigned usedContacts = generateContacts();
+		//ContactResolver::setMaximumRepCount()
+		ContactResolver::resolve(contactsInThisFrame, usedContacts, dt);
+	}
+
+	void PointMassSystem2D::Update() {
+		R_ForcePoint2D::Update();
+		for (PointMass2D* pm : indiv) {
+			pm->Update();
+		}
+		unsigned usedContacts = generateContacts();
+		//ContactResolver::setMaximumRepCount()
+		ContactResolver::resolve(contactsInThisFrame, usedContacts, dt);
+	}
 }

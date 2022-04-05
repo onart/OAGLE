@@ -12,8 +12,15 @@
 *********************************************************************************/
 #include "OA_ForceGenerator.h"
 #include "OA_PointMass.h"
+#include <algorithm>
 
 namespace onart {
+
+	std::map<PointMass*, std::vector<ForceGenerator*>> R_ForcePoint::pmreg;
+	std::map<ForceGenerator*, std::vector<PointMass*>> R_ForcePoint::fgreg;
+	std::map<PointMass2D*, std::vector<ForceGenerator2D*>> R_ForcePoint2D::pmreg;
+	std::map<ForceGenerator2D*, std::vector<PointMass2D*>> R_ForcePoint2D::fgreg;
+
 	void DragGenerator::generate(PointMass* pm) {
 		const vec3& v = pm->getVelocity();
 		pm->addForce(-v * (k1 + k2 * v.length()));
@@ -52,5 +59,97 @@ namespace onart {
 		if (mag <= 0) return;
 		f *= mag;
 		pm->addForce(f);
+	}
+
+	void R_ForcePoint::add(PointMass* pm, ForceGenerator* fg) {
+		pmreg[pm].push_back(fg);
+		fgreg[fg].push_back(pm);
+	}
+
+	void R_ForcePoint::cascade(PointMass* pm) {
+		auto vec = pmreg.find(pm);
+		if (vec == pmreg.end()) return;
+		for (ForceGenerator* fg : vec->second) {
+			auto& fgv = fgreg[fg];
+			fgv.erase(std::remove(fgv.begin(), fgv.end(), pm), fgv.end());
+		}
+		pmreg.erase(pm);
+	}
+
+	void R_ForcePoint::cascade(ForceGenerator* fg) {
+		auto vec = fgreg.find(fg);
+		if (vec == fgreg.end()) return;
+		for (PointMass* pm : vec->second) {
+			auto& pmv = pmreg[pm];
+			pmv.erase(std::remove(pmv.begin(), pmv.end(), fg), pmv.end());
+		}
+		fgreg.erase(fg);
+	}
+
+	void R_ForcePoint::remove(PointMass* pm, ForceGenerator* fg) {
+		auto& pmv = pmreg[pm];
+		pmv.erase(std::remove(pmv.begin(), pmv.end(), fg), pmv.end());
+		auto& fgv = fgreg[fg];
+		fgv.erase(std::remove(fgv.begin(), fgv.end(), pm), fgv.end());
+	}
+
+	void R_ForcePoint::clear() {
+		pmreg.clear();
+		fgreg.clear();
+	}
+
+	void R_ForcePoint::Update() {
+		for (auto& p : fgreg) {
+			ForceGenerator* fg = p.first;
+			for (PointMass* pm : p.second) {
+				fg->generate(pm);
+			}
+		}
+	}
+
+	void R_ForcePoint2D::add(PointMass2D* pm, ForceGenerator2D* fg) {
+		pmreg[pm].push_back(fg);
+		fgreg[fg].push_back(pm);
+	}
+
+	void R_ForcePoint2D::cascade(PointMass2D* pm) {
+		auto vec = pmreg.find(pm);
+		if (vec == pmreg.end()) return;
+		for (ForceGenerator2D* fg : vec->second) {
+			auto& fgv = fgreg[fg];
+			fgv.erase(std::remove(fgv.begin(), fgv.end(), pm), fgv.end());
+		}
+		pmreg.erase(pm);
+	}
+
+	void R_ForcePoint2D::cascade(ForceGenerator2D* fg) {
+		auto vec = fgreg.find(fg);
+		if (vec == fgreg.end()) return;
+		for (PointMass2D* pm : vec->second) {
+			auto& pmv = pmreg[pm];
+			pmv.erase(std::remove(pmv.begin(), pmv.end(), fg), pmv.end());
+		}
+		fgreg.erase(fg);
+	}
+
+	void R_ForcePoint2D::remove(PointMass2D* pm, ForceGenerator2D* fg) {
+		auto& pmv = pmreg[pm];
+		pmv.erase(std::remove(pmv.begin(), pmv.end(), fg), pmv.end());
+		auto& fgv = fgreg[fg];
+		fgv.erase(std::remove(fgv.begin(), fgv.end(), pm), fgv.end());
+	}
+
+	void R_ForcePoint2D::clear() {
+		pmreg.clear();
+		fgreg.clear();
+	}
+
+	void R_ForcePoint2D::Update() {
+		for (auto& p : fgreg) {
+			ForceGenerator2D* fg = p.first;
+			for (PointMass2D* pm : p.second) {
+				fg->generate(pm);
+			}
+		}
 	}
 }

@@ -1,213 +1,246 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="엔진">
+      <UniqueIdentifier>{07523348-e4ae-4d95-aca1-9cd70984ad8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일">
+    <Filter Include="엔진\셰이더">
+      <UniqueIdentifier>{b652949f-7956-419b-907f-238575671a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="외부 소스">
+      <UniqueIdentifier>{1fd1573d-5dbc-48e4-bbbd-b3f4a3f58a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="외부 소스\헤더 파일">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="셰이더">
-      <UniqueIdentifier>{5c7ae06a-41ff-472f-9161-dbddc11764ae}</UniqueIdentifier>
+    <Filter Include="외부 소스\소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="엔진\물리1">
+      <UniqueIdentifier>{4c0518dd-509c-4b15-b1e1-85a15833e867}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리1\헤더 파일">
+      <UniqueIdentifier>{74473754-9d08-4a68-9bd1-c3adc5fe84d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리1\소스 파일">
+      <UniqueIdentifier>{006df378-0bb3-4b6d-8faf-b20a7e1d8bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="응용">
+      <UniqueIdentifier>{1701b391-89fd-48bb-9aef-9f6bd1fe8c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="응용\헤더 파일">
+      <UniqueIdentifier>{86c40efc-298d-4348-9ada-b4e22378be97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="응용\소스 파일">
+      <UniqueIdentifier>{bae46382-e0e5-4b64-bbe9-bc55412f1cf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\기본">
+      <UniqueIdentifier>{b46df743-cbb3-435d-8d90-23ad6759e7a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\기본\헤더 파일">
+      <UniqueIdentifier>{34689717-588a-4636-9d92-e22556ea2c28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\기본\소스 파일">
+      <UniqueIdentifier>{2cf44bfb-0886-46c5-b450-daa527a25c12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="externals\gl\glad\glad.c">
+      <Filter>외부 소스\소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Shader.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Vertex.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Model.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Material.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Random.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Entity.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Anim.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Scene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_TestScene.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Input.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Camera.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="externals\gl\glad\glad.c">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Audio.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Camera.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_CQueue.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OA_Text.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_TestEntity.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_UI.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="OA_Entity.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Hangul.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Input.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Material.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Model.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Random.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Scene.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Shader.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Text.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Transform.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_UI.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Vertex.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Window.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_PointMass.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_ForceGenerator.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Contact.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\물리1\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_PhysicalSystem.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>엔진\물리1\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_PointMass.cpp">
+      <Filter>엔진\물리1\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_TestEntity.cpp">
+      <Filter>응용\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_TestScene.cpp">
+      <Filter>응용\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Contact.cpp">
+      <Filter>엔진\물리1\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resources.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="oagle.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="oaglem.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Shader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="constants.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Vertex.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Model.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Material.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Random.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Entity.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Transform.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Anim.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Scene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_TestScene.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Input.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="oagle_simd.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="externals\gl\glad\glad.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>외부 소스\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="externals\gl\glfw\win64\glfw3.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Audio.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_CQueue.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>외부 소스\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="externals\stb_image.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>외부 소스\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="externals\stb_truetype.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>외부 소스\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_Text.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="OA_Anim.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_TestEntity.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="OA_Audio.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_UI.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="OA_Camera.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_UniversalFunctor.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="OA_CQueue.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_Memory.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="OA_Entity.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Hangul.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Input.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Material.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Memory.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Model.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Random.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Scene.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Shader.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Text.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Transform.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_UI.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_UniversalFunctor.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Vertex.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Window.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_PointMass.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="oagle.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="oagle_simd.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="oaglem.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="resources.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_TestEntity.h">
+      <Filter>응용\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_TestScene.h">
+      <Filter>응용\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_ForceGenerator.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Contact.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>엔진\물리1\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_PhysicalSystem.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>엔진\물리1\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_PointMass.h">
+      <Filter>엔진\물리1\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Contact.h">
+      <Filter>엔진\물리1\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\p3f.txt">
-      <Filter>셰이더</Filter>
+      <Filter>엔진\셰이더</Filter>
     </None>
     <None Include="resources\p3v.txt">
-      <Filter>셰이더</Filter>
+      <Filter>엔진\셰이더</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="resources\p2f.txt">
-      <Filter>셰이더</Filter>
+      <Filter>엔진\셰이더</Filter>
     </Text>
     <Text Include="resources\p2v.txt">
-      <Filter>셰이더</Filter>
+      <Filter>엔진\셰이더</Filter>
     </Text>
   </ItemGroup>
 </Project>

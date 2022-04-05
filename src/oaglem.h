@@ -45,6 +45,7 @@ constexpr float deg(float rad) { return rad * 180 / PI; }
 constexpr float rad(float deg) { return deg / 180 * PI; }
 
 namespace onart {
+	using byte = unsigned char;
 	struct Quaternion;
 	/// <summary>
 	/// N차원 벡터입니다. 길이에 관계없이 상호 변환이 가능합니다.

@@ -13,6 +13,9 @@
 #ifndef __OA_FORCEGENERATOR_H__
 #define __OA_FORCEGENERATOR_H__
 
+#include <vector>
+#include <map>
+
 namespace onart {
 	class PointMass;
 	class PointMass2D;
@@ -105,6 +108,74 @@ namespace onart {
 		PointMass2D* other;
 		const float k;
 		const float restLength;
+	};
+
+	/// <summary>
+	/// 3차원 힘 발생기와 질점의 릴레이션입니다.
+	/// </summary>
+	class R_ForcePoint {
+	protected:
+		static std::map<PointMass*, std::vector<ForceGenerator*>> pmreg;
+		static std::map<ForceGenerator*, std::vector<PointMass*>> fgreg;
+	public:
+		/// <summary>
+		/// 현재 프레임에 가할 힘이 있으면 가합니다.
+		/// </summary>
+		static void Update();
+		/// <summary>
+		/// 힘 발생기와 질점의 연계를 추가합니다.
+		/// </summary>
+		static void add(PointMass* pm, ForceGenerator* fg);
+		/// <summary>
+		/// 힘 발생기와 질점의 연계를 제거합니다.
+		/// </summary>
+		static void remove(PointMass* pm, ForceGenerator* fg);
+		/// <summary>
+		/// 주어진 질점에 대한 모든 힘 발생기를 제거합니다.
+		/// </summary>
+		static void cascade(PointMass* pm);
+		/// <summary>
+		/// 주어진 힘 발생기에 대한 모든 질점을 제거합니다.
+		/// </summary>
+		static void cascade(ForceGenerator* fg);
+		/// <summary>
+		/// 모든 힘 발생기와 질점의 관계를 제거합니다.
+		/// </summary>
+		static void clear();
+	};
+
+	/// <summary>
+	/// 2차원 힘 발생기와 질점의 릴레이션입니다.
+	/// </summary>
+	class R_ForcePoint2D {
+	protected:
+		static std::map<PointMass2D*, std::vector<ForceGenerator2D*>> pmreg;
+		static std::map<ForceGenerator2D*, std::vector<PointMass2D*>> fgreg;
+	public:
+		/// <summary>
+		/// 현재 프레임에 가할 힘이 있으면 가합니다.
+		/// </summary>
+		static void Update();
+		/// <summary>
+		/// 힘 발생기와 질점의 연계를 추가합니다.
+		/// </summary>
+		static void add(PointMass2D* pm, ForceGenerator2D* fg);
+		/// <summary>
+		/// 주어진 질점에 대한 모든 힘 발생기를 제거합니다.
+		/// </summary>
+		static void remove(PointMass2D* pm, ForceGenerator2D* fg);
+		/// <summary>
+		/// 주어진 힘 발생기에 대한 모든 질점을 제거합니다.
+		/// </summary>
+		static void cascade(PointMass2D* pm);
+		/// <summary>
+		/// 주어진 힘 발생기에 대한 모든 질점을 제거합니다.
+		/// </summary>
+		static void cascade(ForceGenerator2D* fg);
+		/// <summary>
+		/// 모든 힘 발생기와 질점의 관계를 제거합니다.
+		/// </summary>
+		static void clear();
 	};
 }
 

@@ -18,10 +18,13 @@
 namespace onart {
 	class PointMass;
 	class PointMass2D;
-	class ForceGenerator;
-	class ForceGenerator2D;
 	class ContactGenerator;
 	class ContactGenerator2D;
+	class Contact;
+	class Contact2D;
+
+	constexpr size_t maxContact = 60;
+
 	/// <summary>
 	/// 질점으로 구성된 세계입니다. 응용 단계에서 다루어지지 않습니다.
 	/// </summary>
@@ -31,14 +34,13 @@ namespace onart {
 		static void Update();
 		static void addIndividual(PointMass* m);
 		static void removeIndividual(PointMass* m);
-		static void addForceGenerator(ForceGenerator* g);
-		static void removeForceGenerator(ForceGenerator* g);
 		static void addContactGenerator(ContactGenerator* g);
 		static void removeContactGenerator(ContactGenerator* g);
+		static unsigned generateContacts();
 	private:
 		static std::vector<PointMass*> indiv;
-		static std::vector<ForceGenerator*> forces;
 		static std::vector<ContactGenerator*> contacts;
+		static Contact* contactsInThisFrame;
 	};
 
 	/// <summary>
@@ -49,14 +51,13 @@ namespace onart {
 		static void Update();
 		static void addIndividual(PointMass2D* m);
 		static void removeIndividual(PointMass2D* m);
-		static void addForceGenerator(ForceGenerator2D* g);
-		static void removeForceGenerator(ForceGenerator2D* g);
 		static void addContactGenerator(ContactGenerator2D* g);
 		static void removeContactGenerator(ContactGenerator2D* g);
+		static unsigned generateContacts();
 	private:
 		static std::vector<PointMass2D*> indiv;
-		static std::vector<ForceGenerator2D*> forces;
 		static std::vector<ContactGenerator2D*> contacts;
+		static Contact2D* contactsInThisFrame;
 	};
 }
 #endif // !_OA_PHYSICALSYSTEM_H__
