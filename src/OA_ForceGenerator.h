@@ -15,16 +15,20 @@
 
 #include <vector>
 #include <map>
+#include "oaglem.h"
 
 namespace onart {
 	class PointMass;
 	class PointMass2D;
+	class RigidBody;
+	class RigidBody2D;
 	/// <summary>
 	/// 매 프레임 힘을 지속적으로 가합니다. 중력 같은 거의 상수인 힘이 아닌 항력 등에 대하여 사용합니다.
 	/// </summary>
 	class ForceGenerator {
 	public:
-		virtual void generate(PointMass* pm) = 0;
+		virtual void generate(PointMass* pm) {}
+		virtual void generate(RigidBody* rb) {}
 		inline virtual void generate(PointMass* pm, float dt) {}
 	};
 
@@ -33,7 +37,8 @@ namespace onart {
 	/// </summary>
 	class ForceGenerator2D {
 	public:
-		virtual void generate(PointMass2D* pm) = 0;
+		virtual void generate(PointMass2D* pm) {}
+		virtual void generator(RigidBody2D* rb) {}
 		inline virtual void generate(PointMass2D* pm, float dt) {}
 	};
 
@@ -44,6 +49,7 @@ namespace onart {
 	public:
 		inline DragGenerator(float k1, float k2) :k1(k1), k2(k2) {}
 		void generate(PointMass* pm);
+		void generate(RigidBody* rb);
 	private:
 		const float k1, k2;
 	};
@@ -108,6 +114,18 @@ namespace onart {
 		PointMass2D* other;
 		const float k;
 		const float restLength;
+	};
+
+	class HookeSpringRigid :public ForceGenerator {
+	private:
+		vec3 attached;
+		vec3 otherAttached;
+		RigidBody* other;
+		float k;
+		float restLength;
+	public:
+		inline HookeSpringRigid(const vec3& attached, RigidBody* other, const vec3& otherAttached, float k, float restLength) :attached(attached), other(other), k(k), restLength(restLength), otherAttached(otherAttached) {}
+		void generate(RigidBody* rb);
 	};
 
 	/// <summary>

@@ -9,7 +9,7 @@ namespace onart {
 	pSafeAudioStream p;
 	void TestScene::Update() {  }
 	void TestScene::init() {
-		uvec4 s = 2;
+		
 		Font::load("ariblk.ttf", { 'A','B','C','l',u'가' }, 480, "arial");
 		addEntity(new TestEntity());
 		addEntity(new UI::Text("te2", Font::get("arial"), u"가가\nACCCCC", vec2(0.f), 2000, AlignH::LEFT, AlignV::TOP, 0.3f));

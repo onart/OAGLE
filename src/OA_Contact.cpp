@@ -149,7 +149,7 @@ namespace onart {
 		if (length < maxLen) return 0;
 		contact->matter[0] = matter[0];
 		contact->matter[1] = matter[1];
-		vec3 norm((matter[1]->getPosition() - matter[0]->getPosition()).normalize());
+		vec3 norm((matter[1]->getPosition() - matter[0]->getPosition()).normal());
 		contact->contactNormal = norm;
 		contact->penetration = length - maxLen;
 		contact->restitution = restitution;
@@ -161,7 +161,7 @@ namespace onart {
 		if (dist == length) return 0;
 		contact->matter[0] = matter[0];
 		contact->matter[1] = matter[1];
-		vec3 norm((matter[1]->getPosition() - matter[0]->getPosition()).normalize());
+		vec3 norm((matter[1]->getPosition() - matter[0]->getPosition()).normal());
 		if (dist > length) {
 			contact->contactNormal = norm;
 			contact->penetration = dist - length;
@@ -187,7 +187,7 @@ namespace onart {
 		if (length < maxLen) return 0;
 		contact->matter[0] = matter[0];
 		contact->matter[1] = matter[1];
-		vec2 norm((matter[1]->getPosition() - matter[0]->getPosition()).normalize());
+		vec2 norm((matter[1]->getPosition() - matter[0]->getPosition()).normal());
 		contact->contactNormal = norm;
 		contact->penetration = length - maxLen;
 		contact->restitution = restitution;
@@ -199,7 +199,7 @@ namespace onart {
 		if (dist == length) return 0;
 		contact->matter[0] = matter[0];
 		contact->matter[1] = matter[1];
-		vec2 norm((matter[1]->getPosition() - matter[0]->getPosition()).normalize());
+		vec2 norm((matter[1]->getPosition() - matter[0]->getPosition()).normal());
 		if (dist > length) {
 			contact->contactNormal = norm;
 			contact->penetration = dist - length;

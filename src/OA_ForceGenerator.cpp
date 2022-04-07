@@ -26,6 +26,11 @@ namespace onart {
 		pm->addForce(-v * (k1 + k2 * v.length()));
 	}
 
+	void DragGenerator::generate(RigidBody* rb) {
+		const vec3& v = rb->getVelocity();
+		rb->addForce(-v * (k1 + k2 * v.length()));
+	}
+
 	void DragGenerator2D::generate(PointMass2D* pm) {
 		const vec2& v = pm->getVelocity();
 		pm->addForce(-v * (k1 + k2 * v.length()));
@@ -59,6 +64,17 @@ namespace onart {
 		if (mag <= 0) return;
 		f *= mag;
 		pm->addForce(f);
+	}
+
+	void HookeSpringRigid::generate(RigidBody* rb) {
+		vec3 lws = rb->getPosition() + attached;
+		vec3 ows = other->getPosition() + otherAttached;
+		vec3 f = lws - ows;
+		float mag = f.length();
+		mag = fabs(mag - restLength) * k;
+		f.normalize();
+		f *= mag;
+		rb->addForceAtPoint(f, lws);
 	}
 
 	void R_ForcePoint::add(PointMass* pm, ForceGenerator* fg) {

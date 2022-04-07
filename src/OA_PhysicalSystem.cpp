@@ -42,12 +42,12 @@ namespace onart {
 	}
 
 	void PointMassSystem::addIndividual(PointMass* p) { insort(indiv, p); }
-	void PointMassSystem::removeIndividual(PointMass* p) { removeFromSorted(indiv, p); }
+	void PointMassSystem::removeIndividual(PointMass* p) { removeFromSorted(indiv, p); R_ForcePoint::cascade(p); }
 	void PointMassSystem::addContactGenerator(ContactGenerator* p) { insort(contacts, p); }
 	void PointMassSystem::removeContactGenerator(ContactGenerator* p) { removeFromSorted(contacts, p); }
 
 	void PointMassSystem2D::addIndividual(PointMass2D* p) { insort(indiv, p); }
-	void PointMassSystem2D::removeIndividual(PointMass2D* p) { removeFromSorted(indiv, p); }
+	void PointMassSystem2D::removeIndividual(PointMass2D* p) { removeFromSorted(indiv, p); R_ForcePoint2D::cascade(p); }
 	void PointMassSystem2D::addContactGenerator(ContactGenerator2D* p) { insort(contacts, p); }
 	void PointMassSystem2D::removeContactGenerator(ContactGenerator2D* p) { removeFromSorted(contacts, p); }
 

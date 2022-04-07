@@ -132,10 +132,18 @@ namespace onart {
 		/// <summary>
 		/// 다른 벡터와 성분별 연산을 차원수가 낮은 쪽을 기준으로 합니다.
 		/// </summary>
-		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] += v[i]; return *this; }
-		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] -= v[i]; return *this; }
-		template <unsigned E> inline nvec& operator*=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] *= v[i]; return *this; }
-		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; for (unsigned i = 0; i < min; i++)entry[i] /= v[i]; return *this; }
+		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; addAll(entry, v.entry, min); return *this; }
+		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; subAll(entry, v.entry, min); return *this; }
+		template <unsigned E> inline nvec& operator*=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; mulAll(entry, v.entry, min); return *this; }
+		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; divAll(entry, v.entry, min); return *this; }
+
+		/// <summary>
+		/// 같은 차원의 다른 벡터와 성분별 연산을 합니다.
+		/// </summary>
+		inline nvec& operator+=(const nvec& v) { if constexpr (D <= 4) add4(entry, v.entry); else addAll(entry, v.entry, D); return *this; }
+		inline nvec& operator-=(const nvec& v) { if constexpr (D <= 4) sub4(entry, v.entry); else subAll(entry, v.entry, D); return *this; }
+		inline nvec& operator*=(const nvec& v) { if constexpr (D <= 4) mul4(entry, v.entry); else mulAll(entry, v.entry, D); return *this; }
+		inline nvec& operator/=(const nvec& v) { if constexpr (D <= 4) div4(entry, v.entry); else divAll(entry, v.entry, D); return *this; }
 
 		/// <summary>
 		/// 벡터의 모든 성분에 대하여 주어진 값과 연산합니다.
@@ -190,7 +198,12 @@ namespace onart {
 		/// <summary>
 		/// 벡터의 방향을 유지하고 길이를 1로 맞춘 것을 리턴합니다. 정수 벡터에서는 사용할 수 없습니다.
 		/// </summary>
-		inline nvec normalize() const { return (*this) / length(); }
+		inline nvec normal() const { return (*this) / length(); }
+
+		/// <summary>
+		/// 벡터의 길이를 1로 만듭니다.
+		/// </summary>
+		inline void normalize() { operator/=(length()); }
 
 		/// <summary>
 		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
@@ -235,6 +248,11 @@ namespace onart {
 	using ivec2 = nvec<2, int>;				using ivec3 = nvec<3, int>;				using ivec4 = nvec<4, int>;
 	using uvec2 = nvec<2, unsigned>;		using uvec3 = nvec<3, unsigned>;		using uvec4 = nvec<4, unsigned>;
 	using dvec2 = nvec<2, double>;			using dvec3 = nvec<3, double>;			using dvec4 = nvec<4, double>;
+
+	/// <summary>
+	/// 2개 2차원 실수 벡터의 외적의 z축 성분을 계산합니다.
+	/// </summary>
+	inline float cross(const vec2& a, const vec2& b) { return a.x * b.y - a.y * b.x; }
 
 	/// <summary>
 	/// 2개 3차원 실수 벡터의 외적을 계산합니다.
@@ -775,9 +793,9 @@ namespace onart {
 		/// <param name="at">피사체 위치</param>
 		/// <param name="up">위쪽 방향: 화면 상에서 위쪽 방향이 이 벡터의 방향과 비슷해집니다.</param>
 		inline static mat4 lookAt(const vec3& eye, const vec3& at, const vec3& up) {
-			vec3 n = (eye - at).normalize();
-			vec3 u = cross(up, n).normalize();
-			vec3 v = cross(n, u).normalize();
+			vec3 n = (eye - at).normal();
+			vec3 u = cross(up, n).normal();
+			vec3 v = cross(n, u).normal();
 			return mat4(
 					u.x, u.y, u.z, -(u.dot(eye)),
 					v.x, v.y, v.z, -(v.dot(eye)),
@@ -885,6 +903,11 @@ namespace onart {
 		inline Quaternion(float o = 1, float i = 0, float j = 0, float k = 0) :c1(o), ci(i), cj(j), ck(k) {};
 
 		/// <summary>
+		/// 각속도 벡터(그 크기가 초당 회전각, 방향이 회전축인 벡터)에 대응하는 사원수를 생성합니다.
+		/// </summary>
+		inline Quaternion(const vec3& av) :c1(0) { memcpy(&ci, av.entry, sizeof(float) * 3); }
+
+		/// <summary>
 		/// 사원수를 복사해서 생성합니다.
 		/// </summary>
 		inline Quaternion(const Quaternion& q) { set4<float>(&c1, &(q.c1)); }
@@ -941,6 +964,16 @@ namespace onart {
 		inline Quaternion operator/(const Quaternion& q) const { Quaternion r(*this); r /= q; return r; }
 
 		/// <summary>
+		/// 이 사원수의 회전 사원수 버전을 리턴합니다.
+		/// </summary>
+		inline Quaternion normal() const { return (*this) * (1 / abs()); }
+
+		/// <summary>
+		/// 이 사원수의 절댓값을 1로 만듭니다.
+		/// </summary>
+		inline void normalize() { operator*=(1 / abs()); }
+
+		/// <summary>
 		/// 사원수의 부호를 반대로 합니다. 180도 뒤집은 것과 동일합니다.
 		/// </summary>
 		inline Quaternion operator-() const { return Quaternion(-c1, -ci, -cj, -ck); }
@@ -961,16 +994,25 @@ namespace onart {
 		/// 사원수를 회전 행렬로 변형합니다.
 		/// </summary>
 		inline mat4 toMat4() const {
-
 			Quaternion i = (*this) * ci;
 			Quaternion j = (*this) * cj;
 			Quaternion k = (*this) * ck;
-
 			return mat4(
 				1 - 2 * (j.cj + k.ck), 2 * (i.cj - k.c1), 2 * (i.ck + j.c1), 0,
 				2 * (i.cj + k.c1), 1 - 2 * (i.ci + k.ck), 2 * (j.ck - i.c1), 0,
 				2 * (i.ck - j.c1), 2 * (j.ck + i.c1), 1 - 2 * (i.ci + j.cj), 0,
 				0, 0, 0, 1
+			);
+		}
+
+		inline mat3 toMat3() const {
+			Quaternion i = (*this) * ci;
+			Quaternion j = (*this) * cj;
+			Quaternion k = (*this) * ck;
+			return mat3(
+				1 - 2 * (j.cj + k.ck), 2 * (i.cj - k.c1), 2 * (i.ck + j.c1),
+				2 * (i.cj + k.c1), 1 - 2 * (i.ci + k.ck), 2 * (j.ck - i.c1),
+				2 * (i.ck - j.c1), 2 * (j.ck + i.c1), 1 - 2 * (i.ci + j.cj)
 			);
 		}
 
@@ -1009,14 +1051,56 @@ namespace onart {
 		}
 
 		/// <summary>
-		/// 축과 각이 주어졌을 때 회전값을 리턴합니다. 회전축은 정규화가 이루어집니다.
+		/// 축과 각이 주어졌을 때 회전값을 리턴합니다.
+		/// 회전축은 자동으로 정규화됩니다.
 		/// </summary>
 		/// <param name="axis">회전축</param>
 		/// <param name="angle">회전각(라디안)</param>
 		inline static Quaternion rotation(const vec3& axis, float angle) {
-			float c = cosf(angle / 2), s = sinf(angle / 2);
-			auto nv = axis.normalize() * s;
+			angle *= 0.5f;
+			float c = cosf(angle), s = sinf(angle);
+			vec3 nv = axis.normal() * s;
 			return Quaternion(c, nv.x, nv.y, nv.z);
+		}
+
+		/// <summary>
+		/// 축과 각이 주어졌을 때 회전값을 리턴합니다.
+		/// 입력된 회전축은 정규화되지 않습니다.
+		/// </summary>
+		/// <param name="uaxis">회전축(단위벡터)</param>
+		/// <param name="angle">회전각(라디안)</param>
+		/// <returns></returns>
+		inline static Quaternion rotationByUnit(const vec3& uaxis, float angle) {
+			angle *= 0.5f;
+			float c = cosf(angle), s = sinf(angle);
+			vec3 nv(uaxis); nv *= s;
+			return Quaternion(c, nv.x, nv.y, nv.z);
+		}
+
+		/// <summary>
+		/// 주어진 방향을 바라보도록 하는 회전 사원수를 생성합니다.
+		/// </summary>
+		/// <param name="after">원하는 방향(회전축이 아닙니다.)</param>
+		/// <param name="after">현재 방향(회전축이 아닙니다.)</param>
+		inline static Quaternion direction(const vec3& after, const vec3& before) {
+			vec3 mid(after);
+			mid *= sqrtf(before.length2() / after.length2());
+			mid += before;
+			mid /= mid.length();
+			return Quaternion(0, mid.x, mid.y, mid.z);
+		}
+
+		/// <summary>
+		/// 주어진 방향을 바라보도록 하는 회전 사원수를 생성합니다.
+		/// 입력 벡터들의 길이는 반드시 동일해야 합니다.
+		/// </summary>
+		/// <param name="after">원하는 방향(회전축이 아닙니다.)</param>
+		/// <param name="after">현재 방향(회전축이 아닙니다.)</param>
+		inline static Quaternion directionByUnit(const vec3& after, const vec3& before) {
+			vec3 mid(after);
+			mid += before;
+			mid /= mid.length();
+			return Quaternion(0, mid.x, mid.y, mid.z);
 		}
 
 		/// <summary>
@@ -1027,7 +1111,6 @@ namespace onart {
 		/// <param name="yaw">yaw(Z축 방향 회전)</param>
 		/// <param name="pitch">pitch(Y축 방향 회전)</param>
 		inline static Quaternion euler(float roll, float pitch, float yaw) {
-			vec3 cypr(yaw, pitch, roll), sypr(cypr);
 			float cy = cosf(yaw / 2);	float sy = sinf(yaw / 2);
 			float cp = cosf(pitch / 2);	float sp = sinf(pitch / 2);
 			float cr = cosf(roll / 2);	float sr = sinf(roll / 2);
