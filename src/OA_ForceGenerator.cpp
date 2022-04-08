@@ -20,6 +20,8 @@ namespace onart {
 	std::map<ForceGenerator*, std::vector<PointMass*>> R_ForcePoint::fgreg;
 	std::map<PointMass2D*, std::vector<ForceGenerator2D*>> R_ForcePoint2D::pmreg;
 	std::map<ForceGenerator2D*, std::vector<PointMass2D*>> R_ForcePoint2D::fgreg;
+	std::map<RigidBody*, std::vector<ForceGenerator*>> R_ForceRigid::rbreg;
+	std::map<ForceGenerator*, std::vector<RigidBody*>> R_ForceRigid::fgreg;
 
 	void DragGenerator::generate(PointMass* pm) {
 		const vec3& v = pm->getVelocity();
@@ -167,5 +169,51 @@ namespace onart {
 				fg->generate(pm);
 			}
 		}
+	}
+
+	void R_ForceRigid::Update() {
+		for (auto& p : fgreg) {
+			ForceGenerator* fg = p.first;
+			for (RigidBody* rb : p.second) {
+				fg->generate(rb);
+			}
+		}
+	}
+
+	void R_ForceRigid::add(RigidBody* rb, ForceGenerator* fg) {
+		rbreg[rb].push_back(fg);
+		fgreg[fg].push_back(rb);
+	}
+
+	void R_ForceRigid::cascade(ForceGenerator* fg) {
+		auto vec = fgreg.find(fg);
+		if (vec == fgreg.end()) return;
+		for (RigidBody* pm : vec->second) {
+			auto& pmv = rbreg[pm];
+			pmv.erase(std::remove(pmv.begin(), pmv.end(), fg), pmv.end());
+		}
+		fgreg.erase(fg);
+	}
+
+	void R_ForceRigid::cascade(RigidBody* rb) {
+		auto vec = rbreg.find(rb);
+		if (vec == rbreg.end()) return;
+		for (ForceGenerator* fg : vec->second) {
+			auto& fgv = fgreg[fg];
+			fgv.erase(std::remove(fgv.begin(), fgv.end(), rb), fgv.end());
+		}
+		rbreg.erase(rb);
+	}
+
+	void R_ForceRigid::remove(RigidBody* rb, ForceGenerator* fg) {
+		auto& pmv = rbreg[rb];
+		pmv.erase(std::remove(pmv.begin(), pmv.end(), fg), pmv.end());
+		auto& fgv = fgreg[fg];
+		fgv.erase(std::remove(fgv.begin(), fgv.end(), rb), fgv.end());
+	}
+
+	void R_ForceRigid::clear() {
+		rbreg.clear();
+		fgreg.clear();
 	}
 }

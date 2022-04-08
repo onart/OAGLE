@@ -129,6 +129,40 @@ namespace onart {
 	};
 
 	/// <summary>
+	/// 3차원 힘 발생기와 강체의 릴레이션입니다.
+	/// </summary>
+	class R_ForceRigid {
+	protected:
+		static std::map<RigidBody*, std::vector<ForceGenerator*>> rbreg;
+		static std::map<ForceGenerator*, std::vector<RigidBody*>> fgreg;
+	public:
+		/// <summary>
+		/// 현재 프레임에 가할 힘이 있으면 가합니다.
+		/// </summary>
+		static void Update();
+		/// <summary>
+		/// 힘 발생기와 질점의 연계를 추가합니다.
+		/// </summary>
+		static void add(RigidBody* pm, ForceGenerator* fg);
+		/// <summary>
+		/// 힘 발생기와 질점의 연계를 제거합니다.
+		/// </summary>
+		static void remove(RigidBody* pm, ForceGenerator* fg);
+		/// <summary>
+		/// 주어진 질점에 대한 모든 힘 발생기를 제거합니다.
+		/// </summary>
+		static void cascade(RigidBody* pm);
+		/// <summary>
+		/// 주어진 힘 발생기에 대한 모든 질점을 제거합니다.
+		/// </summary>
+		static void cascade(ForceGenerator* fg);
+		/// <summary>
+		/// 모든 힘 발생기와 질점의 관계를 제거합니다.
+		/// </summary>
+		static void clear();
+	};
+
+	/// <summary>
 	/// 3차원 힘 발생기와 질점의 릴레이션입니다.
 	/// </summary>
 	class R_ForcePoint {

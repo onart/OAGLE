@@ -22,6 +22,8 @@ extern float dt;
 namespace onart {
 	std::vector<PointMass*> PointMassSystem::indiv;
 	std::vector<PointMass2D*> PointMassSystem2D::indiv;
+	std::vector<RigidBody*> PointMassSystem::rindiv;
+	std::vector<RigidBody2D*> PointMassSystem2D::rindiv;
 	std::vector<ContactGenerator*> PointMassSystem::contacts;
 	std::vector<ContactGenerator2D*> PointMassSystem2D::contacts;
 
@@ -42,7 +44,9 @@ namespace onart {
 	}
 
 	void PointMassSystem::addIndividual(PointMass* p) { insort(indiv, p); }
+	void PointMassSystem::addIndividual(RigidBody* m) { insort(rindiv, m); }
 	void PointMassSystem::removeIndividual(PointMass* p) { removeFromSorted(indiv, p); R_ForcePoint::cascade(p); }
+	void PointMassSystem::removeIndividual(RigidBody* p) { removeFromSorted(rindiv, p); R_ForceRigid::cascade(p); }
 	void PointMassSystem::addContactGenerator(ContactGenerator* p) { insort(contacts, p); }
 	void PointMassSystem::removeContactGenerator(ContactGenerator* p) { removeFromSorted(contacts, p); }
 
@@ -77,9 +81,9 @@ namespace onart {
 
 	void PointMassSystem::Update() {
 		R_ForcePoint::Update();
-		for (PointMass* pm : indiv) {
-			pm->Update();
-		}
+		R_ForceRigid::Update();
+		for (PointMass* pm : indiv) { pm->Update(); }
+		for (RigidBody* pm : rindiv) { pm->Update(); }
 		unsigned usedContacts = generateContacts();
 		//ContactResolver::setMaximumRepCount()
 		ContactResolver::resolve(contactsInThisFrame, usedContacts, dt);

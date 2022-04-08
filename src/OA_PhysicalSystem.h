@@ -22,6 +22,8 @@ namespace onart {
 	class ContactGenerator2D;
 	class Contact;
 	class Contact2D;
+	class RigidBody;
+	class RigidBody2D;
 
 	constexpr size_t maxContact = 60;
 
@@ -33,11 +35,14 @@ namespace onart {
 	public:
 		static void Update();
 		static void addIndividual(PointMass* m);
+		static void addIndividual(RigidBody* m);
 		static void removeIndividual(PointMass* m);
+		static void removeIndividual(RigidBody* m);
 		static void addContactGenerator(ContactGenerator* g);
 		static void removeContactGenerator(ContactGenerator* g);
 		static unsigned generateContacts();
 	private:
+		static std::vector<RigidBody*> rindiv;
 		static std::vector<PointMass*> indiv;
 		static std::vector<ContactGenerator*> contacts;
 		static Contact* contactsInThisFrame;
@@ -55,6 +60,7 @@ namespace onart {
 		static void removeContactGenerator(ContactGenerator2D* g);
 		static unsigned generateContacts();
 	private:
+		static std::vector<RigidBody2D*> rindiv;
 		static std::vector<PointMass2D*> indiv;
 		static std::vector<ContactGenerator2D*> contacts;
 		static Contact2D* contactsInThisFrame;
