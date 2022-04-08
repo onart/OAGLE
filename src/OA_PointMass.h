@@ -284,6 +284,8 @@ namespace onart {
 		/// 현재 프레임의 가속도를 리턴합니다.
 		/// </summary>
 		vec3 getAcceleration();
+		inline mat3 getModel3() { return tr.getModel(); }
+		inline mat4 getModel() { return tr.getModel(); }
 		/// <summary>
 		/// 속도를 강제로 지정합니다.
 		/// </summary>

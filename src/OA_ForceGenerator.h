@@ -229,6 +229,36 @@ namespace onart {
 		/// </summary>
 		static void clear();
 	};
+
+	/// <summary>
+	/// 3D 바람 항력을 발생시킵니다.
+	/// </summary>
+	class Aero : public ForceGenerator {
+	protected:
+		mat3 tensor;
+		vec3 position;
+		const vec3* windSpeed;
+		void generate(RigidBody* rb, const mat3& tensor);
+	public:
+		inline Aero(const mat3& tensor, const vec3& position, const vec3* windSpeed) :tensor(tensor), position(position), windSpeed(windSpeed) {}
+		void generate(RigidBody* rb);
+	};
+
+	/// <summary>
+	/// 3D 표면에서 바람 항력을 발생시킵니다.
+	/// </summary>
+	class AeroControl : public Aero {
+	protected:
+		mat3 maxTensor;
+		mat3 minTensor;
+		mat3 effectiveTensor;
+		float controlSetting = 0;
+	public:
+		inline AeroControl(const mat3& base, const mat3& min, const mat3& max, const vec3& position, const vec3* windSpeed) :Aero(base, position, windSpeed), minTensor(min), maxTensor(max), effectiveTensor(base) {}
+		void generate(RigidBody* rb);
+		void setControl(float f);
+	};
+
 }
 
 #endif // !__OA_FORCEGENERATOR_H__

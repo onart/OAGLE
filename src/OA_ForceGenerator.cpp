@@ -216,4 +216,37 @@ namespace onart {
 		rbreg.clear();
 		fgreg.clear();
 	}
+
+	void Aero::generate(RigidBody* rb, const mat3& tensor) {
+		vec3 velocity = rb->getVelocity();
+		velocity += *windSpeed;
+		mat3 rs = rb->getModel3();
+		vec3 rbv = rs.inverse() * velocity;
+		vec3 rbf = rs * tensor * rbv;
+		rb->addForceAtBodyPoint(rbf, position);
+	}
+
+	void Aero::generate(RigidBody* rb) {
+		generate(rb, tensor);
+	}
+
+	void AeroControl::generate(RigidBody* rb) {
+
+	}
+
+	void AeroControl::setControl(float f) {
+		controlSetting = f;
+		if (f < -1) {
+			effectiveTensor = minTensor;
+		}
+		else if (f < 0) {
+			effectiveTensor = minTensor * (-f) + tensor * (f + 1);
+		}
+		else if (f < 1) {
+			effectiveTensor = tensor * f + maxTensor * (1 - f);
+		}
+		else {
+			effectiveTensor = maxTensor;
+		}
+	}
 }
