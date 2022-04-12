@@ -183,6 +183,6 @@ namespace onart {
 		vec2 pt(point);
 		pt -= tr.getGlobalPosition();
 		netForce += force;
-		float tq = cross(pt, force);
+		float tq = cross2(pt, force);
 	}
 }

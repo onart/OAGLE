@@ -252,7 +252,7 @@ namespace onart {
 	/// <summary>
 	/// 2개 2차원 실수 벡터의 외적의 z축 성분을 계산합니다.
 	/// </summary>
-	inline float cross(const vec2& a, const vec2& b) { return a.x * b.y - a.y * b.x; }
+	inline float cross2(const vec2& a, const vec2& b) { return a.x * b.y - a.y * b.x; }
 
 	/// <summary>
 	/// 2개 3차원 실수 벡터의 외적을 계산합니다.
@@ -1205,6 +1205,87 @@ namespace onart {
 		t = t > max ? max : t;
 		return t;
 	};
+
+	/// <summary>
+	/// 2차원 평면에서 2개 선분의 교점을 리턴합니다.
+	/// 교점이 없는 경우 (nan, nan)이 리턴됩니다.
+	/// 나란한 경우 교점 여부에 무관하게 (nan, 0)이 리턴됩니다.
+	/// https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
+	/// </summary>
+	/// <param name="p1">선분 1의 끝점 1</param>
+	/// <param name="p2">선분 1의 끝점 2</param>
+	/// <param name="q1">선분 2의 끝점 1</param>
+	/// <param name="q2">선분 2의 끝점 2</param>
+	inline vec2 intersect(const vec2& p1, const vec2& p2, const vec2& q1, const vec2& q2) {
+		// cf) n개 중 접촉하는 선분 https://www.geeksforgeeks.org/given-a-set-of-line-segments-find-if-any-two-segments-intersect/
+		vec2 _13(p1 - q1);
+		vec2 _34(q1 - q2);
+		vec2 _12(p1 - p2);
+		float d = cross2(_12, _34);
+		if (d == 0) return vec2(_NAN, 0);
+		float vn = cross2(_13, _12);
+		float tn = cross2(_13, _34);
+		if (d < 0) {
+			if (tn <= 0 && tn >= d && vn <= 0 && vn >= d) return p1 - _12 * (tn / d);
+			else return _NAN;
+		}
+		else {
+			if (tn >= 0 && tn <= d && vn >= 0 && vn <= d) return p1 - _12 * (tn / d);
+			else return _NAN;
+		}
+	}
+
+	/// <summary>
+	/// 2차원 평면에서 2개 선분이 만나는지 여부만 확인합니다.
+	/// </summary>
+	/// <param name="p1">선분 1의 끝점 1</param>
+	/// <param name="p2">선분 1의 끝점 2</param>
+	/// <param name="q1">선분 2의 끝점 1</param>
+	/// <param name="q2">선분 2의 끝점 2</param>
+	inline bool intersect2(const vec2& p1, const vec2& p2, const vec2& q1, const vec2& q2) {
+		// TODO: q1이 p1, p2와 나란한 경우(기저가 안생김)
+		vec2 b1(p1 - q1);
+		vec2 b2(p2 - q1);
+		vec2 qq2(q2 - q1);
+		mat2 bm(b1.x, b2.x, b1.y, b2.y);
+		bm = bm.inverse();
+		vec2 st = bm * qq2;
+		return (st.x >= 0 && st.y >= 0 && st.x + st.y >= 1.0f);
+	}
+
+	/// <summary>
+	/// 3차원 공간 상의 점이 동일 평면 내 삼각형 안에 있는지 확인합니다.
+	/// 삼각형과 점이 동일 평면 내에 있지 않은 경우에 대한 결과는 별도로 정의되지 않았습니다.
+	/// </summary>
+	/// <param name="p">점</param>
+	/// <param name="t1">삼각형 꼭짓점 1</param>
+	/// <param name="t2">삼각형 꼭짓점 2</param>
+	/// <param name="t3">삼각형 꼭짓점 3</param>
+	inline bool pointInTriangle(const vec3& p, const vec3& t1, const vec3& t2, const vec3& t3) {
+		vec3 _12(t2 - t1);
+		vec3 _23(t3 - t2);
+		vec3 p1(p - t1);
+		vec3 p2(p - t2);
+		vec3 p12(std::move(cross(_12, p1)));
+		vec3 p23(std::move(cross(_12, p1)));
+		{
+			vec3 p123(p12*p23);
+			if (p123.x < 0 || p123.y < 0 || p123.z < 0) {
+				return false;
+			}
+		}
+		vec3 p3(p - t3);
+		vec3 _31(t1 - t3);
+		vec3 p31(std::move(cross(_12, p1)));
+		{
+			vec3 p123(p12 * p31);
+			return !(p123.x < 0 || p123.y < 0 || p123.z < 0);
+		}
+	}
+
+	inline bool pointInTriangle2(const vec3& p, const vec3& t1, const vec3& t2, const vec3& t3) {
+		// pseduo inverse 필요.
+	}
 
 	/// <summary>
 	/// 편리한 디버그를 위한 값 출력 함수입니다.
