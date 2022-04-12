@@ -175,6 +175,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OA_BV.cpp" />
     <ClCompile Include="externals\gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
@@ -203,6 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
+    <ClInclude Include="OA_BV.h" />
     <ClInclude Include="externals\gl\glad\glad.h" />
     <ClInclude Include="externals\gl\glfw\win64\glfw3.h" />
     <ClInclude Include="externals\stb_image.h" />

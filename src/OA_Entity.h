@@ -100,7 +100,7 @@ namespace onart {
 		/// <returns></returns>
 		inline const EntityKey& name() const { return key; }
 		/// <summary>
-		/// 카메라 기준 z좌표를 리턴합니다.
+		/// 카메라 기준 상대적 z좌표를 리턴합니다.
 		/// </summary>
 		float zIndex();
 		/// <summary>

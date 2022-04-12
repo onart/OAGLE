@@ -122,6 +122,9 @@
     <ClCompile Include="OA_Contact.cpp">
       <Filter>엔진\물리1\소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="OA_BV.cpp">
+      <Filter>엔진\물리1\소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\gl\glad\glad.h">
@@ -224,6 +227,9 @@
       <Filter>엔진\물리1\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Contact.h">
+      <Filter>엔진\물리1\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_BV.h">
       <Filter>엔진\물리1\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
