@@ -184,15 +184,42 @@ namespace onart {
 	/// </summary>
 	template<class T>
 	inline void mulAll(T* vec, T val, size_t size) {
-		size_t i = 4;
-		for (; i <= size; i += 4) {
-			mul4<T>(vec + (i - 4), val);
+		if (size < 4) {
+			for (size_t i = 0; i < size; i++) vec[i] *= val;
+			return;
 		}
-		for (i -= 4; i < size; i++) {
-			vec[i] *= val;
+		size_t i;
+		switch (size & 3)
+		{
+		case 1:
+			vec[0] *= val;
+			i = 1;
+			break;
+		case 2:
+		{
+			T temp[2];
+			memcpy(temp, vec + 2, sizeof(T) * 2);
+			mul4<T>(vec, val);
+			memcpy(vec + 2, temp, sizeof(T) * 2);
+			i = 2;
+		}
+			break;
+		case 3:
+		{
+			T temp = vec[3];
+			mul4<T>(vec, val);
+			vec[3] = temp;
+			i = 3;
+		}
+			break;
+		default:
+			i = 0;
+			break;
+		}
+		for (; i < size; i += 4) {
+			mul4<T>(vec + i, val);
 		}
 	}
-
 	/// <summary>
 	/// 특정 타입의 배열에 다른 배열을 성분별로 곱합니다.
 	/// </summary>
@@ -201,12 +228,40 @@ namespace onart {
 	/// <param name="size">배열 크기</param>
 	template<class T>
 	inline void mulAll(T* vec, const T* val, size_t size) {
-		size_t i = 4;
-		for (; i <= size; i += 4) {
-			mul4<T>(vec + (i - 4), val + (i - 4));
+		if (size < 4) {
+			for (size_t i = 0; i < size; i++) vec[i] *= val[i];
+			return;
 		}
-		for (i -= 4; i < size; i++) {
-			vec[i] *= val[i];
+		size_t i;
+		switch (size & 3)
+		{
+		case 1:
+			vec[0] *= val[0];
+			i = 1;
+			break;
+		case 2:
+		{
+			T temp[2];
+			memcpy(temp, vec + 2, sizeof(T) * 2);
+			mul4<T>(vec, val);
+			memcpy(vec + 2, temp, sizeof(T) * 2);
+			i = 2;
+		}
+		break;
+		case 3:
+		{
+			T temp = vec[3];
+			mul4<T>(vec, val);
+			vec[3] = temp;
+			i = 3;
+		}
+		break;
+		default:
+			i = 0;
+			break;
+		}
+		for (; i < size; i += 4) {
+			mul4<T>(vec + i, val + i);
 		}
 	}
 

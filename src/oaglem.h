@@ -64,27 +64,27 @@ namespace onart {
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
-		inline nvec() { memset(entry, 0, sizeof(entry)); }
+		inline nvec() { static_assert(D > 1, "Vectors must be at least two dimensions."); memset(entry, 0, sizeof(entry)); }
 
 		/// <summary>
 		/// 벡터의 모든 값을 하나의 값으로 초기화합니다.
 		/// </summary>
-		inline nvec(T a) { setAll(entry, a, D > 4 ? D : 4); }
+		inline nvec(T a) { static_assert(D > 1, "Vectors must be at least two dimensions."); setAll(entry, a, D > 4 ? D : 4); }
 
 		/// <summary>
 		/// 벡터의 값 중 앞 2~4개를 초기화합니다.
 		/// </summary>
-		inline nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) {  }
+		inline nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) { static_assert(D > 1, "Vectors must be at least two dimensions."); }
 
 		/// <summary>
 		/// 복사 생성자입니다.
 		/// </summary>
-		inline nvec(const nvec<D,T>& v) { memcpy(entry, v.entry, sizeof(entry)); }
+		inline nvec(const nvec& v) { memcpy(entry, v.entry, sizeof(entry)); }
 
 		/// <summary>
 		/// 배열을 이용하여 벡터를 생성합니다.
 		/// </summary>
-		inline nvec(const T* v) { memcpy(entry, v, sizeof(entry)); }
+		inline nvec(const T* v) { static_assert(D > 1, "Vectors must be at least two dimensions."); memcpy(entry, v, sizeof(entry)); }
 
 		/// <summary>
 		/// 한 차원 낮은 벡터를 이용하여 생성합니다.
@@ -96,7 +96,7 @@ namespace onart {
 		/// <summary>
 		/// 다른 차원의 벡터를 사용하는 복사 생성자입니다. 가급적 차원 축소에만 사용하는 것이 좋습니다.
 		/// </summary>
-		template <unsigned E> inline nvec(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
+		template <unsigned E> inline nvec(const nvec<E, T>& v) { static_assert(D > 1, "Vectors must be at least two dimensions."); constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. operator=과 동일합니다.
@@ -337,9 +337,9 @@ namespace onart {
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
 		/// </summary>
-		inline mat2& operator*=(float f) { for (int i = 0; i < 4; i++) a[i] *= f; }
+		inline mat2& operator*=(float f) { for (int i = 0; i < 4; i++) a[i] *= f; return *this; }
 		inline mat2 operator*(float f) const { mat2 r(*this); r *= f; return r; }
-		inline mat2& operator/=(float f) { for (int i = 0; i < 4; i++) a[i] /= f; }
+		inline mat2& operator/=(float f) { for (int i = 0; i < 4; i++) a[i] /= f; return *this; }
 		inline mat2 operator/(float f) const { mat2 r(*this); r /= f; return r; }
 
 		/// <summary>
@@ -352,7 +352,9 @@ namespace onart {
 		/// </summary>
 		inline mat2 inverse() const {
 			float d = det();
+#ifdef DEBUG
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
+#endif // DEBUG
 			return mat2(_22, -_12, -_21, _11) / d;
 		}
 
@@ -467,7 +469,9 @@ namespace onart {
 		/// </summary>
 		inline mat3 inverse() const {
 			float d = det();
+#ifdef DEBUG
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
+#endif // DEBUG
 			return mat3(
 				(_22 * _33 - _32 * _23), (_13 * _32 - _12 * _33), (_12 * _23 - _13 * _22),
 				(_23 * _31 - _21 * _33), (_11 * _33 - _13 * _31), (_21 * _13 - _11 * _23),
@@ -688,7 +692,9 @@ namespace onart {
 		/// </summary>
 		inline mat4 inverse() const {
 			float d = det();
+#ifdef DEBUG
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
+#endif // DEBUG
 			return mat4(
 				(_32 * _43 * _24 - _42 * _33 * _24 + _42 * _23 * _34 - _22 * _43 * _34 - _32 * _23 * _44 + _22 * _33 * _44),
 				(_42 * _33 * _14 - _32 * _43 * _14 - _42 * _13 * _34 + _12 * _43 * _34 + _32 * _13 * _44 - _12 * _33 * _44),
@@ -883,6 +889,79 @@ namespace onart {
 			return r2r(r1, targ, z);
 		}
 	};
+
+	/// <summary>
+	/// 행렬 클래스의 일반화입니다. 행 우선 순서이며 정사각 행렬 mat2, mat3, mat4와 다르게 기본적인 연산만 지원됩니다. 영행렬 및 복사 생성만 허용되며 이외에는 직접 초기화만 지원합니다.
+	/// </summary>
+	template <unsigned R, unsigned C>
+	struct mat {
+		float entry[R][C];
+		
+		inline mat() { memset(entry, 0, sizeof(entry)); }
+		inline mat(const mat& m) { memcpy(entry, m.entry, sizeof(entry)); }
+		inline mat(const mat2& m2) { static_assert(R == 2 && C == 2, "The declared one is not a 2x2 matrix."); memcpy(entry, m2.a, sizeof(entry)); }
+		inline mat(const mat3& m3) { static_assert(R == 3 && C == 3, "The declared one is not a 3x3 matrix."); memcpy(entry, m3.a, sizeof(entry)); }
+		inline mat(const mat4& m4) { static_assert(R == 4 && C == 4, "The declared one is not a 4x4 matrix."); memcpy(entry, m4.a, sizeof(entry)); }
+		inline const float* operator[](ptrdiff_t i) const { return entry[i]; }
+		inline float* operator[](ptrdiff_t i) { return entry[i]; }
+		/// <summary>
+		/// r행 벡터를 리턴합니다. 1~(행 수) 외의 입력에 대한 결과는 정의되지 않았습니다.
+		/// </summary>
+		inline nvec<C, float> row(unsigned r) const { assert(r >= 1 && r <= R); return nvec<C, float>(entry[r - 1]); }
+		/// <summary>
+		/// c열 벡터를 리턴합니다. 1~(열 수) 외의 입력에 대한 결과는 정의되지 않았습니다.
+		/// </summary>
+		inline nvec<R, float> col(unsigned c) const { assert(c >= 1 && c <= C);	nvec<R, float> ret;	for (unsigned i = 0; i < R; i++)ret[i] = entry[i][c - 1]; return ret; }
+		/// <summary>
+		/// 열벡터를 행렬의 우측에 곱합니다.
+		/// 이 모듈은 다른 차원 벡터와의 암시적 형 변환을 허용하므로 올바른 차원을 사용하도록 주의하세요.
+		/// </summary>
+		inline nvec<R, float> operator*(const nvec<C, float>& v) const { 
+			nvec<R, float> ret;
+			for (unsigned i = 0; i < R; i++) {
+				nvec<C, float> rw(entry[i]);
+				ret[i] = rw.dot(v);
+			}
+			return ret; 
+		}
+		/// <summary>
+		/// 전치 행렬을 리턴합니다.
+		/// </summary>
+		inline mat<C, R> transpose() const { 
+			mat<C, R> ret;
+			for (unsigned i = 0; i < R; i++) {
+				for (unsigned j = 0; j < C; j++) {
+					ret[j][i] = entry[i][j];
+				}
+			}
+			return ret;
+		}
+		/// <summary>
+		/// 주어진 다른 행렬을 우측에 곱한 결과를 리턴합니다.
+		/// </summary>
+		template <unsigned C2>
+		inline mat<R, C2> operator*(const mat<C,C2>& m) {
+			mat<R, C2> ret;
+			mat<C2, C> mm(std::move(m.transpose()));
+			for (unsigned i = 0; i < R; i++) {
+				nvec<C, float> r(entry[i]);
+				for (unsigned j = 0; j < C2; j++) {
+					ret[i][j] = r.dot2(mm.row(j + 1));
+				}
+			}
+			return ret;
+		}
+		/// <summary>
+		/// 유사역행렬을 구합니다. 없으면 영행렬을 리턴합니다.
+		/// </summary>
+		inline mat<C, R> pseudoInverse() const {
+			mat<C, R> ret;
+			// TODO: 할 수도 안 할 수도
+			return ret;
+		}
+	};
+
+	using mat2x3 = mat<2, 3>;	using mat3x2 = mat<3, 2>;
 
 	/// <summary>
 	/// 3차원 회전 등을 표현하는 사원수입니다. 1, i, j, k 부분에 해당하는 c1, ci, cj, ck 멤버를 가집니다.
@@ -1192,6 +1271,26 @@ namespace onart {
 	template<unsigned D, class T>inline nvec<D, T> operator*(float f, const nvec<D, T>& v) { return v * f; }
 	inline mat4 operator*(float f, const mat4& m) { return m * f; }
 	inline Quaternion operator*(float f, const Quaternion& q) { return q * f; }
+	
+	/// <summary>
+	/// 3x2 행렬의 유사역행렬을 리턴합니다. 없으면 영행렬을 리턴합니다.
+	/// </summary>
+	inline mat2x3 pseudoInverse(const mat3x2& m) {
+		const float& a = m[0][0], & b = m[0][1], & c = m[1][0], & d = m[1][1], & e = m[2][0], & f = m[2][1];
+		float dd = b * (c * (b * c - a * d) + e * (b * e - a * f)) + a * (a * d * d + a * f * f - b * c * d - b * e * f) + (d * e - c * f) * (d * e - c * f);
+		mat2x3 ret;
+		if (dd != 0) {
+			dd = 1 / dd;
+			ret[0][0] = d * d * a + f * f * a - d * b * c - f * b * e;
+			ret[0][1] = -b * a * d + b * b * c + f * f * c - f * d * e;
+			ret[0][2] = -b * a * f + b * b * e - d * c * f + d * d * e;
+			ret[1][0] = -c * a * d - e * a * f + c * c * b + e * e * b;
+			ret[1][1] = -a * b * c + a * a * d - e * c * f + e * e * d;
+			ret[1][2] = -a * b * e + a * a * f - c * d * e + c * c * f;
+			mulAll(ret[0], dd, 6);
+		}
+		return ret;
+	}
 
 	/// <summary>
 	/// 최대/최소 제한을 두어 자른 값을 리턴합니다. 첫 값은 복사생성되니 기본자료형이 아닌 것을 사용할 때는 주의하세요.
@@ -1243,9 +1342,10 @@ namespace onart {
 	/// <param name="q1">선분 2의 끝점 1</param>
 	/// <param name="q2">선분 2의 끝점 2</param>
 	inline bool intersect2(const vec2& p1, const vec2& p2, const vec2& q1, const vec2& q2) {
-		// TODO: q1이 p1, p2와 나란한 경우(기저가 안생김)
 		vec2 b1(p1 - q1);
 		vec2 b2(p2 - q1);
+		float dt = b1.dot(b2);
+		if (dt < 0 && fabs(dt * dt - b1.length2() * b2.length2()) < FLT_EPSILON) return true;
 		vec2 qq2(q2 - q1);
 		mat2 bm(b1.x, b2.x, b1.y, b2.y);
 		bm = bm.inverse();
@@ -1284,7 +1384,7 @@ namespace onart {
 	}
 
 	inline bool pointInTriangle2(const vec3& p, const vec3& t1, const vec3& t2, const vec3& t3) {
-		// pseduo inverse 필요.
+		// pseudo inverse 필요.
 	}
 
 	/// <summary>
