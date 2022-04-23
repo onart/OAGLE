@@ -339,6 +339,13 @@ namespace onart {
 		}
 	}
 
+	template <class T>
+	inline void abs4(T* vec) {
+		vec[0] = vec[0] >= 0 ? vec[0] : -vec[0];
+		vec[1] = vec[1] >= 0 ? vec[1] : -vec[1];
+		vec[2] = vec[2] >= 0 ? vec[2] : -vec[2];
+		vec[3] = vec[3] >= 0 ? vec[3] : -vec[3];
+	}
 }
 
 #if (defined(_M_IX86) || defined(_M_X64)) && !defined (_M_CEE_PURE) && !defined(OAGLE_NOSIMD)
@@ -486,6 +493,26 @@ namespace onart {
 	inline void sqrt4(float* vec) {
 		__m128 m = _mm_loadu_ps(vec);
 		m = _mm_sqrt_ps(m);
+		_mm_storeu_ps(vec, m);
+	}
+
+	/// <summary>
+	/// 실수 배열에서 앞 4개의 부호 비트를 0으로 설정하여 절댓값으로 만듭니다.
+	/// </summary>
+	template<>
+	inline void abs4<float>(float* vec) {
+		__m128 m = _mm_loadu_ps(vec);
+		constexpr int32_t imask = 0x7fffffff;
+		m = _mm_and_ps(m, _mm_set_ps1(*(float*)&imask));
+		_mm_storeu_ps(vec, m);
+	}
+
+	/// <summary>
+	/// 실수 배열에서 앞 4개의 부호 비트를 1로 설정하여 음수로 만듭니다.
+	/// </summary>
+	inline void mabs4(float* vec) {
+		__m128 m = _mm_loadu_ps(vec);
+		m = _mm_or_ps(m, _mm_set_ps1(-0.0f));
 		_mm_storeu_ps(vec, m);
 	}
 

@@ -249,7 +249,6 @@ namespace onart {
 	}
 
 	void Shader::texture(unsigned tex, TexCode idx) {
-		use();
 		int i = (int)idx;
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, tex);

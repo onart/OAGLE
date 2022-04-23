@@ -48,11 +48,12 @@ namespace onart {
 	using byte = unsigned char;
 	struct Quaternion;
 	/// <summary>
-	/// N차원 벡터입니다. 길이에 관계없이 상호 변환이 가능합니다.
+	/// 2~4차원 벡터입니다. 길이에 관계없이 상호 변환이 가능합니다.
+	/// 최적화 힌트: 사용하기에는 xyzw 등이 더 쉽겠지만, 인덱스 접근이 가장 빠릅니다. 거의 2배는 빠른 것 같습니다.
 	/// </summary>
 	/// <typeparam name="T">벡터 성분의 타입입니다. 사칙 연산 및 부호 반전이 가능하여야 합니다.</typeparam>
 	template <unsigned D, class T = float> union nvec {
-		T entry[D];
+		T entry[4];
 		struct { T x, y, z, w; };
 		struct { T r, g, b, a; };
 		struct { T s, t, p, q; };
@@ -64,17 +65,17 @@ namespace onart {
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
-		inline nvec() { static_assert(D > 1, "Vectors must be at least two dimensions."); memset(entry, 0, sizeof(entry)); }
+		inline nvec() { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); memset(entry, 0, sizeof(entry)); }
 
 		/// <summary>
 		/// 벡터의 모든 값을 하나의 값으로 초기화합니다.
 		/// </summary>
-		inline nvec(T a) { static_assert(D > 1, "Vectors must be at least two dimensions."); setAll(entry, a, D > 4 ? D : 4); }
+		inline nvec(T a) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); setAll(entry, a, D > 4 ? D : 4); }
 
 		/// <summary>
 		/// 벡터의 값 중 앞 2~4개를 초기화합니다.
 		/// </summary>
-		inline nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) { static_assert(D > 1, "Vectors must be at least two dimensions."); }
+		inline nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); }
 
 		/// <summary>
 		/// 복사 생성자입니다.
@@ -84,35 +85,35 @@ namespace onart {
 		/// <summary>
 		/// 배열을 이용하여 벡터를 생성합니다.
 		/// </summary>
-		inline nvec(const T* v) { static_assert(D > 1, "Vectors must be at least two dimensions."); memcpy(entry, v, sizeof(entry)); }
+		inline nvec(const T* v) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); memcpy(entry, v, sizeof(T)*D); }
 
 		/// <summary>
 		/// 한 차원 낮은 벡터를 이용하여 생성합니다.
 		/// </summary>
 		/// <param name="v">한 차원 낮은 벡터</param>
 		/// <param name="a">나머지 자리에 들어가는 값</param>
-		inline nvec(const nvec<D - 1, T>& v, T a) { memcpy(entry, v.entry, sizeof(entry) - sizeof(T)); entry[D - 1] = a; }
+		inline nvec(const nvec<D - 1, T>& v, T a) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); memcpy(entry, v.entry, sizeof(entry) - sizeof(T)); entry[D - 1] = a; }
 
 		/// <summary>
 		/// 다른 차원의 벡터를 사용하는 복사 생성자입니다. 가급적 차원 축소에만 사용하는 것이 좋습니다.
 		/// </summary>
-		template <unsigned E> inline nvec(const nvec<E, T>& v) { static_assert(D > 1, "Vectors must be at least two dimensions."); constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
+		template <unsigned E> inline nvec(const nvec<E, T>& v) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); constexpr unsigned min = D > E ? E : D; memset(entry, 0, sizeof(entry)); memcpy(entry, v.entry, min * sizeof(T)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. operator=과 동일합니다.
 		/// </summary>
-		inline void set(T a) { setAll(entry, a, D > 4 ? D : 4); }
+		inline void set(T a) { set4(entry, a, D); }
 		
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
 		/// </summary>
 		/// <param name="v"></param>
-		inline void set(const nvec& v) { memcpy(entry, v.entry, sizeof(entry));; }
+		inline void set(const nvec& v) { memcpy(entry, v.entry, sizeof(entry)); }
 
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
 		/// </summary>
-		template <unsigned E> inline void set(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; memcpy(entry, v.entry, min * sizeof(T)); }
+		template <unsigned E> inline void set(const nvec<E, T>& v) { memcpy(entry, v.entry, sizeof(entry)); }
 
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. set()과 동일합니다.
@@ -130,46 +131,34 @@ namespace onart {
 		template <unsigned E> inline nvec& operator=(const nvec<E, T>& v) { set(v); return *this; }
 
 		/// <summary>
-		/// 다른 벡터와 성분별 연산을 차원수가 낮은 쪽을 기준으로 합니다.
-		/// </summary>
-		template <unsigned E> inline nvec& operator+=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; addAll(entry, v.entry, min); return *this; }
-		template <unsigned E> inline nvec& operator-=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; subAll(entry, v.entry, min); return *this; }
-		template <unsigned E> inline nvec& operator*=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; mulAll(entry, v.entry, min); return *this; }
-		template <unsigned E> inline nvec& operator/=(const nvec<E, T>& v) { constexpr unsigned min = D > E ? E : D; divAll(entry, v.entry, min); return *this; }
-
-		/// <summary>
 		/// 같은 차원의 다른 벡터와 성분별 연산을 합니다.
 		/// </summary>
-		inline nvec& operator+=(const nvec& v) { if constexpr (D <= 4) add4(entry, v.entry); else addAll(entry, v.entry, D); return *this; }
-		inline nvec& operator-=(const nvec& v) { if constexpr (D <= 4) sub4(entry, v.entry); else subAll(entry, v.entry, D); return *this; }
-		inline nvec& operator*=(const nvec& v) { if constexpr (D <= 4) mul4(entry, v.entry); else mulAll(entry, v.entry, D); return *this; }
-		inline nvec& operator/=(const nvec& v) { if constexpr (D <= 4) div4(entry, v.entry); else divAll(entry, v.entry, D); return *this; }
+		inline nvec& operator+=(const nvec& v) { add4(entry, v.entry); return *this; }
+		inline nvec& operator-=(const nvec& v) { sub4(entry, v.entry); return *this; }
+		inline nvec& operator*=(const nvec& v) { mul4(entry, v.entry); return *this; }
+		inline nvec& operator/=(const nvec& v) { div4(entry, v.entry); return *this; }
+		inline nvec operator+(const nvec& v) const { return nvec(*this) += v; }
+		inline nvec operator-(const nvec& v) const { return nvec(*this) -= v; }
+		inline nvec operator*(const nvec& v) const { return nvec(*this) *= v; }
+		inline nvec operator/(const nvec& v) const { return nvec(*this) /= v; }
 
 		/// <summary>
 		/// 벡터의 모든 성분에 대하여 주어진 값과 연산합니다.
 		/// </summary>
-		inline nvec& operator+=(T a) { add4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] += a; return *this; }
-		inline nvec& operator-=(T a) { sub4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] -= a; return *this; }
-		inline nvec& operator*=(T a) { mul4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] *= a; return *this; }
-		inline nvec& operator/=(T a) { div4<T>(entry, a); for (unsigned i = 4; i < D; i++) entry[i] /= a; return *this; }
-		inline nvec operator+(T a) const { auto r(*this); r += a; return r; }
-		inline nvec operator-(T a) const { auto r(*this); r -= a; return r; }
-		inline nvec operator*(T a) const { auto r(*this); r *= a; return r; }
-		inline nvec operator/(T a) const { auto r(*this); r /= a; return r; }
+		inline nvec& operator+=(T a) { add4<T>(entry, a); return *this; }
+		inline nvec& operator-=(T a) { sub4<T>(entry, a); return *this; }
+		inline nvec& operator*=(T a) { mul4<T>(entry, a); return *this; }
+		inline nvec& operator/=(T a) { div4<T>(entry, a); return *this; }
+		inline nvec operator+(T a) const { return nvec(*this) += a; }
+		inline nvec operator-(T a) const { return nvec(*this) -= a; }
+		inline nvec operator*(T a) const { return nvec(*this) *= a; }
+		inline nvec operator/(T a) const { return nvec(*this) /= a; }
 
 		/// <summary>
 		/// 벡터의 모든 성분이 동일한 경우 참을 리턴합니다. 다른 크기의 벡터와의 비교를 지원하지 않습니다.
 		/// </summary>
 		inline bool operator==(const nvec& v) const { return memcmp(entry, v.entry, sizeof(nvec)) == 0; }
 		inline bool operator!=(const nvec& v) const { return !operator==(v); }
-
-		/// <summary>
-		/// 다른 벡터와 성분별 연산을 차원수가 낮은 쪽을 기준으로 합니다. 리턴 차원수는 항상 좌변값과 동일합니다.
-		/// </summary>
-		template <unsigned E> inline nvec operator+(const nvec<E, T>& v) const { auto r(*this); r += v; return r; }
-		template <unsigned E> inline nvec operator-(const nvec<E, T>& v) const { auto r(*this); r -= v; return r; }
-		template <unsigned E> inline nvec operator*(const nvec<E, T>& v) const { auto r(*this); r *= v; return r; }
-		template <unsigned E> inline nvec operator/(const nvec<E, T>& v) const { auto r(*this); r /= v; return r; }
 
 		/// <summary>
 		/// T형 배열로 사용할 수 있도록 포인터를 리턴합니다.
@@ -210,11 +199,11 @@ namespace onart {
 		/// dot 함수에 비해 행렬 간 곱 및 행렬 x 벡터에서 사용하기에 빠릅니다. (원인은 파악 중입니다)
 		/// </summary>
 		inline T dot2(const nvec& v) const { 
-			auto nv = (*this) * v; T s = 0;
+			auto nv = (*this) * v;
 			if constexpr (D == 2) return nv[0] + nv[1];
 			else if constexpr (D == 3) return nv[0] + nv[1] + nv[2];
 			else if constexpr (D == 4) return nv[0] + nv[1] + nv[2] + nv[3];
-			else for (unsigned i = 0; i < D; i++)s += nv[i]; return s; 
+			else return T();	// 더 이상 실행되지 않음
 		}
 
 		/// <summary>
@@ -257,7 +246,10 @@ namespace onart {
 	/// <summary>
 	/// 2개 3차원 실수 벡터의 외적을 계산합니다.
 	/// </summary>
-	inline vec3 cross(const vec3& a, const vec3& b) { return vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x); }
+	inline vec3 cross(const vec3& a, const vec3& b) {
+		vec3 mul = a * vec3(b.yz, b.x) - b * vec3(a.yz, a.x);
+		return vec3(mul.yz, mul.x);
+	}
 
 	/// <summary>
 	/// 2개의 벡터를 선형 보간합니다.
@@ -274,6 +266,19 @@ namespace onart {
 	/// <param name="b">선형 보간 대상 2(t=1에 가까울수록 이 벡터에 가깝습니다.)</param>
 	/// <param name="t">선형 보간 값</param>
 	template <unsigned D, class T> inline nvec<D, T> lerp(const nvec<D, T>& a, const nvec<D, T>& b, float t) { return a * (1 - t) + b * t; }
+
+	/// <summary>
+	/// 2개 단위 벡터를 구면 선형 보간합니다.
+	/// </summary>
+	/// <param name="a">구면 선형 보간 대상 1(t=0에 가까울수록 이 벡터에 가깝습니다.)</param>
+	/// <param name="b">구면 선형 보간 대상 2(t=1에 가까울수록 이 벡터에 가깝습니다.)</param>
+	/// <param name="t">구면 선형 보간 값</param>
+	inline vec3 slerp(const vec3 a, const vec3& b, float t) { 
+		float sinx = cross(a, b).length();
+		float theta = asinf(sinx);
+		if (theta <= FLT_EPSILON)return a;
+		return a * sinf(theta * (1 - t)) + b * sinf(theta * t);
+	}
 
 	/// <summary>
 	/// 2차원 이미지의 회전연산을 위한 2x2 행렬입니다. 단, 3차원 연산의 z축을 0으로 고정하는 것이 더 일반적인 방법입니다.
@@ -1385,6 +1390,38 @@ namespace onart {
 
 	inline bool pointInTriangle2(const vec3& p, const vec3& t1, const vec3& t2, const vec3& t3) {
 		// pseudo inverse 필요.
+	}
+
+	/// <summary>
+	/// RGB 값을 포함하는 vec3를 받아 HSV 형식(근사치)을 리턴합니다.
+	/// 입력해야 할 RGB 값의 범위는 0~255 사이의 정수가 아닌 0~1 사이의 실수이며 리턴값도 0~1 사이의 실수입니다.
+	/// 이 중 H값의 단위는 360 deg = 2PI rad입니다. 예를 들어 0.5는 180도를 뜻합니다.
+	/// https://thebookofshaders.com/06/
+	/// </summary>
+	inline vec3 hsv(const vec3& rgb) {
+		vec4 p = rgb.g < rgb.b ? vec4(rgb.b, rgb.g, -1.0f, 2.0f / 3) : vec4(rgb.g, rgb.b, 0, -1.0f / 3);
+		vec4 q = rgb.r < p.x ? vec4(p.x, p.y, p.w, rgb.r) : vec4(rgb.r, p.y, p.z, p.x);
+		float d = q.x - std::min(q.w, q.y);
+		return vec3(fabsf(q.z + (q.w - q.y) / (6.0f * d + FLT_EPSILON)), d / (q.x + FLT_EPSILON), q.x);
+	}
+
+	/// <summary>
+	/// HSV 값을 포함하는 vec3를 받아 RGB 형식(근사치)을 리턴합니다.
+	/// 입력 H값의 단위는 360 deg = 2PI rad이며 나머지도 0~1 사이의 실수입니다.
+	/// 리턴 rgb값은 0~1사이의 실수로 표현됩니다.
+	/// https://thebookofshaders.com/06/
+	/// </summary>
+	inline vec3 rgb(const vec3& hsv) {
+		vec3 _rgb = vec3(0, 4, 2) + hsv.x * 6;
+		_rgb.x = fmodf(_rgb.x, 6.0f);
+		_rgb.y = fmodf(_rgb.y, 6.0f);
+		_rgb.z = fmodf(_rgb.z, 6.0f);
+		_rgb -= 3;
+		abs4<float>(_rgb.entry);
+		_rgb -= 1;
+		clamp4<float>(_rgb.entry, 0, 1);
+		_rgb = _rgb * _rgb * (-2.0f * _rgb + 3.0f);
+		return lerp(vec3(1), _rgb, hsv.y) * hsv.z;
 	}
 
 	/// <summary>
