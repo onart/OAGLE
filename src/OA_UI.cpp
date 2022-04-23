@@ -32,7 +32,7 @@ namespace onart::UI {
 	}
 
 	Text::Text(const EntityKey& key, Font* font, const oastring& content, const vec4& targRect, float maxWidth, bool fullFit, AlignH align, float rowGap, const vec4& color)
-		:UIEntity(key, Transform(vec3(0, 0, -0.9f)), true, false, true) , font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(true), halign(align), rowGap(rowGap), center(targRect.left + targRect.width / 2, targRect.down + targRect.width / 2), fullFit(fullFit), targRect(targRect) {
+		:UIEntity(key, Transform(vec3(0, 0, -0.9f)), true, false, true) , font(font), input(content), maxWidth(maxWidth), color(color), rectFixed(true), halign(align), rowGap(rowGap), center(targRect[0] + targRect[2] / 2, targRect[1] + targRect[3] / 2), fullFit(fullFit), targRect(targRect) {
 		setContent(content);
 		if (fullFit) { r2r = mat4::r2r(ldwh, targRect); }
 		else { r2r = mat4::r2r2(ldwh, targRect); }
@@ -98,7 +98,7 @@ namespace onart::UI {
 		if (hasNormal = (bool)normal) { addAnim(normal); } else { addAnim("__defaultbutton"); }
 		if (hasOver = (bool)onOver) { addAnim(onOver); } else { addAnim("__defaultbutton"); }
 		if (hasDown = (bool)onDown) { addAnim(onDown); }
-		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
+		vec4 prv(-baseSCTR[0] / 2 + baseSCTR[2], -baseSCTR[1] / 2 + baseSCTR[3], baseSCTR[0], baseSCTR[1]);
 		mat4 tr = mat4::r2r(prv, ldwh, -0.8f);
 		transform.setScale(tr[0], tr[5], 1);
 		transform.setLocalPosition(tr[3], tr[7], -0.8f);
@@ -124,7 +124,7 @@ namespace onart::UI {
 
 	void Button::Update() {
 		vec2 pos = Input::cameraCursorPos();
-		const bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
+		const bool isOver = pos[0] >= ldwh[0] && pos[0] <= ldwh[0] + ldwh[2] && pos[1] >= ldwh[1] && pos[1] <= ldwh[1] + ldwh[3];
 		switch (st)
 		{
 		case 0:	// 기본
@@ -168,7 +168,7 @@ namespace onart::UI {
 		if (hasOver2 = (bool)onOver2) { addAnim(onOver2); } else { addAnim("__defaultbutton"); }
 		if (hasDown1 = (bool)onDown1) { addAnim(onDown1); } else { addAnim("__defaultbutton"); }
 		if (hasDown2 = (bool)onDown2) { addAnim(onDown2); }
-		vec4 prv(-baseSCTR.x / 2 + baseSCTR.z, -baseSCTR.y / 2 + baseSCTR.w, baseSCTR.x, baseSCTR.y);
+		vec4 prv(-baseSCTR[0] / 2 + baseSCTR[2], -baseSCTR[1] / 2 + baseSCTR[3], baseSCTR[0], baseSCTR[1]);
 		mat4 tr = std::move(mat4::r2r(prv, ldwh, -0.8f));
 		transform.setScale(tr[0], tr[5], 1);
 		transform.setLocalPosition(tr[3], tr[7], -0.8f);
@@ -257,7 +257,7 @@ namespace onart::UI {
 
 	void ToggleButton::Update() {
 		vec2 pos = Input::cameraCursorPos();
-		const bool isOver = pos.x >= ldwh.left && pos.x <= ldwh.left + ldwh.width && pos.y >= ldwh.down && pos.y <= ldwh.down + ldwh.height;
+		const bool isOver = pos[0] >= ldwh[0] && pos[0] <= ldwh[0] + ldwh[2] && pos[1] >= ldwh[1] && pos[1] <= ldwh[1] + ldwh[3];
 		const bool var = st % 2;
 		switch (st)
 		{
@@ -303,7 +303,7 @@ namespace onart::UI {
 		if (length <= 1) { value.c = 1; }
 		else { value.q = length - 1; }
 		margin = clamp(margin, 0.0f, 0.495f);
-		vec4 prv(-barSCTR.x / 2 + barSCTR.z, -barSCTR.y / 2 + barSCTR.w, barSCTR.x, barSCTR.y);
+		vec4 prv(-barSCTR[0] / 2 + barSCTR[2], -barSCTR[1] / 2 + barSCTR[3], barSCTR[0], barSCTR[1]);
 		mat4 tr = std::move(mat4::r2r(prv, barArea));
 		if (!bar)bar = std::move(FixedSprite::make("__defaultbutton", Material::get("white1x1")));
 		if (!handle) { 
@@ -311,12 +311,12 @@ namespace onart::UI {
 			color = std::move(vec4(vec3(0.5f), 1));
 		}
 		this->bar = new Entity(key + "bar", Transform(vec3(tr[3], tr[7], -0.8f), vec3(tr[0], tr[5], 1)), bar, true);
-		leftmost = barArea.x + barArea.width * margin;
-		rightmost = barArea.x + barArea.width * (1 - margin);
-		prv = std::move(vec4(-handleSCTR.x / 2 + handleSCTR.z, -handleSCTR.y / 2 + handleSCTR.w, handleSCTR.x, handleSCTR.y));
-		vec2 center(barArea.left + barArea.width * (1 - margin), barArea.down + barArea.height / 2);
-		vec2 newSize = vec2(barArea.height, barArea.height) * handleSize;
-		handleArea = std::move(vec4(center.x - newSize.x / 2, center.y - newSize.y / 2, newSize.x, newSize.y));
+		leftmost = barArea[0] + barArea[2] * margin;
+		rightmost = barArea[0] + barArea[2] * (1 - margin);
+		prv = std::move(vec4(-handleSCTR[0] / 2 + handleSCTR[2], -handleSCTR[1] / 2 + handleSCTR[3], handleSCTR[0], handleSCTR[1]));
+		vec2 center(barArea[0] + barArea[2] * (1 - margin), barArea[1] + barArea[3] / 2);
+		vec2 newSize = vec2(barArea[3], barArea[3]) * handleSize;
+		handleArea = std::move(vec4(center[0] - newSize[0] / 2, center[1] - newSize[1] / 2, newSize[0], newSize[1]));
 		tr = std::move(mat4::r2r(prv, handleArea));
 		transform.setLocalPosition(tr[3], tr[7], -0.81f);
 		transform.setScale(tr[0], tr[5], 1);
@@ -328,7 +328,7 @@ namespace onart::UI {
 		if (length <= 1) { value.c = 1; }
 		else { value.q = length - 1; }
 		margin = clamp(margin, 0.0f, 0.495f);
-		vec4 prv(-barSCTR.x / 2 + barSCTR.z, -barSCTR.y / 2 + barSCTR.w, barSCTR.x, barSCTR.y);
+		vec4 prv(-barSCTR[0] / 2 + barSCTR[2], -barSCTR[1] / 2 + barSCTR[3], barSCTR[0], barSCTR[1]);
 		mat4 tr = std::move(mat4::r2r(prv, barArea));
 		if (!bar)bar = std::move(FixedSprite::make("__defaultbutton", Material::get("white1x1")));
 		if (!handle) {
@@ -336,12 +336,12 @@ namespace onart::UI {
 			color = std::move(vec4(vec3(0.5f), 1));
 		}
 		this->bar = new Entity(key + "bar", Transform(vec3(tr[3], tr[7], -0.8f), vec3(tr[0], tr[5], 1)), bar, true);
-		bottommost = barArea.y + barArea.height * margin;
-		topmost = barArea.y + barArea.height * (1 - margin);
-		prv = std::move(vec4(-handleSCTR.x / 2 + handleSCTR.z, -handleSCTR.y / 2 + handleSCTR.w, handleSCTR.x, handleSCTR.y));
-		vec2 center(barArea.left + barArea.width / 2, barArea.down + barArea.height * (1 - margin));
-		vec2 newSize = vec2(barArea.width, barArea.width) * handleSize;
-		handleArea = std::move(vec4(center.x - newSize.x / 2, center.y - newSize.y / 2, newSize.x, newSize.y));
+		bottommost = barArea[1] + barArea[3] * margin;
+		topmost = barArea[1] + barArea[3] * (1 - margin);
+		prv = std::move(vec4(-handleSCTR[0] / 2 + handleSCTR[2], -handleSCTR[1] / 2 + handleSCTR[3], handleSCTR[0], handleSCTR[1]));
+		vec2 center(barArea[0] + barArea[2] / 2, barArea[1] + barArea[3] * (1 - margin));
+		vec2 newSize = vec2(barArea[2], barArea[2]) * handleSize;
+		handleArea = std::move(vec4(center[0] - newSize[0] / 2, center[1] - newSize[1] / 2, newSize[0], newSize[1]));
 		tr = std::move(mat4::r2r(prv, handleArea));
 		transform.setLocalPosition(tr[3], tr[7], -0.81f);
 		transform.setScale(tr[0], tr[5], 1);
@@ -358,7 +358,7 @@ namespace onart::UI {
 			if (scale == 0)x = leftmost;
 			else if (scale == 1)x = rightmost;
 			transform.setLocalPositionX(x);
-			handleArea.left = x - handleArea.width / 2;
+			handleArea[0] = x - handleArea[2] / 2;
 			value.c = scale;
 			if (isContinuous && onScroll && prev != value.c) {
 				(*onScroll)(&value);
@@ -367,10 +367,10 @@ namespace onart::UI {
 		else {
 			int prev = value.q;
 			value.q = lroundf(scale * (length - 1));
-			float xpos = leftmost + barArea.width / (length - 1) * value.q * (1 - margin * 2);
+			float xpos = leftmost + barArea[2] / (length - 1) * value.q * (1 - margin * 2);
 			xpos = xpos > rightmost ? rightmost : xpos;
 			transform.setLocalPositionX(xpos);
-			handleArea.left = xpos - handleArea.width / 2;
+			handleArea[0] = xpos - handleArea[2] / 2;
 			if (isContinuous && onScroll && prev != value.q) {
 				(*onScroll)(&value);
 			}
@@ -393,7 +393,7 @@ namespace onart::UI {
 			if (scale == 0)y = bottommost;
 			else if (scale == 1)y = topmost;
 			transform.setLocalPositionY(y);
-			handleArea.down = y - handleArea.height / 2;
+			handleArea[1] = y - handleArea[3] / 2;
 			value.c = scale;
 			if (isContinuous && onScroll && prev != value.c) {
 				(*onScroll)(&value);
@@ -402,10 +402,10 @@ namespace onart::UI {
 		else {
 			int prev = value.q;
 			value.q = lroundf(scale * (length - 1));
-			float ypos = bottommost + barArea.height / (length - 1) * value.q * (1 - margin * 2);
+			float ypos = bottommost + barArea[3] / (length - 1) * value.q * (1 - margin * 2);
 			ypos = ypos > topmost ? topmost : ypos;
 			transform.setLocalPositionY(ypos);
-			handleArea.down = ypos - handleArea.height / 2;
+			handleArea[1] = ypos - handleArea[3] / 2;
 			if (isContinuous && onScroll && prev != value.q) {
 				(*onScroll)(&value);
 			}
@@ -420,8 +420,8 @@ namespace onart::UI {
 
 	void GaugeH::Update() {
 		vec2 pos = Input::cameraCursorPos();
-		const bool isOnHandle = pos.x >= handleArea.left && pos.x <= handleArea.left + handleArea.width && pos.y >= handleArea.down && pos.y <= handleArea.down + handleArea.height;
-		const bool isOnBar = pos.x >= barArea.left && pos.x <= barArea.left + barArea.width && pos.y >= barArea.down && pos.y <= barArea.down + barArea.height;
+		const bool isOnHandle = pos[0] >= handleArea[0] && pos[0] <= handleArea[0] + handleArea[2] && pos[1] >= handleArea[1] && pos[1] <= handleArea[1] + handleArea[3];
+		const bool isOnBar = pos[0] >= barArea[0] && pos[0] <= barArea[0] + barArea[2] && pos[1] >= barArea[1] && pos[1] <= barArea[1] + barArea[3];
 		switch (st)
 		{
 		case 0:	// 기본
@@ -432,20 +432,20 @@ namespace onart::UI {
 			else {
 				color = baseColor;
 				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
-					onHolding(pos.x);
+					onHolding(pos[0]);
 				}
 			}
 			break;
 		case 1:	// 손잡이 위 커서
 			if (isOnHandle) {
 				if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
-					onHolding(pos.x);
+					onHolding(pos[0]);
 				}
 			}
 			else {
 				color = baseColor;
 				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
-					onHolding(pos.x);
+					onHolding(pos[0]);
 				}
 				else {
 					st = 0;
@@ -453,7 +453,7 @@ namespace onart::UI {
 			}
 			break;
 		case 2:	// 손잡이를 잡고 있는 커서
-			onHolding(pos.x);
+			onHolding(pos[0]);
 			break;
 		default:
 			break;
@@ -462,8 +462,8 @@ namespace onart::UI {
 
 	void GaugeV::Update() {
 		vec2 pos = Input::cameraCursorPos();
-		const bool isOnHandle = pos.x >= handleArea.left && pos.x <= handleArea.left + handleArea.width && pos.y >= handleArea.down && pos.y <= handleArea.down + handleArea.height;
-		const bool isOnBar = pos.x >= barArea.left && pos.x <= barArea.left + barArea.width && pos.y >= barArea.down && pos.y <= barArea.down + barArea.height;
+		const bool isOnHandle = pos[0] >= handleArea[0] && pos[0] <= handleArea[0] + handleArea[2] && pos[1] >= handleArea[1] && pos[1] <= handleArea[1] + handleArea[3];
+		const bool isOnBar = pos[0] >= barArea[0] && pos[0] <= barArea[0] + barArea[2] && pos[1] >= barArea[1] && pos[1] <= barArea[1] + barArea[3];
 		switch (st)
 		{
 		case 0:	// 기본
@@ -474,20 +474,20 @@ namespace onart::UI {
 			else {
 				color = baseColor;
 				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
-					onHolding(pos.y);
+					onHolding(pos[1]);
 				}
 			}
 			break;
 		case 1:	// 손잡이 위 커서
 			if (isOnHandle) {
 				if (Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
-					onHolding(pos.y);
+					onHolding(pos[1]);
 				}
 			}
 			else {
 				color = baseColor;
 				if (isOnBar && Input::isKeyPressedNow(Input::MouseKeyCode::left)) {
-					onHolding(pos.y);
+					onHolding(pos[1]);
 				}
 				else {
 					st = 0;
@@ -495,7 +495,7 @@ namespace onart::UI {
 			}
 			break;
 		case 2:	// 손잡이를 잡고 있는 커서
-			onHolding(pos.y);
+			onHolding(pos[1]);
 			break;
 		default:
 			st = 0;
@@ -522,7 +522,7 @@ namespace onart::UI {
 	}
 
 	Slider::Slider(const EntityKey& key, const vec4& area, const vec2& size, const std::vector<UIEntity*>& component)
-		:UIEntity(key, Transform(), true), area(area.left, area.down, area.left + area.width, area.down + area.height) {
+		:UIEntity(key, Transform(), true), area(area[0], area[1], area[0] + area[2], area[1] + area[3]) {
 		
 	}
 

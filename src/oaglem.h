@@ -75,7 +75,7 @@ namespace onart {
 		/// <summary>
 		/// 벡터의 값 중 앞 2~4개를 초기화합니다.
 		/// </summary>
-		inline nvec(T x, T y, T z = 0, T w = 0) : x(x), y(y), z(z), w(w) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); }
+		inline nvec(T x, T y, T z = 0, T w = 0) : entry{ x,y,z,w } { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); }
 
 		/// <summary>
 		/// 복사 생성자입니다.
@@ -85,7 +85,7 @@ namespace onart {
 		/// <summary>
 		/// 배열을 이용하여 벡터를 생성합니다.
 		/// </summary>
-		inline nvec(const T* v) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); memcpy(entry, v, sizeof(T)*D); }
+		inline nvec(const T* v) { static_assert(D >= 2 && D <= 4, "Only 2~4 dim vectors are allowed."); memcpy(entry, v, sizeof(T) * D); }
 
 		/// <summary>
 		/// 한 차원 낮은 벡터를 이용하여 생성합니다.
@@ -102,7 +102,7 @@ namespace onart {
 		/// <summary>
 		/// 벡터의 모든 성분을 하나의 값으로 초기화합니다. operator=과 동일합니다.
 		/// </summary>
-		inline void set(T a) { set4(entry, a, D); }
+		inline void set(T a) { set4(entry, a); }
 		
 		/// <summary>
 		/// 다른 벡터의 값을 복사해 옵니다. operator=과 동일합니다.
@@ -148,7 +148,7 @@ namespace onart {
 		inline nvec& operator+=(T a) { add4<T>(entry, a); return *this; }
 		inline nvec& operator-=(T a) { sub4<T>(entry, a); return *this; }
 		inline nvec& operator*=(T a) { mul4<T>(entry, a); return *this; }
-		inline nvec& operator/=(T a) { div4<T>(entry, a); return *this; }
+		inline nvec& operator/=(T a) { mul4<T>(entry, 1/a); return *this; }
 		inline nvec operator+(T a) const { return nvec(*this) += a; }
 		inline nvec operator-(T a) const { return nvec(*this) -= a; }
 		inline nvec operator*(T a) const { return nvec(*this) *= a; }
@@ -163,8 +163,8 @@ namespace onart {
 		/// <summary>
 		/// T형 배열로 사용할 수 있도록 포인터를 리턴합니다.
 		/// </summary>
-		inline operator T* () { return &x; }
-		inline operator const T* () const { return &x; }
+		inline operator T* () { return entry; }
+		inline operator const T* () const { return entry; }
 
 		/// <summary>
 		/// 명시적 캐스트가 가능한 타입이라면 벡터도 명시적으로 캐스트가 가능합니다.
@@ -241,14 +241,14 @@ namespace onart {
 	/// <summary>
 	/// 2개 2차원 실수 벡터의 외적의 z축 성분을 계산합니다.
 	/// </summary>
-	inline float cross2(const vec2& a, const vec2& b) { return a.x * b.y - a.y * b.x; }
+	inline float cross2(const vec2& a, const vec2& b) { return a[0] * b[1] - a[1] * b[0]; }
 
 	/// <summary>
 	/// 2개 3차원 실수 벡터의 외적을 계산합니다.
 	/// </summary>
 	inline vec3 cross(const vec3& a, const vec3& b) {
-		vec3 mul = a * vec3(b.yz, b.x) - b * vec3(a.yz, a.x);
-		return vec3(mul.yz, mul.x);
+		vec3 mul = a * vec3(b[1], b[2], b[0]) - b * vec3(a[1], a[2], a[0]);
+		return vec3(mul[1], mul[2], mul[0]);
 	}
 
 	/// <summary>
@@ -284,52 +284,58 @@ namespace onart {
 	/// 2차원 이미지의 회전연산을 위한 2x2 행렬입니다. 단, 3차원 연산의 z축을 0으로 고정하는 것이 더 일반적인 방법입니다.
 	/// </summary>
 	struct mat2 {
-		union { float a[4]; struct { float _11, _12, _21, _22; }; };
+		float a[4];
 
 		/// <summary>
 		/// 단위행렬을 생성합니다.
 		/// </summary>
-		inline mat2() { _11 = _22 = 1; _12 = _21 = 0; }
+		inline mat2() :a{ 1,0,0,1 } {  }
 
 		/// <summary>
 		/// 행 우선 순서로 매개변수를 주어 행렬을 생성합니다.
 		/// </summary>
-		inline mat2(float _11, float _12, float _21, float _22) :_11(_11), _12(_12), _21(_21), _22(_22) { }
+		inline mat2(float _11, float _12, float _21, float _22) : a{ _11,_12,_21,_22 } {  }
 		
 		/// <summary>
-		/// 인덱스 연산자
+		/// 인덱스 연산자는 행 우선 순서로 일자로 접근할 수 있습니다. 행과 열을 따로 주고자 한다면 at() 함수를 이용해 주세요.
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
 
 		/// <summary>
+		/// row행 col열의 성분의 참조자를 리턴합니다. 행과 열 인덱스는 0 베이스입니다.
+		/// </summary>
+		inline float& at(ptrdiff_t row, ptrdiff_t col) { return a[row * 2 + col]; }
+		inline float at(ptrdiff_t row, ptrdiff_t col) const { return a[row * 2 + col]; }
+
+		/// <summary>
 		/// 복사 생성
 		/// </summary>
-		inline mat2(const mat2& m) { for (int i = 0; i < 4; i++) { a[i] = m[i]; } }
+		inline mat2(const mat2& m) { memcpy(a, m.a, sizeof(a)); }
 
 		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.
 		/// </summary>
-		inline void toI() { _11 = _22 = 1; _12 = _21 = 0; }
+		inline void toI() { a[0] = a[3] = 1; a[1] = a[2] = 0; }
 
 		/// <summary>
 		/// 다른 행렬과 성분별로 더하거나 뺍니다.
 		/// </summary>
-		inline mat2& operator+=(const mat2& m) { for (int i = 0; i < 4; i++)a[i] += m[i]; return *this; }
-		inline mat2& operator-=(const mat2& m) { for (int i = 0; i < 4; i++)a[i] -= m[i]; return *this; }
-		inline mat2 operator+(const mat2& m) const { auto r = mat2(*this); r += m; return r; }
-		inline mat2 operator-(const mat2& m) const { auto r = mat2(*this); r -= m; return r; }
+		inline mat2& operator+=(const mat2& m) { add4(a, m.a); return *this; }
+		inline mat2& operator-=(const mat2& m) { sub4(a, m.a); return *this; }
+		inline mat2 operator+(const mat2& m) const { return mat2(*this) += m; }
+		inline mat2 operator-(const mat2& m) const { return mat2(*this) -= m; }
 
 		/// <summary>
 		/// 행렬곱을 수행합니다.
 		/// </summary>
 		inline mat2 operator*(const mat2& m) const {
 			return mat2(
-				_11 * m._11 + _12 * m._21,
-				_11 * m._12 + _12 * m._22,
+				a[0] * m[0] + a[1] * m[2],
+				a[0] * m[1] + a[1] * m[3],
 
-				_21 * m._11 + _22 * m._21,
-				_21 * m._12 + _22 * m._22
+				a[2] * m[0] + a[3] * m[2],
+				a[2] * m[1] + a[3] * m[3]
 			);
 		}
 		inline mat2& operator*=(const mat2& m) { return *this = operator*(m); }
@@ -337,20 +343,20 @@ namespace onart {
 		/// <summary>
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
-		inline vec2 operator*(const vec2& v) const { return vec2(_11 * v.x + _12 * v.y, _21 * v.x + _22 * v.y); }
+		inline vec2 operator*(const vec2& v) const { return vec2(a[0] * v[0] + a[1] * v[1], a[2] * v[0] + a[3] * v[1]); }
 
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
 		/// </summary>
-		inline mat2& operator*=(float f) { for (int i = 0; i < 4; i++) a[i] *= f; return *this; }
-		inline mat2 operator*(float f) const { mat2 r(*this); r *= f; return r; }
-		inline mat2& operator/=(float f) { for (int i = 0; i < 4; i++) a[i] /= f; return *this; }
-		inline mat2 operator/(float f) const { mat2 r(*this); r /= f; return r; }
+		inline mat2& operator*=(float f) { mul4(a, f); return *this; }
+		inline mat2 operator*(float f) const { return mat2(*this) *= f; }
+		inline mat2& operator/=(float f) { div4(a, f); return *this; }
+		inline mat2 operator/(float f) const { return mat2(*this) *= f; }
 
 		/// <summary>
 		/// 행렬식을 반환합니다.
 		/// </summary>
-		inline float det() const { return _11 * _22 - _12 * _21; }
+		inline float det() const { return a[0] * a[3] - a[1] * a[2]; }
 
 		/// <summary>
 		/// 역행렬을 반환합니다.
@@ -360,13 +366,13 @@ namespace onart {
 #ifdef DEBUG
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
 #endif // DEBUG
-			return mat2(_22, -_12, -_21, _11) / d;
+			return mat2(a[3], -a[1], -a[2], a[0]) / d;
 		}
 
 		/// <summary>
 		/// 전치 행렬을 반환합니다.
 		/// </summary>
-		inline mat2 transpose() const { return mat2(_11, _21, _12, _22); }
+		inline mat2 transpose() const { return mat2(a[0], a[2], a[1], a[3]); }
 
 		/// <summary>
 		/// 행 우선 순서로 된 배열을 리턴합니다.
@@ -378,17 +384,17 @@ namespace onart {
 	/// 3차원 모델의 회전연산 혹은 2차원 이미지의 아핀 변환을 위한 3x3 행렬입니다.
 	/// </summary>
 	struct mat3 {
-		union { float a[9]; struct { float _11, _12, _13, _21, _22, _23, _31, _32, _33; }; };
-
+		float a[9];
+#define MAT3_INDEX const float _11 = a[0], _12 = a[1], _13 = a[2], _21 = a[3], _22 = a[4], _23 = a[5], _31 = a[6], _32 = a[7], _33 = a[8]
 		/// <summary>
 		/// 단위행렬을 생성합니다.
 		/// </summary>
-		inline mat3() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = 1; }
+		inline mat3() { memset(a, 0, sizeof(a)); a[0] = a[4] = a[8] = 1; }
 
 		/// <summary>
 		/// 행 우선 순서로 매개변수를 주어 행렬을 생성합니다.
 		/// </summary>
-		inline mat3(float _11, float _12, float _13, float _21, float _22, float _23, float _31, float _32, float _33) :_11(_11), _12(_12), _13(_13), _21(_21), _22(_22), _23(_23), _31(_31), _32(_32), _33(_33) { }
+		inline mat3(float _11, float _12, float _13, float _21, float _22, float _23, float _31, float _32, float _33) :a{ _11,_12,_13,_21,_22,_23,_31,_32,_33 } { }
 
 		/// <summary>
 		/// 행렬의 성분을 복사해서 생성합니다.
@@ -396,44 +402,49 @@ namespace onart {
 		inline mat3(const mat3& m) { memcpy(a, m.a, sizeof(a)); }
 
 		/// <summary>
-		/// 인덱스 연산자
+		/// 인덱스 연산자는 행 우선 순서로 일자로 접근할 수 있습니다.행과 열을 따로 주고자 한다면 at() 함수를 이용해 주세요.
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
 
 		/// <summary>
+		/// row행 col열 원소의 참조를 리턴합니다. 행과 열 인덱스는 0 베이스입니다.
+		/// </summary>
+		inline float& at(ptrdiff_t row, ptrdiff_t col) { return a[row * 3 + col]; }
+		inline float at(ptrdiff_t row, ptrdiff_t col) const { return a[row * 3 + col]; }
+		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.
 		/// </summary>
-		inline void toI() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = 1; }
+		inline void toI() { memset(a, 0, sizeof(a)); a[0] = a[4] = a[8] = 1; }
 
 		/// <summary>
 		/// 다른 행렬과 성분별로 더하거나 뺍니다.
 		/// </summary>
-		inline mat3& operator+=(const mat3& m) { for (int i = 0; i < 9; i++)a[i] += m[i]; return *this; }
-		inline mat3& operator-=(const mat3& m) { for (int i = 0; i < 9; i++)a[i] -= m[i]; return *this; }
-		inline mat3 operator+(const mat3& m) const { auto r = mat3(*this); r += m; return r; }
-		inline mat3 operator-(const mat3& m) const { auto r = mat3(*this); r -= m; return r; }
+		inline mat3& operator+=(const mat3& m) { add4(a, m.a); add4(a + 4, m.a + 4); a[8] += m.a[8]; return *this; }
+		inline mat3& operator-=(const mat3& m) { sub4(a, m.a); sub4(a + 4, m.a + 4); a[8] -= m.a[8]; return *this; }
+		inline mat3 operator+(const mat3& m) const { return mat3(*this) += m; }
+		inline mat3 operator-(const mat3& m) const { return mat3(*this) -= m; }
 
 		/// <summary>
-		/// n행 벡터를 리턴합니다. 1~3만 입력 가능합니다.
+		/// n행 벡터를 리턴합니다. 0~2만 입력 가능합니다.
 		/// </summary>
-		/// <param name="i">행 인덱스(1 base)</param>
-		inline vec3 row(int i) const { assert(i <= 3 && i >= 1); int st = 3 * i - 3; return vec3(a + st); }
+		/// <param name="i">행 인덱스(0 base)</param>
+		inline vec3 row(int i) const { assert(i <= 2 && i >= 0); return vec3(a + i * 3); }
 
 		/// <summary>
-		/// n열 벡터를 리턴합니다. 1~4만 입력 가능합니다.
+		/// n열 벡터를 리턴합니다. 0~2만 입력 가능합니다.
 		/// </summary>
-		/// <param name="i">열 인덱스(1 base)</param>
-		inline vec3 col(int i) const { assert(i <= 3 && i >= 1); return vec3(a[i - 1], a[i + 2], a[i + 5]); }
+		/// <param name="i">열 인덱스(0 base)</param>
+		inline vec3 col(int i) const { assert(i <= 2 && i >= 0); return vec3(a[i], a[i + 3], a[i + 6]); }
 
 		/// <summary>
 		/// 행렬곱을 수행합니다.
 		/// </summary>
 		inline mat3 operator*(const mat3& m) const {
 			mat3 ret;
-			for (int i = 1, ent = 0; i <= 3; i++) {
+			for (int i = 0, ent = 0; i < 3; i++) {
 				vec3 r = row(i);
-				for (int j = 1; j <= 3; j++, ent++) {
+				for (int j = 0; j < 3; j++, ent++) {
 					vec3 c = m.col(j);
 					ret[ent] = r.dot2(c);
 				}
@@ -449,25 +460,28 @@ namespace onart {
 		/// <summary>
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
-		inline vec3 operator*(const vec3& v) const { return vec3(row(1).dot2(v), row(2).dot2(v), row(3).dot2(v)); }
+		inline vec3 operator*(const vec3& v) const { return vec3(row(0).dot2(v), row(1).dot2(v), row(2).dot2(v)); }
 
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
 		/// </summary>
-		inline mat3& operator*=(float f) { mulAll(a, f, 9); return *this; }
-		inline mat3 operator*(float f) const { mat3 r(*this); r *= f; return r; }
-		inline mat3& operator/=(float f) { divAll(a, f, 9); return *this; }
-		inline mat3 operator/(float f) const { mat3 r(*this); r /= f; return r; }
+		inline mat3& operator*=(float f) { mul4(a, f); mul4(a + 4, f); a[8] *= f; return *this; }
+		inline mat3 operator*(float f) const { return mat3(*this) *= f; }
+		inline mat3& operator/=(float f) { return operator*=(1 / f); }
+		inline mat3 operator/(float f) const { return mat3(*this) /= f; }
 
 		/// <summary>
 		/// 행렬식을 반환합니다.
 		/// </summary>
-		inline float det() const { return _11 * (_22 * _33 - _23 * _32) + _12 * (_23 * _31 - _21 * _33) + _13 * (_21 * _32 - _22 * _31); }
+		inline float det() const { 
+			MAT3_INDEX;
+			return _11 * (_22 * _33 - _23 * _32) + _12 * (_23 * _31 - _21 * _33) + _13 * (_21 * _32 - _22 * _31);
+		}
 
 		/// <summary>
 		/// 행렬 대각 성분의 합을 반환합니다.
 		/// </summary>
-		inline float trace() const { return _11 + _22 + _33; }
+		inline float trace() const { return a[0] + a[4] + a[8]; }
 
 		/// <summary>
 		/// 역행렬을 반환합니다.
@@ -477,6 +491,7 @@ namespace onart {
 #ifdef DEBUG
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
 #endif // DEBUG
+			MAT3_INDEX;
 			return mat3(
 				(_22 * _33 - _32 * _23), (_13 * _32 - _12 * _33), (_12 * _23 - _13 * _22),
 				(_23 * _31 - _21 * _33), (_11 * _33 - _13 * _31), (_21 * _13 - _11 * _23),
@@ -487,25 +502,26 @@ namespace onart {
 		/// <summary>
 		/// 전치 행렬을 반환합니다.
 		/// </summary>
-		inline mat3 transpose() const { return mat3(_11, _21, _31, _12, _22, _32, _13, _23, _33); }
+		inline mat3 transpose() const { MAT3_INDEX; return mat3(_11, _21, _31, _12, _22, _32, _13, _23, _33); }
 
 		/// <summary>
 		/// 행 우선 순서로 된 배열을 리턴합니다.
 		/// </summary>
 		inline operator float* () { return a; }
+		inline operator const float* () const { return a; }
 
 		/// <summary>
 		/// 좌측 상단 2x2 행렬로 캐스트합니다.
 		/// </summary>
-		inline operator mat2() { return mat2(_11, _12, _21, _22); }
+		inline operator mat2() { MAT3_INDEX; return mat2(_11, _12, _21, _22); }
 
 		/// <summary>
 		/// 2차원 병진 행렬을 계산합니다.
 		/// </summary>
 		inline static mat3 translate(const vec2& t) {
 			return mat3(
-				1, 0, t.x,
-				0, 1, t.y,
+				1, 0, t[0],
+				0, 1, t[1],
 				0, 0, 1
 			);
 		}
@@ -525,8 +541,8 @@ namespace onart {
 		/// </summary>
 		inline static mat3 scale(const vec2& t) {
 			return mat3(
-				t.x, 0, 0,
-				0, t.y, 0,
+				t[0], 0, 0,
+				0, t[1], 0,
 				0, 0, 1
 			);
 		}
@@ -559,23 +575,25 @@ namespace onart {
 		/// <param name="pitch">pitch(Y축 방향 회전)</param>
 		/// <param name="yaw">yaw(Z축 방향 회전)</param>
 		inline static mat3 rotate(float roll, float pitch, float yaw);
+#undef MAT3_INDEX
 	};
 
 	/// <summary>
 	/// 3차원 모델의 아핀 변환을 위한 4x4 행렬입니다.
 	/// </summary>
 	struct mat4 {
-		union { float a[16]; struct { float _11, _12, _13, _14, _21, _22, _23, _24, _31, _32, _33, _34, _41, _42, _43, _44; }; };
-
+		float a[16];
+#define MAT4_INDEX const float _11 = a[0], _12 = a[1], _13 = a[2], _14 = a[3], _21 = a[4], _22 = a[5], _23 = a[6], _24 = a[7], _31 = a[8], _32 = a[9], _33 = a[10], _34 = a[11], _41 = a[12], _42 = a[13], _43 = a[14], _44 = a[15]
 		/// <summary>
 		/// 단위행렬을 생성합니다.
 		/// </summary>
-		inline mat4() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = _44 = 1; }
+		inline mat4() { memset(a, 0, sizeof(a)); a[0] = a[5] = a[10] = a[15] = 1; }
 
 		/// <summary>
 		/// 행 우선 순서로 매개변수를 주어 행렬을 생성합니다.
 		/// </summary>
-		inline mat4(float _11, float _12, float _13, float _14, float _21, float _22, float _23, float _24, float _31, float _32, float _33, float _34, float _41, float _42, float _43, float _44) :_11(_11), _12(_12), _13(_13), _14(_14), _21(_21), _22(_22), _23(_23), _24(_24), _31(_31), _32(_32), _33(_33), _34(_34), _41(_41), _42(_42), _43(_43), _44(_44) { }
+		inline mat4(float _11, float _12, float _13, float _14, float _21, float _22, float _23, float _24, float _31, float _32, float _33, float _34, float _41, float _42, float _43, float _44)
+			:a{ _11,_12,_13,_14,_21,_22,_23,_24,_31,_32,_33,_34,_41,_42,_43,_44 } { }
 
 		/// <summary>
 		/// 행렬의 성분을 복사해서 생성합니다.
@@ -583,15 +601,21 @@ namespace onart {
 		inline mat4(const mat4& m) { memcpy(a, m.a, sizeof(a)); }
 
 		/// <summary>
-		/// 인덱스 연산자
+		/// 인덱스 연산자는 행 우선 순서로 일자로 접근할 수 있습니다.행과 열을 따로 주고자 한다면 at() 함수를 이용해 주세요.
 		/// </summary>
 		inline float& operator[](ptrdiff_t i) { return a[i]; }
 		inline const float& operator[](ptrdiff_t i) const { return a[i]; }
 
 		/// <summary>
+		/// row행 col열 원소의 참조를 리턴합니다. 행과 열 인덱스는 0 베이스입니다.
+		/// </summary>
+		inline float& at(ptrdiff_t row, ptrdiff_t col) { return a[row * 4 + col]; }
+		inline float at(ptrdiff_t row, ptrdiff_t col) const { return a[row * 4 + col]; }
+
+		/// <summary>
 		/// 행렬을 단위행렬로 바꿉니다.
 		/// </summary>
-		inline void toI() { memset(a, 0, sizeof(a)); _11 = _22 = _33 = _44 = 1; }
+		inline void toI() { memset(a, 0, sizeof(a)); a[0] = a[5] = a[10] = a[15] = 1; }
 
 		/// <summary>
 		/// 단위행렬이면 true를 리턴합니다.
@@ -603,29 +627,29 @@ namespace onart {
 		/// </summary>
 		inline mat4& operator+=(const mat4& m) { add4<float>(a, m.a); add4<float>(a + 4, m.a + 4); add4<float>(a + 8, m.a + 8); add4<float>(a + 12, m.a + 12); return *this; }
 		inline mat4& operator-=(const mat4& m) { sub4<float>(a, m.a); sub4<float>(a + 4, m.a + 4); sub4<float>(a + 8, m.a + 8); sub4<float>(a + 12, m.a + 12); return *this; }
-		inline mat4 operator+(const mat4& m) const { auto r = mat4(*this); r += m; return r; }
-		inline mat4 operator-(const mat4& m) const { auto r = mat4(*this); r -= m; return r; }
+		inline mat4 operator+(const mat4& m) const { return mat4(*this) += m; }
+		inline mat4 operator-(const mat4& m) const { return mat4(*this) -= m; }
 
 		/// <summary>
-		/// n행 벡터를 리턴합니다. 1~4만 입력 가능합니다.
+		/// n행 벡터를 리턴합니다. 0~3만 입력 가능합니다.
 		/// </summary>
-		/// <param name="i">행 인덱스(1 base)</param>
-		inline vec4 row(int i) const { assert(i <= 4 && i >= 1); int st = 4 * i - 4; vec4 ret; memcpy(ret.entry, a + st, sizeof(ret.entry)); return ret; }
+		/// <param name="i">행 인덱스(0 base)</param>
+		inline vec4 row(int i) const { assert(i < 4 && i >= 0); return vec4(a + 4 * i); }
 
 		/// <summary>
-		/// n열 벡터를 리턴합니다. 1~4만 입력 가능합니다.
+		/// n열 벡터를 리턴합니다. 0~3만 입력 가능합니다.
 		/// </summary>
-		/// <param name="i">열 인덱스(1 base)</param>
-		inline vec4 col(int i) const { assert(i <= 4 && i >= 1); return vec4(a[i - 1], a[i + 3], a[i + 7], a[i + 11]); }
+		/// <param name="i">열 인덱스(0 base)</param>
+		inline vec4 col(int i) const { assert(i < 4 && i >= 0); return vec4(a[i], a[i + 4], a[i + 8], a[i + 12]); }
 
 		/// <summary>
 		/// 행렬곱을 수행합니다.
 		/// </summary>
 		inline mat4 operator*(const mat4& m) const {
 			mat4 ret;
-			for (int i = 1, ent = 0; i <= 4; i++) {
+			for (int i = 0, ent = 0; i < 4; i++) {
 				vec4 r = row(i);
-				for (int j = 1; j <= 4; j++, ent++) {
+				for (int j = 0; j < 4; j++, ent++) {
 					vec4 c = m.col(j);
 					ret[ent] = r.dot2(c);
 				}
@@ -642,7 +666,7 @@ namespace onart {
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
 		inline vec4 operator*(const vec4& v) const { 
-			return vec4(row(1).dot2(v), row(2).dot2(v), row(3).dot2(v), row(4).dot2(v));
+			return vec4(row(0).dot2(v), row(1).dot2(v), row(2).dot2(v), row(3).dot2(v));
 		}
 
 		/// <summary>
@@ -657,6 +681,7 @@ namespace onart {
 		/// 행렬식을 반환합니다.
 		/// </summary>
 		inline float det() const {
+			MAT4_INDEX;
 			return 
 				_41 * _32 * _23 * _14 - _31 * _42 * _23 * _14 - _41 * _22 * _33 * _14 + _21 * _42 * _33 * _14 +
 				_31 * _22 * _43 * _14 - _21 * _32 * _43 * _14 - _41 * _32 * _13 * _24 + _31 * _42 * _13 * _24 +
@@ -669,12 +694,15 @@ namespace onart {
 		/// <summary>
 		/// 행렬의 대각선 성분 합을 리턴합니다.
 		/// </summary>
-		inline float trace() const { return _11 + _22 + _33 + _44; }
+		inline float trace() const { return a[0] + a[5] + a[10] + a[15]; }
 		
 		/// <summary>
 		/// 좌측 상단 3x3 행렬로 캐스트합니다.
 		/// </summary>
-		inline operator mat3() const { return mat3(_11, _12, _13, _21, _22, _23, _31, _32, _33); }
+		inline operator mat3() const { 
+			MAT4_INDEX;
+			return mat3(_11, _12, _13, _21, _22, _23, _31, _32, _33); 
+		}
 
 		/// <summary>
 		/// 아핀 변환의 역행렬을 조금 더 효율적으로 구합니다.
@@ -685,9 +713,9 @@ namespace onart {
 			mat3 ir(mat3(*this).inverse());
 			vec3 p = ir * (-this->col(4));
 			return mat4(
-				ir._11, ir._12, ir._13, p.x,
-				ir._21, ir._22, ir._23, p.y,
-				ir._31, ir._32, ir._33, p.z,
+				ir[0], ir[1], ir[2], p[0],
+				ir[3], ir[4], ir[5], p[1],
+				ir[6], ir[7], ir[8], p[2],
 				0, 0, 0, 1
 			);
 		}
@@ -700,6 +728,7 @@ namespace onart {
 #ifdef DEBUG
 			if (d == 0) printf("%p: 이 행렬은 역행렬이 없거나 매우 큰 성분을 가집니다. NaN에 의해 예기치 못한 동작이 발생할 수 있습니다.\n", this);
 #endif // DEBUG
+			MAT4_INDEX;
 			return mat4(
 				(_32 * _43 * _24 - _42 * _33 * _24 + _42 * _23 * _34 - _22 * _43 * _34 - _32 * _23 * _44 + _22 * _33 * _44),
 				(_42 * _33 * _14 - _32 * _43 * _14 - _42 * _13 * _34 + _12 * _43 * _34 + _32 * _13 * _44 - _12 * _33 * _44),
@@ -725,7 +754,10 @@ namespace onart {
 		/// <summary>
 		/// 전치 행렬을 반환합니다.
 		/// </summary>
-		inline mat4 transpose() const { return mat4(_11, _21, _31, _41, _12, _22, _32, _42, _13, _23, _33, _43, _14, _24, _34, _44); }
+		inline mat4 transpose() const { 
+			MAT4_INDEX;
+			return mat4(_11, _21, _31, _41, _12, _22, _32, _42, _13, _23, _33, _43, _14, _24, _34, _44); 
+		}
 
 		/// <summary>
 		/// 행 우선 순서로 된 배열을 리턴합니다.
@@ -738,9 +770,9 @@ namespace onart {
 		/// </summary>
 		inline static mat4 translate(const vec3& t) {
 			return mat4(
-				1, 0, 0, t.x,
-				0, 1, 0, t.y,
-				0, 0, 1, t.z,
+				1, 0, 0, t[0],
+				0, 1, 0, t[1],
+				0, 0, 1, t[2],
 				0, 0, 0, 1
 			);
 		}
@@ -761,9 +793,9 @@ namespace onart {
 		/// </summary>
 		inline static mat4 scale(const vec3& t) {
 			return mat4(
-				t.x, 0, 0, 0,
-				0, t.y, 0, 0,
-				0, 0, t.z, 0,
+				t[0], 0, 0, 0,
+				0, t[1], 0, 0,
+				0, 0, t[2], 0,
 				0, 0, 0, 1
 			);
 		}
@@ -808,9 +840,9 @@ namespace onart {
 			vec3 u = cross(up, n).normal();
 			vec3 v = cross(n, u).normal();
 			return mat4(
-					u.x, u.y, u.z, -(u.dot(eye)),
-					v.x, v.y, v.z, -(v.dot(eye)),
-					n.x, n.y, n.z, -(n.dot(eye)),
+					u[0], u[1], u[2], -(u.dot(eye)),
+					v[0], v[1], v[2], -(v.dot(eye)),
+					n[0], n[1], n[2], -(n.dot(eye)),
 					0, 0, 0, 1
 				);
 		}
@@ -844,7 +876,7 @@ namespace onart {
 				0, 0, (dnear + dfar) / (dnear - dfar), (2 * dnear * dfar) / (dnear - dfar) ,
 				0, 0,					-1, 0
 			);
-			r._11 = r._22 / aspect;
+			r[0] = r[5] / aspect;
 			return r;
 		}
 
@@ -855,10 +887,10 @@ namespace onart {
 		/// <param name="r2">변환 후 직사각형</param>
 		/// <param name="z">직사각형이 위치할 z좌표(-1이 가장 겉)</param>
 		inline static mat4 r2r(const vec4& r1, const vec4& r2, float z = 0) {
-			vec4 sc = r2 / r1;	vec4 tr = r2 - r1 * vec4(sc.z, sc.w);
+			vec4 sc = r2 / r1;	vec4 tr = r2 - r1 * vec4(sc[2], sc[3]);
 			return mat4(
-				sc.z, 0, 0, tr.x,
-				0, sc.w, 0, tr.y,
+				sc[2], 0, 0, tr[0],
+				0, sc[3], 0, tr[1],
 				0, 0, 1, z,
 				0, 0, 0, 1
 			);
@@ -881,18 +913,19 @@ namespace onart {
 		/// <param name="r2">변환 후 직사각형</param>
 		/// <param name="z">직사각형이 위치할 z좌표(-1이 가장 겉)</param>
 		inline static mat4 r2r2(const vec4& r1, const vec4& r2, float z = 0) {
-			float r = r1.width / r1.height;
+			float r = r1[2] / r1[3];
 			vec4 targ(r2);
-			if (targ.width < targ.height * r) {	// 세로선을 맞출 것
-				targ.down += (targ.height - targ.width / r) / 2;
-				targ.height = targ.width / r;
+			if (targ[2] < targ[3] * r) {	// 세로선을 맞출 것
+				targ[1] += (targ[3] - targ[2] / r) / 2;
+				targ[3] = targ[2] / r;
 			}
 			else {	// 가로선을 맞출 것
-				targ.left += (targ.width - targ.height * r) / 2;
-				targ.width = targ.height * r;
+				targ[0] += (targ[2] - targ[3] * r) / 2;
+				targ[2] = targ[3] * r;
 			}
 			return r2r(r1, targ, z);
 		}
+#undef MAT4_INDEX
 	};
 
 	/// <summary>
@@ -1123,14 +1156,14 @@ namespace onart {
 			vec3 a;
 			float sinrcosp = 2 * (q.c1 * q.ci + q.cj * q.ck);
 			float cosrcosp = 1 - 2 * (q.ci * q.ci + q.cj * q.cj);
-			a.x = atan2f(sinrcosp, cosrcosp);
+			a[0] = atan2f(sinrcosp, cosrcosp);
 			float sinp = 2 * (q.c1 * q.cj - q.ck * q.ci);
-			if (sinp >= 1) a.y = PI / 2;
-			else if (sinp <= -1) a.y = -PI / 2;
-			else a.y = asinf(sinp);
+			if (sinp >= 1) a[1] = PI / 2;
+			else if (sinp <= -1) a[1] = -PI / 2;
+			else a[1] = asinf(sinp);
 			float sinycosp = 2 * (q.c1 * q.ck + q.ci * q.cj);
 			float cosycosp = 1 - 2 * (q.cj * q.cj + q.ck * q.ck);
-			a.z = atan2f(sinycosp, cosycosp);
+			a[2] = atan2f(sinycosp, cosycosp);
 			return a;
 		}
 
@@ -1144,7 +1177,7 @@ namespace onart {
 			angle *= 0.5f;
 			float c = cosf(angle), s = sinf(angle);
 			vec3 nv = axis.normal() * s;
-			return Quaternion(c, nv.x, nv.y, nv.z);
+			return Quaternion(c, nv[0], nv[1], nv[2]);
 		}
 
 		/// <summary>
@@ -1158,7 +1191,7 @@ namespace onart {
 			angle *= 0.5f;
 			float c = cosf(angle), s = sinf(angle);
 			vec3 nv(uaxis); nv *= s;
-			return Quaternion(c, nv.x, nv.y, nv.z);
+			return Quaternion(c, nv[0], nv[1], nv[2]);
 		}
 
 		/// <summary>
@@ -1170,8 +1203,7 @@ namespace onart {
 			vec3 mid(after);
 			mid *= sqrtf(before.length2() / after.length2());
 			mid += before;
-			mid /= mid.length();
-			return Quaternion(0, mid.x, mid.y, mid.z);
+			return rotation(mid, PI);
 		}
 
 		/// <summary>
@@ -1181,10 +1213,7 @@ namespace onart {
 		/// <param name="after">원하는 방향(회전축이 아닙니다.)</param>
 		/// <param name="after">현재 방향(회전축이 아닙니다.)</param>
 		inline static Quaternion directionByUnit(const vec3& after, const vec3& before) {
-			vec3 mid(after);
-			mid += before;
-			mid /= mid.length();
-			return Quaternion(0, mid.x, mid.y, mid.z);
+			return rotation(before + after, PI);
 		}
 
 		/// <summary>
@@ -1251,9 +1280,9 @@ namespace onart {
 		mul4<float>(r.a, sc);
 		mul4<float>(r.a + 4, sc);
 		mul4<float>(r.a + 8, sc);
-		r[3] = translation.x;
-		r[7] = translation.y;
-		r[11] = translation.z;
+		r[3] = translation[0];
+		r[7] = translation[1];
+		r[11] = translation[2];
 		return r;
 	}
 
@@ -1261,13 +1290,13 @@ namespace onart {
 		// SIMD 적용 시 곱 19회/합 18회
 		mat4 r = rotation.conjugate().toMat4();	// 공액사원수=역회전
 		vec3 sc(1); sc /= scale;
-		mul4(r.a, sc.x);
-		mul4(r.a + 4, sc.y);
-		mul4(r.a + 8, sc.z);
+		mul4(r.a, sc[0]);
+		mul4(r.a + 4, sc[1]);
+		mul4(r.a + 8, sc[2]);
 		vec3 itr = r * (-translation);
-		r[3] = itr.x;
-		r[7] = itr.y;
-		r[11] = itr.z;
+		r[3] = itr[0];
+		r[7] = itr[1];
+		r[11] = itr[2];
 		return r;
 	}
 
@@ -1352,10 +1381,10 @@ namespace onart {
 		float dt = b1.dot(b2);
 		if (dt < 0 && fabs(dt * dt - b1.length2() * b2.length2()) < FLT_EPSILON) return true;
 		vec2 qq2(q2 - q1);
-		mat2 bm(b1.x, b2.x, b1.y, b2.y);
+		mat2 bm(b1[0], b2[0], b1[1], b2[1]);
 		bm = bm.inverse();
 		vec2 st = bm * qq2;
-		return (st.x >= 0 && st.y >= 0 && st.x + st.y >= 1.0f);
+		return (st[0] >= 0 && st[1] >= 0 && st[0] + st[1] >= 1.0f);
 	}
 
 	/// <summary>
@@ -1374,8 +1403,8 @@ namespace onart {
 		vec3 p12(std::move(cross(_12, p1)));
 		vec3 p23(std::move(cross(_12, p1)));
 		{
-			vec3 p123(p12*p23);
-			if (p123.x < 0 || p123.y < 0 || p123.z < 0) {
+			vec3 p123(p12 * p23);
+			if (p123[0] < 0 || p123[1] < 0 || p123[2] < 0) {
 				return false;
 			}
 		}
@@ -1384,7 +1413,7 @@ namespace onart {
 		vec3 p31(std::move(cross(_12, p1)));
 		{
 			vec3 p123(p12 * p31);
-			return !(p123.x < 0 || p123.y < 0 || p123.z < 0);
+			return !(p123[0] < 0 || p123[1] < 0 || p123[2] < 0);
 		}
 	}
 
@@ -1399,10 +1428,10 @@ namespace onart {
 	/// https://thebookofshaders.com/06/
 	/// </summary>
 	inline vec3 hsv(const vec3& rgb) {
-		vec4 p = rgb.g < rgb.b ? vec4(rgb.b, rgb.g, -1.0f, 2.0f / 3) : vec4(rgb.g, rgb.b, 0, -1.0f / 3);
-		vec4 q = rgb.r < p.x ? vec4(p.x, p.y, p.w, rgb.r) : vec4(rgb.r, p.y, p.z, p.x);
-		float d = q.x - std::min(q.w, q.y);
-		return vec3(fabsf(q.z + (q.w - q.y) / (6.0f * d + FLT_EPSILON)), d / (q.x + FLT_EPSILON), q.x);
+		vec4 p = rgb[1] < rgb[2] ? vec4(rgb[2], rgb[1], -1.0f, 2.0f / 3) : vec4(rgb[1], rgb[2], 0, -1.0f / 3);
+		vec4 q = rgb[0] < p[0] ? vec4(p[0], p[1], p[3], rgb[0]) : vec4(rgb[0], p[1], p[2], p[0]);
+		float d = q[0] - std::min(q[3], q[1]);
+		return vec3(fabsf(q[2] + (q[3] - q[1]) / (6.0f * d + FLT_EPSILON)), d / (q[0] + FLT_EPSILON), q[0]);
 	}
 
 	/// <summary>
@@ -1412,16 +1441,16 @@ namespace onart {
 	/// https://thebookofshaders.com/06/
 	/// </summary>
 	inline vec3 rgb(const vec3& hsv) {
-		vec3 _rgb = vec3(0, 4, 2) + hsv.x * 6;
-		_rgb.x = fmodf(_rgb.x, 6.0f);
-		_rgb.y = fmodf(_rgb.y, 6.0f);
-		_rgb.z = fmodf(_rgb.z, 6.0f);
+		vec3 _rgb = vec3(0, 4, 2) + hsv[0] * 6;
+		_rgb[0] = fmodf(_rgb[0], 6.0f);
+		_rgb[1] = fmodf(_rgb[1], 6.0f);
+		_rgb[2] = fmodf(_rgb[2], 6.0f);
 		_rgb -= 3;
 		abs4<float>(_rgb.entry);
 		_rgb -= 1;
 		clamp4<float>(_rgb.entry, 0, 1);
 		_rgb = _rgb * _rgb * (-2.0f * _rgb + 3.0f);
-		return lerp(vec3(1), _rgb, hsv.y) * hsv.z;
+		return lerp(vec3(1), _rgb, hsv[1]) * hsv[2];
 	}
 
 	/// <summary>
@@ -1429,20 +1458,20 @@ namespace onart {
 	/// </summary>
 	/// <param name="v">표시할 변수</param>
 	/// <param name="tag">이름</param>
-	inline void print(const vec2& v, const char* tag = "", char end = '\n') { printf("%s: %f %f%c", tag, v.x, v.y, end); }
-	inline void print(const ivec2& v, const char* tag = "", char end = '\n') { printf("%s: %d %d%c", tag, v.x, v.y, end); }
-	inline void print(const uvec2& v, const char* tag = "", char end = '\n') { printf("%s: %u %u%c", tag, v.x, v.y, end); }
-	inline void print(const dvec2& v, const char* tag = "", char end = '\n') { printf("%s: %f %f%c", tag, v.x, v.y, end); }
-	inline void print(const vec3& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f%c", tag, v.x, v.y, v.z, end); }
-	inline void print(const ivec3& v, const char* tag = "", char end = '\n') { printf("%s: %d %d %d%c", tag, v.x, v.y, v.z, end); }
-	inline void print(const uvec3& v, const char* tag = "", char end = '\n') { printf("%s: %u %u %u%c", tag, v.x, v.y, v.z, end); }
-	inline void print(const dvec3& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f%c", tag, v.x, v.y, v.z, end); }
-	inline void print(const vec4& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f %f%c", tag, v.x, v.y, v.z, v.w, end); }
-	inline void print(const ivec4& v, const char* tag = "", char end = '\n') { printf("%s: %d %d %d %d%c", tag, v.x, v.y, v.z, v.w, end); }
-	inline void print(const uvec4& v, const char* tag = "", char end = '\n') { printf("%s: %u %u %u %u%c", tag, v.x, v.y, v.z, v.w, end); }
-	inline void print(const dvec4& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f %f%c", tag, v.x, v.y, v.z, v.w, end); }
+	inline void print(const vec2& v, const char* tag = "", char end = '\n') { printf("%s: %f %f%c", tag, v[0], v[1], end); }
+	inline void print(const ivec2& v, const char* tag = "", char end = '\n') { printf("%s: %d %d%c", tag, v[0], v[1], end); }
+	inline void print(const uvec2& v, const char* tag = "", char end = '\n') { printf("%s: %u %u%c", tag, v[0], v[1], end); }
+	inline void print(const dvec2& v, const char* tag = "", char end = '\n') { printf("%s: %f %f%c", tag, v[0], v[1], end); }
+	inline void print(const vec3& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f%c", tag, v[0], v[1], v[2], end); }
+	inline void print(const ivec3& v, const char* tag = "", char end = '\n') { printf("%s: %d %d %d%c", tag, v[0], v[1], v[2], end); }
+	inline void print(const uvec3& v, const char* tag = "", char end = '\n') { printf("%s: %u %u %u%c", tag, v[0], v[1], v[2], end); }
+	inline void print(const dvec3& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f%c", tag, v[0], v[1], v[2], end); }
+	inline void print(const vec4& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f %f%c", tag, v[0], v[1], v[2], v[3], end); }
+	inline void print(const ivec4& v, const char* tag = "", char end = '\n') { printf("%s: %d %d %d %d%c", tag, v[0], v[1], v[2], v[3], end); }
+	inline void print(const uvec4& v, const char* tag = "", char end = '\n') { printf("%s: %u %u %u %u%c", tag, v[0], v[1], v[2], v[3], end); }
+	inline void print(const dvec4& v, const char* tag = "", char end = '\n') { printf("%s: %f %f %f %f%c", tag, v[0], v[1], v[2], v[3], end); }
 	inline void print(const Quaternion& q, const char* tag = "", char end = '\n') { printf("%s: %f + %fi + %fj + %fk%c", tag, q.c1, q.ci, q.cj, q.ck, end); }
-	inline void print(const mat4& m, const char* tag = "") { printf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", tag, m._11, m._12, m._13, m._14, m._21, m._22, m._23, m._24, m._31, m._32, m._33, m._34, m._41, m._42, m._43, m._44); }
+	inline void print(const mat4& m, const char* tag = "") { printf("%s:\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n%f %f %f %f\n", tag, m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], m[12], m[13], m[14], m[15]); }
 	inline void print(int i, const char* tag = "", char end = '\n') { printf("%s: %d%c", tag, i, end); }
 	inline void print(int64_t i, const char* tag = "", char end = '\n') { printf("%s: %lld%c", tag, i, end); }
 	inline void print(unsigned i, const char* tag = "", char end = '\n') { printf("%s: %d%c", tag, i, end); }

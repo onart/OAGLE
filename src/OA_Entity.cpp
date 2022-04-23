@@ -28,7 +28,7 @@ namespace onart {
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
 	float Entity::zIndex() {
-		return vec3(mainCamera.getViewMatrix().row(3)).dot(transform.getGlobalPosition());
+		return vec3(mainCamera.getViewMatrix().row(2)).dot(transform.getGlobalPosition());
 	}
 
 	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc, bool isTranslucent)

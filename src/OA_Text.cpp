@@ -165,9 +165,9 @@ namespace onart {
 		default:
 			vf = 0.5f;
 		}
-		vec2 thisCenter(group.left + group.width * hf, group.down + group.height * vf);
+		vec2 thisCenter(group[0] + group[2] * hf, group[1] + group[3] * vf);
 		thisCenter *= size;
-		vec3 tl(center - thisCenter); tl.z = 0;
+		vec3 tl(center - thisCenter); tl[2] = 0;
 		program2[textGroup] = mat4::translate(tl) * mat4::scale(size);
 		cdraw(content, lineXY, color);
 	}
@@ -202,9 +202,9 @@ namespace onart {
 		default:
 			vf = 0.5f;
 		}
-		vec2 thisCenter(group.left + group.width * hf, group.down + group.height * vf);
+		vec2 thisCenter(group[0] + group[2] * hf, group[1] + group[3] * vf);
 		thisCenter *= size;
-		vec3 tl(center - thisCenter); tl.z = 0;
+		vec3 tl(center - thisCenter); tl[2] = 0;
 		program2[textGroup] = transform * mat4::translate(tl) * mat4::scale(size);
 		cdraw(content, lineXY, color);
 	}
@@ -248,9 +248,9 @@ namespace onart {
 			switch (c)
 			{
 			case '\n':
-				if (curW > totalLDWH.width)totalLDWH.width = curW;
-				lineXY.push_back(vec2(curW, -totalLDWH.height - curH));
-				totalLDWH.height += rowGap * curH;
+				if (curW > totalLDWH[2])totalLDWH[2] = curW;
+				lineXY.push_back(vec2(curW, -totalLDWH[3] - curH));
+				totalLDWH[3] += rowGap * curH;
 				curH = resolution * cury;
 				curW = 0;
 				regular = false;
@@ -291,21 +291,21 @@ namespace onart {
 				break;
 			}
 		}
-		if (curW > totalLDWH.width) totalLDWH.width = curW;
-		totalLDWH.height += curH;
-		totalLDWH.down = -totalLDWH.height;
-		lineXY.push_back(vec2(curW, totalLDWH.down));
+		if (curW > totalLDWH[2]) totalLDWH[2] = curW;
+		totalLDWH[3] += curH;
+		totalLDWH[1] = -totalLDWH[3];
+		lineXY.push_back(vec2(curW, totalLDWH[1]));
 		// 라인별 첫 글자의 x, y 오프셋을 정한다(전체스케일 제외)
 		switch (align)
 		{
 		case AlignH::CENTER:
-			for (vec2& xy : lineXY) xy.x = (totalLDWH.width - xy.x) / 2;
+			for (vec2& xy : lineXY) xy[0] = (totalLDWH[2] - xy[0]) / 2;
 			break;
 		case AlignH::LEFT:
-			for (vec2& xy : lineXY) xy.x = 0;
+			for (vec2& xy : lineXY) xy[0] = 0;
 			break;
 		case AlignH::RIGHT:
-			for (vec2& xy : lineXY)xy.x = totalLDWH.width - xy.x;
+			for (vec2& xy : lineXY)xy[0] = totalLDWH[2] - xy[0];
 			break;
 		}
 
@@ -315,8 +315,8 @@ namespace onart {
 	void Font::cdraw(const oastring& content, const std::vector<vec2>& lineXY, const vec4& color) {
 		ppMesh rect = Mesh::get("rect");
 		int line = 0;
-		float curW = lineXY[0].x;
-		float curH = lineXY[0].y;
+		float curW = lineXY[0][0];
+		float curH = lineXY[0][1];
 		float curx = 1, cury = 1;
 		float curScale = 1;
 		program2.bind(**rect);
@@ -326,8 +326,8 @@ namespace onart {
 			switch (c)
 			{
 			case '\n':
-				curW = lineXY[++line].x;
-				curH = lineXY[line].y;
+				curW = lineXY[++line][0];
+				curH = lineXY[line][1];
 				continue;
 			case '\a':
 				if (i + 5 < charCount) {

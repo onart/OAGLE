@@ -101,15 +101,15 @@ void mouse(GLFWwindow* window, int key, int action, int mods) {
 }
 
 void mouseMoved(GLFWwindow* window, double x, double y) {
-	mousePos.x = (int)x;
-	mousePos.y = (int)y;
+	mousePos[0] = (int)x;
+	mousePos[1] = (int)y;
 }
 
 void reshape(GLFWwindow* window, int width, int height) {
 	float r = mainCamera.ratio.getRatio();
 	float dpir = onart::dpiRatio();
-	windowSize.x = width = int(width * dpir);
-	windowSize.y = height = int(height * dpir);
+	windowSize[0] = width = int(width * dpir);
+	windowSize[1] = height = int(height * dpir);
 	if (width < height * r) {
 		vp_ldwh[0] = 0;
 		vp_ldwh[1] = int(height - width / r) / 2;

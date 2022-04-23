@@ -72,15 +72,15 @@ namespace onart {
 		/// <summary>
 		/// x축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityX(float x) { velocity.x = x; }
+		inline void setVelocityX(float x) { velocity[0] = x; }
 		/// <summary>
 		/// y축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityY(float y) { velocity.y = y; }
+		inline void setVelocityY(float y) { velocity[1] = y; }
 		/// <summary>
 		/// z축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityZ(float z) { velocity.z = z; }
+		inline void setVelocityZ(float z) { velocity[2] = z; }
 		/// <summary>
 		/// 현재 속도를 리턴합니다.
 		/// </summary>
@@ -189,11 +189,11 @@ namespace onart {
 		/// <summary>
 		/// x축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityX(float x) { velocity.x = x; }
+		inline void setVelocityX(float x) { velocity[0] = x; }
 		/// <summary>
 		/// y축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityY(float y) { velocity.y = y; }
+		inline void setVelocityY(float y) { velocity[1] = y; }
 		/// <summary>
 		/// 현재 속도를 리턴합니다.
 		/// </summary>
@@ -293,15 +293,15 @@ namespace onart {
 		/// <summary>
 		/// x축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityX(float x) { velocity.x = x; }
+		inline void setVelocityX(float x) { velocity[0] = x; }
 		/// <summary>
 		/// y축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityY(float y) { velocity.y = y; }
+		inline void setVelocityY(float y) { velocity[1] = y; }
 		/// <summary>
 		/// z축 속도를 강제로 지정합니다.
 		/// </summary>
-		inline void setVelocityZ(float z) { velocity.z = z; }
+		inline void setVelocityZ(float z) { velocity[2] = z; }
 		/// <summary>
 		/// 현재 속도를 리턴합니다.
 		/// </summary>

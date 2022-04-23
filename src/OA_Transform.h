@@ -128,19 +128,19 @@ namespace onart {
 		inline void setScale(const vec3& sc) {
 			vec3 v = sc / scale;
 			scale = sc;
-			if (isfinite(v.x) && isfinite(v.y) && isfinite(v.z)) {
+			if (isfinite(v[0]) && isfinite(v[1]) && isfinite(v[2])) {
 				float m[4];
 
 				m[0] = model[0]; m[1] = model[4]; m[2] = model[8];
-				mul4<float>(m, v.x);
+				mul4<float>(m, v[0]);
 				model[0] = m[0];	model[4] = m[1];	model[8] = m[2];
 
 				m[0] = model[1]; m[1] = model[5]; m[2] = model[9];
-				mul4<float>(m, v.y);
+				mul4<float>(m, v[1]);
 				model[1] = m[0];	model[5] = m[1];	model[9] = m[2];
 
 				m[0] = model[2]; m[1] = model[6]; m[2] = model[10];
-				mul4<float>(m, v.z);
+				mul4<float>(m, v[2]);
 				model[2] = m[0];	model[6] = m[1];	model[10] = m[2];
 			}
 			else {
@@ -167,7 +167,7 @@ namespace onart {
 		/// <summary>
 		/// 3D 위치를 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setLocalPosition(const vec3& p) { pos = p; model[3] = p.x; model[7] = p.y; model[11] = p.z; globalNotReady(); }
+		inline void setLocalPosition(const vec3& p) { pos = p; model[3] = p[0]; model[7] = p[1]; model[11] = p[2]; globalNotReady(); }
 		/// <summary>
 		/// 3D 위치를 설정하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -207,27 +207,27 @@ namespace onart {
 		/// <summary>
 		/// x좌표만 변경합니다.
 		/// </summary>
-		inline void dSetLocalPositionX(float x) { pos.x = x; ready = false; globalNotReady(); }
+		inline void dSetLocalPositionX(float x) { pos[0] = x; ready = false; globalNotReady(); }
 		/// <summary>
 		/// y좌표만 변경합니다.
 		/// </summary>
-		inline void dSetLocalPositionY(float y) { pos.y = y; ready = false; globalNotReady(); }
+		inline void dSetLocalPositionY(float y) { pos[1] = y; ready = false; globalNotReady(); }
 		/// <summary>
 		/// z좌표만 변경합니다.
 		/// </summary>
-		inline void dSetLocalPositionZ(float z) { pos.z = z; ready = false; globalNotReady(); }
+		inline void dSetLocalPositionZ(float z) { pos[2] = z; ready = false; globalNotReady(); }
 		/// <summary>
 		/// x좌표만 변경하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setLocalPositionX(float x) { pos.x = x; model[3] = x; globalNotReady(); }
+		inline void setLocalPositionX(float x) { pos[0] = x; model[3] = x; globalNotReady(); }
 		/// <summary>
 		/// y좌표만 변경하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setLocalPositionY(float y) { pos.y = y; model[7] = y; globalNotReady(); }
+		inline void setLocalPositionY(float y) { pos[1] = y; model[7] = y; globalNotReady(); }
 		/// <summary>
 		/// z좌표만 변경하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void setLocalPositionZ(float z) { pos.z = z; model[11] = z; globalNotReady(); }
+		inline void setLocalPositionZ(float z) { pos[2] = z; model[11] = z; globalNotReady(); }
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동합니다.
 		/// </summary>
@@ -239,7 +239,7 @@ namespace onart {
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addLocalPosition(const vec3& p) { pos += p; model[3] += p.x; model[7] += p.y; model[11] += p.z; globalNotReady(); }
+		inline void addLocalPosition(const vec3& p) { pos += p; model[3] += p[0]; model[7] += p[1]; model[11] += p[2]; globalNotReady(); }
 		/// <summary>
 		/// 주어진 값만큼 위치를 이동하고 모델 행렬을 업데이트합니다.
 		/// </summary>
@@ -247,27 +247,27 @@ namespace onart {
 		/// <summary>
 		/// x좌표만 누적합니다.
 		/// </summary>
-		inline void dAddLocalPositionX(float x) { pos.x += x; ready = false; globalNotReady(); }
+		inline void dAddLocalPositionX(float x) { pos[0] += x; ready = false; globalNotReady(); }
 		/// <summary>
 		/// y좌표만 누적합니다.
 		/// </summary>
-		inline void dAddLocalPositionY(float y) { pos.y += y; ready = false; globalNotReady(); }
+		inline void dAddLocalPositionY(float y) { pos[1] += y; ready = false; globalNotReady(); }
 		/// <summary>
 		/// z좌표만 누적합니다.
 		/// </summary>
-		inline void dAddLocalPositionZ(float z) { pos.z += z; ready = false; globalNotReady(); }
+		inline void dAddLocalPositionZ(float z) { pos[2] += z; ready = false; globalNotReady(); }
 		/// <summary>
 		/// x좌표만 누적하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addLocalPositionX(float x) { pos.x += x; model[3] += x; globalNotReady(); }
+		inline void addLocalPositionX(float x) { pos[0] += x; model[3] += x; globalNotReady(); }
 		/// <summary>
 		/// y좌표만 누적하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addLocalPositionY(float y) { pos.y += y; model[7] += y; globalNotReady(); }
+		inline void addLocalPositionY(float y) { pos[1] += y; model[7] += y; globalNotReady(); }
 		/// <summary>
 		/// z좌표만 누적하고 모델 행렬을 업데이트합니다.
 		/// </summary>
-		inline void addLocalPositionZ(float z) { pos.z += z; model[11] += z; globalNotReady(); }
+		inline void addLocalPositionZ(float z) { pos[2] += z; model[11] += z; globalNotReady(); }
 		/// <summary>
 		/// 3D 회전을 설정합니다.
 		/// </summary>
