@@ -227,10 +227,11 @@ namespace onart {
 		delete[] hx;
 		if (*er) return -1;
 		vec4 v;
-		v.r = (float)((clr >> 24) & 0xff);
-		v.g = (float)((clr >> 16) & 0xff);
-		v.b = (float)((clr >> 8) & 0xff);
-		v.a = (float)(clr & 0xff);
+		USE_NVEC_RGBA;
+		v[r] = (float)((clr >> 24) & 0xff);
+		v[g] = (float)((clr >> 16) & 0xff);
+		v[b] = (float)((clr >> 8) & 0xff);
+		v[a] = (float)(clr & 0xff);
 		return v /= 255;
 	}
 

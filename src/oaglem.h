@@ -44,6 +44,20 @@ constexpr float deg(float rad) { return rad * 180 / PI; }
 /// </summary>
 constexpr float rad(float deg) { return deg / 180 * PI; }
 
+/// 컴파일러 상 최적화를 위해 nvec을 struct로 바꾼 대신 그나마 직관적인 방법으로 멤버에 접근할 수 있도록 매크로를 만들었습니다. 이름이 안 겹친다는 보장이 있다면 소스 파일의 맨 앞에 이것을 깔고 시작해도 됩니다.
+#define USE_NVEC_INDEX enum { x = 0, y, z, w, r = 0, g, b, a, s = 0, t, p, q, left = 0, down, width, height }
+#define USE_NVEC_XYZW enum { x = 0, y, z, w }
+#define USE_NVEC_RGBA enum { r = 0, g, b, a }
+#define USE_NVEC_STPQ enum { s = 0, t, p, q }
+#define USE_NVEC_LDWH enum { left = 0, down, width, height }
+#define USE_NVEC_XYZW_UPPER enum { X = 0, Y, Z, W }
+#define USE_NVEC_RGBA_UPPER enum { R = 0, G, B, A }
+#define USE_NVEC_STPQ_UPPER enum { S = 0, T, P, Q }
+#define USE_NVEC_LDWH_UPPER enum { LEFT = 0, DOWN, WIDTH, HEIGHT }
+#define USE_MAT2_INDEX enum { _11 = 0, _12, _21, _22 }
+#define USE_MAT3_INDEX enum { _11 = 0, _12, _13, _21, _22, _23, _31, _32, _33 }
+#define USE_MAT4_INDEX enum { _11 = 0, _12, _13, _14, _21, _22, _23, _24, _31, _32, _33, _34, _41, _42, _43, _44 }
+
 namespace onart {
 	using byte = unsigned char;
 	struct Quaternion;
@@ -52,16 +66,8 @@ namespace onart {
 	/// 최적화 힌트: 사용하기에는 xyzw 등이 더 쉽겠지만, 인덱스 접근이 가장 빠릅니다. 거의 2배는 빠른 것 같습니다.
 	/// </summary>
 	/// <typeparam name="T">벡터 성분의 타입입니다. 사칙 연산 및 부호 반전이 가능하여야 합니다.</typeparam>
-	template <unsigned D, class T = float> union nvec {
+	template <unsigned D, class T = float> struct nvec {
 		T entry[4];
-		struct { T x, y, z, w; };
-		struct { T r, g, b, a; };
-		struct { T s, t, p, q; };
-		struct { T left, down, width, height; };
-		struct { T xy[2]; T zw[2]; };
-		struct { T xyz[3]; };
-		struct { T _x; T yz[2]; };
-		struct { T __x; T yzw[3]; };
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
@@ -378,6 +384,7 @@ namespace onart {
 		/// 행 우선 순서로 된 배열을 리턴합니다.
 		/// </summary>
 		inline operator float* () { return a; }
+		inline operator const float* () const { return a; }
 	};
 
 	/// <summary>
@@ -1002,13 +1009,10 @@ namespace onart {
 	using mat2x3 = mat<2, 3>;	using mat3x2 = mat<3, 2>;
 
 	/// <summary>
-	/// 3차원 회전 등을 표현하는 사원수입니다. 1, i, j, k 부분에 해당하는 c1, ci, cj, ck 멤버를 가집니다.
+	/// 3차원 회전 등을 표현하는 사원수입니다. 1, i, j, k 부분에 해당하는 c1, ci, cj, ck 멤버를 가집니다. 순서대로 일반적인 사원수 모듈의 w, x, y, z에 대응합니다.
 	/// </summary>
 	struct Quaternion {
-		union {
-			struct { float c1, ci, cj, ck; };
-			struct { float w, x, y, z; };
-		};
+		float c1, ci, cj, ck;
 
 		/// <summary>
 		/// 사원수를 생성합니다.

@@ -30,9 +30,10 @@ namespace onart::Input {
 	}
 
 	vec2 relativeCursorPos() {
+		USE_NVEC_INDEX;
 		vec2 rpos(mousePos);
-		rpos[0] -= vp_ldwh[0];	rpos[1] -= vp_ldwh[1];					// 뷰포트 좌측상단 좌표를 (0,0)으로 하도록 평행이동 (일반적인 화면 크기 범위에서는 절대 오차가 생기지 않음)
-		rpos[0] /= vp_ldwh[2];	rpos[1] /= vp_ldwh[3];					// 뷰포트 우측하단 좌표를 (1,1)로 하도록 수축
+		rpos[x] -= vp_ldwh[left];	rpos[y] -= vp_ldwh[down];					// 뷰포트 좌측상단 좌표를 (0,0)으로 하도록 평행이동 (일반적인 화면 크기 범위에서는 절대 오차가 생기지 않음)
+		rpos[x] /= vp_ldwh[width];	rpos[y] /= vp_ldwh[height];					// 뷰포트 우측하단 좌표를 (1,1)로 하도록 수축
 		return rpos;
 	}
 

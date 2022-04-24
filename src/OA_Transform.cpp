@@ -43,7 +43,7 @@ namespace onart {
 	}
 
 	void Transform::mat2prs() {
-		pos = model.col(4);
+		pos = model.col(3);
 		scale = model.row(0);
 		vec3 rsr2(model.row(1)), rsr3(model.row(2));
 		scale *= scale;	rsr2 *= rsr2;	rsr3 *= rsr3;
@@ -71,7 +71,7 @@ namespace onart {
 	}
 
 	void Transform::gmat2prs() {
-		pos = globalModel.col(4);
+		pos = globalModel.col(3);
 		globalScale = globalModel.row(0);
 		vec3 rsr2(globalModel.row(1)), rsr3(globalModel.row(2));
 		globalScale *= globalScale;	rsr2 *= rsr2;	rsr3 *= rsr3;
