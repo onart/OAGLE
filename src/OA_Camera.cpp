@@ -50,12 +50,13 @@ namespace onart {
 
 	vec2 Camera::mouse2screen(const vec2& mousePos)
 	{
+		USE_NVEC_XYZW;
 		const float& r = ratio.ratio;
 		if (r > 1) {
-			return vec2((mousePos[0] * 2 - 1) * r, -2 * mousePos[1] + 1);
+			return vec2((mousePos[x] * 2 - 1) * r, -2 * mousePos[y] + 1);
 		}
 		else {
-			return vec2(2 * mousePos[0] - 1, (-2 * mousePos[1] + 1) / r);
+			return vec2(2 * mousePos[x] - 1, (-2 * mousePos[y] + 1) / r);
 		}
 	}
 

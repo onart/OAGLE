@@ -27,6 +27,8 @@
 
 extern onart::Shader program2, program3;
 USE_SHADER_UNIFORM;
+USE_NVEC_XYZW_UPPER;
+USE_NVEC_LDWH_UPPER;
 
 namespace onart {
 	std::map<std::string, pAnimation> Animation::animations;
@@ -100,14 +102,14 @@ namespace onart {
 		for (size_t i = 0; i < sz; i++) { 
 			float timepoint = rcts[i].tp;
 			const ivec2& wh = kpNow(tx, timepoint)->value->size;
-			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh[0], (float)wh[1], (float)wh[0], (float)wh[1])};
+			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh[X], (float)wh[Y], (float)wh[X], (float)wh[Y])};
 			if (pv) {
 				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
-				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value[2], rects[i].value[3]);
-				vec2 xy(rctz[i].value[2], rctz[i].value[3]);
-				xy *= vec2((float)wh[0], (float)wh[1]) / 1024.0f;
+				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value[WIDTH], rects[i].value[HEIGHT]);
+				vec2 xy(rctz[i].value[WIDTH], rctz[i].value[HEIGHT]);
+				xy *= vec2((float)wh[X], (float)wh[Y]) / 1024.0f;
 				pivv *= xy;
-				sctrz[i] = vec4(xy[0], xy[1], pivv[0], pivv[1]);
+				sctrz[i] = vec4(xy[X], xy[Y], pivv[X], pivv[Y]);
 			}
 		}
 		struct anim2d :public Animation2D { 
@@ -188,16 +190,16 @@ namespace onart {
 		if (anim) return anim;
 		vec4 ldwh;
 		const ivec2& wh = tex->size;
-		if (rect == vec4()) { ldwh = vec4(0, 0, 1, 1); rect = vec4(0, 0, (float)wh[0], (float)wh[1]); }
-		else { ldwh = rect / vec4((float)wh[0], (float)wh[1], (float)wh[0], (float)wh[1]); }
+		if (rect == vec4()) { ldwh = vec4(0, 0, 1, 1); rect = vec4(0, 0, (float)wh[X], (float)wh[Y]); }
+		else { ldwh = rect / vec4((float)wh[X], (float)wh[Y], (float)wh[X], (float)wh[Y]); }
 		if (isnan(pivot[0])) {
-			pivot = vec2((float)wh[0], (float)wh[1]) / 2;
+			pivot = vec2((float)wh[X], (float)wh[Y]) / 2;
 		}
-		vec2 pivv = vec2(0.5f) - pivot / vec2(rect[2], rect[3]);
-		vec2 xy(ldwh[2], ldwh[3]);
-		xy *= vec2((float)wh[0], (float)wh[1]) / 1024;
+		vec2 pivv = vec2(0.5f) - pivot / vec2(rect[WIDTH], rect[HEIGHT]);
+		vec2 xy(ldwh[WIDTH], ldwh[HEIGHT]);
+		xy *= vec2((float)wh[X], (float)wh[Y]) / 1024;
 		pivv *= xy;
-		vec4 sctr(xy[0], xy[1], pivv[0], pivv[1]);
+		vec4 sctr(xy[X], xy[Y], pivv[X], pivv[Y]);
 		struct spr :public Sprite {
 			spr(const pTexture& _1, const vec4& _2, const vec4& _3) :Sprite(_1, _2, _3) {}
 		};
@@ -681,14 +683,14 @@ namespace onart {
 		for (size_t i = 0; i < sz; i++) {
 			float timepoint = rcts[i].tp;
 			const ivec2& wh = kpNow(tx, timepoint)->value->size;
-			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh[0], (float)wh[1], (float)wh[0], (float)wh[1])};
+			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh[X], (float)wh[Y], (float)wh[X], (float)wh[Y])};
 			if (pv) {
 				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
-				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value[2], rects[i].value[3]);
-				vec2 xy(rctz[i].value[2], rctz[i].value[3]);
-				xy *= vec2((float)wh[0], (float)wh[1]) / 1024.0f;
+				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value[WIDTH], rects[i].value[HEIGHT]);
+				vec2 xy(rctz[i].value[WIDTH], rctz[i].value[HEIGHT]);
+				xy *= vec2((float)wh[X], (float)wh[Y]) / 1024.0f;
 				pivv *= xy;
-				sctrz[i] = vec4(xy[0], xy[1], pivv[0], pivv[1]);
+				sctrz[i] = vec4(xy[X], xy[Y], pivv[X], pivv[Y]);
 			}
 		}
 		struct anim2d :public UIAnimation {

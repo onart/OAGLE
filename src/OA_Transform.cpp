@@ -9,7 +9,9 @@
 
 
 namespace onart {
-	
+
+	USE_NVEC_XYZW_UPPER;
+
 	Transform::Transform(const vec3& pos, const vec3& scale, const Quaternion& rot, Transform* parent)
 		:pos(pos), scale(scale), rotation(rot), parent(parent) {
 		if (parent) parent->addChild(this);
@@ -127,10 +129,10 @@ namespace onart {
 		if (!parent)return setLocalPosition(p);
 		// FACT: 부모 변환이 아핀 변환일 때 글로벌 포지션을 움직이고 자식 변환에 반영할 경우, 자식 변환 또한 위치만 변함
 		getModel();
-		globalModel.at(0, 3) = p[0];	globalModel.at(1, 3) = p[1];	globalModel.at(2, 3) = p[2];
+		globalModel.at(0, 3) = p[X];	globalModel.at(1, 3) = p[Y];	globalModel.at(2, 3) = p[Z];
 		globalPos = p;
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}
@@ -139,9 +141,9 @@ namespace onart {
 		if (!parent)return addLocalPosition(p);
 		getModel();
 		globalPos += p;
-		globalModel.at(0, 3) = globalPos[0];	globalModel.at(1, 3) = globalPos[1];	globalModel.at(2, 3) = globalPos[2];
+		globalModel.at(0, 3) = globalPos[X];	globalModel.at(1, 3) = globalPos[Y];	globalModel.at(2, 3) = globalPos[Z];
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}
@@ -150,9 +152,9 @@ namespace onart {
 		if (!parent)return setLocalPositionX(x);
 		getModel();
 		globalModel.at(0, 3) = x;
-		globalPos[0] = x;
+		globalPos[X] = x;
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}
@@ -160,10 +162,9 @@ namespace onart {
 	void Transform::setPositionY(float y) {
 		if (!parent)return setLocalPositionY(y);
 		getModel();
-		globalModel.at(1, 3) = y;
-		globalPos[1] = y;
+		globalModel.at(1, 3) = y;	globalPos[Y] = y;
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}
@@ -172,9 +173,9 @@ namespace onart {
 		if (!parent)return setLocalPositionZ(z);
 		getModel();
 		globalModel.at(2, 3) = z;
-		globalPos[2] = z;
+		globalPos[Z] = z;
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}
@@ -182,10 +183,10 @@ namespace onart {
 	void Transform::addPositionX(float x) {
 		if (!parent)return addLocalPositionX(x);
 		getModel();
-		globalPos[0] += x;
-		globalModel.at(0, 3) = globalPos[0];
+		globalPos[X] += x;
+		globalModel.at(0, 3) = globalPos[X];
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}
@@ -193,10 +194,9 @@ namespace onart {
 	void Transform::addPositionY(float y) {
 		if (!parent)return addLocalPositionX(y);
 		getModel();
-		globalPos[1] += y;
-		globalModel.at(1, 3) = globalPos[1];
+		globalPos[Y] += y;		globalModel.at(1, 3) = globalPos[Y];
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}
@@ -204,10 +204,9 @@ namespace onart {
 	void Transform::addPositionZ(float z) {
 		if (!parent)return addLocalPositionZ(z);
 		getModel();
-		globalPos[2] += z;
-		globalModel.at(2, 3) = globalPos[2];
+		globalPos[Z] += z;		globalModel.at(2, 3) = globalPos[Z];
 		pos = parent->getInverseTransform() * vec4(globalPos, 1);
-		model.at(0, 3) = pos[0];	model.at(1, 3) = pos[1];	model.at(2, 3) = pos[2];
+		model.at(0, 3) = pos[X];	model.at(1, 3) = pos[Y];	model.at(2, 3) = pos[Z];
 		globalNotReady();
 		globalReady = true;
 	}

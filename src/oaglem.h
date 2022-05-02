@@ -50,6 +50,7 @@ constexpr float rad(float deg) { return deg / 180 * PI; }
 #define USE_NVEC_RGBA enum { r = 0, g, b, a }
 #define USE_NVEC_STPQ enum { s = 0, t, p, q }
 #define USE_NVEC_LDWH enum { left = 0, down, width, height }
+#define USE_NVEC_INDEX_UPPER enum { X = 0, Y, Z, W, R = 0, G, B, A, S = 0, T, P, Q, LEFT = 0, DOWN, WIDTH, HEIGHT }
 #define USE_NVEC_XYZW_UPPER enum { X = 0, Y, Z, W }
 #define USE_NVEC_RGBA_UPPER enum { R = 0, G, B, A }
 #define USE_NVEC_STPQ_UPPER enum { S = 0, T, P, Q }
@@ -187,8 +188,8 @@ namespace onart {
 		/// <summary>
 		/// 인덱스 연산자
 		/// </summary>
-		inline T& operator[](ptrdiff_t i) { assert(i < D); return entry[i]; }
-		inline const T& operator[](ptrdiff_t i) const { assert(i < D); return entry[i]; }
+		inline T& operator[](unsigned i) { assert(i < D); return entry[i]; }
+		inline const T& operator[](unsigned i) const { assert(i < D); return entry[i]; }
 
 		/// <summary>
 		/// 벡터의 방향을 유지하고 길이를 1로 맞춘 것을 리턴합니다. 정수 벡터에서는 사용할 수 없습니다.

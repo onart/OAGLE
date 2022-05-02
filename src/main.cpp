@@ -106,22 +106,23 @@ void mouseMoved(GLFWwindow* window, double x, double y) {
 }
 
 void reshape(GLFWwindow* window, int width, int height) {
+	USE_NVEC_LDWH_UPPER;
 	float r = mainCamera.ratio.getRatio();
 	float dpir = onart::dpiRatio();
 	windowSize[0] = width = int(width * dpir);
 	windowSize[1] = height = int(height * dpir);
 	if (width < height * r) {
-		vp_ldwh[0] = 0;
-		vp_ldwh[1] = int(height - width / r) / 2;
-		vp_ldwh[2] = width;
-		vp_ldwh[3] = int(width / r);
+		vp_ldwh[LEFT] = 0;
+		vp_ldwh[DOWN] = int(height - width / r) / 2;
+		vp_ldwh[WIDTH] = width;
+		vp_ldwh[HEIGHT] = int(width / r);
 		glViewport(0, int(height - width / r) / 2, width, int(width / r));
 	}
 	else {
-		vp_ldwh[0] = int(width - height * r) / 2;
-		vp_ldwh[1] = 0;
-		vp_ldwh[2] = int(height * r);
-		vp_ldwh[3] = height;
+		vp_ldwh[LEFT] = int(width - height * r) / 2;
+		vp_ldwh[DOWN] = 0;
+		vp_ldwh[WIDTH] = int(height * r);
+		vp_ldwh[HEIGHT] = height;
 		glViewport(int(width - height * r) / 2, 0, int(height * r), height);
 	}
 }
