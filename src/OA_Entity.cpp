@@ -139,6 +139,7 @@ namespace onart {
 	}
 
 	void Entity::act(int kp, float progress) {
+		if (!Animation::actSwitch) return;
 		animKp = kp;
 		Act(kp, progress);
 	}

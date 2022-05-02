@@ -128,6 +128,14 @@ void reshape(GLFWwindow* window, int width, int height) {
 }
 
 /// <summary>
+/// 뷰포트를 기본 프레임버퍼에 맞춥니다.
+/// </summary>
+void defaultFramebufferViewport() {
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	reshape(window, windowSize[0], windowSize[1]);
+}
+
+/// <summary>
 /// 마우스 스크롤 콜백. 일반 마우스 기준 yoffset만 +1(휠 위로) 혹은 -1의 값을 가집니다.
 /// </summary>
 void scroll(GLFWwindow* window, double xoffset, double yoffset)

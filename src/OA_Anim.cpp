@@ -32,6 +32,7 @@ USE_NVEC_LDWH_UPPER;
 
 namespace onart {
 	std::map<std::string, pAnimation> Animation::animations;
+	bool Animation::actSwitch = true;	// 애니메이션 상태에 개체가 반응하는 함수를 호출할지 정합니다. (true=호출) 초기값은 true이며 프레임버퍼를 이용한 deferred 렌더링 등을 할 때 개체 이벤트를 한 번만 발생시키도록 활용할 수 있습니다. 예를 들어, 애니메이션 액션 함수에 의하여 위치가 직접적으로 옮겨지는 경우(권장되지 않는 바지만)라면 모델을 마지막으로 그릴 때만 act를 활성화시킬 수 있습니다.
 
 	static ppMesh mRect;
 	
