@@ -21,6 +21,8 @@ namespace onart {
 		/// <summary>
 		/// 프레임버퍼를 생성합니다. 이름이 겹치는 경우 아무것도 하지 않습니다.
 		/// 프레임버퍼를 생성한 직후에는 자동으로 기본 프레임버퍼가 바인드되므로 혼란을 피하려면 필요한 프레임버퍼는 시작할 때 바로 만드시기 바랍니다.
+		/// 스텐실 버퍼 첨부물은 용도가 한정적이므로, 사용할 경우 반드시 깊이 버퍼와 붙은 상태로만 사용되며 NONE이 아닌 옵션이 주어진 경우 depthBuffer에 주어진 것과 동일하게 주어집니다.
+		/// 단, 깊이 버퍼가 NONE이고 스텐실 버퍼가 존재하는 것은 가능합니다.
 		/// </summary>
 		/// <param name="name">접근할 프레임버퍼 이름입니다.</param>
 		/// <param name="width">프레임버퍼 폭입니다.</param>
@@ -28,7 +30,13 @@ namespace onart {
 		/// <param name="colorBuffer">색 버퍼 사용 여부입니다.</param>
 		/// <param name="depthBuffer">깊이 버퍼 사용 여부입니다.</param>
 		/// <param name="stencilBuffer">스텐실 버퍼 사용 여부입니다.</param>
-		static void make(const char* name, unsigned width, unsigned height, ATTACHMENT colorBuffer, ATTACHMENT depthBuffer, ATTACHMENT stencilBuffer = ATTACHMENT::NONE, unsigned func = 0, unsigned ref = 0, unsigned sfail = 0, unsigned dpfail = 0, unsigned dppass = 0);
+		/// <param name="func">glStencilFunc()의 인수(통과 조건)</param>
+		/// <param name="ref">glStencilFunc()의 인수(비교 값)</param>
+		/// <param name="mask">glStencilFunc()의 인수(유효 비트 지정)</param>
+		/// <param name="sfail">glStencilOp()의 인수(스텐실 실패 시 동작)</param>
+		/// <param name="dpfail">glStencilOp()의 인수(스텐실 통과, 깊이 실패 시 동작)</param>
+		/// <param name="dppass">glStencilOp()의 인수(스텐실과 깊이 통과 시 동작)</param>
+		static void make(const char* name, unsigned width, unsigned height, ATTACHMENT colorBuffer, ATTACHMENT depthBuffer, ATTACHMENT stencilBuffer = ATTACHMENT::NONE, unsigned func = 0, int ref = 0, unsigned mask = 0, unsigned sfail = 0, unsigned dpfail = 0, unsigned dppass = 0);
 		/// <summary>
 		/// 만든 프레임버퍼를 제거합니다.
 		/// </summary>
@@ -38,8 +46,47 @@ namespace onart {
 		/// use() 호출 후에는 render 명령이 해당 프레임버퍼에 그리게 됩니다.
 		/// </summary>
 		static void use(const char* name = nullptr);
+		/// <summary>
+		/// 현재 프레임 버퍼에서 색 버퍼의 값을 읽을 수 있는 경우 읽어 옵니다. 리턴값은 동적할당된 배열 주소입니다.
+		/// 읽는 범위가 큰 경우 glGetTextureSubImage가 더 빠른 것으로 알려져 있습니다. 이는 기본적으로 GL 4.6을 사용하는 이 엔진의 기본 세팅에 의하면 사용 가능하지만
+		/// 기본적으로 여기서는 지원하지 않습니다.
+		/// 픽셀 좌측 하단의 좌표가 (0,0)입니다.
+		/// 색 버퍼를 사용하지 않는 경우라도 검사하지 않으니 주의하세요.
+		/// 색 데이터는 각 값마다 RGBA 형식으로 배열됩니다. 따라서 4차원 nvec 형식의 배열 캐스팅이 가능합니다.
+		/// 단, 이 동적할당된 주소는 new에 의한 자유 공간 할당이므로 해제 시 주의하세요.
+		/// 가능한 타입은 (unsigned) char, (unsigned) short, (unsigned) int, float입니다.
+		/// 이것을 참고하세요. https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glReadPixels.xhtml
+		/// </summary>
+		template <class T> static T* readColorValue(unsigned left, unsigned down, unsigned width = 1, unsigned height = 1);
+		/// <summary>
+		/// 현재 프레임 버퍼에서 깊이 버퍼의 값을 읽을 수 있는 경우 읽어 옵니다. 값은 0과 1 사이의 실수입니다.
+		/// 픽셀 좌측 하단의 좌표가 (0,0)입니다.
+		/// 리턴되는 동적할당된 주소는 new에 의한 자유 공간 할당이므로 해제 시 주의하세요.
+		/// </summary>
+		static float* readDepthValue(unsigned left, unsigned down, unsigned width = 1, unsigned height = 1);
+		/// <summary>
+		/// 현재 프레임 버퍼에서 깊이 버퍼의 값을 읽을 수 있는 경우 읽어 옵니다. 값은 0과 1 사이의 실수입니다.
+		/// 픽셀 좌측 하단의 좌표가 (0,0)입니다.
+		/// 리턴되는 동적할당된 주소는 new에 의한 자유 공간 할당이므로 해제 시 주의하세요.
+		/// </summary>
+		static unsigned char* readStencilValue(unsigned left, unsigned down, unsigned width = 1, unsigned height = 1);
+		/// <summary>
+		/// 이 프레임버퍼의 색상 텍스처 오브젝트를 리턴합니다.
+		/// 없는 경우 0을 리턴합니다.
+		/// </summary>
+		inline unsigned getColorTex() { return CDS[0] == ATTACHMENT::RW ? color : 0; }
+		/// <summary>
+		/// 이 프레임버퍼의 깊이 혹은 깊이+스텐실 텍스처 오브젝트를 리턴합니다.
+		/// 없는 경우 0을 리턴합니다.
+		/// </summary>
+		inline unsigned getDepthTex() { return CDS[1] == ATTACHMENT::RW ? depth : 0; }
+		/// <summary>
+		/// 이 프레임버퍼의 스텐실 텍스처 오브젝트를 리턴합니다.
+		/// 깊이 텍스처가 없고 스텐실 텍스처가 있을 때에는 getDepthTex() 대신 이것을 사용해야 합니다.
+		/// </summary>
+		inline unsigned getStencilTex() { return CDS[2] == ATTACHMENT::RW ? depth : 0; }
 	private:
-		FrameBuffer(unsigned width, unsigned height, ATTACHMENT color, ATTACHMENT depth, ATTACHMENT stencil);
+		FrameBuffer(unsigned width, unsigned height, ATTACHMENT color, ATTACHMENT depth, ATTACHMENT stencil, unsigned func = 0, int ref = 0, unsigned mask = 0, unsigned sfail = 0, unsigned dpfail = 0, unsigned dppass = 0);
 		FrameBuffer(unsigned width, unsigned height, ATTACHMENT color, ATTACHMENT depth);
 		~FrameBuffer();
 
@@ -50,7 +97,9 @@ namespace onart {
 		const unsigned width, height;
 		const ATTACHMENT CDS[3];
 		unsigned fbo;
-		unsigned color, depth, stencil;
+		unsigned color, depth;
+		unsigned stFunc, stMask, sfail, dpfail, dppass;
+		int stRef;
 	};
 }
 
