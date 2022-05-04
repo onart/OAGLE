@@ -32,6 +32,7 @@ USE_NVEC_LDWH_UPPER;
 
 namespace onart {
 	std::map<std::string, pAnimation> Animation::animations;
+	std::map<int, mat4> Animation3D::recentGlobalTransforms;
 	bool Animation::actSwitch = true;	// 애니메이션 상태에 개체가 반응하는 함수를 호출할지 정합니다. (true=호출) 초기값은 true이며 프레임버퍼를 이용한 deferred 렌더링 등을 할 때 개체 이벤트를 한 번만 발생시키도록 활용할 수 있습니다. 예를 들어, 애니메이션 액션 함수에 의하여 위치가 직접적으로 옮겨지는 경우(권장되지 않는 바지만)라면 모델을 마지막으로 그릴 때만 act를 활성화시킬 수 있습니다.
 
 	static ppMesh mRect;
@@ -289,6 +290,10 @@ namespace onart {
 		program3.use();
 		float tp = getTp(elapsed * dynamicTps);
 		auto sub = std::upper_bound(sigKp.begin(), sigKp.end(), tp);
+		for (auto& bone : keys) {
+			bone.second.setTrans(tp);
+		}
+		setGlobalTrans(btree);
 		if (sub != sigKp.begin()) {
 			int kp = int(sub - sigKp.begin() - 1);
 			//if (e->getAnimKey() != kp)e->act(kp);
@@ -307,12 +312,8 @@ namespace onart {
 					e->act(kp);
 				}
 			}
-			//if (e->getAnimKey() != kp)e->act(kp);
+			// if (e->getAnimKey() != kp)e->act(kp);
 		}
-		for (auto& bone : keys) {
-			bone.second.setTrans(tp);
-		}
-		setGlobalTrans(btree);
 		int i = 0;
 		for (Bone& m : u) {
 			program3[bones][i++] = m.uni;
@@ -468,9 +469,10 @@ namespace onart {
 		if (isMoving) {	
 			nodeTransform = keys[t.id].localTransform;
 		}
-		mat4 global = parent * nodeTransform;
+		mat4 global = parent * nodeTransform;	// 외부 클래스에서 이 값에 접근이 가능해야 함
 		bool isBone = t.id >= 0;	// 정점에 직접적 연관이 있는가?
 		if (isBone) {
+			recentGlobalTransforms[t.id] = global;
 			Bone& b = u[t.id];
 			b.uni = globalInverse * global * b.offset;
 		}

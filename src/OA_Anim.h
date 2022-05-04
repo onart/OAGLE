@@ -207,6 +207,10 @@ namespace onart {
 		/// <param name="sig_kp">act()로 알림받을 시점(float)</param>
 		static std::shared_ptr<Animation> loadBin(const std::string& name, const unsigned char* dat, size_t len, const std::vector<float>& sig_kp = {});
 		/// <summary>
+		/// 애니메이션 적용 직후 원하는 번호의 뼈의 변환을 알 수 있습니다. 이것은 정적 멤버 함수입니다. 한 개체의 render() 호출 직후에 받아 두지 않으면 값이 변해 있을 수 있습니다.
+		/// </summary>
+		inline static mat4 readGlobalTrans(int id) { return recentGlobalTransforms[id]; }
+		/// <summary>
 		/// 애니메이션 데이터를 바이너리 형태로 내보냅니다. 파일 이름은 (이름.oanim)입니다.
 		/// 모델과 애니메이션을 다대다 대응하는 경우, 통일된 규격이 아닌 필요한 데이터만 있는 전용 데이터를 사용하는 것이 용량을 줄이는 방법이 될 수 있습니다.
 		/// sig_kp 부분은 저장되지 않습니다.
@@ -231,7 +235,7 @@ namespace onart {
 			std::vector<Keypoint<Quaternion>> keyRot;
 			std::vector<Keypoint<vec3>> keyScale;
 
-			mat4 localTransform;
+			mat4 localTransform;	// 간혹 go 없이 여기에 직접 쓸 수 있는 것도 있으면 좋음
 			void setTrans(float tp);
 		};
 
@@ -259,6 +263,7 @@ namespace onart {
 		BoneTree btree;
 		mat4 globalInverse;
 		void setGlobalTrans(BoneTree& t, const mat4& parent = mat4());
+		static std::map<int, mat4> recentGlobalTransforms;
 	};
 
 	/// <summary>
