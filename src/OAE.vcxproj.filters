@@ -45,6 +45,18 @@
     <Filter Include="엔진\기본\소스 파일">
       <UniqueIdentifier>{2cf44bfb-0886-46c5-b450-daa527a25c12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="엔진\물리2">
+      <UniqueIdentifier>{70288f6b-4534-43a6-8676-f82bc24d55b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리2\헤더 파일">
+      <UniqueIdentifier>{bbb8730d-67ed-416f-9250-685c98da3cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리2\소스 파일">
+      <UniqueIdentifier>{bd6a762c-1172-42e1-b8bb-ac77f92699ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리3">
+      <UniqueIdentifier>{4b8d55c8-a48e-4068-af4d-7d3d3c9e7bea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="externals\gl\glad\glad.c">
@@ -127,6 +139,12 @@
     </ClCompile>
     <ClCompile Include="OA_FrameBuffer.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Rigidbody.cpp">
+      <Filter>엔진\물리2\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Collider.cpp">
+      <Filter>엔진\물리2\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +255,21 @@
     </ClInclude>
     <ClInclude Include="OA_FrameBuffer.h">
       <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Rigidbody.h">
+      <Filter>엔진\물리2\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Collider.h">
+      <Filter>엔진\물리2\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_FasterMath.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_PhysicalSys.h">
+      <Filter>엔진\물리2\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_PhysicalSurface.h">
+      <Filter>엔진\물리2\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
