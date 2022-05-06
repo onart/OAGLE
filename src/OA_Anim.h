@@ -137,7 +137,7 @@ namespace onart {
 		/// <param name="tex">스프라이트를 포함한 텍스처입니다.</param>
 		/// <param name="rect">텍스처 내의 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)입니다. 입력하지 않거나 영벡터를 입력하는 경우 이미지 전체를 사용합니다.</param>
 		/// <param name="pivot">피벗 좌표입니다. 선택한 직사각형 영역의 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 회전/크기/병진 변환의 중심입니다. 입력하지 않는 경우 이미지의 중심이 피벗이 됩니다.</param>
-		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0.f, vec2 pivot = _NAN);
+		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0.f, vec2 pivot = NAN);
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 		Sprite(const pTexture& tex, const vec4& rect, const vec4& sctr);
@@ -157,7 +157,7 @@ namespace onart {
 		/// <param name="tex">스프라이트를 포함한 텍스처입니다.</param>
 		/// <param name="rect">텍스처 내의 직사각형 영역(LDWH. 좌/하/폭/높이, 단위는 px)입니다. 입력하지 않거나 영벡터를 입력하는 경우 이미지 전체를 사용합니다.</param>
 		/// <param name="pivot">피벗 좌표입니다. 선택한 직사각형 영역의 좌측 하단을 0으로, 픽셀 단위로 입력하면 됩니다. 회전/크기/병진 변환의 중심입니다. 입력하지 않는 경우 이미지의 중심이 피벗이 됩니다.</param>
-		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0.f, vec2 pivot = _NAN);
+		static std::shared_ptr<Animation> make(const std::string& name, const pTexture& tex, vec4 rect = 0.f, vec2 pivot = NAN);
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 		FixedSprite(const pTexture& tex, const vec4& rect, const vec4& sctr);

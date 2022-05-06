@@ -89,22 +89,21 @@ namespace onart {
 			return pAnimation();
 		}
 		// 시점순으로 정렬
-		auto tx(tex);	auto rcts(rects);
+		auto tx(tex);
 		std::sort(tx.begin(), tx.end());
-		std::sort(rcts.begin(), rcts.end());
-		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
+		if (!std::is_sorted(rects.begin(), rects.end())) {
 			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
 			return pAnimation();
 		}
-		
+
 		// rect를 상대값으로 변형하여 저장
 		const bool pv = !pivots.empty();
-		size_t sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
+		size_t sz = rects.size(); std::vector<Keypoint<vec4>> rctz(sz);
 		std::vector<vec4> sctrz(pivots.size());
 		for (size_t i = 0; i < sz; i++) { 
-			float timepoint = rcts[i].tp;
+			float timepoint = rects[i].tp;
 			const ivec2& wh = kpNow(tx, timepoint)->value->size;
-			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh[X], (float)wh[Y], (float)wh[X], (float)wh[Y])};
+			rctz[i] = { rects[i].tp, rects[i].value / vec4((float)wh[X], (float)wh[Y], (float)wh[X], (float)wh[Y])};
 			if (pv) {
 				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
 				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value[WIDTH], rects[i].value[HEIGHT]);
@@ -671,22 +670,21 @@ namespace onart {
 			return pAnimation();
 		}
 		// 시점순으로 정렬
-		auto tx(tex);	auto rcts(rects);
+		auto tx(tex);
 		std::sort(tx.begin(), tx.end());
-		std::sort(rcts.begin(), rcts.end());
-		if (memcmp(rects.data(), rcts.data(), sizeof(Keypoint<vec4>) * rects.size()) != 0) {
+		if (!std::is_sorted(rects.begin(), rects.end())) {
 			fprintf(stderr, "rects는 반드시 시점순으로 정렬된 상태로 입력되어야 합니다.\n");
 			return pAnimation();
 		}
 
 		// rect를 상대값으로 변형하여 저장
 		const bool pv = !pivots.empty();
-		size_t sz = rcts.size(); std::vector<Keypoint<vec4>> rctz(sz);
+		size_t sz = rects.size(); std::vector<Keypoint<vec4>> rctz(sz);
 		std::vector<vec4> sctrz(pivots.size());
 		for (size_t i = 0; i < sz; i++) {
-			float timepoint = rcts[i].tp;
+			float timepoint = rects[i].tp;
 			const ivec2& wh = kpNow(tx, timepoint)->value->size;
-			rctz[i] = { rcts[i].tp, rcts[i].value / vec4((float)wh[X], (float)wh[Y], (float)wh[X], (float)wh[Y])};
+			rctz[i] = { rects[i].tp, rects[i].value / vec4((float)wh[X], (float)wh[Y], (float)wh[X], (float)wh[Y])};
 			if (pv) {
 				// pivots를 가지고 원본 프레임 사이즈에 비례하게 크기 조절하는 벡터 추가
 				vec2 pivv = vec2(0.5f) - pivots[i] / vec2(rects[i].value[WIDTH], rects[i].value[HEIGHT]);

@@ -74,11 +74,11 @@ namespace onart {
 		void addComplete();
 		void read(void* out, unsigned long count);
 	private:
-		STD_SAMPLE_FORMAT body[RINGBUFFER_SIZE] = { 0, };	// 약 6프레임 분량
 		unsigned long readIndex = 0;	// 콜백에서 읽는 기준
 		unsigned long limitIndex = 0;	// 쓰기 제한 기준
 		unsigned long writeIndex = 0;	// 쓰기 시작점
 		bool isFirst = true;
+		alignas(16) STD_SAMPLE_FORMAT body[RINGBUFFER_SIZE] = { 0, };	// 약 6프레임 분량
 	} ringBuffer;
 
 	unsigned long RingBuffer::writable() {

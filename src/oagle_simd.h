@@ -349,7 +349,7 @@ namespace onart {
 }
 
 #if (defined(_M_IX86) || defined(_M_X64)) && !defined (_M_CEE_PURE) && !defined(OAGLE_NOSIMD)
-	#include <emmintrin.h>
+	#include <immintrin.h>
 	#include <cstdint>
 namespace onart {
 	/// <summary>

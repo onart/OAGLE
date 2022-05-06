@@ -76,7 +76,7 @@ namespace onart {
 				if (i < sz) {
 					e1 = bubble[i];
 					float e1z = entities[e1]->zIndex();
-					float past = INF;
+					float past = INFINITY;
 					for (i += 1; i < sz; i++) {
 						if (id != currentScene->id) return;
 						Entity* e2 = entities[bubble[i]];

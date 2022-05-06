@@ -110,7 +110,7 @@ namespace onart {
 		unsigned i;
 		unsigned iterationsUsed = 0;
 		while (iterationsUsed < iterations) {
-			float min = INF;
+			float min = INFINITY;
 			unsigned mi = numContacts;
 			for (i = 0; i < numContacts; i++) {
 				float sep = arr[i].afterSpeed();
@@ -129,7 +129,7 @@ namespace onart {
 		unsigned i;
 		unsigned iterationsUsed = 0;
 		while (iterationsUsed < iterations) {
-			float min = INF;
+			float min = INFINITY;
 			unsigned mi = numContacts;
 			for (i = 0; i < numContacts; i++) {
 				float sep = arr[i].afterSpeed();

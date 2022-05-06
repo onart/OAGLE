@@ -56,7 +56,7 @@ namespace onart {
 			/// <param name="align">수평 정렬 상태입니다. 가운데/왼쪽/오른쪽 옵션만 가능합니다.</param>
 			/// <param name="rowGap">행 간격입니다. 문서 프로그램들과 동일한 단위로 제공되는 것이 아니므로 직접 조절해 주시기 바랍니다.</param>
 			/// <param name="color">전체의 색입니다.</param>
-			Text(const EntityKey& key, Font* font, const oastring& content, const vec4& ldwh, float maxWidth = INF, bool fullFit = false, AlignH align = AlignH::CENTER, float rowGap = 1, const vec4& color = 1);
+			Text(const EntityKey& key, Font* font, const oastring& content, const vec4& ldwh, float maxWidth = 1e10f, bool fullFit = false, AlignH align = AlignH::CENTER, float rowGap = 1, const vec4& color = 1);
 			/// <summary>
 			/// 텍스트 개체를 생성합니다. 직사각형 범위에 고정되지 않고 특정 지점을 중심으로 합니다.
 			/// 이를 테면 게임 상 물체에서 텍스트가 생산될 때 사용하기에 적합합니다. 이 경우 Camera::world2screen() 함수를 참고해 주세요.
@@ -72,7 +72,7 @@ namespace onart {
 			/// <param name="size">텍스트의 크기입니다. 다른 폰트라면 같은 값이 같은 크기로 보장되지 않습니다.</param>
 			/// <param name="rowGap">행 간격입니다. 문서 프로그램들과 동일한 단위로 제공되는 것이 아니므로 직접 조절해 주시기 바랍니다.</param>
 			/// <param name="color">전체의 색입니다.</param>
-			Text(const EntityKey& key, Font* font, const oastring& content, const vec2& center, float maxWidth = INF, AlignH ha = AlignH::CENTER, AlignV va = AlignV::CENTER, float size = 1, float rowGap = 1, const vec4& color = 1);
+			Text(const EntityKey& key, Font* font, const oastring& content, const vec2& center, float maxWidth = 1e10f, AlignH ha = AlignH::CENTER, AlignV va = AlignV::CENTER, float size = 1, float rowGap = 1, const vec4& color = 1);
 			/// <summary>
 			/// 주어진 문자열로 내용을 바꿉니다. 글자별 크기/색상 옵션은 생성자를 참조하세요.
 			/// </summary>

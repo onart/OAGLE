@@ -32,8 +32,6 @@
 #pragma warning(disable: 6294 6201 26495)
 
 constexpr float PI = 3.14159265358979323846f;
-constexpr float INF = INFINITY;
-constexpr float _NAN = NAN;
 
 /// <summary>
 /// 라디안을 입력하면 도 단위로 변경합니다.
@@ -68,7 +66,7 @@ namespace onart {
 	/// </summary>
 	/// <typeparam name="T">벡터 성분의 타입입니다. 사칙 연산 및 부호 반전이 가능하여야 합니다.</typeparam>
 	template <unsigned D, class T = float> struct nvec {
-		T entry[4];
+		alignas(16) T entry[4];
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>
@@ -203,21 +201,14 @@ namespace onart {
 
 		/// <summary>
 		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
-		/// dot 함수에 비해 행렬 간 곱 및 행렬 x 벡터에서 사용하기에 빠릅니다. (원인은 파악 중입니다)
 		/// </summary>
-		inline T dot2(const nvec& v) const { 
-			auto nv = (*this) * v;
+		inline T dot(const nvec& v) const { 
+			nvec nv(*this * v);
 			if constexpr (D == 2) return nv[0] + nv[1];
 			else if constexpr (D == 3) return nv[0] + nv[1] + nv[2];
-			else if constexpr (D == 4) return nv[0] + nv[1] + nv[2] + nv[3];
+			else if constexpr (D == 4) return (nv[0] + nv[1]) + (nv[2] + nv[3]);
 			else return T();	// 더 이상 실행되지 않음
 		}
-
-		/// <summary>
-		/// 다른 벡터와의 내적을 리턴합니다. 다른 차원과의 연산을 지원하지 않습니다.
-		/// dot2 함수에 비해 단순히 벡터에서 사용하기에 빠릅니다. (원인은 파악 중입니다)
-		/// </summary>
-		inline T dot(const nvec& v) const { return std::transform_reduce(entry, entry + D, v.entry, (T)0); }
 
 		/// <summary>
 		/// 벡터 길이의 제곱을 리턴합니다.
@@ -291,7 +282,7 @@ namespace onart {
 	/// 2차원 이미지의 회전연산을 위한 2x2 행렬입니다. 단, 3차원 연산의 z축을 0으로 고정하는 것이 더 일반적인 방법입니다.
 	/// </summary>
 	struct mat2 {
-		float a[4];
+		alignas(16) float a[4];
 
 		/// <summary>
 		/// 단위행렬을 생성합니다.
@@ -390,9 +381,10 @@ namespace onart {
 
 	/// <summary>
 	/// 3차원 모델의 회전연산 혹은 2차원 이미지의 아핀 변환을 위한 3x3 행렬입니다.
+	/// mat3은 9개의 float 변수를 가지지만 16 배수 정렬로 인해 실제로는 48바이트를 차지합니다(뒤 12바이트 빈 공간). 이 부분에 유의하세요.
 	/// </summary>
 	struct mat3 {
-		float a[9];
+		alignas(16) float a[9];
 #define MAT3_INDEX const float _11 = a[0], _12 = a[1], _13 = a[2], _21 = a[3], _22 = a[4], _23 = a[5], _31 = a[6], _32 = a[7], _33 = a[8]
 		/// <summary>
 		/// 단위행렬을 생성합니다.
@@ -454,7 +446,7 @@ namespace onart {
 				vec3 r = row(i);
 				for (int j = 0; j < 3; j++, ent++) {
 					vec3 c = m.col(j);
-					ret[ent] = r.dot2(c);
+					ret[ent] = r.dot(c);
 				}
 			}
 			return ret;
@@ -468,7 +460,7 @@ namespace onart {
 		/// <summary>
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
-		inline vec3 operator*(const vec3& v) const { return vec3(row(0).dot2(v), row(1).dot2(v), row(2).dot2(v)); }
+		inline vec3 operator*(const vec3& v) const { return vec3(row(0).dot(v), row(1).dot(v), row(2).dot(v)); }
 
 		/// <summary>
 		/// 행렬에 실수배를 합니다.
@@ -590,7 +582,7 @@ namespace onart {
 	/// 3차원 모델의 아핀 변환을 위한 4x4 행렬입니다.
 	/// </summary>
 	struct mat4 {
-		float a[16];
+		alignas(16) float a[16];
 #define MAT4_INDEX const float _11 = a[0], _12 = a[1], _13 = a[2], _14 = a[3], _21 = a[4], _22 = a[5], _23 = a[6], _24 = a[7], _31 = a[8], _32 = a[9], _33 = a[10], _34 = a[11], _41 = a[12], _42 = a[13], _43 = a[14], _44 = a[15]
 		/// <summary>
 		/// 단위행렬을 생성합니다.
@@ -659,7 +651,7 @@ namespace onart {
 				vec4 r = row(i);
 				for (int j = 0; j < 4; j++, ent++) {
 					vec4 c = m.col(j);
-					ret[ent] = r.dot2(c);
+					ret[ent] = r.dot(c);
 				}
 			}
 			return ret;
@@ -674,7 +666,7 @@ namespace onart {
 		/// 벡터에 선형변환을 적용하여 리턴합니다.
 		/// </summary>
 		inline vec4 operator*(const vec4& v) const { 
-			return vec4(row(0).dot2(v), row(1).dot2(v), row(2).dot2(v), row(3).dot2(v));
+			return vec4(row(0).dot(v), row(1).dot(v), row(2).dot(v), row(3).dot(v));
 		}
 
 		/// <summary>
@@ -992,7 +984,7 @@ namespace onart {
 			for (unsigned i = 0; i < R; i++) {
 				nvec<C, float> r(entry[i]);
 				for (unsigned j = 0; j < C2; j++) {
-					ret[i][j] = r.dot2(mm.row(j + 1));
+					ret[i][j] = r.dot(mm.row(j + 1));
 				}
 			}
 			return ret;
@@ -1360,16 +1352,16 @@ namespace onart {
 		vec2 _34(q1 - q2);
 		vec2 _12(p1 - p2);
 		float d = cross2(_12, _34);
-		if (d == 0) return vec2(_NAN, 0);
+		if (d == 0) return vec2(NAN, 0);
 		float vn = cross2(_13, _12);
 		float tn = cross2(_13, _34);
 		if (d < 0) {
 			if (tn <= 0 && tn >= d && vn <= 0 && vn >= d) return p1 - _12 * (tn / d);
-			else return _NAN;
+			else return NAN;
 		}
 		else {
 			if (tn >= 0 && tn <= d && vn >= 0 && vn <= d) return p1 - _12 * (tn / d);
-			else return _NAN;
+			else return NAN;
 		}
 	}
 
