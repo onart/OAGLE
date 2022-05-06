@@ -1,12 +1,18 @@
 #ifndef __OA_PHYSICALSYS_H__
 #define __OA_PHYSICALSYS_H__
 
+#include <vector>
+#include "oaglem.h"
+
 namespace onart {
+	
+	class Collider2D;
+
 	class PhysicalSys2D {
 	public:
-		void Update();
+		static void Update();
 	private:
-		void makeCollisions();
+		static void makeCollisions();
 	};
 }
 

@@ -18,15 +18,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="엔진\물리1">
-      <UniqueIdentifier>{4c0518dd-509c-4b15-b1e1-85a15833e867}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="엔진\물리1\헤더 파일">
-      <UniqueIdentifier>{74473754-9d08-4a68-9bd1-c3adc5fe84d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="엔진\물리1\소스 파일">
-      <UniqueIdentifier>{006df378-0bb3-4b6d-8faf-b20a7e1d8bad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="응용">
       <UniqueIdentifier>{1701b391-89fd-48bb-9aef-9f6bd1fe8c4e}</UniqueIdentifier>
     </Filter>
@@ -45,16 +36,25 @@
     <Filter Include="엔진\기본\소스 파일">
       <UniqueIdentifier>{2cf44bfb-0886-46c5-b450-daa527a25c12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엔진\물리2">
+    <Filter Include="엔진\물리1%28CYCLONE%29">
+      <UniqueIdentifier>{4c0518dd-509c-4b15-b1e1-85a15833e867}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리1%28CYCLONE%29\헤더 파일">
+      <UniqueIdentifier>{74473754-9d08-4a68-9bd1-c3adc5fe84d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리1%28CYCLONE%29\소스 파일">
+      <UniqueIdentifier>{006df378-0bb3-4b6d-8faf-b20a7e1d8bad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="엔진\물리2%28직접 구현/OAP%29">
       <UniqueIdentifier>{70288f6b-4534-43a6-8676-f82bc24d55b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엔진\물리2\헤더 파일">
+    <Filter Include="엔진\물리2%28직접 구현/OAP%29\헤더 파일">
       <UniqueIdentifier>{bbb8730d-67ed-416f-9250-685c98da3cc2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엔진\물리2\소스 파일">
+    <Filter Include="엔진\물리2%28직접 구현/OAP%29\소스 파일">
       <UniqueIdentifier>{bd6a762c-1172-42e1-b8bb-ac77f92699ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엔진\물리3">
+    <Filter Include="엔진\물리3%28포팅 예정%29">
       <UniqueIdentifier>{4b8d55c8-a48e-4068-af4d-7d3d3c9e7bea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -117,13 +117,13 @@
       <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_ForceGenerator.cpp">
-      <Filter>엔진\물리1\소스 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_PhysicalSystem.cpp">
-      <Filter>엔진\물리1\소스 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_PointMass.cpp">
-      <Filter>엔진\물리1\소스 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_TestEntity.cpp">
       <Filter>응용\소스 파일</Filter>
@@ -132,19 +132,22 @@
       <Filter>응용\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Contact.cpp">
-      <Filter>엔진\물리1\소스 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_BV.cpp">
-      <Filter>엔진\물리1\소스 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_FrameBuffer.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Rigidbody.cpp">
-      <Filter>엔진\물리2\소스 파일</Filter>
+      <Filter>엔진\물리2%28직접 구현/OAP%29\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_Collider.cpp">
-      <Filter>엔진\물리2\소스 파일</Filter>
+      <Filter>엔진\물리2%28직접 구현/OAP%29\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_PhysicalSys.cpp">
+      <Filter>엔진\물리2%28직접 구현/OAP%29\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -239,37 +242,37 @@
       <Filter>응용\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_ForceGenerator.h">
-      <Filter>엔진\물리1\헤더 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_PhysicalSystem.h">
-      <Filter>엔진\물리1\헤더 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_PointMass.h">
-      <Filter>엔진\물리1\헤더 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Contact.h">
-      <Filter>엔진\물리1\헤더 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_BV.h">
-      <Filter>엔진\물리1\헤더 파일</Filter>
+      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_FrameBuffer.h">
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Rigidbody.h">
-      <Filter>엔진\물리2\헤더 파일</Filter>
+      <Filter>엔진\물리2%28직접 구현/OAP%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Collider.h">
-      <Filter>엔진\물리2\헤더 파일</Filter>
+      <Filter>엔진\물리2%28직접 구현/OAP%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_FasterMath.h">
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_PhysicalSys.h">
-      <Filter>엔진\물리2\헤더 파일</Filter>
+      <Filter>엔진\물리2%28직접 구현/OAP%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_PhysicalSurface.h">
-      <Filter>엔진\물리2\헤더 파일</Filter>
+      <Filter>엔진\물리2%28직접 구현/OAP%29\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -194,6 +194,7 @@
     <ClCompile Include="OA_Input.cpp" />
     <ClCompile Include="OA_Material.cpp" />
     <ClCompile Include="OA_Model.cpp" />
+    <ClCompile Include="OA_PhysicalSys.cpp" />
     <ClCompile Include="OA_PhysicalSystem.cpp" />
     <ClCompile Include="OA_PointMass.cpp" />
     <ClCompile Include="OA_Random.cpp" />
