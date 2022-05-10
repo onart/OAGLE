@@ -13,6 +13,8 @@ extern float dt;
 namespace onart{
 	std::vector<Rigidbody2D*> Rigidbody2D::objs;
 
+
+
 	void Rigidbody2D::UpdateV() {
 		velocity += acceleration * dt;
 		velocity += netForce * inverseMass * dt;

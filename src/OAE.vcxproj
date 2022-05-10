@@ -163,9 +163,11 @@
       <DebugInformationFormat>None</DebugInformationFormat>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointModel>Precise</FloatingPointModel>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
+      <OmitFramePointers>
+      </OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -211,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h" />
+    <ClInclude Include="oaglem_geometry.h" />
     <ClInclude Include="OA_BV.h" />
     <ClInclude Include="externals\gl\glad\glad.h" />
     <ClInclude Include="externals\gl\glfw\win64\glfw3.h" />

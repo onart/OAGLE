@@ -39,14 +39,29 @@ namespace onart {
 		/// </summary>
 		void UpdateP();
 		/// <summary>
-		/// 현 프레임 동안 강체에 힘을 가합니다. 지속적으로 힘을 가할 것이 아니라면 impulse() 함수를 사용하세요.
+		/// 현 프레임 동안 강체에 힘을 가합니다. 토크가 발생하지 않습니다. 지속적으로 힘을 가할 것이 아니라면 impulse() 함수를 사용하세요.
 		/// </summary>
 		inline void addForce(const vec2& force) { netForce += force; }
+		/// <summary>
+		/// 특정 위치에 강체에 힘을 가합니다. 토크가 발생할 수 있습니다.
+		/// </summary>
+		inline void addForce(const vec2& force, const vec2& globalPoint) {
+			netForce += force;
+			netTorque += cross2(globalPoint - transform->getGlobalPosition(), force);
+		}
 		/// <summary>
 		/// 프레임 시간에 관계 없이 물체를 질량에 반비례하게 가속시킵니다. 즉, 질량이 1인 물체가 가속했으면 좋겠는 양을 주면 됩니다.
 		/// 질량에 관계 없이 특정 속도를 만들고 싶다면 accelerate() 함수를 사용하세요.
 		/// </summary>
 		inline void impulse(const vec2& force) { velocity += inverseMass * force; }
+		/// <summary>
+		/// 프레임 시간에 관계 없이 물체를 질량에 반비례하게 가속시킵니다. 토크도 순간적으로 발생할 수 있습니다.
+		/// 질량이 1인 물체가 가속했으면 좋겠는 양을 줍니다.
+		/// </summary>
+		inline void impulse(const vec2& force, const vec2& globalPoint) {
+			velocity += inverseMass * force;
+			angularVel += inverseMoment * cross2(globalPoint - transform->getGlobalPosition(), force);
+		}
 		/// <summary>
 		/// 프레임 시간 및 질량에 관계 없이 속도를 주어진 값만큼 더합니다. setVelocity() 함수도 참고하세요.
 		/// </summary>

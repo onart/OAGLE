@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cstring>
 #include <numeric>
+#include <type_traits>
 
 #include "oagle_simd.h"
 
@@ -153,7 +154,11 @@ namespace onart {
 		inline nvec& operator+=(T a) { add4<T>(entry, a); return *this; }
 		inline nvec& operator-=(T a) { sub4<T>(entry, a); return *this; }
 		inline nvec& operator*=(T a) { mul4<T>(entry, a); return *this; }
-		inline nvec& operator/=(T a) { mul4<T>(entry, 1/a); return *this; }
+		inline nvec& operator/=(T a) { 
+			if constexpr (std::is_same_v<float, T> || std::is_same_v<double, T> || std::is_same_v<long double, T>) mul4<T>(entry, 1 / a);
+			else div4<T>(entry, a);
+			return *this;
+		}
 		inline nvec operator+(T a) const { return nvec(*this) += a; }
 		inline nvec operator-(T a) const { return nvec(*this) -= a; }
 		inline nvec operator*(T a) const { return nvec(*this) *= a; }
@@ -1337,120 +1342,6 @@ namespace onart {
 	};
 
 	/// <summary>
-	/// 2차원 평면에서 2개 선분의 교점을 리턴합니다.
-	/// 교점이 없는 경우 (nan, nan)이 리턴됩니다.
-	/// 나란한 경우 교점 여부에 무관하게 (nan, 0)이 리턴됩니다.
-	/// https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection#Given_two_points_on_each_line_segment
-	/// </summary>
-	/// <param name="p1">선분 1의 끝점 1</param>
-	/// <param name="p2">선분 1의 끝점 2</param>
-	/// <param name="q1">선분 2의 끝점 1</param>
-	/// <param name="q2">선분 2의 끝점 2</param>
-	inline vec2 intersect(const vec2& p1, const vec2& p2, const vec2& q1, const vec2& q2) {
-		// cf) n개 중 접촉하는 선분 https://www.geeksforgeeks.org/given-a-set-of-line-segments-find-if-any-two-segments-intersect/
-		vec2 _13(p1 - q1);
-		vec2 _34(q1 - q2);
-		vec2 _12(p1 - p2);
-		float d = cross2(_12, _34);
-		if (d == 0) return vec2(NAN, 0);
-		float vn = cross2(_13, _12);
-		float tn = cross2(_13, _34);
-		if (d < 0) {
-			if (tn <= 0 && tn >= d && vn <= 0 && vn >= d) return p1 - _12 * (tn / d);
-			else return NAN;
-		}
-		else {
-			if (tn >= 0 && tn <= d && vn >= 0 && vn <= d) return p1 - _12 * (tn / d);
-			else return NAN;
-		}
-	}
-
-	/// <summary>
-	/// 2차원 평면에서 2개 선분이 만나는지 여부만 확인합니다.
-	/// </summary>
-	/// <param name="p1">선분 1의 끝점 1</param>
-	/// <param name="p2">선분 1의 끝점 2</param>
-	/// <param name="q1">선분 2의 끝점 1</param>
-	/// <param name="q2">선분 2의 끝점 2</param>
-	inline bool intersect2(const vec2& p1, const vec2& p2, const vec2& q1, const vec2& q2) {
-		vec2 b1(p1 - q1);
-		vec2 b2(p2 - q1);
-		float dt = b1.dot(b2);
-		if (dt < 0 && fabs(dt * dt - b1.length2() * b2.length2()) < FLT_EPSILON) return true;
-		vec2 qq2(q2 - q1);
-		mat2 bm(b1[0], b2[0], b1[1], b2[1]);
-		bm = bm.inverse();
-		vec2 st = bm * qq2;
-		return (st[0] >= 0 && st[1] >= 0 && st[0] + st[1] >= 1.0f);
-	}
-
-	/// <summary>
-	/// 3차원 공간 상의 점이 동일 평면 내 삼각형 안에 있는지 확인합니다.
-	/// 삼각형과 점이 동일 평면 내에 있지 않은 경우에 대한 결과는 별도로 정의되지 않았습니다.
-	/// </summary>
-	/// <param name="p">점</param>
-	/// <param name="t1">삼각형 꼭짓점 1</param>
-	/// <param name="t2">삼각형 꼭짓점 2</param>
-	/// <param name="t3">삼각형 꼭짓점 3</param>
-	inline bool pointInTriangle(const vec3& p, const vec3& t1, const vec3& t2, const vec3& t3) {
-		vec3 _12(t2 - t1);
-		vec3 _23(t3 - t2);
-		vec3 p1(p - t1);
-		vec3 p2(p - t2);
-		vec3 p12(std::move(cross(_12, p1)));
-		vec3 p23(std::move(cross(_12, p1)));
-		{
-			vec3 p123(p12 * p23);
-			if (p123[0] < 0 || p123[1] < 0 || p123[2] < 0) {
-				return false;
-			}
-		}
-		vec3 p3(p - t3);
-		vec3 _31(t1 - t3);
-		vec3 p31(std::move(cross(_12, p1)));
-		{
-			vec3 p123(p12 * p31);
-			return !(p123[0] < 0 || p123[1] < 0 || p123[2] < 0);
-		}
-	}
-
-	inline bool pointInTriangle2(const vec3& p, const vec3& t1, const vec3& t2, const vec3& t3) {
-		// pseudo inverse 필요.
-	}
-
-	/// <summary>
-	/// RGB 값을 포함하는 vec3를 받아 HSV 형식(근사치)을 리턴합니다.
-	/// 입력해야 할 RGB 값의 범위는 0~255 사이의 정수가 아닌 0~1 사이의 실수이며 리턴값도 0~1 사이의 실수입니다.
-	/// 이 중 H값의 단위는 360 deg = 2PI rad입니다. 예를 들어 0.5는 180도를 뜻합니다.
-	/// https://thebookofshaders.com/06/
-	/// </summary>
-	inline vec3 hsv(const vec3& rgb) {
-		vec4 p = rgb[1] < rgb[2] ? vec4(rgb[2], rgb[1], -1.0f, 2.0f / 3) : vec4(rgb[1], rgb[2], 0, -1.0f / 3);
-		vec4 q = rgb[0] < p[0] ? vec4(p[0], p[1], p[3], rgb[0]) : vec4(rgb[0], p[1], p[2], p[0]);
-		float d = q[0] - std::min(q[3], q[1]);
-		return vec3(fabsf(q[2] + (q[3] - q[1]) / (6.0f * d + FLT_EPSILON)), d / (q[0] + FLT_EPSILON), q[0]);
-	}
-
-	/// <summary>
-	/// HSV 값을 포함하는 vec3를 받아 RGB 형식(근사치)을 리턴합니다.
-	/// 입력 H값의 단위는 360 deg = 2PI rad이며 나머지도 0~1 사이의 실수입니다.
-	/// 리턴 rgb값은 0~1사이의 실수로 표현됩니다.
-	/// https://thebookofshaders.com/06/
-	/// </summary>
-	inline vec3 rgb(const vec3& hsv) {
-		vec3 _rgb = vec3(0, 4, 2) + hsv[0] * 6;
-		_rgb[0] = fmodf(_rgb[0], 6.0f);
-		_rgb[1] = fmodf(_rgb[1], 6.0f);
-		_rgb[2] = fmodf(_rgb[2], 6.0f);
-		_rgb -= 3;
-		abs4<float>(_rgb.entry);
-		_rgb -= 1;
-		clamp4<float>(_rgb.entry, 0, 1);
-		_rgb = _rgb * _rgb * (-2.0f * _rgb + 3.0f);
-		return lerp(vec3(1), _rgb, hsv[1]) * hsv[2];
-	}
-
-	/// <summary>
 	/// 편리한 디버그를 위한 값 출력 함수입니다.
 	/// </summary>
 	/// <param name="v">표시할 변수</param>
@@ -1477,3 +1368,5 @@ namespace onart {
 }
 
 #endif // !__OAGLEM_H__
+
+#include "oaglem_geometry.h"

@@ -220,13 +220,11 @@ namespace onart {
 
 	vec4 Font::parseColor(const oastring& str, int start) {	// start는 8자리 중 처음을 가리키도록 주어짐
 		char* er = nullptr;
-		char* hx = new char[9];	hx[8] = 0;
-		char* p = hx;
-		for (int i = start; i < start + 8; i++, p++) {
-			*p = (char)str[i];
+		char hx[9];	hx[8] = 0;
+		for (int i = 0; i < 8; i++) {
+			hx[i] = (char)str[i + start];
 		}
 		unsigned long clr = strtoul(hx, &er, 16);
-		delete[] hx;
 		if (*er) return -1;
 		vec4 v;
 		USE_NVEC_RGBA;

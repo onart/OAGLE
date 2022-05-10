@@ -274,6 +274,9 @@
     <ClInclude Include="OA_PhysicalSurface.h">
       <Filter>엔진\물리2%28직접 구현/OAP%29\헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="oaglem_geometry.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\p3f.txt">

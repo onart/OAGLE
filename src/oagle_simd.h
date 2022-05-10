@@ -349,7 +349,7 @@ namespace onart {
 }
 
 #if (defined(_M_IX86) || defined(_M_X64)) && !defined (_M_CEE_PURE) && !defined(OAGLE_NOSIMD)
-	#include <immintrin.h>
+	#include <emmintrin.h>
 	#include <cstdint>
 namespace onart {
 	/// <summary>
@@ -362,7 +362,7 @@ namespace onart {
 		__m128 b = _mm_set_ps1(val);
 		_mm_storeu_ps(vec, b);
 	}
-
+	
 	/// <summary>
 	/// 실수 배열에서 4개를 원하는 값으로 초기화합니다.
 	/// </summary>

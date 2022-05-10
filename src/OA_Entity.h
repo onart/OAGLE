@@ -100,6 +100,10 @@ namespace onart {
 		/// <returns></returns>
 		inline const EntityKey& name() const { return key; }
 		/// <summary>
+		/// 개체의 변환 상태를 나타냅니다.
+		/// </summary>
+		inline Transform* getTransform() { return &transform; }
+		/// <summary>
 		/// 카메라 기준 상대적 z좌표를 리턴합니다.
 		/// </summary>
 		float zIndex();
