@@ -180,12 +180,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OA_Ballpool.cpp" />
     <ClCompile Include="OA_BV.cpp" />
     <ClCompile Include="externals\gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
     <ClCompile Include="OA_Audio.cpp" />
-    <ClCompile Include="OA_Collider.cpp" />
     <ClCompile Include="OA_Contact.cpp" />
     <ClCompile Include="OA_CQueue.cpp" />
     <ClCompile Include="OA_Camera.cpp" />
@@ -196,7 +196,6 @@
     <ClCompile Include="OA_Input.cpp" />
     <ClCompile Include="OA_Material.cpp" />
     <ClCompile Include="OA_Model.cpp" />
-    <ClCompile Include="OA_PhysicalSys.cpp" />
     <ClCompile Include="OA_PhysicalSystem.cpp" />
     <ClCompile Include="OA_PointMass.cpp" />
     <ClCompile Include="OA_Random.cpp" />
@@ -204,16 +203,21 @@
     <ClCompile Include="OA_Scene.cpp" />
     <ClCompile Include="OA_Shader.cpp" />
     <ClCompile Include="OA_TestEntity.cpp" />
+    <ClCompile Include="OA_TestEntity2.cpp" />
     <ClCompile Include="OA_TestScene.cpp" />
     <ClCompile Include="OA_Text.cpp" />
     <ClCompile Include="OA_Transform.cpp" />
     <ClCompile Include="OA_UI.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
     <ClCompile Include="OA_Window.cpp" />
+    <ClCompile Include="OA_BallCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="binaryIOvec.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="oaglem_geometry.h" />
+    <ClInclude Include="OA_BallCollider.h" />
+    <ClInclude Include="OA_Ballpool.h" />
     <ClInclude Include="OA_BV.h" />
     <ClInclude Include="externals\gl\glad\glad.h" />
     <ClInclude Include="externals\gl\glfw\win64\glfw3.h" />
@@ -224,7 +228,6 @@
     <ClInclude Include="oagle_simd.h" />
     <ClInclude Include="OA_Anim.h" />
     <ClInclude Include="OA_Audio.h" />
-    <ClInclude Include="OA_Collider.h" />
     <ClInclude Include="OA_Contact.h" />
     <ClInclude Include="OA_CQueue.h" />
     <ClInclude Include="OA_Camera.h" />
@@ -237,14 +240,15 @@
     <ClInclude Include="OA_Material.h" />
     <ClInclude Include="OA_Memory.h" />
     <ClInclude Include="OA_Model.h" />
+    <ClInclude Include="OA_modules.h" />
     <ClInclude Include="OA_PhysicalSurface.h" />
-    <ClInclude Include="OA_PhysicalSys.h" />
     <ClInclude Include="OA_PhysicalSystem.h" />
     <ClInclude Include="OA_PointMass.h" />
     <ClInclude Include="OA_Random.h" />
     <ClInclude Include="OA_Rigidbody.h" />
     <ClInclude Include="OA_Scene.h" />
     <ClInclude Include="OA_TestEntity.h" />
+    <ClInclude Include="OA_TestEntity2.h" />
     <ClInclude Include="OA_TestScene.h" />
     <ClInclude Include="OA_Text.h" />
     <ClInclude Include="OA_Transform.h" />

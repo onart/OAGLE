@@ -840,6 +840,15 @@ namespace onart {
 		__m128i b = _mm_mullo_epi16(_mm_loadu_si128((__m128i*)vec), _mm_loadu_si128((__m128i*)val));
 		_mm_storeu_si128((__m128i*)vec, b);
 	}
+
+	/// <summary>
+	/// float 4개를 int 4개로 변환합니다. (버림 적용)
+	/// </summary>
+	inline void f2i(const float* vec, int32_t* val) {
+		__m128 v = _mm_loadu_ps(vec);
+		__m128i i = _mm_cvttps_epi32(v);
+		_mm_storeu_si128((__m128i*)val, i);
+	}
 }
 	
 #endif

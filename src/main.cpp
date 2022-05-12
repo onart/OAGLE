@@ -19,6 +19,7 @@
 #include "OA_Camera.h"
 #include "OA_Audio.h"
 #include "OA_Material.h"
+#include "OA_Ballpool.h"
 #include "externals/stb_image.h"
 
 // 창 관련
@@ -64,12 +65,14 @@ void update() {
 		tp = cur;
 	}
 	onart::Scene::currentScene->update();
+	onart::Ballpool2D::Update();
 }
 
 void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	mainCamera.viewUpdate();
 	onart::Scene::currentScene->render();
+	onart::Ballpool2D::render();	// 디버그용
 	glfwSwapBuffers(window);
 }
 

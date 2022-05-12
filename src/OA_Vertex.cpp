@@ -85,7 +85,8 @@ namespace onart {
 		circ[0] = { vec3(0.f), vec3(0,0,-1.0f), vec2(0.5f) };
 		for (unsigned k = 0; k < N; k++)
 		{
-			float t = PI * 2.0f * k / float(N), c = cos(t), s = sin(t);
+			float t = PI * 2.0f * k / float(N);
+			float c = cos(t), s = sin(t);
 			circ[k + 1] = { vec3(c,s,0), vec3(0,0,-1.0f), vec2(c,s) * 0.5f + 0.5f };
 		}
 		for (unsigned k = 0; k < N; k++) {
@@ -265,6 +266,8 @@ namespace onart {
 #endif // USE_ANIM
 #endif
 		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		return vao;
 	}
 

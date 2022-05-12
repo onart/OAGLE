@@ -43,6 +43,12 @@ constexpr float deg(float rad) { return rad * 180 / PI; }
 /// </summary>
 constexpr float rad(float deg) { return deg / 180 * PI; }
 
+/// <summary>
+/// 첫 매개변수 값이 주어진 범위 사이에 있는지 확인합니다.
+/// </summary>
+template <int lower, int upper>
+inline bool isInRange(int value) { static_assert(lower < upper); return (unsigned)(value - lower) <= (unsigned)(upper - lower); }
+
 /// 컴파일러 상 최적화를 위해 nvec을 struct로 바꾼 대신 그나마 직관적인 방법으로 멤버에 접근할 수 있도록 매크로를 만들었습니다. 이름이 안 겹친다는 보장이 있다면 소스 파일의 맨 앞에 이것을 깔고 시작해도 됩니다.
 #define USE_NVEC_INDEX enum { x = 0, y, z, w, r = 0, g, b, a, s = 0, t, p, q, left = 0, down, width, height }
 #define USE_NVEC_XYZW enum { x = 0, y, z, w }

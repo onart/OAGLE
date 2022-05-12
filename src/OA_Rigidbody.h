@@ -9,6 +9,7 @@
 #define __OA_RIGIDBODY_H__
 
 #include "oaglem.h"
+#include "OA_Transform.h"
 #include <vector>
 
 namespace onart {
@@ -19,7 +20,7 @@ namespace onart {
 	/// 고전 역학 법칙을 적용받는 2차원 강체입니다. 가급적 최상위 transform에만 하는 것이 성능상 좋습니다.
 	/// </summary>
 	class Rigidbody2D {
-		friend class PhysicalSys2D;
+		friend class Ballpool2D;
 	public:
 		/// <summary>
 		/// 강체를 생성합니다.
@@ -27,9 +28,8 @@ namespace onart {
 		/// <param name="mass">질량</param>
 		/// <param name="inertiaMoment">관성모멘트</param>
 		/// <param name="transform">개체의 변환 포인터</param>
-		inline Rigidbody2D(float mass, float inertiaMoment, Transform* transform) :inverseMass(1 / mass), inverseMoment(1 / inertiaMoment), transform(transform), netTorque(0), angularVel(0), angularAcc(0) {
-			objs.push_back(this);
-		}
+		Rigidbody2D(float mass, float inertiaMoment, Transform& transform);
+		~Rigidbody2D();
 		/// <summary>
 		/// 현재 프레임에 속도를 업데이트합니다.
 		/// </summary>
@@ -47,7 +47,7 @@ namespace onart {
 		/// </summary>
 		inline void addForce(const vec2& force, const vec2& globalPoint) {
 			netForce += force;
-			netTorque += cross2(globalPoint - transform->getGlobalPosition(), force);
+			netTorque += cross2(globalPoint - transform.getGlobalPosition(), force);
 		}
 		/// <summary>
 		/// 프레임 시간에 관계 없이 물체를 질량에 반비례하게 가속시킵니다. 즉, 질량이 1인 물체가 가속했으면 좋겠는 양을 주면 됩니다.
@@ -60,7 +60,7 @@ namespace onart {
 		/// </summary>
 		inline void impulse(const vec2& force, const vec2& globalPoint) {
 			velocity += inverseMass * force;
-			angularVel += inverseMoment * cross2(globalPoint - transform->getGlobalPosition(), force);
+			angularVel += inverseMoment * cross2(globalPoint - transform.getGlobalPosition(), force);
 		}
 		/// <summary>
 		/// 프레임 시간 및 질량에 관계 없이 속도를 주어진 값만큼 더합니다. setVelocity() 함수도 참고하세요.
@@ -85,7 +85,7 @@ namespace onart {
 		/// </summary>
 		inline void addTorque(float torque) { netTorque += torque; }
 	private:
-		Transform* transform;	// 개체 위치, 회전
+		Transform& transform;	// 개체 위치, 회전
 		vec2 velocity;			// 속도
 		vec2 acceleration;		// 가속도
 		vec2 netForce;			// 합력

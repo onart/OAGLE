@@ -16,14 +16,10 @@
 #include <iterator>
 
 extern onart::Shader program2, program3;
-extern float tp, dt;
 
 USE_SHADER_UNIFORM;
 
 namespace onart {
-
-	const float& Entity::tp = ::tp;
-	const float& Entity::dt = ::dt;
 
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
@@ -136,6 +132,10 @@ namespace onart {
 
 	void Entity::Update() {
 		
+	}
+
+	void Entity::onTrigger(Entity* other) {
+
 	}
 
 	void Entity::act(int kp, float progress) {

@@ -21,6 +21,7 @@ namespace onart {
 }
 
 extern onart::Camera mainCamera;
+extern float dt, tp;
 
 namespace onart {
 	class Model;
@@ -36,6 +37,20 @@ namespace onart {
 #else
 		using EntityKey = std::string;	// const char*로 변경 예정
 #endif
+	private:
+		float lt = 0;
+		EntityKey key;
+		std::shared_ptr<Model> model;
+		int as = -1;
+		float animStartTimepoint;
+		float animTps = 1;
+		int animKp = 0;
+		std::vector<pAnimation> anims;
+		bool isFixed;
+		bool responseContinuously;
+		char eclass;
+		static std::multimap<EntityKey, Entity*> entities;
+	public:
 		/// <summary>
 		/// 개체를 생성합니다. 특별히 매 프레임 업데이트할 내용이 없는 개체는 상속 없이 그대로 사용할 수 있습니다.
 		/// <para>스프라이트 혹은 모델: addAnim(), setModel()로 정합니다.</para>
@@ -130,6 +145,10 @@ namespace onart {
 		/// </summary>
 		virtual void Update();
 		/// <summary>
+		/// 다른 개체와의 충돌 혹은 겹칩 판정 시 프레임마다 호출됩니다.
+		/// </summary>
+		virtual void onTrigger(Entity* other);
+		/// <summary>
 		/// 현재 애니메이션 키를 읽습니다. 응용 단계에서 사용할 일 없는 함수입니다.
 		/// </summary>
 		inline int getAnimKey() { return responseContinuously ? -1 : animKp; }
@@ -156,6 +175,10 @@ namespace onart {
 		/// 개체를 제거합니다.
 		/// </summary>
 		inline static void destroy(Entity* e) { delete e; }
+		/// <summary>
+		/// 개체의 분류를 리턴합니다.
+		/// </summary>
+		inline char getClass() { return eclass; }
 		/// <summary>
 		/// 현존 객체 중에서 해당 키를 가지고 원하는 개체형인 것 중 가장 앞의 하나를 찾아 반환합니다. 단 하나도 없는 경우 nullptr를 반환합니다.
 		/// </summary>
@@ -198,31 +221,10 @@ namespace onart {
 		/// </summary>
 		void addAnim(pAnimation&);
 		/// <summary>
-		/// 게임이 실행된 후 현재 프레임에 들어오기까지 흐른 시간(초)입니다.
-		/// </summary>
-		static const float& tp;
-		/// <summary>
-		/// 이전 프레임과 현재 프레임 간의 시간 간격(초)입니다.
-		/// </summary>
-		static const float& dt;
-		/// <summary>
 		/// 개체의 색상입니다. 섞이는 것이 아니라 성분별 곱하기로 계산되는 점 주의하세요.
 		/// </summary>
 		vec4 color = 1;
 		virtual ~Entity();
-	private:
-		float lt = 0;
-		EntityKey key;
-		std::shared_ptr<Model> model;
-		int as = -1;
-		float animStartTimepoint;
-		float animTps = 1;
-		int animKp = 0;
-		std::vector<pAnimation> anims;
-		bool isFixed;
-		bool responseContinuously;
-
-		static std::multimap<EntityKey, Entity*> entities;
 	};
 }
 

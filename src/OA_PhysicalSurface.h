@@ -12,7 +12,7 @@ namespace onart {
 	constexpr float DYNAMIC_FRICTIONS[NTYPE][NTYPE] = {	// 운동 마찰 계수
 		{1}
 	};
-	constexpr float ELASTIC_VALUES[NTYPE][NTYPE] = {	// 반발 계수
+	constexpr float RESTITUTIONS[NTYPE][NTYPE] = {	// 반발 계수
 		{0}
 	};
 }

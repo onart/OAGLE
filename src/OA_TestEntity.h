@@ -2,6 +2,8 @@
 #define __OA_TESTENTITY_H__
 
 #include "OA_Entity.h"
+#include "OA_Rigidbody.h"
+#include "OA_BallCollider.h"
 
 namespace onart {
 	class TestEntity : public Entity
@@ -10,7 +12,10 @@ namespace onart {
 		virtual void Update();
 		virtual void Act(int kp, float progress);
 		TestEntity();
+		inline void onTrigger(Entity* other) { printf("trigger\n"); }
 	private:
+		Rigidbody2D rb;
+		BallCollider2D bc;
 	};
 }
 
