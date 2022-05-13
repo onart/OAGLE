@@ -80,10 +80,10 @@ namespace onart {
 			glDeleteVertexArrays(1, &VAO);
 		}
 
-		std::vector<Vertex> circ(N + 1);
+		std::vector<Vertex> circ(N + 2);
 		std::vector<unsigned> indices(N * 3);
 		circ[0] = { vec3(0.f), vec3(0,0,-1.0f), vec2(0.5f) };
-		for (unsigned k = 0; k < N; k++)
+		for (unsigned k = 0; k < N+1; k++)
 		{
 			float t = PI * 2.0f * k / float(N);
 			float c = cos(t), s = sin(t);

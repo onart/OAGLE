@@ -41,7 +41,7 @@ namespace onart {
 			}
 			);
 		window::setCursorImage(anim2, vec2(0.4f));
-		rb.addConstantAcceleration(vec2(0, -1.9f));
+		rb.addConstantAcceleration(vec2(0, -1.0f));
 	}
 	void TestEntity::Update() { if (Input::isKeyPressedNow(Input::KeyCode::space)) { window::setCursorImage(); } }
 
