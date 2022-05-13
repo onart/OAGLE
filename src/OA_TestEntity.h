@@ -12,7 +12,7 @@ namespace onart {
 		virtual void Update();
 		virtual void Act(int kp, float progress);
 		TestEntity();
-		inline void onTrigger(Entity* other) { printf("trigger\n"); }
+		inline void onTrigger(Entity* other) {  }
 	private:
 		Rigidbody2D rb;
 		BallCollider2D bc;

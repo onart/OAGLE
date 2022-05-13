@@ -34,7 +34,7 @@ void setRatio(unsigned rw, unsigned rh) {
 
 // 프레임/시간
 int frame = 1;
-float tp = 0, dt;
+float tp = 0, dt = 1.0f / 60;
 
 // 셰이더 프로그램
 onart::Shader program3;		// 뷰-프로젝션 행렬 및 셰이딩의 영향을 받는 셰이더 프로그램입니다.

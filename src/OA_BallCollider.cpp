@@ -1,3 +1,10 @@
+/********************************************************************************
+* 2D/3D OpenGL Game Engine
+* Copyright 2022 onart@github
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*********************************************************************************/
 #include "OA_BallCollider.h"
 #include "binaryIOvec.h"
 #include "OA_Model.h"
@@ -10,7 +17,7 @@ namespace onart {
 	std::vector<BallCollider2D*> BallCollider2D::objs;
 
 	BallCollider2D::BallCollider2D(Entity* entity, float radius, const vec2& offset, Rigidbody2D* body, PHYSICAL_SURFACE surface)
-		:entity(entity), radius(radius), offset(offset), body(body), surface((int)surface) {
+		:entity(entity), radius(radius), offset(offset), body(body), surface((int)surface), isActive(true) {
 		insort(objs, this);
 		range();
 	}
@@ -22,9 +29,8 @@ namespace onart {
 	void BallCollider2D::range() {
 		if (!isActive) return;
 		// 절대 위치(원 중심) 계산
-		const vec3& pos0 = entity->getTransform()->getGlobalPosition();
-		vec3 off = pos0 + entity->getTransform()->getLocalRotation().toMat3() * offset;
-		vec2 vel = pos_vel - off;
+		vec3 off = entity->getTransform()->getGlobalPosition() + entity->getTransform()->getLocalRotation().toMat3() * offset;
+		vec2 vel = (pos_vel - off) / dt;
 		pos_vel = off;
 		pos_vel[2] = vel[0];
 		pos_vel[3] = vel[1];	// 충돌체 중심의 이전 프레임 대비 위치(=선속도)

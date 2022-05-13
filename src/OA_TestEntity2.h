@@ -8,7 +8,7 @@ namespace onart {
 	public:
 		virtual void Update();
 		TestEntity2();
-		inline void onTrigger(Entity* other) { printf("trigger\n"); }
+		inline void onTrigger(Entity* other) {  }
 	private:
 		Rigidbody2D rb;
 		BallCollider2D bc;
