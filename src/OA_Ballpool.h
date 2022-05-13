@@ -34,6 +34,10 @@ namespace onart {
 		/// <param name="b2"></param>
 		/// <param name="posvel"></param>
 		static void collide(BallCollider2D* b1, BallCollider2D* b2, const vec4& posvel);
+		/// <summary>
+		/// 2D 물리 개체의 겹침을 해소합니다. 질량에 반비례하게 서로 옮깁니다.
+		/// </summary>
+		static void resolveOverlap(BallCollider2D* b1, BallCollider2D* b2, float dist, const vec4& posvel);
 	};
 }
 

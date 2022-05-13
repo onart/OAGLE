@@ -245,7 +245,7 @@ int main(int argc, char* argv[]) {
 	//glfwSetWindowCloseCallback(window, callback)	 // 윈도우 종료 신호 발생 시 콜백을 변경합니다. void callback(GLFWwindow* window)
 
 	for (frame = 1; !glfwWindowShouldClose(window); frame++) {
-		glfwPollEvents();
+		glfwPollEvents();	// 물리 때문에라도 여기 창끌기 관련 조치 필요함
 		if constexpr (!OA_AUDIO_NOTHREAD) onart::Audio::allow(false);
 		else if constexpr (OA_AUDIO_WAIT_ON_DRAG) onart::Audio::wait = false;
 		update();

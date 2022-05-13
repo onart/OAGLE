@@ -14,10 +14,10 @@ namespace onart {
 		for (Rigidbody2D* obj : Rigidbody2D::objs) {
 			obj->UpdateV();
 		}
-		makeCollisions();
 		for (Rigidbody2D* obj : Rigidbody2D::objs) {
 			obj->UpdateP();
 		}
+		makeCollisions();
 	}
 
 	void Ballpool2D::makeCollisions() {
@@ -32,15 +32,27 @@ namespace onart {
 				BallCollider2D* o2 = BallCollider2D::objs[j];
 				if (o1->coarseCheck(o2) && o1->isActive && o2->isActive && o1->entity != o2->entity) {	// 개괄 검사
 					vec4 rel(o2->pos_vel - p1);
-					if (reinterpret_cast<vec2*>(&rel)->length2() <= (o1->radius + o2->radius) * (o1->radius + o2->radius)) {	// 터치 검사
+					float dist = reinterpret_cast<vec2*>(&rel)->length();
+					dist -= (o1->radius + o2->radius);
+					if (dist <= 0) {	// 터치 검사
 						o1->entity->onTrigger(o2->entity); o2->entity->onTrigger(o1->entity);
 						if (o1->body && o2->body) {
 							collide(o1, o2, rel);
+							resolveOverlap(o1, o2, dist, rel);
 						}
 					}
 				}				
 			}
 		}
+	}
+
+	void Ballpool2D::resolveOverlap(BallCollider2D* b1, BallCollider2D* b2, float dist, const vec4& posvel) {
+		vec2 p3(posvel);
+		p3.normalize();
+		p3 *= dist;
+		float im = 1 / (b1->body->inverseMass + b2->body->inverseMass);
+		b1->entity->getTransform()->addPosition(p3 * im * b1->body->inverseMass * 2);
+		b2->entity->getTransform()->addPosition(-p3 * im * b2->body->inverseMass * 2);
 	}
 
 	void Ballpool2D::collide(BallCollider2D* b1, BallCollider2D* b2, const vec4& posvel) {
@@ -57,7 +69,6 @@ namespace onart {
 		b1->pos_vel[3] = b1->body->velocity[1];
 		b2->pos_vel[2] = b2->body->velocity[0];
 		b2->pos_vel[3] = b2->body->velocity[1];
-		// 속도가 보통 수준인 경우라면 겹침 해소를 하지 않아도 괜찮을까..?
 	}
 
 	void Ballpool2D::render() {
