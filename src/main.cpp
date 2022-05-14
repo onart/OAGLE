@@ -34,7 +34,7 @@ void setRatio(unsigned rw, unsigned rh) {
 
 // 프레임/시간
 int frame = 1;
-float tp = 0, dt = 1.0f / 60;
+float tp = 0, dt = 1.0f / 60, idt = 60;
 
 // 셰이더 프로그램
 onart::Shader program3;		// 뷰-프로젝션 행렬 및 셰이딩의 영향을 받는 셰이더 프로그램입니다.
@@ -56,12 +56,12 @@ onart::ivec2 mousePos;	// 마우스의 위치를 저장합니다.
 // 주기 호출 함수 (게임 루프)
 void update() {
 	if constexpr (onart::OA_FIX_TIMESCALE) {
-		dt = 1.0f / 60;
 		tp += dt;
 	}
 	else {
 		float cur = (float)glfwGetTime();
 		dt = cur - tp;
+		idt = 1.0f / dt;
 		tp = cur;
 	}
 	onart::Scene::currentScene->update();

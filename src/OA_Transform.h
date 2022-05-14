@@ -28,11 +28,11 @@ namespace onart {
 		Quaternion rotation;
 		vec3 scale = 1;
 		vec3 pos;
-		mat4 model;
 
 		vec3 globalScale;	// 부모에 회전이 있는 경우, 의미가 퇴색. 외부 수정 제공x
 		vec3 globalPos;		// 외부 수정 제공
 		Quaternion globalRotation;	// 외부 수정 제공x
+		mat4 model;
 		mat4 globalModel;
 		bool ready = false, globalReady = false;
 

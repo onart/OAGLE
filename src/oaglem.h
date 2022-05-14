@@ -243,8 +243,8 @@ namespace onart {
 	};
 
 	using vec2 = nvec<2>;					using vec3 = nvec<3>;					using vec4 = nvec<4>;
-	using ivec2 = nvec<2, int>;				using ivec3 = nvec<3, int>;				using ivec4 = nvec<4, int>;
-	using uvec2 = nvec<2, unsigned>;		using uvec3 = nvec<3, unsigned>;		using uvec4 = nvec<4, unsigned>;
+	using ivec2 = nvec<2, int32_t>;			using ivec3 = nvec<3, int32_t>;			using ivec4 = nvec<4, int32_t>;
+	using uvec2 = nvec<2, uint32_t>;		using uvec3 = nvec<3, uint32_t>;		using uvec4 = nvec<4, uint32_t>;
 	using dvec2 = nvec<2, double>;			using dvec3 = nvec<3, double>;			using dvec4 = nvec<4, double>;
 
 	/// <summary>
@@ -1015,7 +1015,7 @@ namespace onart {
 	/// <summary>
 	/// 3차원 회전 등을 표현하는 사원수입니다. 1, i, j, k 부분에 해당하는 c1, ci, cj, ck 멤버를 가집니다. 순서대로 일반적인 사원수 모듈의 w, x, y, z에 대응합니다.
 	/// </summary>
-	struct Quaternion {
+	struct alignas(16) Quaternion {
 		float c1, ci, cj, ck;
 
 		/// <summary>

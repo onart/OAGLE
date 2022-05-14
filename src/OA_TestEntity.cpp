@@ -3,7 +3,7 @@
 #include "OA_Camera.h"
 #include "OA_Window.h"
 namespace onart {
-	TestEntity::TestEntity() :Entity("2danim", Transform(vec2(0.02f,1)), false, false, true), rb(1, 1000, transform), bc(this, 0.1f, vec2(0.0f), &rb) {
+	TestEntity::TestEntity() :Entity("2danim", Transform(vec2(0,1)), false, false, true), rb(1, 1000, transform), bc(this, 0.1f, vec2(0.0f), &rb) {
 		pAnimation anim1 = Animation2D::make("돌려차기", true,
 			{ Keypoint<pTexture>{0,Material::genTextureFromFile("2danim.png")} },
 			{

@@ -30,14 +30,29 @@ namespace onart {
 		/// <summary>
 		/// 2D 물리 개체의 충돌을 확인하고 판정을 가합니다.
 		/// </summary>
-		/// <param name="b1"></param>
-		/// <param name="b2"></param>
-		/// <param name="posvel"></param>
 		static void collide(BallCollider2D* b1, BallCollider2D* b2, const vec4& posvel);
 		/// <summary>
 		/// 2D 물리 개체의 겹침을 해소합니다. 질량에 반비례하게 서로 옮깁니다.
 		/// </summary>
-		static void resolveOverlap(BallCollider2D* b1, BallCollider2D* b2, float dist, const vec4& posvel);
+		static void resolveOverlap(BallCollider2D* b1, BallCollider2D* b2, float dist, vec2 p3);
+	};
+
+	class BallCollider3D;
+	class Ballpool3D {
+	public:
+		static void Update();
+		static void render();
+	private:
+		static void makeCollisions();
+		/// <summary>
+		/// 3D 물리 개체의 충돌을 확인하고 판정을 가합니다.
+		/// </summary>
+		static void collide(BallCollider3D* b1, BallCollider3D* b2, const vec3& relPos, const vec3& relVel);
+		/// <summary>
+		/// 2D 물리 개체의 겹침을 해소합니다. 질량에 반비례하게 서로 옮깁니다.
+		/// </summary>
+		static void resolveOverlap(BallCollider3D* b1, BallCollider3D* b2, float dist, vec3 relPos);
+
 	};
 }
 

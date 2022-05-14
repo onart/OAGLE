@@ -11,10 +11,12 @@
 #include "OA_Shader.h"
 
 extern onart::Shader program3;
+extern float idt;
 
 namespace onart {
 
 	std::vector<BallCollider2D*> BallCollider2D::objs;
+	std::vector<BallCollider3D*> BallCollider3D::objs;
 
 	BallCollider2D::BallCollider2D(Entity* entity, float radius, const vec2& offset, Rigidbody2D* body, PHYSICAL_SURFACE surface)
 		:entity(entity), radius(radius), offset(offset), body(body), surface((int)surface), isActive(true) {
@@ -30,7 +32,7 @@ namespace onart {
 		if (!isActive) return;
 		// 절대 위치(원 중심) 계산
 		vec3 off = entity->getTransform()->getGlobalPosition() + entity->getTransform()->getLocalRotation().toMat3() * offset;
-		vec2 vel = (pos_vel - off) / dt;
+		vec2 vel = (pos_vel - off) * idt;
 		pos_vel = off;
 		pos_vel[2] = vel[0];
 		pos_vel[3] = vel[1];	// 충돌체 중심의 이전 프레임 대비 위치(=선속도)
@@ -48,10 +50,48 @@ namespace onart {
 	}
 
 	void BallCollider2D::render() {
-		program3["color"] = vec4(0, 1, 0, 0.3f);
-		program3["model"] = mat4::TRS(vec3(pos_vel[0], pos_vel[1], -1), Quaternion(), radius);
-		program3["piv"] = mat4();
+		USE_SHADER_UNIFORM;
+		program3[color] = vec4(0, 1, 0, 0.3f);
+		program3[model] = mat4::TRS(vec3(pos_vel[0], pos_vel[1], -1), Quaternion(), radius);
+		program3[piv] = mat4();
 		program3.texture(Material::get("white1x1")->id);
 		program3.draw(**Mesh::get("circ"));
+	}
+
+	BallCollider3D::BallCollider3D(Entity* entity, float radius, const vec3& offset, Rigidbody3D* body, PHYSICAL_SURFACE surface)
+		:entity(entity), radius(radius), offset(offset), body(body), surface((int)surface), isActive(true) {
+		insort(objs, this);
+	}
+
+	BallCollider3D::~BallCollider3D(){
+		removeFromSorted(objs, this);
+	}
+
+	void BallCollider3D::range() {
+		if (!isActive) return;
+		vec3 off = entity->getTransform()->getGlobalPosition() + entity->getTransform()->getLocalRotation().toMat3() * offset;
+		vel = (gpos - off) * idt;
+		gpos = off;
+		vec3 lowers(gpos);	lowers -= radius;	lowers *= INV_ONE_GRID;
+		vec3 uppers(gpos + radius);	uppers += radius;	uppers *= INV_ONE_GRID;
+		ivec3 xyzIDX;
+		f2i(lowers.entry, xyzIDX.entry);
+		rangex = rangey = rangez = (range_t)(~0);
+		if (isInRange<0, PARTS>(xyzIDX[0])) { rangex >>= xyzIDX[0]; }
+		if (isInRange<0, PARTS>(xyzIDX[1])) { rangey >>= xyzIDX[1]; }
+		if (isInRange<0, PARTS>(xyzIDX[2])) { rangez >>= xyzIDX[2]; }
+		f2i(uppers.entry, xyzIDX.entry);
+		if (xyzIDX[0] < PARTS) { rangex -= ((range_t)(1) << (PARTS - 1 - xyzIDX[0])) - 1; }
+		if (xyzIDX[1] < PARTS) { rangey -= ((range_t)(1) << (PARTS - 1 - xyzIDX[1])) - 1; }
+		if (xyzIDX[2] < PARTS) { rangez -= ((range_t)(1) << (PARTS - 1 - xyzIDX[2])) - 1; }
+	}
+
+	void BallCollider3D::render() {
+		USE_SHADER_UNIFORM;
+		program3[color] = vec4(0, 1, 0, 0.3f);
+		program3[model] = mat4::TRS(vec3(gpos), Quaternion(), radius);
+		program3[piv] = mat4();
+		program3.texture(Material::get("white1x1")->id);
+		program3.draw(**Mesh::get("sphr"));
 	}
 }

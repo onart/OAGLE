@@ -8,10 +8,11 @@
 #include "OA_Rigidbody.h"
 #include "binaryIOvec.h"
 
-extern float dt;
+extern float dt, idt;
 
 namespace onart {
 	std::vector<Rigidbody2D*> Rigidbody2D::objs;
+	std::vector<Rigidbody3D*> Rigidbody3D::objs;
 
 	Rigidbody2D::Rigidbody2D(float mass, float inertiaMoment, Transform& transform)
 		:inverseMass(1 / mass), inverseMoment(1 / inertiaMoment), transform(transform), netTorque(0), angularVel(0), angularAcc(0) {
@@ -23,12 +24,49 @@ namespace onart {
 	}
 
 	void Rigidbody2D::UpdateV() {
-		velocity += acceleration * dt;
-		velocity += netForce * inverseMass * dt;
+		velocity += (acceleration + netForce * inverseMass) * dt;
+		angularVel += (angularAcc + netTorque * inverseMoment) * dt;
 		netForce = 0;
+		netTorque = 0;
 	}
 
 	void Rigidbody2D::UpdateP() {
+		transform.dAddRotation(vec3(0, 0, angularVel * dt));
 		transform.addPosition(vec3(velocity * dt, 0));
+	}
+
+	Rigidbody3D::Rigidbody3D(float mass, const mat3& inverseInertiaMoment, Transform& transform)
+		:inverseMass(1 / mass), inverseInertiaTensor(inverseInertiaMoment), transform(transform) {
+		insort(objs, this);
+	}
+
+	Rigidbody3D::~Rigidbody3D() {
+		removeFromSorted(objs, this);
+	}
+
+	mat3 Rigidbody3D::worldIITensor() {
+		const Quaternion& rot = transform.getRotation();
+		return rot.toMat3() * inverseInertiaTensor * rot.conjugate().toMat3();
+	}
+
+	void Rigidbody3D::UpdateV() {
+		velocity += (acceleration + netForce * inverseMass) * dt;
+		angularVel += (angularAcc + worldIITensor() * netTorque) * dt;
+		netForce = 0;
+		netTorque = 0;
+	}
+
+	void Rigidbody3D::UpdateP() {
+		Quaternion rot(transform.getLocalRotation());
+		rot += dt * 0.5f * Quaternion(angularVel) * rot;
+		/* https://fgiesen.wordpress.com/2012/08/24/quaternion-differentiation/
+		* 결론: 사원수의 왼쪽에 axis, angle * dt 기반의 사원수를 곱하는 것은
+		* 각속도 vec3의 사원수 버전(실수부분 0, 나머지 벡터성분 그대로)에 대하여 위 식으로 근사할 수 있음
+		* 실험 결과 dt=1/60에서 정규화 시 안정적인 결과를 보임
+		*/
+		rot.normalize();
+		transform.dSetRotation(rot);
+		transform.addPosition(dt * velocity);
+		
 	}
 }

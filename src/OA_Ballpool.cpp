@@ -14,10 +14,10 @@ namespace onart {
 		for (Rigidbody2D* obj : Rigidbody2D::objs) {
 			obj->UpdateV();
 		}
+		makeCollisions();
 		for (Rigidbody2D* obj : Rigidbody2D::objs) {
 			obj->UpdateP();
 		}
-		makeCollisions();
 	}
 
 	void Ballpool2D::makeCollisions() {
@@ -41,18 +41,23 @@ namespace onart {
 							resolveOverlap(o1, o2, dist, rel);
 						}
 					}
-				}				
+				}
 			}
 		}
 	}
 
-	void Ballpool2D::resolveOverlap(BallCollider2D* b1, BallCollider2D* b2, float dist, const vec4& posvel) {
-		vec2 p3(posvel);
+	void Ballpool2D::resolveOverlap(BallCollider2D* b1, BallCollider2D* b2, float dist, vec2 p3) {
 		p3.normalize();
 		p3 *= dist;
 		float im = 1 / (b1->body->inverseMass + b2->body->inverseMass);
 		b1->entity->getTransform()->addPosition(p3 * im * b1->body->inverseMass * 2);
 		b2->entity->getTransform()->addPosition(-p3 * im * b2->body->inverseMass * 2);
+		/*
+		b1->pos_vel[0] = b1->entity->getTransform()->getGlobalPosition()[0];
+		b1->pos_vel[1] = b1->entity->getTransform()->getGlobalPosition()[1];
+		b2->pos_vel[0] = b2->entity->getTransform()->getGlobalPosition()[0];
+		b2->pos_vel[1] = b2->entity->getTransform()->getGlobalPosition()[1];
+		*/
 	}
 
 	void Ballpool2D::collide(BallCollider2D* b1, BallCollider2D* b2, const vec4& posvel) {
@@ -75,5 +80,67 @@ namespace onart {
 		for (BallCollider2D* obj : BallCollider2D::objs) {
 			obj->render();
 		}
+	}
+
+	void Ballpool3D::Update() {
+		for (Rigidbody3D* obj : Rigidbody3D::objs) {
+			obj->UpdateV();
+		}
+		makeCollisions();
+		for (Rigidbody3D* obj : Rigidbody3D::objs) {
+			obj->UpdateP();
+		}
+	}
+
+	void Ballpool3D::makeCollisions() {
+		int sz = (int)BallCollider3D::objs.size();
+		for (int i = 0; i < sz; i++) {
+			BallCollider3D::objs[i]->range();
+		}
+		for (int i = 0; i < sz - 1; i++) {
+			BallCollider3D* o1 = BallCollider3D::objs[i];
+			vec3 p1(o1->gpos);
+			vec3 v1(o1->vel);
+			for (int j = i + 1; j < sz; j++) {
+				BallCollider3D* o2 = BallCollider3D::objs[j];
+				if (o1->coarseCheck(o2) && o1->isActive && o2->isActive && o1->entity != o2->entity) {	// 개괄 검사
+					vec3 v3(o2->vel - v1);
+					vec3 p3(o2->gpos - v1);
+					float dist = reinterpret_cast<vec3*>(&p3)->length();
+					dist -= (o1->radius + o2->radius);
+					if (dist <= 0) {	// 터치 검사
+						o1->entity->onTrigger(o2->entity); o2->entity->onTrigger(o1->entity);
+						if (o1->body && o2->body) {
+							collide(o1, o2, p3, v3);
+							resolveOverlap(o1, o2, dist, p3);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	void Ballpool3D::collide(BallCollider3D* b1, BallCollider3D* b2, const vec3& p3, const vec3& v3) {
+		float im = b1->body->inverseMass + b2->body->inverseMass;
+		float r = RESTITUTIONS[b1->surface][b2->surface];
+		float proj = v3.dot(p3);
+		if (proj <= 0) { return; }
+		vec2 imp = -proj * (r + 1) / (p3.length2() * im) * p3;
+		b1->body->impulse(imp, b1->gpos);
+		b2->body->impulse(-imp, b2->gpos);
+		b1->vel = b1->body->velocity;
+		b2->vel = b1->body->velocity;
+	}
+
+	void Ballpool3D::resolveOverlap(BallCollider3D* b1, BallCollider3D* b2, float dist, vec3 p3) {
+		p3.normalize();
+		p3 *= dist;
+		float im = 1 / (b1->body->inverseMass + b2->body->inverseMass);
+		b1->entity->getTransform()->addPosition(p3 * im * b1->body->inverseMass * 2);
+		b2->entity->getTransform()->addPosition(-p3 * im * b2->body->inverseMass * 2);
+		/*
+		b1->gpos=b1->entity->getTransform()->getGlobalPosition();
+		b2->gpos=b1->entity->getTransform()->getGlobalPosition();
+		*/
 	}
 }

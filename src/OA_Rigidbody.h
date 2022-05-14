@@ -96,6 +96,85 @@ namespace onart {
 		float inverseMoment;	// 역관성모멘트
 		static std::vector<Rigidbody2D*> objs;
 	};
+
+	class Rigidbody3D {
+		friend class Ballpool3D;
+	public:
+		/// <summary>
+		/// 강체를 생성합니다.
+		/// </summary>
+		/// <param name="mass">질량</param>
+		/// <param name="inertiaMoment">관성텐서의 역행렬 (3x3)</param>
+		/// <param name="transform">개체의 변환 포인터</param>
+		Rigidbody3D(float mass, const mat3& inverseInertiaMoment, Transform& transform);
+		~Rigidbody3D();
+		/// <summary>
+		/// 현재 프레임에 속도를 업데이트합니다.
+		/// </summary>
+		void UpdateV();
+		/// <summary>
+		/// 현재 프레임에 위치를 업데이트합니다.
+		/// </summary>
+		void UpdateP();
+		/// <summary>
+		/// 현 프레임 동안 강체에 힘을 가합니다. 토크가 발생하지 않습니다. 지속적으로 힘을 가할 것이 아니라면 impulse() 함수를 사용하세요.
+		/// </summary>
+		inline void addForce(const vec3& force) { netForce += force; }
+		/// <summary>
+		/// 특정 위치에 강체에 힘을 가합니다. 토크가 발생할 수 있습니다.
+		/// </summary>
+		inline void addForce(const vec3& force, const vec3& globalPoint) {
+			netForce += force;
+			netTorque += cross(globalPoint - transform.getGlobalPosition(), force);
+		}
+		/// <summary>
+		/// 프레임 시간에 관계 없이 물체를 질량에 반비례하게 가속시킵니다. 즉, 질량이 1인 물체가 가속했으면 좋겠는 양을 주면 됩니다.
+		/// 질량에 관계 없이 특정 속도를 만들고 싶다면 accelerate() 함수를 사용하세요.
+		/// </summary>
+		inline void impulse(const vec3& force) { velocity += inverseMass * force; }
+		/// <summary>
+		/// 프레임 시간에 관계 없이 물체를 질량에 반비례하게 가속시킵니다. 토크도 순간적으로 발생할 수 있습니다.
+		/// 질량이 1인 물체가 가속했으면 좋겠는 양을 줍니다.
+		/// </summary>
+		inline void impulse(const vec3& force, const vec3& globalPoint) {
+			velocity += inverseMass * force;
+			angularVel += worldIITensor() * force;
+		}
+		/// <summary>
+		/// 프레임 시간 및 질량에 관계 없이 속도를 주어진 값만큼 더합니다. setVelocity() 함수도 참고하세요.
+		/// </summary>
+		inline void accelerate(const vec2& dv) { velocity += dv; }
+		/// <summary>
+		/// 속도를 강제로 정합니다.
+		/// </summary>
+		inline void setVelocity(const vec2& v) { velocity = v; }
+		/// <summary>
+		/// 지속적으로 힘을 가합니다. 질량에 반비례합니다.
+		/// 이를 없애려면 반대 방향의 벡터를 주면 됩니다.
+		/// </summary>
+		inline void addConstantForce(const vec2& force) { acceleration += force * inverseMass; }
+		/// <summary>
+		/// 지속적인 가속을 추가합니다. 질량에 무관하므로 중력을 이것으로 적용할 수 있습니다.
+		/// 이를 없애려면 반대 방향의 벡터를 주면 됩니다.
+		/// </summary>
+		inline void addConstantAcceleration(const vec2& da) { acceleration += da; }
+		/// <summary>
+		/// 현 프레임 동안 +Z축(시계 방향)으로 토크를 가합니다.
+		/// </summary>
+		inline void addTorque(float torque) { netTorque += torque; }
+	private:
+		mat3 worldIITensor();
+		Transform& transform;
+		vec3 velocity;
+		vec3 acceleration;
+		vec3 netForce;
+		vec3 netTorque;		// 각 관련 성분은 회전각(라디안) x 회전축(단위벡터)로 표현되며 시간 구간이 충분히 작은 경우 Quaternion(0, 회전각들)
+		vec3 angularVel;
+		vec3 angularAcc;
+		const mat3 inverseInertiaTensor;
+		float inverseMass;
+		static std::vector<Rigidbody3D*> objs;
+	};
 }
 
 #endif

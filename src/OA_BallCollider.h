@@ -45,6 +45,39 @@ namespace onart {
 		float radius;	// 기본 반지름
 		static std::vector<BallCollider2D*> objs;
 	};
+
+	class Rigidbody3D;
+	class BallCollider3D {
+		friend class Ballpool3D;
+		using range_t = uint64_t;
+		static constexpr int PARTS = sizeof(range_t) * 8;
+		static constexpr float WORLD_RANGE = 100.0f;	// 분할 범위: x,y축 +- WORLD_RANGE
+		static constexpr float ONE_GRID = WORLD_RANGE * 2 / PARTS;
+		static constexpr float INV_ONE_GRID = 1 / ONE_GRID;
+	public:
+		BallCollider3D(Entity* entity, float radius, const vec3& offset = 0.0f, Rigidbody3D* body = nullptr, PHYSICAL_SURFACE surface = PHYSICAL_SURFACE::DEFAULT_SURFACE);
+		~BallCollider3D();
+		bool isActive;	// false일 경우 판정 자체가 없어집니다.
+		const int surface;
+		inline range_t rx() const { return rangex; }
+		inline range_t ry() const { return rangey; }
+		inline range_t rz() const { return rangez; }
+		inline float setRadius() const { return radius; }
+		inline void setOffset(const vec3& off) { offset = off; }
+		inline bool coarseCheck(BallCollider3D* other) { return (rangex & other->rx()) && (rangey & other->ry()) && (rangez & other->rz()); }
+		inline Entity* getEntity() { return entity; }
+		void render();
+	private:
+		void range();	// 현 프레임의 순간 선속도, 위치, 개괄 영역을 계산합니다.
+		range_t rangex, rangey, rangez;
+		vec3 offset;	// Entity를 질량중심으로 칠 때 충돌체 중심의 위치
+		vec3 gpos;
+		vec3 vel;
+		Entity* const entity;
+		Rigidbody3D* const body;
+		float radius;	// 기본 반지름
+		static std::vector<BallCollider3D*> objs;
+	};
 }
 
 #endif // !__OA_BALLCOLLIDER_H__
