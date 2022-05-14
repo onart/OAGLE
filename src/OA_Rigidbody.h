@@ -71,6 +71,22 @@ namespace onart {
 		/// </summary>
 		inline void setVelocity(const vec2& v) { velocity = v; }
 		/// <summary>
+		/// X축 방향 속도를 강제로 정합니다.
+		/// </summary>
+		inline void setVelocityX(float x) { velocity[0] = x; }
+		/// <summary>
+		/// X축 방향 속도를 강제로 정합니다.
+		/// </summary>
+		inline void setVelocityY(float y) { velocity[1] = y; }
+		/// <summary>
+		/// 이 강체의 선속도를 리턴합니다.
+		/// </summary>
+		inline vec2 getVelocity() { return velocity; }
+		/// <summary>
+		/// 이 강체의 +z방향 각속도(rad/s)를 리턴합니다.
+		/// </summary>
+		inline float getAngularVel() { return angularVel; }
+		/// <summary>
 		/// 지속적으로 힘을 가합니다. 질량에 반비례합니다.
 		/// 이를 없애려면 반대 방향의 벡터를 주면 됩니다.
 		/// </summary>
@@ -81,9 +97,13 @@ namespace onart {
 		/// </summary>
 		inline void addConstantAcceleration(const vec2& da) { acceleration += da; }
 		/// <summary>
-		/// 현 프레임 동안 +Z축(시계 방향)으로 토크를 가합니다.
+		/// 현 프레임 동안 +Z축(시계 방향)으로 토크를 가합니다. 회전 중심은 항상 질량중심, 즉 개체의 글로벌 위치입니다.
 		/// </summary>
 		inline void addTorque(float torque) { netTorque += torque; }
+		/// <summary>
+		/// 관성 모멘트에 무관하게 각속도를 변화시킵니다.
+		/// </summary>
+		inline void angularAccelerate(float t) { angularVel += t; }
 	private:
 		Transform& transform;	// 개체 위치, 회전
 		vec2 velocity;			// 속도
@@ -143,11 +163,23 @@ namespace onart {
 		/// <summary>
 		/// 프레임 시간 및 질량에 관계 없이 속도를 주어진 값만큼 더합니다. setVelocity() 함수도 참고하세요.
 		/// </summary>
-		inline void accelerate(const vec2& dv) { velocity += dv; }
+		inline void accelerate(const vec3& dv) { velocity += dv; }
 		/// <summary>
 		/// 속도를 강제로 정합니다.
 		/// </summary>
-		inline void setVelocity(const vec2& v) { velocity = v; }
+		inline void setVelocity(const vec3& v) { velocity = v; }
+		/// <summary>
+		/// 속도를 강제로 정합니다.
+		/// </summary>
+		inline void setVelocityX(float x) { velocity[0] = x; }
+		/// <summary>
+		/// 속도를 강제로 정합니다.
+		/// </summary>
+		inline void setVelocityY(float y) { velocity[1] = y; }
+		/// <summary>
+		/// 속도를 강제로 정합니다.
+		/// </summary>
+		inline void setVelocityZ(float z) { velocity[2] = z; }
 		/// <summary>
 		/// 지속적으로 힘을 가합니다. 질량에 반비례합니다.
 		/// 이를 없애려면 반대 방향의 벡터를 주면 됩니다.
@@ -162,6 +194,18 @@ namespace onart {
 		/// 현 프레임 동안 +Z축(시계 방향)으로 토크를 가합니다.
 		/// </summary>
 		inline void addTorque(float torque) { netTorque += torque; }
+		/// <summary>
+		/// 프레임 시간 및 관성 모멘트에 관계 없이 주어진 만큼 각속도를 더합니다. (rad/s x 단위 회전축)
+		/// </summary>
+		inline void angularAccelerate(const vec3& v) { angularVel += v; }
+		/// <summary>
+		/// 이 강체의 선속도를 리턴합니다.
+		/// </summary>
+		inline vec3 getVelocity() { return velocity; }
+		/// <summary>
+		/// 이 강체의 각속도를 리턴합니다.
+		/// </summary>
+		inline vec3 getAngularVel() { return angularVel; }
 	private:
 		mat3 worldIITensor();
 		Transform& transform;

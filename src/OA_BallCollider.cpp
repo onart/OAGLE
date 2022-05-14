@@ -9,6 +9,7 @@
 #include "binaryIOvec.h"
 #include "OA_Model.h"
 #include "OA_Shader.h"
+#include "OA_Rigidbody.h"
 
 extern onart::Shader program3;
 extern float idt;
@@ -31,13 +32,18 @@ namespace onart {
 	void BallCollider2D::range() {
 		if (!isActive) return;
 		// 절대 위치(원 중심) 계산
-		vec3 off = entity->getTransform()->getGlobalPosition() + entity->getTransform()->getLocalRotation().toMat3() * offset;
-		vec2 vel = (pos_vel - off) * idt;
-		pos_vel = off;
-		pos_vel[2] = vel[0];
-		pos_vel[3] = vel[1];	// 충돌체 중심의 이전 프레임 대비 위치(=선속도)
+		vec2 absOffset = entity->getTransform()->getRotation().toMat3() * offset;
+		pos_vel = entity->getTransform()->getGlobalPosition() + absOffset;
+		if (body) {
+			vec2 vel = body->getVelocity();
+			vec2 tan = absOffset;
+			float temp = tan[1];	tan[1] = -tan[0];	tan[0] = temp;	// 각속도 방향은 + 아니면 -뿐이므로 선속도 방향은 +90도 회전만 하면 됨. 이는 결국 외적과 동일한 과정
+			vel += tan * body->getAngularVel();
+			pos_vel[2] = vel[0];
+			pos_vel[3] = vel[1];
+		}
 		// 개괄 영역(직사각형) 계산
-		vec4 ldru(off[0], off[1], off[0], off[1]);
+		vec4 ldru(pos_vel[0], pos_vel[1], pos_vel[0], pos_vel[1]);
 		ldru += vec4(radius, radius, -radius, -radius);
 		ldru *= INV_ONE_GRID;
 		ivec4 ldruIDX;
@@ -69,9 +75,13 @@ namespace onart {
 
 	void BallCollider3D::range() {
 		if (!isActive) return;
-		vec3 off = entity->getTransform()->getGlobalPosition() + entity->getTransform()->getLocalRotation().toMat3() * offset;
-		vel = (gpos - off) * idt;
-		gpos = off;
+		vec3 absOffset = entity->getTransform()->getRotation().toMat3() * offset;
+		gpos = entity->getTransform()->getGlobalPosition() + absOffset;
+		if (body) {
+			vel = body->getVelocity();
+			vec3 av = cross(absOffset, body->getAngularVel());
+			vel += av;
+		}
 		vec3 lowers(gpos);	lowers -= radius;	lowers *= INV_ONE_GRID;
 		vec3 uppers(gpos + radius);	uppers += radius;	uppers *= INV_ONE_GRID;
 		ivec3 xyzIDX;

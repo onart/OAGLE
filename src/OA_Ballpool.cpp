@@ -38,7 +38,7 @@ namespace onart {
 						o1->entity->onTrigger(o2->entity); o2->entity->onTrigger(o1->entity);
 						if (o1->body && o2->body) {
 							collide(o1, o2, rel);
-							resolveOverlap(o1, o2, dist, rel);
+							resolveOverlap(o1, o2, dist, rel);	// 보통의 가속도 기준, 1회면 충분한 것으로 판명
 						}
 					}
 				}
@@ -50,8 +50,8 @@ namespace onart {
 		p3.normalize();
 		p3 *= dist;
 		float im = 1 / (b1->body->inverseMass + b2->body->inverseMass);
-		b1->entity->getTransform()->addPosition(p3 * im * b1->body->inverseMass * 2);
-		b2->entity->getTransform()->addPosition(-p3 * im * b2->body->inverseMass * 2);
+		b1->entity->getTransform()->addPosition(p3 * im * b1->body->inverseMass);
+		b2->entity->getTransform()->addPosition(-p3 * im * b2->body->inverseMass);
 		/*
 		b1->pos_vel[0] = b1->entity->getTransform()->getGlobalPosition()[0];
 		b1->pos_vel[1] = b1->entity->getTransform()->getGlobalPosition()[1];
@@ -66,8 +66,8 @@ namespace onart {
 		vec2 v3(posvel[2], posvel[3]);
 		float r = RESTITUTIONS[b1->surface][b2->surface];
 		float proj = v3.dot(p3);
-		if (proj <= 0) { return; }
-		vec2 imp = -proj * (r + 1) / (p3.length2() * im) * p3;
+		if (proj >= 0) { return; }
+		vec2 imp = proj * (r + 1) / (p3.length2() * im) * p3;
 		b1->body->impulse(imp, b1->pos_vel);
 		b2->body->impulse(-imp, b2->pos_vel);
 		b1->pos_vel[2] = b1->body->velocity[0];
@@ -124,8 +124,8 @@ namespace onart {
 		float im = b1->body->inverseMass + b2->body->inverseMass;
 		float r = RESTITUTIONS[b1->surface][b2->surface];
 		float proj = v3.dot(p3);
-		if (proj <= 0) { return; }
-		vec2 imp = -proj * (r + 1) / (p3.length2() * im) * p3;
+		if (proj >= 0) { return; }
+		vec2 imp = proj * (r + 1) / (p3.length2() * im) * p3;
 		b1->body->impulse(imp, b1->gpos);
 		b2->body->impulse(-imp, b2->gpos);
 		b1->vel = b1->body->velocity;
@@ -136,8 +136,8 @@ namespace onart {
 		p3.normalize();
 		p3 *= dist;
 		float im = 1 / (b1->body->inverseMass + b2->body->inverseMass);
-		b1->entity->getTransform()->addPosition(p3 * im * b1->body->inverseMass * 2);
-		b2->entity->getTransform()->addPosition(-p3 * im * b2->body->inverseMass * 2);
+		b1->entity->getTransform()->addPosition(p3 * im * b1->body->inverseMass);
+		b2->entity->getTransform()->addPosition(-p3 * im * b2->body->inverseMass);
 		/*
 		b1->gpos=b1->entity->getTransform()->getGlobalPosition();
 		b2->gpos=b1->entity->getTransform()->getGlobalPosition();

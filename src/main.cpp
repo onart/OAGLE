@@ -34,7 +34,10 @@ void setRatio(unsigned rw, unsigned rh) {
 
 // 프레임/시간
 int frame = 1;
-float tp = 0, dt = 1.0f / 60, idt = 60;
+float tp = 0, dt, idt;
+
+float refreshRate;
+float refreshPeriod;
 
 // 셰이더 프로그램
 onart::Shader program3;		// 뷰-프로젝션 행렬 및 셰이딩의 영향을 받는 셰이더 프로그램입니다.
@@ -180,6 +183,9 @@ glErrCallback(GLenum source,
 
 // 초기화 함수
 bool init() {
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	idt = (float)mode->refreshRate;
+	dt = 1 / idt;
 
 	stbi_set_flip_vertically_on_load(true);
 
