@@ -34,7 +34,7 @@ namespace onart {
 					vec4 rel(o2->pos_vel - p1);
 					float dist = reinterpret_cast<vec2*>(&rel)->length();
 					dist -= (o1->radius + o2->radius);
-					if (dist <= 0) {	// 터치 검사
+					if (dist <= 9.536743e-7f) {	// 터치 검사. 충돌 인/아웃 검사의 경우 dist 제한을 약간 늘려 주면 ok
 						o1->entity->onTrigger(o2->entity); o2->entity->onTrigger(o1->entity);
 						if (o1->body && o2->body) {
 							collide(o1, o2, rel);

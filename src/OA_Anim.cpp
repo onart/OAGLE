@@ -251,6 +251,7 @@ namespace onart {
 		xy *= vec2((float)wh[0], (float)wh[1]) / 1024;
 		pivv *= xy;
 		vec4 sctr(xy[0], xy[1], pivv[0], pivv[1]);
+		// print(sctrz[0]);	// 버튼에 사용하기 위한 값을 알아낼 수 있습니다.
 		struct spr :public FixedSprite {
 			spr(const pTexture& _1, const vec4& _2, const vec4& _3) :FixedSprite(_1, _2, _3) { }
 		};
@@ -694,6 +695,7 @@ namespace onart {
 				sctrz[i] = vec4(xy[X], xy[Y], pivv[X], pivv[Y]);
 			}
 		}
+		// print(sctrz[0]);	// 버튼에 사용하기 위한 값을 알아낼 수 있습니다.
 		struct anim2d :public UIAnimation {
 			anim2d(bool _1, const std::vector<Keypoint<pTexture>>& _2, const std::vector<Keypoint<vec4>>& _3, const std::vector<vec4>& _4) :UIAnimation(_1, _2, _3, _4) {}
 		};

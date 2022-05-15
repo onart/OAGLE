@@ -10,6 +10,7 @@
 #include "oaglem.h"
 
 namespace onart {
+	class Transform;
 	class Camera
 	{
 	public:
@@ -18,14 +19,8 @@ namespace onart {
 		/// 카메라가 따라가던 동적 할당된 vec3 객체가 해제된 경우 프로그램이 깨지니 주의하세요.
 		/// </summary>
 		/// <param name="relativePos">카메라가 볼 지점을 기준으로 한 카메라의 위치입니다.</param>
-		/// <param name="at">카메라가 따라갈 벡터입니다.</param>
-		inline void follow(const vec3& relativePos, const vec3* at = nullptr) { 
-			this->relativePos = relativePos; 
-			if (!at) {
-				fixedAt = *(this->at);
-			}
-			this->at = at; 
-		}
+		/// <param name="at">카메라가 따라갈 트랜스폼입니다.</param>
+		void follow(const vec3& relativePos, Transform* at = nullptr);
 		/// <summary>
 		/// 카메라가 원하는 위치를 보도록 고정합니다.
 		/// </summary>

@@ -8,6 +8,7 @@
 #include "OA_Camera.h"
 #include "OA_Shader.h"
 #include "OA_Scene.h"
+#include "OA_Transform.h"
 
 extern float dt;
 extern onart::Shader program2, program3;
@@ -15,6 +16,14 @@ extern onart::Shader program2, program3;
 USE_SHADER_UNIFORM;
 
 namespace onart {
+
+	void Camera::follow(const vec3& relativePos, Transform* at) {
+		this->relativePos = relativePos;
+		if (!at) {
+			fixedAt = *(this->at);
+		}
+		this->at = &(at->getGlobalPosition());
+	}
 
 	void Camera::viewUpdate() {
 		vec3 desiredEye;
