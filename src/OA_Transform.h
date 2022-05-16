@@ -66,11 +66,12 @@ namespace onart {
 		/// </summary>
 		/// <param name="p">부모 트랜스폼</param>
 		void setParent(Transform* p = nullptr);
+		~Transform();
 		inline Transform* getParent() const { return parent; }
 		/// <summary>
 		/// 주어진 변환이 자식 중에 있으면 제외합니다.
 		/// </summary>
-		inline void excludeChild(Transform* t) { children.erase(std::remove(children.begin(), children.end(), t), children.end()); }
+		inline void excludeChild(Transform* t) { t->setParent(); children.erase(std::remove(children.begin(), children.end(), t), children.end()); }
 		/// <summary>
 		/// 주어진 변환을 자식에 포함시킵니다. 중복 포함은 검사하지 않습니다.
 		/// </summary>

@@ -30,10 +30,25 @@ namespace onart {
 		mat2prs();
 	}
 
+	Transform::~Transform() {
+		std::vector<Transform*> ch2;
+		ch2.swap(children);
+		for (Transform* child : ch2) {
+			child->setParent();
+		}
+		if (parent) {
+			Transform* temp = parent;
+			parent = nullptr;
+			temp->excludeChild(this);
+		}
+	}
+
 	void Transform::setParent(Transform* p) {
 		if (p == this) p = nullptr;
-		if (parent) { parent->excludeChild(this); }
+		else if (parent == p) return;
+		Transform* formerParent = parent;
 		parent = p;
+		if (formerParent) { formerParent->excludeChild(this); }
 		if (parent) {
 			parent->addChild(this);
 			model = parent->getInverseTransform() * globalModel;
