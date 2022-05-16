@@ -181,23 +181,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="OA_Ballpool.cpp" />
-    <ClCompile Include="OA_BV.cpp" />
     <ClCompile Include="externals\gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
     <ClCompile Include="OA_Audio.cpp" />
-    <ClCompile Include="OA_Contact.cpp" />
     <ClCompile Include="OA_CQueue.cpp" />
     <ClCompile Include="OA_Camera.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
-    <ClCompile Include="OA_ForceGenerator.cpp" />
     <ClCompile Include="OA_FrameBuffer.cpp" />
+    <ClCompile Include="OA_Game.cpp" />
     <ClCompile Include="OA_Hangul.cpp" />
-    <ClCompile Include="OA_Input.cpp" />
     <ClCompile Include="OA_Material.cpp" />
     <ClCompile Include="OA_Model.cpp" />
-    <ClCompile Include="OA_PhysicalSystem.cpp" />
-    <ClCompile Include="OA_PointMass.cpp" />
     <ClCompile Include="OA_Random.cpp" />
     <ClCompile Include="OA_Rigidbody.cpp" />
     <ClCompile Include="OA_Scene.cpp" />
@@ -209,7 +204,6 @@
     <ClCompile Include="OA_Transform.cpp" />
     <ClCompile Include="OA_UI.cpp" />
     <ClCompile Include="OA_Vertex.cpp" />
-    <ClCompile Include="OA_Window.cpp" />
     <ClCompile Include="OA_BallCollider.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -218,7 +212,6 @@
     <ClInclude Include="oaglem_geometry.h" />
     <ClInclude Include="OA_BallCollider.h" />
     <ClInclude Include="OA_Ballpool.h" />
-    <ClInclude Include="OA_BV.h" />
     <ClInclude Include="externals\gl\glad\glad.h" />
     <ClInclude Include="externals\gl\glfw\win64\glfw3.h" />
     <ClInclude Include="externals\stb_image.h" />
@@ -228,22 +221,18 @@
     <ClInclude Include="oagle_simd.h" />
     <ClInclude Include="OA_Anim.h" />
     <ClInclude Include="OA_Audio.h" />
-    <ClInclude Include="OA_Contact.h" />
     <ClInclude Include="OA_CQueue.h" />
     <ClInclude Include="OA_Camera.h" />
     <ClInclude Include="OA_Entity.h" />
     <ClInclude Include="OA_FasterMath.h" />
-    <ClInclude Include="OA_ForceGenerator.h" />
     <ClInclude Include="OA_FrameBuffer.h" />
+    <ClInclude Include="OA_Game.h" />
     <ClInclude Include="OA_Hangul.h" />
-    <ClInclude Include="OA_Input.h" />
     <ClInclude Include="OA_Material.h" />
     <ClInclude Include="OA_Memory.h" />
     <ClInclude Include="OA_Model.h" />
     <ClInclude Include="OA_modules.h" />
     <ClInclude Include="OA_PhysicalSurface.h" />
-    <ClInclude Include="OA_PhysicalSystem.h" />
-    <ClInclude Include="OA_PointMass.h" />
     <ClInclude Include="OA_Random.h" />
     <ClInclude Include="OA_Rigidbody.h" />
     <ClInclude Include="OA_Scene.h" />
@@ -255,7 +244,6 @@
     <ClInclude Include="OA_UI.h" />
     <ClInclude Include="OA_UniversalFunctor.h" />
     <ClInclude Include="OA_Vertex.h" />
-    <ClInclude Include="OA_Window.h" />
     <ClInclude Include="resources.h" />
     <ClInclude Include="OA_Shader.h" />
   </ItemGroup>

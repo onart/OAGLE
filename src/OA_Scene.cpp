@@ -10,13 +10,9 @@
 
 #include <queue>
 
-extern float tp, dt;
-
 namespace onart {
 	
 	Scene* Scene::currentScene;
-	const float& Scene::dt = ::dt;
-	const float& Scene::tp = ::tp;
 	
 	void Scene::update() {
 		doing = SceneDoing::UPDATE;
@@ -226,9 +222,8 @@ namespace onart {
 	}
 
 	void Scene::change(Scene* other) {
-		if (other == this) return;
-		currentScene = other;
-		for (auto& e : entities) {
+		if (other == currentScene) return;
+		for (Entity*& e : currentScene->entities) {
 			if (e->preserveOnSceneChange) {
 				other->addEntity(e);
 			}
@@ -238,7 +233,8 @@ namespace onart {
 			}
 		}
 		other->init();
-		delete this;
+		delete currentScene;
+		currentScene = other;
 	}
 
 	void Scene::addEntity(Entity* e) {

@@ -542,9 +542,8 @@ namespace onart::UI {
 	}
 
 	void Slider::render() {
-		extern Shader program2;
-		program2[constraint] = area;
+		Game::program2[constraint] = area;
 		// render components
-		program2[constraint] = vec4(-100, -100, 100, 100);
+		Game::program2[constraint] = vec4(-100, -100, 100, 100);
 	}
 }

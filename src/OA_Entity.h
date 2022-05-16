@@ -13,15 +13,12 @@
 #include <map>
 
 #include "OA_Transform.h"
-#include "OA_Input.h"
+#include "OA_Game.h"
 #include "OA_Anim.h"
 
 namespace onart {
 	class Camera;
 }
-
-extern onart::Camera mainCamera;
-extern float dt, tp;
 
 namespace onart {
 	class Model;
@@ -211,7 +208,7 @@ namespace onart {
 		/// <summary>
 		/// 애니메이션 상태를 변경합니다. 현재 적용 중인 번호를 고르면 그 애니메이션은 처음부터 다시 시작합니다.
 		/// </summary>
-		inline void setAnim(int idx, float dynamicTps = 1) { as = idx; animKp = 0; animStartTimepoint = tp; animTps = dynamicTps; }
+		inline void setAnim(int idx, float dynamicTps = 1) { as = idx; animKp = 0; animStartTimepoint = Game::tp(); animTps = dynamicTps; }
 		/// <summary>
 		/// 애니메이션을 저장 배열의 끝에 추가합니다. 첫 애니메이션을 추가할 때 animState는 0이 됩니다.
 		/// </summary>

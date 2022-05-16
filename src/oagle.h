@@ -93,7 +93,7 @@ namespace onart {
 	/// <summary>
 	/// 창을 정해진 옵션으로 생성합니다. 다른 옵션은 GLFW 문서를 보고 수정하시기 바랍니다.
 	/// </summary>
-	/// <param name="name">창의 이름으로 표시될 문자열입니다. UTF-8 인코딩</param>
+	/// <param name="name">창의 이름으로 표시될 문자열입니다. UTF-8 인코딩이 필요하며, 리터럴 접두어 u8"문자열"과 같이 하면 쉽게 이용할 수 있습니다.</param>
 	/// <param name="width">창의 가로 길이입니다.</param>
 	/// <param name="height">창의 세로 길이입니다.</param>
 	/// <returns>생성한 window의 포인터</returns>

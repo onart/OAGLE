@@ -8,17 +8,11 @@
 #ifndef __OA_SCENE_H__
 #define __OA_SCENE_H__
 
-#include "OA_Input.h"
+#include "OA_Game.h"
 
 #include <string>
 #include <vector>
 #include <map>
-
-namespace onart {
-	class Camera;
-}
-
-extern onart::Camera mainCamera;
 
 namespace onart {
 
@@ -33,29 +27,18 @@ namespace onart {
 	/// </summary>
 	class Scene
 	{
+		friend class Game;
 	public:
 		/// <summary>
 		/// 현재 열려 있는 씬입니다. 게임에는 한 번에 하나의 씬만 열려 있을 수 있습니다.
 		/// </summary>
 		static Scene* currentScene;
 		/// <summary>
-		/// 응용 계층에서 사용할 일 없는 함수입니다.
-		/// </summary>
-		void update();
-		/// <summary>
-		/// 응용 계층에서 사용할 일 없는 함수입니다.
-		/// </summary>
-		void render();
-		/// <summary>
 		/// 씬에 개체를 추가합니다.
 		/// </summary>
 		void addEntity(Entity*);
 
 		inline int getSceneId() { return id; }
-		/// <summary>
-		/// 씬에서 매 프레임마다 호출됩니다. 항상 씬 내 개체의 Update()보다 먼저 실행됩니다.
-		/// </summary>
-		virtual void Update() = 0;
 		/// <summary>
 		/// 씬 포인터를 통해 이벤트를 발동할 수 있습니다.
 		/// </summary>
@@ -95,9 +78,15 @@ namespace onart {
 		/// <summary>
 		/// 다른 씬으로 전환합니다.
 		/// </summary>
-		void change(Scene* other);
+		static void change(Scene* other);
 		// +다수의 광원
-	private:	
+	private:
+		void update();
+		void render();
+		/// <summary>
+		/// 씬에서 매 프레임마다 호출됩니다. 항상 씬 내 개체의 Update()보다 먼저 실행됩니다.
+		/// </summary>
+		virtual void Update() = 0;
 		std::vector<Entity*> entities;
 		std::multimap<float, size_t> renderOrder;
 		std::vector<size_t> bubble;

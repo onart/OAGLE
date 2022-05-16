@@ -5,10 +5,9 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
+#include "OA_Game.h"
 #include "OA_Rigidbody.h"
 #include "binaryIOvec.h"
-
-extern float dt, idt;
 
 namespace onart {
 	std::vector<Rigidbody2D*> Rigidbody2D::objs;
@@ -24,15 +23,15 @@ namespace onart {
 	}
 
 	void Rigidbody2D::UpdateV() {
-		velocity += (acceleration + netForce * inverseMass) * dt;
-		angularVel += (angularAcc + netTorque * inverseMoment) * dt;
+		velocity += (acceleration + netForce * inverseMass) * Game::dt();
+		angularVel += (angularAcc + netTorque * inverseMoment) * Game::dt();
 		netForce = 0;
 		netTorque = 0;
 	}
 
 	void Rigidbody2D::UpdateP() {
-		transform.dAddRotation(vec3(0, 0, angularVel * dt));
-		transform.addPosition(vec3(velocity * dt, 0));
+		transform.dAddRotation(vec3(0, 0, angularVel * Game::dt()));
+		transform.addPosition(vec3(velocity * Game::dt(), 0));
 	}
 
 	Rigidbody3D::Rigidbody3D(float mass, const mat3& inverseInertiaMoment, Transform& transform)
@@ -50,15 +49,15 @@ namespace onart {
 	}
 
 	void Rigidbody3D::UpdateV() {
-		velocity += (acceleration + netForce * inverseMass) * dt;
-		angularVel += (angularAcc + worldIITensor() * netTorque) * dt;
+		velocity += (acceleration + netForce * inverseMass) * Game::dt();
+		angularVel += (angularAcc + worldIITensor() * netTorque) * Game::dt();
 		netForce = 0;
 		netTorque = 0;
 	}
 
 	void Rigidbody3D::UpdateP() {
 		Quaternion rot(transform.getLocalRotation());
-		rot += dt * 0.5f * Quaternion(angularVel) * rot;
+		rot += Game::dt() * 0.5f * Quaternion(angularVel) * rot;
 		/* https://fgiesen.wordpress.com/2012/08/24/quaternion-differentiation/
 		* 결론: 사원수의 왼쪽에 axis, angle * dt 기반의 사원수를 곱하는 것은
 		* 각속도 vec3의 사원수 버전(실수부분 0, 나머지 벡터성분 그대로)에 대하여 위 식으로 근사할 수 있음
@@ -66,7 +65,7 @@ namespace onart {
 		*/
 		rot.normalize();
 		transform.dSetRotation(rot);
-		transform.addPosition(dt * velocity);
+		transform.addPosition(Game::dt() * velocity);
 		
 	}
 }

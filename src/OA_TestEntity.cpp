@@ -1,7 +1,7 @@
 ﻿#include "OA_TestEntity.h"
 #include "OA_Material.h"
 #include "OA_Camera.h"
-#include "OA_Window.h"
+
 namespace onart {
 	TestEntity::TestEntity() :Entity("2danim", Transform(vec2(0, 1)) , false, false, true), rb(1, 1000, transform), bc(this, 0.03f, vec2(0.0f, 0.01f), &rb) {
 		pAnimation anim1 = Animation2D::make("돌려차기", true,
@@ -40,10 +40,10 @@ namespace onart {
 				vec2(110,16),
 			}
 			);
-		window::setCursorImage(anim2, vec2(0.4f));
+		Window::setCursorImage(anim2, vec2(0.4f));
 		rb.addConstantAcceleration(vec2(0, -1.0f));
 	}
-	void TestEntity::Update() { if (Input::isKeyPressedNow(Input::KeyCode::space)) { window::setCursorImage(); } }
+	void TestEntity::Update() { if (Input::isKeyPressedNow(Input::KeyCode::space)) { Window::setCursorImage(); } }
 
 	void TestEntity::Act(int kp, float progress) {  }
 }

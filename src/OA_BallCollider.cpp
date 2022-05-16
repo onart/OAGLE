@@ -5,14 +5,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
+#include "OA_Game.h"
 #include "OA_BallCollider.h"
 #include "binaryIOvec.h"
 #include "OA_Model.h"
 #include "OA_Shader.h"
 #include "OA_Rigidbody.h"
-
-extern onart::Shader program3;
-extern float idt;
 
 namespace onart {
 
@@ -57,11 +55,11 @@ namespace onart {
 
 	void BallCollider2D::render() {
 		USE_SHADER_UNIFORM;
-		program3[color] = vec4(0, 1, 0, 0.3f);
-		program3[model] = mat4::TRS(vec3(pos_vel[0], pos_vel[1], -1), Quaternion(), radius);
-		program3[piv] = mat4();
-		program3.texture(Material::get("white1x1")->id);
-		program3.draw(**Mesh::get("circ"));
+		Game::program3[color] = vec4(0, 1, 0, 0.3f);
+		Game::program3[model] = mat4::TRS(vec3(pos_vel[0], pos_vel[1], -1), Quaternion(), radius);
+		Game::program3[piv] = mat4();
+		Game::program3.texture(Material::get("white1x1")->id);
+		Game::program3.draw(**Mesh::get("circ"));
 	}
 
 	BallCollider3D::BallCollider3D(Entity* entity, float radius, const vec3& offset, Rigidbody3D* body, PHYSICAL_SURFACE surface)
@@ -98,10 +96,10 @@ namespace onart {
 
 	void BallCollider3D::render() {
 		USE_SHADER_UNIFORM;
-		program3[color] = vec4(0, 1, 0, 0.3f);
-		program3[model] = mat4::TRS(vec3(gpos), Quaternion(), radius);
-		program3[piv] = mat4();
-		program3.texture(Material::get("white1x1")->id);
-		program3.draw(**Mesh::get("sphr"));
+		Game::program3[color] = vec4(0, 1, 0, 0.3f);
+		Game::program3[model] = mat4::TRS(vec3(gpos), Quaternion(), radius);
+		Game::program3[piv] = mat4();
+		Game::program3.texture(Material::get("white1x1")->id);
+		Game::program3.draw(**Mesh::get("sphr"));
 	}
 }

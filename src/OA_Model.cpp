@@ -5,6 +5,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
+#include "OA_Game.h"
 #include "OA_Model.h"
 #include "OA_Shader.h"
 #include "OA_Material.h"
@@ -24,7 +25,6 @@
 
 #include <filesystem>
 
-extern onart::Shader program3;
 USE_SHADER_UNIFORM;
 
 namespace onart {
@@ -254,31 +254,31 @@ namespace onart {
 	}
 
 	void Model::render() const {
-		program3.bind(**mesh);
-		program3[piv] = mat4();
-		program3[is2d] = false;
-		program3[useFull] = true;
+		Game::program3.bind(**mesh);
+		Game::program3[piv] = mat4();
+		Game::program3[is2d] = false;
+		Game::program3[useFull] = true;
 		for (auto& g : geom) {
 			auto& mtl = materials[g.material];
 			if (mtl) {
-				program3[Ka] = mtl->getAmbient();
-				program3[Ks] = mtl->getSpecular();
-				program3[Kd] = mtl->getDiffuse();
-				program3[shininess] = mtl->getShininess();
+				Game::program3[Ka] = mtl->getAmbient();
+				Game::program3[Ks] = mtl->getSpecular();
+				Game::program3[Kd] = mtl->getDiffuse();
+				Game::program3[shininess] = mtl->getShininess();
 
 				unsigned df = mtl->getDiffuseTex();
 				if (df) {
-					program3.texture(df);
-					program3[oneColor] = false;
+					Game::program3.texture(df);
+					Game::program3[oneColor] = false;
 				}
 				else {
-					program3[oneColor] = true;
+					Game::program3[oneColor] = true;
 				}
 			}
 			else {
-				program3[oneColor] = true;
+				Game::program3[oneColor] = true;
 			}
-			program3.draw(g.start, g.count);
+			Game::program3.draw(g.start, g.count);
 		}
 	}
 }

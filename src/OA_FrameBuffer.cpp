@@ -8,6 +8,7 @@
 #include "OA_FrameBuffer.h"
 #include "OA_Material.h"
 #include "externals/gl/glad/glad.h"
+#include "OA_Game.h"
 
 #include <type_traits>
 
@@ -188,8 +189,7 @@ namespace onart {
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_STENCIL_TEST);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			void defaultFramebufferViewport();
-			defaultFramebufferViewport();
+			Game::defaultFramebufferViewport();
 		}
 		else {
 			auto fb = fbs.find(name);

@@ -36,15 +36,6 @@
     <Filter Include="엔진\기본\소스 파일">
       <UniqueIdentifier>{2cf44bfb-0886-46c5-b450-daa527a25c12}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엔진\물리1%28CYCLONE%29">
-      <UniqueIdentifier>{4c0518dd-509c-4b15-b1e1-85a15833e867}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="엔진\물리1%28CYCLONE%29\헤더 파일">
-      <UniqueIdentifier>{74473754-9d08-4a68-9bd1-c3adc5fe84d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="엔진\물리1%28CYCLONE%29\소스 파일">
-      <UniqueIdentifier>{006df378-0bb3-4b6d-8faf-b20a7e1d8bad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="엔진\물리2%28직접 구현/OAP%29">
       <UniqueIdentifier>{70288f6b-4534-43a6-8676-f82bc24d55b9}</UniqueIdentifier>
     </Filter>
@@ -83,9 +74,6 @@
     <ClCompile Include="OA_Hangul.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OA_Input.cpp">
-      <Filter>엔진\기본\소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="OA_Material.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
@@ -113,29 +101,11 @@
     <ClCompile Include="OA_Vertex.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OA_Window.cpp">
-      <Filter>엔진\기본\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_ForceGenerator.cpp">
-      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_PhysicalSystem.cpp">
-      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_PointMass.cpp">
-      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="OA_TestEntity.cpp">
       <Filter>응용\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_TestScene.cpp">
       <Filter>응용\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_Contact.cpp">
-      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="OA_BV.cpp">
-      <Filter>엔진\물리1%28CYCLONE%29\소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="OA_FrameBuffer.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
@@ -151,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="OA_TestEntity2.cpp">
       <Filter>응용\소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="OA_Game.cpp">
+      <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,9 +155,6 @@
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Hangul.h">
-      <Filter>엔진\기본\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Input.h">
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Material.h">
@@ -220,9 +190,6 @@
     <ClInclude Include="OA_Vertex.h">
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="OA_Window.h">
-      <Filter>엔진\기본\헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="oagle.h">
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
@@ -243,21 +210,6 @@
     </ClInclude>
     <ClInclude Include="OA_TestScene.h">
       <Filter>응용\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_ForceGenerator.h">
-      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_PhysicalSystem.h">
-      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_PointMass.h">
-      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Contact.h">
-      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_BV.h">
-      <Filter>엔진\물리1%28CYCLONE%29\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_FrameBuffer.h">
       <Filter>엔진\기본\헤더 파일</Filter>
@@ -287,6 +239,9 @@
       <Filter>응용\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_modules.h">
+      <Filter>엔진\기본\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="OA_Game.h">
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

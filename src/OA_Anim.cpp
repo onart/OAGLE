@@ -25,7 +25,6 @@
 
 #include <algorithm>
 
-extern onart::Shader program2, program3;
 USE_SHADER_UNIFORM;
 USE_NVEC_XYZW_UPPER;
 USE_NVEC_LDWH_UPPER;
@@ -130,21 +129,21 @@ namespace onart {
 		
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
-			program3[oneColor] = false;
-			program3.texture(kpNow(tex, tp)->value->id);
+			Game::program3[oneColor] = false;
+			Game::program3.texture(kpNow(tex, tp)->value->id);
 		}
 		else {
-			program3[oneColor] = true;
+			Game::program3[oneColor] = true;
 		}
 
 		if (hasRect) {
-			program3[useFull] = false;
+			Game::program3[useFull] = false;
 			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
 			int kp = 0;
-			if (l == rects.begin()) { program3[ldwh] = rects[0].value; }
+			if (l == rects.begin()) { Game::program3[ldwh] = rects[0].value; }
 			else { 
 				l--;
-				program3[ldwh] = l->value;
+				Game::program3[ldwh] = l->value;
 				kp = int(l - rects.begin());
 				int ak = e->getAnimKey();
 				if (ak != kp) {
@@ -170,20 +169,20 @@ namespace onart {
 					0, sctr[1], 0, sctr[3],
 					0, 0, 1, 0,
 					0, 0, 0, 1);
-				program3[piv] = pivMat;
+				Game::program3[piv] = pivMat;
 			}
 			else {
-				program3[piv] = mat4();
+				Game::program3[piv] = mat4();
 			}
 		}
 		else {
-			program3[useFull] = true;
-			program3[piv] = mat4();
+			Game::program3[useFull] = true;
+			Game::program3[piv] = mat4();
 		}
-		program3[hasBones] = false;
-		program3[is2d] = true;
-		program3.bind(**mRect);
-		program3.draw();
+		Game::program3[hasBones] = false;
+		Game::program3[is2d] = true;
+		Game::program3.bind(**mRect);
+		Game::program3.draw();
 	}
 
 	pAnimation Sprite::make(const std::string& name, const pTexture& tex, vec4 rect, vec2 pivot) {
@@ -216,24 +215,24 @@ namespace onart {
 	void Sprite::go(float, Entity*, float) {
 		if (!mRect)mRect = Mesh::get("rect");
 		if (tex) { 
-			program3[oneColor] = false;
-			program3.texture(tex->id);
+			Game::program3[oneColor] = false;
+			Game::program3.texture(tex->id);
 		}
 		else {
-			program3[oneColor] = true;
+			Game::program3[oneColor] = true;
 		}
-		program3[useFull] = false;
-		program3[::ldwh] = ldwh;
+		Game::program3[useFull] = false;
+		Game::program3[::ldwh] = ldwh;
 		mat4 pivMat(
 			sctr[0], 0, 0, sctr[2],
 			0, sctr[1], 0, sctr[3],
 			0, 0, 1, 0,
 			0, 0, 0, 1);
-		program3[piv] = pivMat;
-		program3[hasBones] = false;
-		program3[is2d] = true;
-		program3.bind(**mRect);
-		program3.draw();
+		Game::program3[piv] = pivMat;
+		Game::program3[hasBones] = false;
+		Game::program3[is2d] = true;
+		Game::program3.bind(**mRect);
+		Game::program3.draw();
 	}
 
 	pAnimation FixedSprite::make(const std::string& name, const pTexture& tex, vec4 rect, vec2 pivot) {
@@ -267,27 +266,27 @@ namespace onart {
 	void FixedSprite::go(float, Entity*, float) {
 		if (!mRect)mRect = Mesh::get("rect");
 		if (tex) {
-			program2[oneColor] = false;
-			program2.texture(tex->id);
+			Game::program2[oneColor] = false;
+			Game::program2.texture(tex->id);
 		}
 		else {
-			program2[oneColor] = true;
+			Game::program2[oneColor] = true;
 		}
-		program2[useFull] = false;
-		program2[::ldwh] = ldwh;
-		program2[isText] = false;
+		Game::program2[useFull] = false;
+		Game::program2[::ldwh] = ldwh;
+		Game::program2[isText] = false;
 		mat4 pivMat(
 			sctr[0], 0, 0, sctr[2],
 			0, sctr[1], 0, sctr[3],
 			0, 0, 1, 0,
 			0, 0, 0, 1);
-		program2[piv] = pivMat;
-		program2.bind(**mRect);
-		program2.draw();
+		Game::program2[piv] = pivMat;
+		Game::program2.bind(**mRect);
+		Game::program2.draw();
 	}
 
 	void Animation3D::go(float elapsed, Entity* e, float dynamicTps) {
-		program3.use();
+		Game::program3.use();
 		float tp = getTp(elapsed * dynamicTps);
 		auto sub = std::upper_bound(sigKp.begin(), sigKp.end(), tp);
 		for (auto& bone : keys) {
@@ -316,9 +315,9 @@ namespace onart {
 		}
 		int i = 0;
 		for (Bone& m : u) {
-			program3[bones][i++] = m.uni;
+			Game::program3[bones][i++] = m.uni;
 		}
-		program3[hasBones] = true;
+		Game::program3[hasBones] = true;
 	}
 
 	void Animation3D::readHierarchy(aiNode* root, BoneTree& tree) {
@@ -604,21 +603,21 @@ namespace onart {
 
 		float tp = getTp(elapsed * dynamicTps);
 		if (hasTex) {
-			program2[oneColor] = false;
-			program2.texture(kpNow(tex, tp)->value->id);
+			Game::program2[oneColor] = false;
+			Game::program2.texture(kpNow(tex, tp)->value->id);
 		}
 		else {
-			program2[oneColor] = true;
+			Game::program2[oneColor] = true;
 		}
 
 		if (hasRect) {
-			program2[useFull] = false;
+			Game::program2[useFull] = false;
 			auto l = std::upper_bound(rects.begin(), rects.end(), tp);
 			int kp = 0;
-			if (l == rects.begin()) { program2[ldwh] = rects[0].value; }
+			if (l == rects.begin()) { Game::program2[ldwh] = rects[0].value; }
 			else {
 				l--;
-				program2[ldwh] = l->value;
+				Game::program2[ldwh] = l->value;
 				kp = int(l - rects.begin());
 				int ak = e->getAnimKey();
 				if (ak != kp) {
@@ -644,18 +643,18 @@ namespace onart {
 					0, sctr[1], 0, sctr[3],
 					0, 0, 1, 0,
 					0, 0, 0, 1);
-				program2[piv] = pivMat;
+				Game::program2[piv] = pivMat;
 			}
 			else {
-				program2[piv] = mat4();
+				Game::program2[piv] = mat4();
 			}
 		}
 		else {
-			program2[useFull] = true;
-			program2[piv] = mat4();
+			Game::program2[useFull] = true;
+			Game::program2[piv] = mat4();
 		}
-		program2.bind(**mRect);
-		program2.draw();
+		Game::program2.bind(**mRect);
+		Game::program2.draw();
 	}
 
 	UIAnimation::UIAnimation(bool loop, const std::vector<Keypoint<pTexture>>& tex, const std::vector<Keypoint<vec4>>& rects, const std::vector<vec4>& sctrs)

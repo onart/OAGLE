@@ -10,6 +10,7 @@
 #include <cctype>
 
 #include "externals/gl/glad/glad.h"
+#include "OA_Game.h"
 #include "OA_Text.h"
 #define STB_TRUETYPE_IMPLEMENTATION
 #include "externals/stb_truetype.h"
@@ -17,8 +18,6 @@
 #include "OA_Vertex.h"
 
 #pragma warning(disable: 26451)
-
-extern onart::Shader program2;
 
 USE_SHADER_UNIFORM;
 
@@ -127,21 +126,21 @@ namespace onart {
 	}
 
 	void Font::draw(const oastring& content, const mat4& group, const std::vector<vec2>& lineXY, const vec4& color) {
-		program2[isText] = true;
-		program2[piv] = mat4();
-		program2[::color] = color;
-		program2[useFull] = true;
-		program2[textGroup] = group;
+		Game::program2[isText] = true;
+		Game::program2[piv] = mat4();
+		Game::program2[::color] = color;
+		Game::program2[useFull] = true;
+		Game::program2[textGroup] = group;
 		cdraw(content, lineXY, color);
 	}
 
 	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, AlignH ha, AlignV va, const vec2& center, float size, const vec4& color) {
 		constexpr float BASE_SIZE = 1.0f / 1024;
 		size *= BASE_SIZE;
-		program2[isText] = true;
-		program2[piv] = mat4();
-		program2[::color] = color;
-		program2[useFull] = true;
+		Game::program2[isText] = true;
+		Game::program2[piv] = mat4();
+		Game::program2[::color] = color;
+		Game::program2[useFull] = true;
 		float hf, vf;
 		switch (ha)
 		{
@@ -169,17 +168,17 @@ namespace onart {
 		vec2 thisCenter(group[left] + group[width] * hf, group[down] + group[height] * vf);
 		thisCenter *= size;
 		vec3 tl(center - thisCenter, 0);
-		program2[textGroup] = mat4::TRS(tl, Quaternion(), size);
+		Game::program2[textGroup] = mat4::TRS(tl, Quaternion(), size);
 		cdraw(content, lineXY, color);
 	}
 
 	void Font::draw(const oastring& content, const vec4& group, const std::vector<vec2>& lineXY, const mat4& transform, AlignH ha, AlignV va, const vec2& center, float size, const vec4& color) {
 		constexpr float BASE_SIZE = 1.0f / 1024;
 		size *= BASE_SIZE;
-		program2[isText] = true;
-		program2[piv] = mat4();
-		program2[::color] = color;
-		program2[useFull] = true;
+		Game::program2[isText] = true;
+		Game::program2[piv] = mat4();
+		Game::program2[::color] = color;
+		Game::program2[useFull] = true;
 		float hf, vf;
 		switch (ha)
 		{
@@ -207,7 +206,7 @@ namespace onart {
 		vec2 thisCenter(group[left] + group[width] * hf, group[down] + group[height] * vf);
 		thisCenter *= size;
 		vec3 tl(center - thisCenter, 0);
-		program2[textGroup] = transform * mat4::TRS(tl, Quaternion(), size);
+		Game::program2[textGroup] = transform * mat4::TRS(tl, Quaternion(), size);
 		cdraw(content, lineXY, color);
 	}
 
@@ -322,7 +321,7 @@ namespace onart {
 		float curH = lineXY[0][Y];
 		float curx = 1, cury = 1;
 		float curScale = 1;
-		program2.bind(**rect);
+		Game::program2.bind(**rect);
 		int charCount = (int)content.size();
 		for (int i = 0; i < charCount; i++) {
 			oachar c = content[i];
@@ -355,7 +354,7 @@ namespace onart {
 			case '\b':
 				if (i + 8 < charCount) {
 					vec4 r = parseColor(content, i + 1);
-					if (r[0] != -1) program2[::color] = r * color;
+					if (r[0] != -1) Game::program2[::color] = r * color;
 				}
 				i += 8;
 				continue;
@@ -363,13 +362,13 @@ namespace onart {
 				auto t = txs.find(c);
 				if (t == txs.end()) continue;
 				const charTex& ct = t->second;
-				program2[transform] = mat4::r2r(vec4(curW, curH - ct.size[1] - ct.bearing[1], ct.size[0] * curx, ct.size[1] * cury), -0.9f);
-				program2.texture(ct.id);
-				program2.draw();
+				Game::program2[transform] = mat4::r2r(vec4(curW, curH - ct.size[1] - ct.bearing[1], ct.size[0] * curx, ct.size[1] * cury), -0.9f);
+				Game::program2.texture(ct.id);
+				Game::program2.draw();
 				curW += ct.advance * curx;
 			}
 		}
-		program2[isText] = false;
+		Game::program2[isText] = false;
 	}
 
 	oastring Font::cutLine(const oastring& content, float maxWidth) {

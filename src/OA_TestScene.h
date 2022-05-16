@@ -8,8 +8,8 @@ namespace onart {
 	{
 	public:
 		void init();
-		void Update();
 	private:
+		void Update();
 	};
 }
 

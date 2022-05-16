@@ -15,8 +15,6 @@
 #include <algorithm>
 #include <iterator>
 
-extern onart::Shader program2, program3;
-
 USE_SHADER_UNIFORM;
 
 namespace onart {
@@ -24,7 +22,7 @@ namespace onart {
 	std::multimap<Entity::EntityKey, Entity*> Entity::entities;
 
 	float Entity::zIndex() {
-		return vec3(mainCamera.getViewMatrix().row(2)).dot(transform.getGlobalPosition());
+		return vec3(Game::mainCamera.getViewMatrix().row(2)).dot(transform.getGlobalPosition());
 	}
 
 	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc, bool isTranslucent)
@@ -96,27 +94,27 @@ namespace onart {
 		if (!isRendered) return;
 		if (isFixed) {
 			if (model) {
-				program3[fixed] = true;
-				program3[::model] = transform.getModel();
+				Game::program3[fixed] = true;
+				Game::program3[::model] = transform.getModel();
 			}
 			else {
-				program2[::transform] = transform.getModel();
-				program2[::color] = color;
+				Game::program2[::transform] = transform.getModel();
+				Game::program2[::color] = color;
 			}
 		}
 		else {
-			program3[fixed] = false;
-			program3[::model] = transform.getModel();
-			program3[::color] = color;
+			Game::program3[fixed] = false;
+			Game::program3[::model] = transform.getModel();
+			Game::program3[::color] = color;
 		}
 		if (!model) {
-			program3[is2d] = true;
+			Game::program3[is2d] = true;
 		}
 		if (as >= 0) { 
 			anims[as]->go(lt - animStartTimepoint, this, animTps);
 		}
 		else {
-			program3[hasBones] = false;
+			Game::program3[hasBones] = false;
 		}
 		if (model) { 
 			model->render();
@@ -125,7 +123,7 @@ namespace onart {
 
 	void Entity::update() {
 		if (isActive) {
-			lt += dt;
+			lt += Game::dt();
 			Update();
 		}
 	}
