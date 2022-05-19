@@ -30,13 +30,14 @@ namespace onart {
 		const int surface;
 		inline range_t rx() const { return rangex; }
 		inline range_t ry() const { return rangey; }
-		inline float setRadius() const { return radius; }
+		inline float getRadius() const { return radius; }
+		inline void setRadius(float r) { radius = r; }
 		inline void setOffset(const vec2& off) { offset = off; }
-		inline bool coarseCheck(BallCollider2D* other) { return (rangex & other->rx()) && (rangey & other->ry()); }
 		inline Entity* getEntity() { return entity; }
-		void render();
 	private:
 		void range();	// 현 프레임의 순간 선속도, 위치, 개괄 영역을 계산합니다.
+		void render();
+		inline bool coarseCheck(BallCollider2D* other) { return (rangex & other->rx()) && (rangey & other->ry()); }
 		range_t rangex, rangey;
 		vec2 offset;	// Entity를 질량중심으로 칠 때 충돌체 중심의 위치
 		vec4 pos_vel;
@@ -62,13 +63,14 @@ namespace onart {
 		inline range_t rx() const { return rangex; }
 		inline range_t ry() const { return rangey; }
 		inline range_t rz() const { return rangez; }
-		inline float setRadius() const { return radius; }
+		inline float getRadius() const { return radius; }
+		inline void setRadius(float r) { radius = r; }
 		inline void setOffset(const vec3& off) { offset = off; }
-		inline bool coarseCheck(BallCollider3D* other) { return (rangex & other->rx()) && (rangey & other->ry()) && (rangez & other->rz()); }
 		inline Entity* getEntity() { return entity; }
-		void render();
 	private:
 		void range();	// 현 프레임의 순간 선속도, 위치, 개괄 영역을 계산합니다.
+		void render();
+		inline bool coarseCheck(BallCollider3D* other) { return (rangex & other->rx()) && (rangey & other->ry()) && (rangez & other->rz()); }
 		range_t rangex, rangey, rangez;
 		vec3 offset;	// Entity를 질량중심으로 칠 때 충돌체 중심의 위치
 		vec3 gpos;

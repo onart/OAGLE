@@ -27,10 +27,11 @@ namespace onart {
 		}
 		for (int i = 0; i < sz - 1; i++) {
 			BallCollider2D* o1 = BallCollider2D::objs[i];
+			if (!o1->isActive) continue;
 			vec4 p1(o1->pos_vel);
 			for (int j = i + 1; j < sz; j++) {
 				BallCollider2D* o2 = BallCollider2D::objs[j];
-				if (o1->coarseCheck(o2) && o1->isActive && o2->isActive && o1->entity != o2->entity) {	// °³°ý °Ë»ç
+				if (o1->coarseCheck(o2) && o2->isActive && o1->entity != o2->entity) {	// °³°ý °Ë»ç
 					vec4 rel(o2->pos_vel - p1);
 					float dist = reinterpret_cast<vec2*>(&rel)->length();
 					dist -= (o1->radius + o2->radius);

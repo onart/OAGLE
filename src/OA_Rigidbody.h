@@ -31,14 +31,6 @@ namespace onart {
 		Rigidbody2D(float mass, float inertiaMoment, Transform& transform);
 		~Rigidbody2D();
 		/// <summary>
-		/// 현재 프레임에 속도를 업데이트합니다.
-		/// </summary>
-		void UpdateV();
-		/// <summary>
-		/// 현재 프레임에 위치를 업데이트합니다.
-		/// </summary>
-		void UpdateP();
-		/// <summary>
 		/// 현 프레임 동안 강체에 힘을 가합니다. 토크가 발생하지 않습니다. 지속적으로 힘을 가할 것이 아니라면 impulse() 함수를 사용하세요.
 		/// </summary>
 		inline void addForce(const vec2& force) { netForce += force; }
@@ -105,6 +97,14 @@ namespace onart {
 		/// </summary>
 		inline void angularAccelerate(float t) { angularVel += t; }
 	private:
+		/// <summary>
+		/// 현재 프레임에 속도를 업데이트합니다.
+		/// </summary>
+		void UpdateV();
+		/// <summary>
+		/// 현재 프레임에 위치를 업데이트합니다.
+		/// </summary>
+		void UpdateP();
 		Transform& transform;	// 개체 위치, 회전
 		vec2 velocity;			// 속도
 		vec2 acceleration;		// 가속도
@@ -128,14 +128,6 @@ namespace onart {
 		/// <param name="transform">개체의 변환 포인터</param>
 		Rigidbody3D(float mass, const mat3& inverseInertiaMoment, Transform& transform);
 		~Rigidbody3D();
-		/// <summary>
-		/// 현재 프레임에 속도를 업데이트합니다.
-		/// </summary>
-		void UpdateV();
-		/// <summary>
-		/// 현재 프레임에 위치를 업데이트합니다.
-		/// </summary>
-		void UpdateP();
 		/// <summary>
 		/// 현 프레임 동안 강체에 힘을 가합니다. 토크가 발생하지 않습니다. 지속적으로 힘을 가할 것이 아니라면 impulse() 함수를 사용하세요.
 		/// </summary>
@@ -207,6 +199,14 @@ namespace onart {
 		/// </summary>
 		inline vec3 getAngularVel() { return angularVel; }
 	private:
+		/// <summary>
+		/// 현재 프레임에 속도를 업데이트합니다.
+		/// </summary>
+		void UpdateV();
+		/// <summary>
+		/// 현재 프레임에 위치를 업데이트합니다.
+		/// </summary>
+		void UpdateP();
 		mat3 worldIITensor();
 		Transform& transform;
 		vec3 velocity;
