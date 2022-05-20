@@ -21,13 +21,13 @@ extern "C" {
 
 #ifdef _WIN32
 	#ifdef _WIN64
-		#pragma comment(lib, "externals/portaudio/portaudio_x64.lib")
+		#pragma comment(lib, "externals/portaudio/portaudio64.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx8664/avformat.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx8664/avcodec.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx8664/avutil.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx8664/swresample.lib")
 	#else
-		#pragma comment(lib, "externals/portaudio/portaudio_x86.lib")
+		#pragma comment(lib, "externals/portaudio/portaudio32.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx86/avformat.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx86/avcodec.lib")
 		#pragma comment(lib, "externals/ffmpeg/libx86/avutil.lib")

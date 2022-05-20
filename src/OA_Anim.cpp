@@ -12,6 +12,7 @@
 
 #ifdef _MSC_VER
 #ifdef _WIN64
+	#pragma comment(lib, "assimp/zlibstatic64.lib")
 	#pragma comment(lib, "assimp/assimp64.lib")
 #else
 	#pragma comment(lib, "assimp/zlibstatic32.lib")

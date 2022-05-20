@@ -26,18 +26,18 @@ namespace onart {
 	}
 
 	Entity::Entity(const EntityKey& k, const Transform& transform, bool isFixed, bool rc, bool isTranslucent)
-		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
+		:key(k), transform(transform), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
 		entities.insert({ k,this });
 	}
 
 	Entity::Entity(const EntityKey& k, const Transform& transform, pAnimation& anim0, bool isFixed, bool rc, bool isTranslucent)
-		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
+		:key(k), transform(transform), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
 		entities.insert({ k,this });
 		if (anim0)addAnim(anim0);
 	}
 	
 	Entity::Entity(const EntityKey& k, const Transform& transform, std::shared_ptr<Model>& model, bool isFixed, bool rc, bool isTranslucent)
-		:key(k), transform(transform), localTp(lt), animState(as), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
+		:key(k), transform(transform), animStartTimepoint(lt), isFixed(isFixed), responseContinuously(rc), isTranslucent(isTranslucent) {
 		entities.insert({ k,this });
 		if (model)setModel(model);
 	}
