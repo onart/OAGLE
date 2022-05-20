@@ -177,12 +177,6 @@ namespace onart {
 		inline bool operator!=(const nvec& v) const { return !operator==(v); }
 
 		/// <summary>
-		/// T형 배열로 사용할 수 있도록 포인터를 리턴합니다.
-		/// </summary>
-		inline operator T* () { return entry; }
-		inline operator const T* () const { return entry; }
-
-		/// <summary>
 		/// 명시적 캐스트가 가능한 타입이라면 벡터도 명시적으로 캐스트가 가능합니다.
 		/// 성분별로 캐스트해서 새로 만드는 것과 비교하여 특별히 성능적 면에서 나을 부분은 없으며
 		/// 유연한 코드만을 위해 추가하였습니다.
@@ -1285,9 +1279,9 @@ namespace onart {
 		// SIMD 적용 시 곱 15회/합 6회, 따로 하는 경우 곱 44회/합 102회
 		mat4 r = rotation.toMat4();
 		vec4 sc(scale);
-		mul4<float>(r.a, sc);
-		mul4<float>(r.a + 4, sc);
-		mul4<float>(r.a + 8, sc);
+		mul4<float>(r.a, sc.entry);
+		mul4<float>(r.a + 4, sc.entry);
+		mul4<float>(r.a + 8, sc.entry);
 		r[3] = translation[0];
 		r[7] = translation[1];
 		r[11] = translation[2];

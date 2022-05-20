@@ -12,9 +12,10 @@
 
 #ifdef _MSC_VER
 #ifdef _WIN64
-#pragma comment(lib, "assimp/assimp64.lib")
+	#pragma comment(lib, "assimp/assimp64.lib")
 #elif defined(_WIN32)
-#pragma comment(lib, "assimp/assimp32.lib")
+	#pragma comment(lib, "assimp/zlibstatic32.lib")
+	#pragma comment(lib, "assimp/assimp32.lib")
 #endif
 #pragma warning(disable: 26495 26812)
 #endif

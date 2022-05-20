@@ -14,6 +14,7 @@
 #ifdef _WIN64
 	#pragma comment(lib, "assimp/assimp64.lib")
 #else
+	#pragma comment(lib, "assimp/zlibstatic32.lib")
 	#pragma comment(lib, "assimp/assimp32.lib")
 #endif
 	#pragma warning(disable: 26495 26812)

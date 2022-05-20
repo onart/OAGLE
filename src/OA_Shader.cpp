@@ -149,43 +149,43 @@ namespace onart {
 	void Shader::uniform(const char* name, const vec2& v2) {
 		use();
 		int uloc = getUloc(name);
-		glUniform2fv(uloc, 1, v2);
+		glUniform2fv(uloc, 1, v2.entry);
 	}
 
 	void Shader::uniform(const char* name, const vec3& v3) {
 		use();
 		int uloc = getUloc(name);
-		glUniform3fv(uloc, 1, v3);
+		glUniform3fv(uloc, 1, v3.entry);
 	}
 
 	void Shader::uniform(const char* name, const vec4& v4) {
 		use();
 		int uloc = getUloc(name);
-		glUniform4fv(uloc, 1, v4);
+		glUniform4fv(uloc, 1, v4.entry);
 	}
 
 	void Shader::uniform(const char* name, const ivec2& v2) {
 		use();
 		int uloc = getUloc(name);
-		glUniform2iv(uloc, 1, v2);
+		glUniform2iv(uloc, 1, v2.entry);
 	}
 
 	void Shader::uniform(const char* name, const ivec3& v3) {
 		use();
 		int uloc = getUloc(name);
-		glUniform3iv(uloc, 1, v3);
+		glUniform3iv(uloc, 1, v3.entry);
 	}
 
 	void Shader::uniform(const char* name, const ivec4& v4) {
 		use();
 		int uloc = getUloc(name);
-		glUniform4iv(uloc, 1, v4);
+		glUniform4iv(uloc, 1, v4.entry);
 	}
 
 	void Shader::uniform(const char* name, const mat4& m4) {
 		use();
 		int uloc = getUloc(name);
-		glUniformMatrix4fv(uloc, 1, GL_TRUE, m4);
+		glUniformMatrix4fv(uloc, 1, GL_TRUE, m4.a);
 	}
 
 	void Shader::uniform(const char* name, size_t index, bool b) {
@@ -209,43 +209,43 @@ namespace onart {
 	void Shader::uniform(const char* name, size_t index, const vec2& b) {
 		use();
 		int uloc = getUloc(name, index);
-		glUniform2fv(uloc, 1, b);
+		glUniform2fv(uloc, 1, b.entry);
 	}
 
 	void Shader::uniform(const char* name, size_t index, const vec3& b) {
 		use();
 		int uloc = getUloc(name, index);
-		glUniform3fv(uloc, 1, b);
+		glUniform3fv(uloc, 1, b.entry);
 	}
 
 	void Shader::uniform(const char* name, size_t index, const vec4& b) {
 		use();
 		int uloc = getUloc(name, index);
-		glUniform4fv(uloc, 1, b);
+		glUniform4fv(uloc, 1, b.entry);
 	}
 
 	void Shader::uniform(const char* name, size_t index, const ivec2& b) {
 		use();
 		int uloc = getUloc(name, index);
-		glUniform2iv(uloc, 1, b);
+		glUniform2iv(uloc, 1, b.entry);
 	}
 
 	void Shader::uniform(const char* name, size_t index, const ivec3& b) {
 		use();
 		int uloc = getUloc(name, index);
-		glUniform3iv(uloc, 1, b);
+		glUniform3iv(uloc, 1, b.entry);
 	}
 
 	void Shader::uniform(const char* name, size_t index, const ivec4& b) {
 		use();
 		int uloc = getUloc(name, index);
-		glUniform4iv(uloc, 1, b);
+		glUniform4iv(uloc, 1, b.entry);
 	}
 
 	void Shader::uniform(const char* name, size_t index, const mat4& b) {
 		use();
 		int uloc = getUloc(name, index);
-		glUniformMatrix4fv(uloc, 1, GL_TRUE, b);
+		glUniformMatrix4fv(uloc, 1, GL_TRUE, b.a);
 	}
 
 	void Shader::texture(unsigned tex, TexCode idx) {
@@ -332,31 +332,31 @@ namespace onart {
 	}
 
 	void Shader::_uniformSender_::operator=(const vec2& v) {
-		glUniform2fv(loc, 1, v);
+		glUniform2fv(loc, 1, v.entry);
 	}
 	
 	void Shader::_uniformSender_::operator=(const vec3& v) {
-		glUniform3fv(loc, 1, v);
+		glUniform3fv(loc, 1, v.entry);
 	}
 
 	void Shader::_uniformSender_::operator=(const vec4& v) {
-		glUniform4fv(loc, 1, v);
+		glUniform4fv(loc, 1, v.entry);
 	}
 
 	void Shader::_uniformSender_::operator=(const ivec2& v) {
-		glUniform2iv(loc, 1, v);
+		glUniform2iv(loc, 1, v.entry);
 	}
 
 	void Shader::_uniformSender_::operator=(const ivec3& v) {
-		glUniform3iv(loc, 1, v);
+		glUniform3iv(loc, 1, v.entry);
 	}
 
 	void Shader::_uniformSender_::operator=(const ivec4& v) {
-		glUniform4iv(loc, 1, v);
+		glUniform4iv(loc, 1, v.entry);
 	}
 	
 	void Shader::_uniformSender_::operator=(const mat4& m) {
-		glUniformMatrix4fv(loc, 1, GL_TRUE, m);
+		glUniformMatrix4fv(loc, 1, GL_TRUE, m.a);
 	}
 
 	Shader::_uniformSender_& Shader::_uniformSender_::operator[](size_t i) {
