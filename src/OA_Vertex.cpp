@@ -57,7 +57,7 @@ namespace onart {
 			glDeleteBuffers(1, &IB);
 			glDeleteVertexArrays(1, &VAO);
 		}
-
+		// 공통적으로 tangent (1,0,0), bitangent (0,1,0)
 		std::vector<Vertex> rect = {
 			Vertex{vec3(0.5f,0.5f,0.0f),vec3(1,1,1),vec2(1,1)},
 			Vertex{vec3(0.5f,-0.5f,0.0f),vec3(1,1,1),vec2(1,0)},
