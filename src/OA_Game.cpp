@@ -28,6 +28,7 @@ namespace onart {
 	onart::ivec4 Game::vp_ldwh;
 	onart::Shader Game::program3;
 	onart::Shader Game::program2;
+	onart::Shader Game::shadowMap;
 	GLFWwindow* Game::window;
 	int Game::frame;
 	float Game::_tp;
@@ -107,6 +108,8 @@ namespace onart {
 		glDepthFunc(GL_LEQUAL);
 		program2.initWithMemory(p2vert, p2frag);
 		program3.initWithMemory(p3vert, p3frag);
+		
+		shadowMap.initWithMemory(smvert, smfrag);
 
 		onart::Mesh::rectModel();
 		onart::Mesh::circleModel();

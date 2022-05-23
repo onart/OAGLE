@@ -71,6 +71,7 @@ namespace onart {
 		uniform("alphaMask", 1);
 		uniform("bumpMap", 2);
 		uniform("surface2", 3);
+		uniform("shadowMap", 4);
 		uniform("view", mat4());
 	}
 

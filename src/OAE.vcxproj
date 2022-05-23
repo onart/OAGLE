@@ -254,6 +254,8 @@
   <ItemGroup>
     <Text Include="resources\p2f.txt" />
     <Text Include="resources\p2v.txt" />
+    <Text Include="smf.txt" />
+    <Text Include="smv.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

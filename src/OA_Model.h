@@ -57,8 +57,11 @@ namespace onart {
 		/// <summary>
 		/// 셰이더에 이 모델을 렌더링합니다.
 		/// </summary>
-		/// <param name="color">색상(mix가 아니라 *로 적용됩니다.)</param>
 		void render() const;
+		/// <summary>
+		/// 그림자 맵에 이 모델을 반영합니다.
+		/// </summary>
+		void shadowRender() const;
 		/// <summary>
 		/// 이미 불러온 모델에 diffuse 텍스처 이미지를 추가합니다.
 		/// </summary>

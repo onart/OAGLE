@@ -54,6 +54,10 @@ namespace onart {
 		/// </summary>
 		static void use(const char* name = nullptr);
 		/// <summary>
+		/// 프레임버퍼 포인터를 얻어옵니다. 이것은 텍스처를 얻는 함수를 위해 나옵니다.
+		/// </summary>
+		inline static const FrameBuffer* get(const char* name) { return fbs[name]; }
+		/// <summary>
 		/// 현재 프레임 버퍼에서 색 버퍼의 값을 읽을 수 있는 경우 읽어 옵니다. 리턴값은 동적할당된 배열 주소입니다.
 		/// 읽는 범위가 큰 경우 glGetTextureSubImage가 더 빠른 것으로 알려져 있습니다. 이는 기본적으로 GL 4.6을 사용하는 이 엔진의 기본 세팅에 의하면 사용 가능하지만
 		/// 기본적으로 여기서는 지원하지 않습니다.
@@ -81,17 +85,17 @@ namespace onart {
 		/// 이 프레임버퍼의 색상 텍스처 오브젝트를 리턴합니다.
 		/// 없는 경우 0을 리턴합니다.
 		/// </summary>
-		inline unsigned getColorTex() { return CDS[0] == ATTACHMENT::RW ? color : 0; }
+		inline unsigned getColorTex() const { return CDS[0] == ATTACHMENT::RW ? color : 0; }
 		/// <summary>
 		/// 이 프레임버퍼의 깊이 혹은 깊이+스텐실 텍스처 오브젝트를 리턴합니다.
 		/// 없는 경우 0을 리턴합니다.
 		/// </summary>
-		inline unsigned getDepthTex() { return CDS[1] == ATTACHMENT::RW ? depth : 0; }
+		inline unsigned getDepthTex() const { return CDS[1] == ATTACHMENT::RW ? depth : 0; }
 		/// <summary>
 		/// 이 프레임버퍼의 스텐실 텍스처 오브젝트를 리턴합니다.
 		/// 깊이 텍스처가 없고 스텐실 텍스처가 있을 때에는 getDepthTex() 대신 이것을 사용해야 합니다.
 		/// </summary>
-		inline unsigned getStencilTex() { return CDS[2] == ATTACHMENT::RW ? depth : 0; }
+		inline unsigned getStencilTex() const { return CDS[2] == ATTACHMENT::RW ? depth : 0; }
 	private:
 		FrameBuffer(unsigned width, unsigned height, ATTACHMENT color, ATTACHMENT depth, ATTACHMENT stencil, unsigned func = 0, int ref = 0, unsigned mask = 0, unsigned sfail = 0, unsigned dpfail = 0, unsigned dppass = 0);
 		FrameBuffer(unsigned width, unsigned height, ATTACHMENT color, ATTACHMENT depth);

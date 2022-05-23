@@ -136,6 +136,10 @@ namespace onart {
 		/// <summary>
 		/// 기본적으로 응용 계층에서 접근할 일 없는 함수입니다. 꼭 필요한 경우가 아니라면 오버라이딩 및 호출하지 않는 것이 좋습니다.
 		/// </summary>
+		virtual void renderShadowMap();
+		/// <summary>
+		/// 기본적으로 응용 계층에서 접근할 일 없는 함수입니다. 꼭 필요한 경우가 아니라면 오버라이딩 및 호출하지 않는 것이 좋습니다.
+		/// </summary>
 		virtual void update();
 		/// <summary>
 		/// Update() 함수를 오버라이딩하여 개체가 프레임마다 취하는 행동을 정의합니다.

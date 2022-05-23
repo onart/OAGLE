@@ -94,6 +94,7 @@ namespace onart {
 	private:
 		void update();
 		void render();
+		void renderWithShadow();	// 그림자 맵을 이용하여 별도로 그립니다.
 		/// <summary>
 		/// 씬에서 매 프레임마다 호출됩니다. 항상 씬 내 개체의 Update()보다 먼저 실행됩니다.
 		/// </summary>

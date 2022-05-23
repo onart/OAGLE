@@ -283,4 +283,8 @@ namespace onart {
 			Game::program3.draw(g.start, g.count);
 		}
 	}
+
+	void Model::shadowRender() const {
+		Game::shadowMap.draw(**mesh);
+	}
 }

@@ -322,6 +322,41 @@ namespace onart {
 		Game::program3[hasBones] = true;
 	}
 
+	void Animation3D::shadowGo(float elapsed, Entity* e, float dynamicTps) {
+		Game::shadowMap.use();
+		float tp = getTp(elapsed * dynamicTps);
+		auto sub = std::upper_bound(sigKp.begin(), sigKp.end(), tp);
+		for (auto& bone : keys) {
+			bone.second.setTrans(tp);
+		}
+		setGlobalTrans(btree);
+		if (sub != sigKp.begin()) {
+			int kp = int(sub - sigKp.begin() - 1);
+			//if (e->getAnimKey() != kp)e->act(kp);
+			int ak = e->getAnimKey();
+			if (ak != kp) {
+				if (ak < 0) {
+					if (sub + 1 != sigKp.end()) {
+						float nextp = *(sub + 1);
+						e->act(kp, (tp - *sub) / (nextp - *sub));
+					}
+					else {
+						e->act(kp);
+					}
+				}
+				else {
+					e->act(kp);
+				}
+			}
+			// if (e->getAnimKey() != kp)e->act(kp);
+		}
+		int i = 0;
+		for (Bone& m : u) {
+			Game::shadowMap[bones][i++] = m.uni;
+		}
+		Game::shadowMap[hasBones] = true;
+	}
+
 	void Animation3D::readHierarchy(aiNode* root, BoneTree& tree) {
 		if (n2i.find(root->mName.data) != n2i.end()) { tree.id = n2i[root->mName.data]; }
 		else { tree.id = -int(n2i.size()); n2i[root->mName.data] = tree.id; }

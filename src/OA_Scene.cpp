@@ -8,6 +8,7 @@
 #include "OA_Scene.h"
 #include "OA_Shader.h"
 #include "OA_Entity.h"
+#include "OA_FrameBuffer.h"
 
 #include <queue>
 
@@ -162,6 +163,31 @@ namespace onart {
 		reap();
 #endif // OAGLE_2DGAME
 		doing = SceneDoing::NOTHING;
+	}
+
+	void Scene::renderWithShadow() {
+		USE_SHADER_UNIFORM;
+		FrameBuffer::use("shadow");
+		if (lightSource[3] == 1.0f) {
+			// 보류: perspective와 lookat에서 실제 카메라에 들어가는 영역을 커버하도록 해야 함
+			Game::shadowMap["pv"] = mat4::perspective(PI / 2, 1, 0.0f, 1000.0f) * mat4::lookAt(this->lightSource, 0.0f, vec3(0.0f, 1.0f, 0.0f));
+		}
+		else {
+			// 보류: perspective와 lookat에서 실제 카메라에 들어가는 영역을 커버하도록 해야 함
+			Game::shadowMap["pv"] = mat4::lookAt(this->lightSource, 0.0f, vec3(0.0f, 1.0f, 0.0f));
+		}
+		size_t sz = entities.size();
+		for (size_t i = 0; i < sz; i++) {
+			if (id != currentScene->id) return;
+			Entity* e = entities[i];
+			if(e) e->render();
+		}
+		unsigned zmap = FrameBuffer::get("shadow")->getDepthTex();
+		FrameBuffer::use();
+		Animation::actSwitch = false;
+		Game::program3.texture(zmap, Shader::TexCode::SHADOW);
+		render();
+		Animation::actSwitch = true;
 	}
 
 	void Scene::reap() {

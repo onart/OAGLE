@@ -121,6 +121,15 @@ namespace onart {
 		}
 	}
 
+	void Entity::renderShadowMap() {
+		if (isRendered && !isFixed && model) {
+			Game::shadowMap[::model] = transform.getModel();
+			if (as >= 0) std::reinterpret_pointer_cast<Animation3D>(anims[as])->shadowGo(lt - animStartTimepoint, this, animTps);
+			else Game::shadowMap[hasBones] = false;
+			model->shadowRender();
+		}
+	}
+
 	void Entity::update() {
 		if (isActive) {
 			lt += Game::dt();

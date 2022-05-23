@@ -51,6 +51,8 @@ namespace onart{
 		static inline float idt() { return _idt; }
 		static Shader program3;	// 뷰-프로젝션 행렬 및 셰이딩의 영향을 받는 셰이더 프로그램입니다.
 		static Shader program2;	// 뷰-프로젝션 행렬 및 셰이딩의 영향을 받지 않는 셰이더 프로그램입니다. 객체는 표준 뷰 볼륨에 그려집니다.
+
+		static Shader shadowMap;	// 그림자 맵을 생성합니다.
 		/// <summary>
 		/// 창을 닫고 게임을 종료합니다. stdlib exit과 다르게 정상적 경로로 게임을 종료합니다.
 		/// </summary>

@@ -1,0 +1,7 @@
+const char smfrag[]=R"(
+#version 330
+
+void main(){
+	// fragColor=vec4(0.0);
+}
+)";

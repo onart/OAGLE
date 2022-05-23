@@ -877,7 +877,7 @@ namespace onart {
 		inline static mat4 perspective(float fovy, float aspect, float dnear, float dfar) {
 			mat4 r(
 				1, 0, 0, 0,
-				0, 1 / tanf(fovy / 2), 0, 0,
+				0, 1 / tanf(fovy * 0.5f), 0, 0, 
 				0, 0, (dnear + dfar) / (dnear - dfar), (2 * dnear * dfar) / (dnear - dfar) ,
 				0, 0,					-1, 0
 			);

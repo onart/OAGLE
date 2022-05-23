@@ -60,11 +60,11 @@ namespace onart {
 			/// <summary>
 			/// 텍스처 전달용 코드입니다.
 			/// <para>SURFACE0: 기본 표면 이미지입니다.</para>
-			/// <para>ALPHA: 투명도 마스크 이미지입니다.</para>
+			/// <para>ALPHA: 투명도 마스크 이미지입니다. 단, 가급적 이것 말고 알파 값을 이미 가진 이미지를 사용하는 것을 추천합니다.</para>
 			/// <para>BUMP: 법선 매핑을 위한 이미지입니다.</para>
-			/// <para>SURFACE1: 단일 개체에 대하여 추가 이미지가 필요한 경우 사용할 수 있습니다. 단, 가급적 별개의 정점 그룹을 사용하는 것을 추천합니다.</para>
+			/// <para>SURFACE1: 단일 개체에 대하여 추가 이미지가 필요한 경우 사용할 수 있습니다. 단, 가급적 이것 말고 별개의 정점 그룹을 사용하는 것을 추천합니다.</para>
 			/// </summary>
-			enum class TexCode { SURFACE0 = 0, ALPHA, BUMP, SURFACE1 };
+			enum class TexCode { SURFACE0 = 0, ALPHA, BUMP, SURFACE1, SHADOW };
 
 			/// <summary>
 			/// 스크립트 파일에서 읽어서 프로그램을 생성합니다.

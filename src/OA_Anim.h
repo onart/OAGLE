@@ -228,6 +228,10 @@ namespace onart {
 		/// <param name="e">개체 포인터</param>
 		/// <param name="dynamicTps">애니메이션 속도(기본값=1)</param>
 		void go(float elapsed, Entity* e, float dynamicTps = 1);
+		/// <summary>
+		/// 애니메이션의 현재 상태를 그림자 맵에 반영하고, 필요한 경우 개체에서 함수를 호출합니다.
+		/// </summary>
+		void shadowGo(float elapsed, Entity* e, float dynamicTps = 1);
 	private:
 
 		struct BoneAnim {

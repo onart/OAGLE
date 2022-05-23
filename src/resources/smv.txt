@@ -1,0 +1,35 @@
+const char smvert[]=R"(
+#version 330
+layout(location=0) in vec3 position;
+layout(location=1) in vec3 normal;
+layout(location=2) in vec2 texcoord;
+layout(location=3) in vec3 tang;
+layout(location=4) in vec3 bitang;
+layout(location=5) in ivec4 boneIds;
+layout(location=6) in vec4 weights;
+
+uniform mat4	model;
+uniform mat4	pv;
+uniform int		has_bones;
+
+const int MAX_BONES=64;
+uniform mat4 bones[MAX_BONES];
+const int MAX_BONE_INFLUENCE=4;
+
+void main(){
+	vec4 totalPosition=vec4(0.0f);
+	vec3 norm=vec3(0);
+	if(has_bones != 0){
+		totalPosition += weights[0] * bones[boneIds[0]] * vec4(position, 1.0f);
+		totalPosition += weights[1] * bones[boneIds[1]] * vec4(position, 1.0f);
+		totalPosition += weights[2] * bones[boneIds[2]] * vec4(position, 1.0f);
+		totalPosition += weights[3] * bones[boneIds[3]] * vec4(position, 1.0f);
+	}
+	else{
+		totalPosition=vec4(position,1);
+		norm=normal;
+	}
+	gl_Position=pv*totalPosition;
+}
+
+)";
