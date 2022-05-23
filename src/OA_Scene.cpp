@@ -6,6 +6,7 @@
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *********************************************************************************/
 #include "OA_Scene.h"
+#include "OA_Shader.h"
 #include "OA_Entity.h"
 
 #include <queue>
@@ -285,5 +286,32 @@ namespace onart {
 
 	vec3 Scene::constrainCamera(const vec3& currentCameraPos, const vec3& desiredCameraPos) {
 		return desiredCameraPos;
+	}
+
+	void Scene::setDirectionalLight(const vec3& dir) {
+		USE_SHADER_UNIFORM;
+		this->lightSource = vec4(dir, 0);
+		Game::program3[lightSource] = this->lightSource;
+	}
+
+	void Scene::setPointLight(const vec3& pos) {
+		USE_SHADER_UNIFORM;
+		this->lightSource = vec4(pos, 1);
+		Game::program3[lightSource] = this->lightSource;
+	}
+
+	void Scene::setAmbientLight(const vec4& amb) {
+		USE_SHADER_UNIFORM;
+		Game::program3[Ia] = amb;
+	}
+
+	void Scene::setDiffuseLight(const vec4& diff) {
+		USE_SHADER_UNIFORM;
+		Game::program3[Id] = diff;
+	}
+
+	void Scene::setSpecularLight(const vec4& spec) {
+		USE_SHADER_UNIFORM;
+		Game::program3[Is] = spec;
 	}
 }

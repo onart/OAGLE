@@ -28,17 +28,7 @@ namespace onart {
 
 		desiredAt = at ? at : &fixedAt;
 		desiredEye = *desiredAt + relativePos;
-		float way = delay * Game::dt();
-		vec3 wantedPos;
-		if (way > 1) {
-			wantedPos = desiredEye;
-		}
-		else if (way > 0) {
-			wantedPos = lerp(currentPos, desiredEye, way);
-		}
-		else {
-			wantedPos = desiredEye;
-		}
+		vec3 wantedPos = lerp(desiredEye, currentPos, zeroth * (bias1 + Game::dt() * logc));
 		currentPos = Scene::currentScene->constrainCamera(currentPos, wantedPos);
 		if (fixdir) { 
 			Game::program3[view] = viewM4 = mat4::lookAt(currentPos, currentPos - relativePos, up);
@@ -67,8 +57,10 @@ namespace onart {
 	}
 
 	void Camera::setDelay(float s) {
-		constexpr float ln100 = 4.605170185988f;	// 실제 ln100보다 약 6.40e-8만큼 큼
-		delay = s ? ln100 / fabs(s) : INFINITY;
+		float c = s <= 0.0f ? 1.0f : powf(0.01f, 1.0f / s);
+		zeroth = powf(c, STANDARD_FRAME_TIME);
+		logc = logf(c);
+		bias1 = 1 - STANDARD_FRAME_TIME * logc;
 	}
 
 	mat4 Camera::Ratio::getAspectMatrix() {

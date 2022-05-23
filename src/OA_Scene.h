@@ -37,7 +37,26 @@ namespace onart {
 		/// 씬에 개체를 추가합니다.
 		/// </summary>
 		void addEntity(Entity*);
-
+		/// <summary>
+		/// 방향만 있는 빛을 배치합니다.
+		/// </summary>
+		void setDirectionalLight(const vec3& dir);
+		/// <summary>
+		/// 빛을 특정 위치에 배치합니다.
+		/// </summary>
+		void setPointLight(const vec3& pos);
+		/// <summary>
+		/// 주변광의 표현을 설정합니다.
+		/// </summary>
+		void setAmbientLight(const vec4& amb);
+		/// <summary>
+		/// 난반사광의 표현을 설정합니다.
+		/// </summary>
+		void setDiffuseLight(const vec4& diff);
+		/// <summary>
+		/// 정반사광이 표현을 설정합니다.
+		/// </summary>
+		void setSpecularLight(const vec4& spec);
 		inline int getSceneId() { return id; }
 		/// <summary>
 		/// 씬 포인터를 통해 이벤트를 발동할 수 있습니다.
@@ -82,6 +101,7 @@ namespace onart {
 		std::vector<Entity*> entities;
 		std::multimap<float, size_t> renderOrder;
 		std::vector<size_t> bubble;
+		vec4 lightSource = 0.0f;
 		void reap();
 		bool shouldReap = false;
 		bool shouldOrder = false;

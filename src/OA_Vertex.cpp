@@ -80,6 +80,7 @@ namespace onart {
 			glDeleteVertexArrays(1, &VAO);
 		}
 
+		// 공통적으로 tangent (1,0,0), bitangent (0,1,0)
 		std::vector<Vertex> circ(N + 1);
 		std::vector<unsigned> indices(N * 3);
 		circ[0] = { vec3(0.f), vec3(0,0,-1.0f), vec2(0.5f) };
@@ -117,6 +118,7 @@ namespace onart {
 			for (unsigned j = 0; j < N * 2 + 1; j++) {
 				float phi = j * PI / N;
 				vec3 pos(sinth * cosf(phi), sinth * sinf(phi), costh);
+				// tangent (-sin(phi),0,cos(phi)), bitangent는 외적으로
 				sphr[idx++] = Vertex{ pos, pos, vec2((float)j / (N * 2),1 - (float)i / N) };
 			}
 		}

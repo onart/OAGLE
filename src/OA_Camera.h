@@ -31,7 +31,7 @@ namespace onart {
 		/// <summary>
 		/// 카메라의 움직임 딜레이를 설정합니다.
 		/// </summary>
-		/// <param name="s">딜레이의 결정 변수입니다. 카메라가 eye의 위치까지 완전히(at이 정지한 기준, 카메라가 이동해야 할 거리의 99%) 이동하는 데 걸리는 시간을 의미합니다. 음의 값을 넣을 경우 강제로 양의 값으로 변환됩니다.</param>
+		/// <param name="s">딜레이의 결정 변수입니다. 카메라가 eye의 위치까지 완전히(at이 정지한 기준, 카메라가 이동해야 할 거리의 99%) 이동하는 데 걸리는 시간을 의미합니다. 음의 값을 넣을 경우 0으로 취급됩니다.</param>
 		void setDelay(float s);
 		
 		/// <summary>
@@ -125,11 +125,12 @@ namespace onart {
 		vec3 fixedAt = { 0,0,-1 }, up = { 0,1,0 };
 		vec3 relativePos = { 0,0,1 };
 		vec3 currentPos;
-		float delay = 0;
+		float zeroth = 1, bias1 = 0, logc = 0;
 		const vec3* at = nullptr;
 		mat4 viewM4;	// UI(program2)와 월드(program3)의 연결점. 카메라는 하나만 있을 것이므로 메모리 문제는 거의 없다고 봐도 무방
 		float zoom = 1;	// //
 		bool fixdir = false;
+		constexpr static float STANDARD_FRAME_TIME = 1.0f / 60;
 	};
 }
 

@@ -53,6 +53,10 @@ namespace onart {
 			static constexpr const char* K_D = "Kd";
 			static constexpr const char* K_S = "Ks";
 			static constexpr const char* SHININESS = "shininess";
+			static constexpr const char* I_A = "Ia";
+			static constexpr const char* I_D = "Id";
+			static constexpr const char* I_S = "Is";
+			static constexpr const char* LIGHTSOURCE = "lightSource";
 			/// <summary>
 			/// 텍스처 전달용 코드입니다.
 			/// <para>SURFACE0: 기본 표면 이미지입니다.</para>
@@ -245,7 +249,8 @@ namespace onart {
 							*proj=onart::Shader::PROJECTION, *view=onart::Shader::VIEW,\
 							*zoom=onart::Shader::ZOOM, *textGroup=onart::Shader::TEXT_GROUP,\
 							*Ka=onart::Shader::K_A, *Kd=onart::Shader::K_D, *Ks=onart::Shader::K_S,\
-							*shininess=onart::Shader::SHININESS;
+							*shininess=onart::Shader::SHININESS, *lightSource=onart::Shader::LIGHTSOURCE,\
+							*Ia=onart::Shader::I_A, *Id=onart::Shader::I_D, *Is=onart::Shader::I_S
 /// 셰이더 클래스 내부에 정의된 static 상수를 전역에서 사용합니다. 문장의 형식을 갖춘 것으로 보이기 위해 매크로 사용 뒤에 ;를 붙여 주세요.
 /// 소문자가 다른 이름과 겹칠까봐 부담스러운 경우 이 매크로를 사용합니다. (소문자 버전은 가독성을 위해 제공됩니다.)
 #define USE_SHADER_UNIFORM_UPPER static constexpr const char* FIXED = onart::Shader::FIXED, * MODEL = onart::Shader::MODEL, \
@@ -258,5 +263,6 @@ namespace onart {
 							*PROJ=onart::Shader::PROJECTION, *VIEW=onart::Shader::VIEW,\
 							*ZOOM=onart::Shader::ZOOM, *TEXT_GROUP=onart::Shader::TEXT_GROUP,\
 							*K_A=onart::Shader::K_A, *K_D=onart::Shader::K_D, *K_S=onart::Shader::K_S,\
-							*SHININESS=onart::Shader::SHININESS;
+							*SHININESS=onart::Shader::SHININESS, *LIGHTSOURCE=onart::Shader::LIGHTSOURCE,\
+							*I_A=onart::Shader::I_A, *I_D=onart::Shader::I_D,*I_S=onart::Shader::I_S
 #endif // !__OA_SHADER_H__
