@@ -16,6 +16,7 @@
 #include "externals/stb_image.h"
 #include "OA_Game.h"
 #include "OA_Entity.h"
+#include "OA_FrameBuffer.h"
 
 #include <cstdio>
 #include <cstdlib>
@@ -121,6 +122,7 @@ namespace onart {
 		mainCamera.ratio.setProjMatrix2D();
 		onart::Scene::currentScene = new onart::TestScene();
 		onart::Scene::currentScene->init();
+		FrameBuffer::make("shadow", 1024, 1024, FrameBuffer::ATTACHMENT::NONE, FrameBuffer::ATTACHMENT::RW, FrameBuffer::ATTACHMENT::NONE);
 #ifdef _DEBUG
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(glErrCallback, 0);
