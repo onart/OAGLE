@@ -44,6 +44,11 @@ extern "C" {
 #include <mutex>
 #include <condition_variable>
 
+constexpr unsigned long RINGBUFFER_SIZE = 8820;	// 사운드 재생/정지 반영의 딜레이와 관련되어 있습니다. 단독 수정이 가능합니다.
+constexpr int STD_SAMPLE_RATE = 44100;	// 음질과 프로그램 성능에 관련되어 있습니다. 단독 수정이 가능합니다.
+
+constexpr bool OA_AUDIO_NOTHREAD = false;	// 어떤 이유든 오디오 모듈이 스레드를 생성하기 원하지 않는 경우 true로 설정해 주세요. 그러면 스레드 대신 프레임 타임에 오디오 내용을 읽습니다.
+constexpr bool OA_AUDIO_WAIT_ON_DRAG = false;	// NOTHREAD 상수가 true이며 이것도 true인 경우, 창을 잡고 있는 등의 윈도우 메시지 입력이 오래 지속될 경우 소리가 정지합니다.
 /// 이쪽 상수들은 portaudio 라이브러리에서 단일 스트림을 사용하기 위해 리샘플할 기준이 됩니다. 여기 있는 인자들을 바꾸는 경우 버퍼링 시 연산도 바꿔야 합니다. (생각보다 복잡)
 constexpr int FF_RESAMPLE_FORMAT = AVSampleFormat::AV_SAMPLE_FMT_FLT;
 constexpr int PA_SAMPLE_FORMAT = paFloat32;

@@ -180,11 +180,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="OA_Audio2.cpp" />
     <ClCompile Include="OA_Ballpool.cpp" />
     <ClCompile Include="externals\gl\glad\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OA_Anim.cpp" />
-    <ClCompile Include="OA_Audio.cpp" />
     <ClCompile Include="OA_CQueue.cpp" />
     <ClCompile Include="OA_Camera.cpp" />
     <ClCompile Include="OA_Entity.cpp" />
@@ -210,6 +210,7 @@
     <ClInclude Include="binaryIOvec.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="oaglem_geometry.h" />
+    <ClInclude Include="OA_Audio2.h" />
     <ClInclude Include="OA_BallCollider.h" />
     <ClInclude Include="OA_Ballpool.h" />
     <ClInclude Include="externals\gl\glad\glad.h" />

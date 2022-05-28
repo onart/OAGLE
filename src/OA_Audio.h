@@ -20,12 +20,6 @@ struct AVIOContext;
 struct SwrContext;
 struct PaStreamCallbackTimeInfo;
 
-constexpr unsigned long RINGBUFFER_SIZE = 8820;	// 사운드 재생/정지 반영의 딜레이와 관련되어 있습니다. 단독 수정이 가능합니다.
-constexpr int STD_SAMPLE_RATE = 44100;	// 음질과 프로그램 성능에 관련되어 있습니다. 단독 수정이 가능합니다.
-
-constexpr bool OA_AUDIO_NOTHREAD = false;	// 어떤 이유든 오디오 모듈이 스레드를 생성하기 원하지 않는 경우 true로 설정해 주세요. 그러면 스레드 대신 프레임 타임에 오디오 내용을 읽습니다.
-constexpr bool OA_AUDIO_WAIT_ON_DRAG = false;	// NOTHREAD 상수가 true이며 이것도 true인 경우, 창을 잡고 있는 등의 윈도우 메시지 입력이 오래 지속될 경우 소리가 정지합니다.
-
 namespace onart {
 	/// <summary>
 	/// 음성을 재생하는 모듈입니다.
@@ -37,36 +31,16 @@ namespace onart {
 	/// </summary>
 	class Audio
 	{
+		friend class Game;
 	public:
-		/// <summary>
-		/// 창을 드래그할 때 소리를 멈추기 위한 변수입니다. 응용 계층에서 사용하지 마시기 바랍니다.
-		/// 전체 소리를 멈추기 위해 이를 사용할 경우, 프레임 시작과 동시에 정지가 풀리게 됩니다.
-		/// </summary>
-		static bool wait;
 		/// <summary>
 		/// 읽기 전용 마스터 볼륨입니다.
 		/// </summary>
 		static const float& masterVolume;
 		/// <summary>
-		/// 응용 단계에서 호출할 일이 없습니다.
-		/// </summary>
-		static void update();
-		/// <summary>
-		/// 오디오 사용을 시작합니다. 호출되지 않으면 소리 관련 기능을 사용할 수 없습니다. 응용 단계에서 호출할 일이 없습니다.
-		/// </summary>
-		static void init();
-		/// <summary>
-		/// 오디오 사용을 종료합니다. 응용 단계에서 호출할 일이 없습니다.
-		/// </summary>
-		static void terminate();
-		/// <summary>
 		/// 마스터 볼륨을 조정합니다. 범위는 0~1입니다.
 		/// </summary>
 		static void setMasterVolume(float v);
-		/// <summary>
-		/// 응용 단계에서 호출할 일이 없습니다.
-		/// </summary>
-		static void allow(bool);
 
 		class Stream;
 		class SafeStreamPointer;
@@ -226,16 +200,21 @@ namespace onart {
 		};
 	private:
 		static bool noup;
+		static bool wait;
 		static void audioThread();
 		static std::vector<std::shared_ptr<Source>> src;
 		static std::map<std::string, size_t> n2i;
 		static float master;
 		static void* masterStream;
 		static int playCallback(const void* input, void* output, unsigned long frameCount, const PaStreamCallbackTimeInfo* timeinfo, unsigned long statusFlags, void* userData);
+		static void update();
+		static void init();
+		static void terminate();
+		static void allow(bool);
 	};
 
 	using pAudioSource = std::shared_ptr<Audio::Source>;	// 음원의 포인터입니다.
-	using pSafeAudioStream = Audio::SafeStreamPointer;		// 스트림의 안전 포인터입니다. 루프와 같이 자동으로 소멸하지 않는 스트림에 대해서는 안전 포인터가 특별히 필요하지 않습니다.
+	//using pSafeAudioStream = Audio::SafeStreamPointer;		// 스트림의 안전 포인터입니다. 루프와 같이 자동으로 소멸하지 않는 스트림에 대해서는 안전 포인터가 특별히 필요하지 않습니다.
 }
 
 #endif // !__OA_AUDIO_H__

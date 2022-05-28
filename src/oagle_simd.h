@@ -849,6 +849,40 @@ namespace onart {
 		__m128i i = _mm_cvttps_epi32(v);
 		_mm_storeu_si128((__m128i*)val, i);
 	}
+
+	/// <summary>
+	/// 2바이트 정수 배열 vec에 다른 배열 val을 더합니다. 오버플로 발생 시 최대/최소값으로 고정됩니다.
+	/// </summary>
+	inline void addsAll(int16_t* vec, const int16_t* val, size_t size) {
+		size_t i;
+		for (i = 8; i < size; i += 8) {
+			__m128i ves = _mm_loadu_si128((__m128i*)(vec + i - 8));
+			__m128i ver = _mm_loadu_si128((__m128i*)(val + i - 8));
+			ves = _mm_adds_epi16(ves, ver);
+			_mm_storeu_si128((__m128i*)(vec + i - 8), ves);
+		}
+		for (i -= 8; i < size; i++) {
+			vec[i] += val[i];
+		}
+	}
+
+	/// <summary>
+	/// 2바이트 정수 배열의 각각의 값에 실수를 곱합니다. 곱하는 실수가 [0,1] 범위일 경우에만 정상적으로 계산해 줍니다. 최대 2의 오차가 발생할 수 있습니다.
+	/// </summary>
+	inline void mulAll(int16_t* vec, float val, size_t size) {
+		int16_t v2 = (int16_t)((float)val * 32768.0f);
+		__m128i v = _mm_set1_epi16(v2);
+		size_t i;
+		for (i = 8; i < size; i += 8) {
+			__m128i ves = _mm_loadu_si128((__m128i*)(vec + i - 8));
+			ves = _mm_mulhi_epi16(ves, v);
+			ves = _mm_slli_epi16(ves, 1);
+			_mm_storeu_si128((__m128i*)(vec + i - 8), ves);
+		}
+		for (i -= 8; i < size; i++) {
+			vec[i] = (int16_t)((float)vec[i] * val);
+		}
+	}
 }
 	
 #endif
