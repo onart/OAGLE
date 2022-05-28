@@ -21,7 +21,7 @@
 	#pragma comment(lib, "externals/portaudio/portaudio64.lib")
 	#pragma comment(lib, "externals/libvorbis/libvorbisfile64.lib")
 	#pragma comment(lib, "externals/libvorbis/libvorbis64.lib")
-	#pragma comment(lib, "externals/libvorbis/ogg.lib")
+	#pragma comment(lib, "externals/libvorbis/ogg64.lib")
 #elif defined(_WIN32)
 	#pragma comment(lib, "externals/portaudio/portaudio32.lib")
 	#pragma comment(lib, "externals/libvorbis/libvorbisfile32.lib")
@@ -54,6 +54,7 @@ namespace onart {
 		unsigned long limitIndex = 0;	// 쓰기 제한 기준
 		unsigned long writeIndex = 0;	// 쓰기 시작점
 		bool isFirst = true;
+		bool isFirst2 = true;
 		alignas(16) int16_t body[RINGBUFFER_SIZE] = { 0, };	// 약 6프레임 분량
 	} ringBuffer;
 
@@ -69,47 +70,54 @@ namespace onart {
 
 	void RingBuffer::addComplete() {	// 인덱스 맞춤
 		isFirst = true;
+		isFirst2 = true;
 		writeIndex = limitIndex;
 	}
 
 	void RingBuffer::add(int16_t* in, unsigned long max, unsigned long to) {
-		unsigned long writeIndex = (this->writeIndex + to) % RINGBUFFER_SIZE;
-		if (isFirst) {
+		unsigned long writeIndex = this->writeIndex + to;
+		if (isFirst || isFirst2) {
 			if (limitIndex >= writeIndex) {
-				unsigned long w = limitIndex - writeIndex;
-				w = w > max ? max : w;
-				memcpy(body + writeIndex, in, w * sizeof(int16_t));
+				memcpy(body + writeIndex, in, max * sizeof(int16_t));
 			}
 			else {
-				unsigned long w = RINGBUFFER_SIZE - writeIndex;
-				w = w > max ? max : w;
-				printf("%d %d\n", w, max);
-				memcpy(body + writeIndex, in, w * sizeof(int16_t));
-				if (max > w) {
-					in += w;
-					max -= w;
-					w = limitIndex > max ? max : limitIndex;
-					memcpy(body, in, w * sizeof(int16_t));
+				if (RINGBUFFER_SIZE <= writeIndex) writeIndex %= RINGBUFFER_SIZE;
+				if (limitIndex >= writeIndex) {
+					memcpy(body + writeIndex, in, max * sizeof(int16_t));
+				}
+				else {
+					unsigned long w = RINGBUFFER_SIZE - writeIndex;
+					if (w > max) {
+						memcpy(body + writeIndex, in, max * sizeof(int16_t));
+					}
+					else {
+						memcpy(body + writeIndex, in, w * sizeof(int16_t));
+						memcpy(body, in, (max - w) * sizeof(int16_t));
+					}
 				}
 			}
+			if (!isFirst && to == 0) isFirst2 = false;
 			isFirst = false;
 			return;
 		}
 		else {
 			if (limitIndex >= writeIndex) {
-				unsigned long w = limitIndex - writeIndex;
-				w = w > max ? max : w;
-				addsAll(body + writeIndex, in, w);
+				addsAll(body + writeIndex, in, max);
 			}
 			else {
-				unsigned long w = RINGBUFFER_SIZE - writeIndex;
-				w = w > max ? max : w;
-				addsAll(body + writeIndex, in, w);
-				if (max > w) {
-					in += w;
-					max -= w;
-					w = limitIndex > max ? max : limitIndex;
-					addsAll(body, in, w);
+				if (RINGBUFFER_SIZE <= writeIndex) writeIndex %= RINGBUFFER_SIZE;
+				if (limitIndex >= writeIndex) {
+					addsAll(body + writeIndex, in, max);
+				}
+				else {
+					unsigned long w = RINGBUFFER_SIZE - writeIndex;
+					if (w > max) {
+						addsAll(body + writeIndex, in, max);
+					}
+					else {
+						addsAll(body + writeIndex, in, w);
+						addsAll(body, in, max - w);
+					}
 				}
 			}
 		}
@@ -169,10 +177,9 @@ namespace onart {
 		volume = v;
 	}
 
-	pAudioSource2 Audio2::Source::load(const std::string& file, const std::string& name) {
-		std::string memName(name);
-		if (memName.size() == 0) { memName = file; }
-		if (Audio2::n2i.find(memName) != Audio2::n2i.end()) { return Audio2::src[Audio2::n2i[memName]]; }
+	pAudioSource2 Audio2::Source::load(const std::string& file, std::string name) {
+		if (name.size() == 0) { name = file; }
+		if (Audio2::n2i.find(name) != Audio2::n2i.end()) { return Audio2::src[Audio2::n2i[name]]; }
 		OggVorbis_File vf;
 		if (ov_fopen(file.c_str(), &vf) != 0) {
 			fprintf(stderr, "유효하지 않은 파일입니다.");
@@ -322,9 +329,8 @@ namespace onart {
 		if (stopped) return false;
 		if (offset == -1) return true;
 		unsigned long need = ringBuffer.writable();
-		//printf("need %d\n", need);
 		bool isOver = false;
-		constexpr unsigned long BUF_LEN = 512;
+		constexpr unsigned long BUF_LEN = 2048;
 		int16_t temp[BUF_LEN];
 		int cursor = 0;
 		unsigned long addTo = 0;

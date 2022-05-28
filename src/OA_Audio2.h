@@ -67,7 +67,7 @@ namespace onart {
 			/// <param name="file">불러올 음성 파일 이름(경로)입니다.</param>
 			/// <param name="name">프로그램 내에서 사용할 별명입니다. 입력하지 않는 경우 파일 이름 그대로 들어갑니다.</param>
 			/// <returns>불러온 소스의 포인터를 리턴합니다.</returns>
-			static std::shared_ptr<Source> load(const std::string& file, const std::string& name = "");
+			static std::shared_ptr<Source> load(const std::string& file, std::string name = "");
 
 			/// <summary>
 			/// 메모리에서 음성을 불러옵니다. 별명이 겹치는 경우 기존에 이미 로드한 것을 리턴합니다.

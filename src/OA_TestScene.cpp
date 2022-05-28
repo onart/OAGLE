@@ -8,7 +8,7 @@
 
 namespace onart {
 	pSafeAudioStream p;
-	void TestScene::Update() {  }
+	void TestScene::Update() { if (Input::isKeyPressedNow(Input::KeyCode::A)) { auto x = Audio2::Source::get("004.ogg"); if(x)x->play(); } }
 	void TestScene::init() {
 		Font::load("ariblk.ttf", { 'A','B','C','l',u'가' }, 480, "arial");
 		auto x=Audio2::Source::load("004.ogg");
