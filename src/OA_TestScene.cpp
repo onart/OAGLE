@@ -4,15 +4,16 @@
 #include "OA_Camera.h"
 #include "OA_UI.h"
 #include "OA_Random.h"
-#include "OA_Audio2.h"
+#include "OA_Audio.h"
+
+unsigned char a[2000000];
 
 namespace onart {
 	pSafeAudioStream p;
-	void TestScene::Update() { if (Input::isKeyPressedNow(Input::KeyCode::A)) { auto x = Audio2::Source::get("004.ogg"); if(x)x->play(); } }
+	void TestScene::Update() {  }
 	void TestScene::init() {
 		Font::load("ariblk.ttf", { 'A','B','C','l',u'가' }, 480, "arial");
-		auto x=Audio2::Source::load("004.ogg");
-		x->play();
+		Audio::Source::load("004.ogg")->play();
 		//addEntity(new TestEntity());
 		//addEntity(new TestEntity2());
 		oastring basee = u"\aa2.00가가\nAC\bff0000ffC\bffffffffCCC";

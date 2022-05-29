@@ -11,8 +11,7 @@
 #include "OA_Vertex.h"
 #include "OA_TestScene.h"
 #include "OA_Camera.h"
-//#include "OA_Audio.h"
-#include "OA_Audio2.h"
+#include "OA_Audio.h"
 #include "OA_Ballpool.h"
 #include "externals/stb_image.h"
 #include "OA_Game.h"
@@ -22,8 +21,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <filesystem>
-
-using Audio = onart::Audio2;
 
 namespace onart {
 	onart::Camera Game::mainCamera;
@@ -100,7 +97,7 @@ namespace onart {
 
 		stbi_set_flip_vertically_on_load(true);
 
-		::Audio::init();
+		Audio::init();
 		glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
 
 		// https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glEnable.xhtml
@@ -153,15 +150,15 @@ namespace onart {
 		
 		for (frame = 1; !glfwWindowShouldClose(window); frame++) {
 			glfwPollEvents();	// 물리 때문에라도 여기 창끌기 관련 조치 필요함
-			if constexpr (!OA_AUDIO_NOTHREAD) ::Audio::allow(false);
-			else if constexpr (OA_AUDIO_WAIT_ON_DRAG) ::Audio::wait = false;
+			if constexpr (!OA_AUDIO_NOTHREAD) Audio::allow(false);
+			else if constexpr (OA_AUDIO_WAIT_ON_DRAG) Audio::wait = false;
 			update();
 			render();
 			if constexpr (OA_AUDIO_NOTHREAD) {
-				::Audio::update();
+				Audio::update();
 				if constexpr (OA_AUDIO_WAIT_ON_DRAG) Audio::wait = true;
 			}
-			else { ::Audio::allow(true); }
+			else { Audio::allow(true); }
 		}
 
 		finalize();
@@ -170,7 +167,7 @@ namespace onart {
 	}
 
 	void Game::finalize() {
-		::Audio::terminate();
+		Audio::terminate();
 	}
 
 	void Game::exit() {

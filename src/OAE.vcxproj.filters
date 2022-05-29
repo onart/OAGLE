@@ -122,7 +122,7 @@
     <ClCompile Include="OA_Game.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="OA_Audio2.cpp">
+    <ClCompile Include="OA_Audio.cpp">
       <Filter>엔진\기본\소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,9 +242,6 @@
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="OA_Game.h">
-      <Filter>엔진\기본\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="OA_Audio2.h">
       <Filter>엔진\기본\헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
