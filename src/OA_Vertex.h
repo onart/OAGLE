@@ -91,18 +91,30 @@ namespace onart {
 	template<class F>
 	struct CustomVertex<F> {
 		F first;
+		/// <summary>
+		/// 정점의 멤버에 접근할 수 있습니다. 생성은 초기화 리스트를 통하여 하는 것을 권장합니다.
+		/// </summary>
+		template<unsigned P> inline constexpr auto& get() { static_assert(P == 0, "Index exceeded."); return first; }
+		CustomVertex(const CustomVertex&) = default;
+		CustomVertex(CustomVertex&&) = default;
 		inline static void enableVA() { enableVA(sizeof(CustomVertex<F>), 0, 0); }
 		inline static void enableVA(int stride, unsigned index, size_t offset);
 	};
 
 	/// <summary>
-	/// 속성을 직접 설정할 수 있는 정점 클래스입니다.
+	/// 속성을 직접 설정할 수 있는 정점 클래스입니다. 생성은 초기화 리스트를 통하여 하는 것을 권장합니다.
 	/// 단, 인수로는 (unsigned) char, (unsigned) short, (unsigend) int, float, double과 그에 대한 nvec만 가능합니다.
 	/// </summary>
 	template <class F, class... T>
 	struct CustomVertex<F, T...> {
 		F first;
 		CustomVertex<T...> rest;
+		/// <summary>
+		/// 정점의 P번째(0 base) 멤버에 접근할 수 있습니다. 예를 들어 템플릿 매개변수가 int, float, char인 경우 get＜2＞는 char 부분에 대한 참조(포인터 말고 참조자)를 리턴합니다.
+		/// </summary>
+		template<unsigned P> inline constexpr auto& get() { static_assert(sizeof...(T) >= P, "Index exceeded."); if constexpr (P == 0) return first; else return rest.get<P - 1>(); }
+		CustomVertex(const CustomVertex&) = default;
+		CustomVertex(CustomVertex&&) = default;
 		inline static void enableVA() { enableVA(sizeof(CustomVertex<F, T...>), 0, 0); }
 		inline static void enableVA(int stride, unsigned index, size_t offset) {
 			CustomVertex<F>::enableVA(stride, index, offset);
@@ -235,59 +247,67 @@ namespace onart {
 	// 인라인 함수***********************************************************************************
 	template<class F>
 	void CustomVertex<F>::enableVA(int stride, unsigned index, size_t offset) {
-		int size;
-		if constexpr (isOneOf<F, float, vec2, vec3, vec4>()) {
-			if constexpr (std::is_same_v<F, float>) size = 1;
-			else size = F::DIM();
-			floatAttribPointer(index, size, stride, (void*)offset);
+		if constexpr (isOneOf<F, vec2, vec3, vec4>()) {
+			floatAttribPointer(index, (int)F::DIM(), stride, (void*)offset);
 		}
-		else if constexpr (isOneOf<F, double, dvec2, dvec3, dvec4>()) {
-			if constexpr (std::is_same_v<F, float>) size = 1;
-			else size = F::DIM();
-			doubleAttribPointer(index, size, stride, (void*)offset);
+		else if constexpr (isOneOf<F, float, float[1], float[2], float[3], float[4]>()) {
+			floatAttribPointer(index, sizeof(F) / sizeof(float), stride, (void*)offset);
 		}
-		else if constexpr (isOneOf < F, int8_t, nvec<2, int8_t>, nvec<3, int8_t>, nvec<4, int8_t>>()) {
-			if constexpr (std::is_same_v<F, char>) size = 1;
-			else size = F::DIM();
-			int8AttribPointer(index, size, stride, (void*)offset);
+		else if constexpr (isOneOf<F, dvec2, dvec3, dvec4>()) {
+			doubleAttribPointer(index, (int)F::DIM(), stride, (void*)offset);
 		}
-		else if constexpr (isOneOf<F, uint8_t, nvec<2, uint8_t>, nvec<3, uint8_t>, nvec<4, uint8_t>>()) {
-			if constexpr (std::is_same_v<F, unsigned char>) size = 1;
-			else size = F::DIM();
-			uint8AttribPointer(index, size, stride, (void*)offset);
+		else if constexpr (isOneOf<F, double, double[1], double[2], double[3], double[4]>()) {
+			doubleAttribPointer(index, sizeof(F) / sizeof(double), stride, (void*)offset);
 		}
-		else if constexpr (isOneOf<F, int16_t, nvec<2, int16_t>, nvec<3, int16_t>, nvec<4, int16_t>>()) {
-			if constexpr (std::is_same_v<F, int16_t>) size = 1;
-			else size = F::DIM();
-			int16AttribPointer(index, size, stride, (void*)offset);
+		else if constexpr (isOneOf < F, nvec<2, int8_t>, nvec<3, int8_t>, nvec<4, int8_t>>()) {
+			int8AttribPointer(index, (int)F::DIM(), stride, (void*)offset);
 		}
-		else if constexpr (isOneOf<F, uint16_t, nvec<2, uint16_t>, nvec<3, uint16_t>, nvec<4, uint16_t>>()) {
-			if constexpr (std::is_same_v<F, unsigned short>) size = 1;
-			else size = F::DIM();
-			uint16AttribPointer(index, size, stride, (void*)offset);
+		else if constexpr (isOneOf<F, int8_t, int8_t[1], int8_t[2], int8_t[3], int8_t[4]>()) {
+			int8AttribPointer(index, sizeof(F) / sizeof(int8_t), stride, (void*)offset);
 		}
-		else if constexpr (isOneOf<F, int32_t, ivec2, ivec3, ivec4>()) {
-			if constexpr (std::is_same_v<F, int>) size = 1;
-			else size = F::DIM();
-			int32AttribPointer(index, size, stride, (void*)offset);
+		else if constexpr (isOneOf<F, nvec<2, uint8_t>, nvec<3, uint8_t>, nvec<4, uint8_t>>()) {
+			uint8AttribPointer(index, (int)F::DIM(), stride, (void*)offset);
 		}
-		else if constexpr (isOneOf<F, uint32_t, uvec2, uvec3, uvec4>()) {
-			if constexpr (std::is_same_v<F, uint32_t>) size = 1;
-			else size = F::DIM();
-			uint32AttribPointer(index, size, stride, (void*)offset);
+		else if constexpr (isOneOf<F, uint8_t, uint8_t[1], uint8_t[2], uint8_t[3], uint8_t[4]>()) {
+			uint8AttribPointer(index, sizeof(F) / sizeof(uint8_t), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, nvec<2, int16_t>, nvec<3, int16_t>, nvec<4, int16_t>>()) {
+			int16AttribPointer(index, (int)F::DIM(), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, int16_t, int16_t[1], int16_t[2], int16_t[3], int16_t[4]>()) {
+			int16AttribPointer(index, sizeof(F) / sizeof(int16_t), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, nvec<2, uint16_t>, nvec<3, uint16_t>, nvec<4, uint16_t>>()) {
+			uint16AttribPointer(index, (int)F::DIM(), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint16_t, uint16_t[1], uint16_t[2], uint16_t[3], uint16_t[4]>()) {
+			int16AttribPointer(index, sizeof(F) / sizeof(uint16_t), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, ivec2, ivec3, ivec4>()) {
+			int32AttribPointer(index, (int)F::DIM(), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, int32_t, int32_t[1], int32_t[2], int32_t[3], int32_t[4]>()) {
+			int32AttribPointer(index, sizeof(F) / sizeof(int32_t), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uvec2, uvec3, uvec4>()) {
+			uint32AttribPointer(index, (int)F::DIM(), stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint32_t, uint32_t[1], uint32_t[2], uint32_t[3], uint32_t[4]>()) {
+			uint32AttribPointer(index, sizeof(F) / sizeof(uint32_t), stride, (void*)offset);
 		}
 		else {
 			static_assert(
 				isOneOf<F,
-				float, vec2, vec3, vec4,
-				double, dvec2, dvec3, dvec4,
-				int8_t, nvec<2, int8_t>, nvec<3, int8_t>, nvec<4, int8_t>,
-				uint8_t, nvec<2, uint8_t>, nvec<3, uint8_t>, nvec<4, uint8_t>,
-				int16_t, nvec<2, int16_t>, nvec<3, int16_t>, nvec<4, int16_t>,
-				uint16_t, nvec<2, uint16_t>, nvec<3, uint16_t>, nvec<4, uint16_t>,
-				int32_t, ivec2, ivec3, ivec4,
-				uint32_t, uvec2, uvec3, uvec4
-				>(), "Can't resolve this attribute: only float, double, char, short, int and vectors of them are possible attribute types");
+				float, vec2, vec3, vec4, float[1], float[2], float[3], float[4],
+				double, dvec2, dvec3, dvec4, double[1], double[2], double[3], double[4],
+				int8_t, nvec<2, int8_t>, nvec<3, int8_t>, nvec<4, int8_t>, int8_t[1], int8_t[2], int8_t[3], int8_t[4],
+				uint8_t, nvec<2, uint8_t>, nvec<3, uint8_t>, nvec<4, uint8_t>, uint8_t[1], uint8_t[2], uint8_t[3], uint8_t[4],
+				int16_t, nvec<2, int16_t>, nvec<3, int16_t>, nvec<4, int16_t>, int16_t[1], int16_t[2], int16_t[3], int16_t[4],
+				uint16_t, nvec<2, uint16_t>, nvec<3, uint16_t>, nvec<4, uint16_t>, uint16_t[1], uint16_t[2], uint16_t[3], uint16_t[4],
+				int32_t, ivec2, ivec3, ivec4, int32_t[1], int32_t[2], int32_t[3], int32_t[4],
+				uint32_t, uvec2, uvec3, uvec4, uint32_t[1], uint32_t[2], uint32_t[3], uint32_t[4]
+				>(), "Can't resolve this attribute: only float, double, signed/unsigned char(not JUST \'char\'), short, int and vectors(only onart::nvec) or standard C arrays(fixed 1~4 dim) of them are possible attribute types");
+			//  리빙포인트: isOneOf<F>만 남겨 false를 유발해도 동작은 같으나, 가능 타입을 직접 명시하기 위해 남겨 둠. (false로 하는 경우에는 이 조건에 넘어오지 않아도 반드시 컴파일에 실패)
 		}
 	}
 
