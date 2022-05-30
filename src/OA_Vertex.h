@@ -10,6 +10,7 @@
 
 #include "oaglem.h"
 
+#include <type_traits>
 #include <tuple>
 #include <map>
 #include <string>
@@ -20,6 +21,19 @@
 #define USE_ANIM
 
 namespace onart {
+
+	template<class A>
+	inline constexpr bool isOneOf() {
+		return false;
+	}
+
+	/// <summary>
+	/// 첫 번째 템플릿 인자가 나머지 중 하나와 동일한 경우 참을 리턴합니다.
+	/// </summary>
+	template <class A, class T1, class... Types>
+	inline constexpr bool isOneOf() {
+		return std::is_same_v<A, T1> || isOneOf<A, Types...>();
+	}
 
 	/// <summary>
 	/// 렌더링 파이프라인의 정점입니다.
@@ -78,7 +92,7 @@ namespace onart {
 	struct CustomVertex<F> {
 		F first;
 		inline static void enableVA() { enableVA(sizeof(CustomVertex<F>), 0, 0); }
-		static void enableVA(unsigned stride, unsigned index = 0, unsigned offset = 0);
+		inline static void enableVA(int stride, unsigned index, size_t offset);
 	};
 
 	/// <summary>
@@ -90,8 +104,14 @@ namespace onart {
 		F first;
 		CustomVertex<T...> rest;
 		inline static void enableVA() { enableVA(sizeof(CustomVertex<F, T...>), 0, 0); }
-		static void enableVA(unsigned stride, unsigned index = 0, unsigned offset = 0);
+		inline static void enableVA(int stride, unsigned index, size_t offset) {
+			CustomVertex<F>::enableVA(stride, index, offset);
+			using thisType = CustomVertex<F, T...>;
+			CustomVertex<T...>::enableVA(stride, index + 1, offset + offsetof(thisType, rest));
+		}
 	};
+
+	using DefaultVertex = CustomVertex<vec3, vec3, vec2, vec3, vec3, ivec4, vec4>;	// position, normal vector, textrue coordinate, tangent, bitangent, bone id, bone weight
 
 	/// <summary>
 	/// 기초 모델(메터리얼, 애니메이션 등이 없는 것)의 클래스입니다.
@@ -182,7 +202,7 @@ namespace onart {
 			/// <param name="ib">인덱스 버퍼를 받을 주소</param>
 			/// <returns></returns>
 			template<class... T>
-			static unsigned createVAO(const std::vector<CustomVertex<T...>>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib);
+			inline static unsigned createVAO(const std::vector<CustomVertex<T...>>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib);
 			/// <summary>
 			/// 정점 버퍼와 인덱스 버퍼를 가지고 정점 버퍼 오브젝트를 생성하고 리턴합니다.
 			/// </summary>
@@ -191,6 +211,10 @@ namespace onart {
 		private:
 			inline Mesh(unsigned vb, unsigned ib, unsigned vao, unsigned length) :vb(vb), ib(ib), vao(vao), length(length) {};
 			~Mesh();	// 프로그램 종료 전까지 임의로 메시 삭제 불가능
+
+			static unsigned generateVBIBVAO(void* vertData, unsigned* idxData, size_t vSize, size_t icount, unsigned* vb, unsigned* ib);
+			static void unbindVAO();
+
 			unsigned vb = 0, ib = 0, vao = 0;
 			const unsigned length = 0;
 
@@ -198,6 +222,82 @@ namespace onart {
 	};
 
 	using ppMesh = std::shared_ptr<std::unique_ptr<Mesh>>;	// Mesh 클래스에 대한 이중 포인터입니다.
+
+	void floatAttribPointer(unsigned index, int size, int stride, const void* ptr);
+	void doubleAttribPointer(unsigned index, int size, int stride, const void* ptr);
+	void int8AttribPointer(unsigned index, int size, int stride, const void* ptr);
+	void int16AttribPointer(unsigned index, int size, int stride, const void* ptr);
+	void int32AttribPointer(unsigned index, int size, int stride, const void* ptr);
+	void uint8AttribPointer(unsigned index, int size, int stride, const void* ptr);
+	void uint16AttribPointer(unsigned index, int size, int stride, const void* ptr);
+	void uint32AttribPointer(unsigned index, int size, int stride, const void* ptr);
+
+	// 인라인 함수***********************************************************************************
+	template<class F>
+	void CustomVertex<F>::enableVA(int stride, unsigned index, size_t offset) {
+		int size;
+		if constexpr (isOneOf<F, float, vec2, vec3, vec4>()) {
+			if constexpr (std::is_same_v<F, float>) size = 1;
+			else size = F::DIM();
+			floatAttribPointer(index, size, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, double, dvec2, dvec3, dvec4>()) {
+			if constexpr (std::is_same_v<F, float>) size = 1;
+			else size = F::DIM();
+			doubleAttribPointer(index, size, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf < F, int8_t, nvec<2, int8_t>, nvec<3, int8_t>, nvec<4, int8_t>>()) {
+			if constexpr (std::is_same_v<F, char>) size = 1;
+			else size = F::DIM();
+			int8AttribPointer(index, size, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint8_t, nvec<2, uint8_t>, nvec<3, uint8_t>, nvec<4, uint8_t>>()) {
+			if constexpr (std::is_same_v<F, unsigned char>) size = 1;
+			else size = F::DIM();
+			uint8AttribPointer(index, size, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, int16_t, nvec<2, int16_t>, nvec<3, int16_t>, nvec<4, int16_t>>()) {
+			if constexpr (std::is_same_v<F, int16_t>) size = 1;
+			else size = F::DIM();
+			int16AttribPointer(index, size, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint16_t, nvec<2, uint16_t>, nvec<3, uint16_t>, nvec<4, uint16_t>>()) {
+			if constexpr (std::is_same_v<F, unsigned short>) size = 1;
+			else size = F::DIM();
+			uint16AttribPointer(index, size, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, int32_t, ivec2, ivec3, ivec4>()) {
+			if constexpr (std::is_same_v<F, int>) size = 1;
+			else size = F::DIM();
+			int32AttribPointer(index, size, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint32_t, uvec2, uvec3, uvec4>()) {
+			if constexpr (std::is_same_v<F, uint32_t>) size = 1;
+			else size = F::DIM();
+			uint32AttribPointer(index, size, stride, (void*)offset);
+		}
+		else {
+			static_assert(
+				isOneOf<F,
+				float, vec2, vec3, vec4,
+				double, dvec2, dvec3, dvec4,
+				int8_t, nvec<2, int8_t>, nvec<3, int8_t>, nvec<4, int8_t>,
+				uint8_t, nvec<2, uint8_t>, nvec<3, uint8_t>, nvec<4, uint8_t>,
+				int16_t, nvec<2, int16_t>, nvec<3, int16_t>, nvec<4, int16_t>,
+				uint16_t, nvec<2, uint16_t>, nvec<3, uint16_t>, nvec<4, uint16_t>,
+				int32_t, ivec2, ivec3, ivec4,
+				uint32_t, uvec2, uvec3, uvec4
+				>(), "Can't resolve this attribute: only float, double, char, short, int and vectors of them are possible attribute types");
+		}
+	}
+
+	template<class... T>
+	unsigned Mesh::createVAO(const std::vector<CustomVertex<T...>>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib) {
+		unsigned vao = generateVBIBVAO(v.data(), i.data(), sizeof(CustomVertex<T...>) * v.size(), i.size(), vb, ib);
+		CustomVertex<T...>::enableVA();
+		unbindVAO();
+		return vao;
+	}
 }
 
 #endif // !__OA_VERTEX_H__
