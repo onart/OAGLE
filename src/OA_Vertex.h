@@ -10,6 +10,7 @@
 
 #include "oaglem.h"
 
+#include <tuple>
 #include <map>
 #include <string>
 #include <vector>
@@ -60,6 +61,36 @@ namespace onart {
 		vec4 boneWeights = { 0,0,0,0 };
 #endif // USE_ANIM
 
+	};
+
+	/// <summary>
+	/// 속성을 직접 설정할 수 있는 정점 클래스입니다.
+	/// 단, 인수로는 (unsigned) char, (unsigned) short, (unsigend) int, float, double과 그에 대한 nvec만 가능합니다.
+	/// </summary>
+	template<class... T>
+	struct CustomVertex;
+
+	/// <summary>
+	/// 속성을 직접 설정할 수 있는 정점 클래스입니다.
+	/// 단, 인수로는 (unsigned) char, (unsigned) short, (unsigend) int, float, double과 그에 대한 nvec만 가능합니다.
+	/// </summary>
+	template<class F>
+	struct CustomVertex<F> {
+		F first;
+		inline static void enableVA() { enableVA(sizeof(CustomVertex<F>), 0, 0); }
+		static void enableVA(unsigned stride, unsigned index = 0, unsigned offset = 0);
+	};
+
+	/// <summary>
+	/// 속성을 직접 설정할 수 있는 정점 클래스입니다.
+	/// 단, 인수로는 (unsigned) char, (unsigned) short, (unsigend) int, float, double과 그에 대한 nvec만 가능합니다.
+	/// </summary>
+	template <class F, class... T>
+	struct CustomVertex<F, T...> {
+		F first;
+		CustomVertex<T...> rest;
+		inline static void enableVA() { enableVA(sizeof(CustomVertex<F, T...>), 0, 0); }
+		static void enableVA(unsigned stride, unsigned index = 0, unsigned offset = 0);
 	};
 
 	/// <summary>
@@ -142,6 +173,16 @@ namespace onart {
 			/// <param name="ib">인덱스 버퍼를 받을 주소</param>
 			/// <returns></returns>
 			static unsigned createVAO(const std::vector<Vertex>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib);
+			/// <summary>
+			/// 커스텀 정점 클래스에 대하여 정점 벡터와 인덱스 벡터를 가지고 정점 버퍼 오브젝트를 생성하고 리턴합니다.
+			/// </summary>
+			/// <param name="v">정점 벡터</param>
+			/// <param name="i">인덱스 벡터</param>
+			/// <param name="vb">정점 버퍼를 받을 주소</param>
+			/// <param name="ib">인덱스 버퍼를 받을 주소</param>
+			/// <returns></returns>
+			template<class... T>
+			static unsigned createVAO(const std::vector<CustomVertex<T...>>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib);
 			/// <summary>
 			/// 정점 버퍼와 인덱스 버퍼를 가지고 정점 버퍼 오브젝트를 생성하고 리턴합니다.
 			/// </summary>

@@ -74,6 +74,8 @@ namespace onart {
 	/// <typeparam name="T">벡터 성분의 타입입니다. 사칙 연산 및 부호 반전이 가능하여야 합니다.</typeparam>
 	template <unsigned D, class T = float> struct nvec {
 		alignas(16) T entry[4];
+
+		inline static constexpr unsigned DIM() { return D; }
 		/// <summary>
 		/// 영벡터를 생성합니다.
 		/// </summary>

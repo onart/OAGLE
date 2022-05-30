@@ -7,6 +7,7 @@
 *********************************************************************************/
 #include "OA_Vertex.h"
 #include "externals/gl/glad/glad.h"
+#include <type_traits>
 #pragma warning(disable: 26451)
 
 namespace onart {
@@ -245,6 +246,30 @@ namespace onart {
 		return createVAO(*vb, *ib);
 	}
 
+	template<class... T>
+	unsigned Mesh::createVAO(const std::vector<CustomVertex<T...>>& v, const std::vector<unsigned>& i, unsigned* vb, unsigned* ib) {
+		glGenBuffers(1, vb);
+		glBindBuffer(GL_ARRAY_BUFFER, *vb);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * v.size(), &v[0], GL_STATIC_DRAW);
+
+		glGenBuffers(1, ib);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *ib);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned) * i.size(), &i[0], GL_STATIC_DRAW);
+
+		unsigned vao;
+		glGenVertexArrays(1, &vao);
+		glBindVertexArray(vao);
+		glBindBuffer(GL_ARRAY_BUFFER, vb);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ib);
+
+		CustomVertex<T...>::enableVA();
+
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		return vao;
+	}
+
 	unsigned Mesh::createVAO(unsigned vb, unsigned ib) {
 		unsigned vao;
 		glGenVertexArrays(1, &vao);
@@ -272,6 +297,78 @@ namespace onart {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		return vao;
+	}
+
+	template<class A>
+	constexpr bool isOneOf() {
+		return false;
+	}
+
+	template <class A, class T1, class... Types>
+	constexpr bool isOneOf() {
+		return std::is_same_v<A, T1> || isOneOf<A, Types...>();
+	}
+	
+	template<class F>
+	void CustomVertex<F>::enableVA(unsigned stride, unsigned index, unsigned offset) {
+
+	}
+
+	template<class F, class... T>
+	void CustomVertex<F, T...>::enableVA(unsigned stride, unsigned index, unsigned offset) {
+		int size;
+		GLenum type;
+		if constexpr (isOneOf<F, float, vec2, vec3, vec4>()) {
+			if constexpr (std::is_same_v<F, float>) size = 1;
+			else size = F::DIM();
+			glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, double, dvec2, dvec3, dvec4>()) {
+			if constexpr (std::is_same_v<F, float>) size = 1;
+			else size = F::DIM();
+			glVertexAttribLPointer(index, size, GL_DOUBLE, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf < F, int8_t, nvec<2, int8_t>, nvec<3, int8_t>, nvec<4, int8_t>>()) {
+			type = GL_BYTE;
+			if constexpr (std::is_same_v<F, char>) size = 1;
+			else size = F::DIM();
+			glVertexAttribIPointer(index, size, type, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint8_t, nvec<2, uint8_t>, nvec<3, uint8_t>, nvec<4, uint8_t>>()) {
+			type = GL_UNSIGNED_BYTE;
+			if constexpr (std::is_same_v<F, unsigned char>) size = 1;
+			else size = F::DIM();
+			glVertexAttribIPointer(index, size, type, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, int16_t, nvec<2, int16_t>, nvec<3, int16_t>, nvec<4, int16_t>>()) {
+			type = GL_SHORT;
+			if constexpr (std::is_same_v<F, int16_t>) size = 1;
+			else size = F::DIM();
+			glVertexAttribIPointer(index, size, type, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint16_t, nvec<2, uint16_t>, nvec<3, uint16_t>, nvec<4, uint16_t>>()) {
+			type = GL_UNSIGNED_SHORT;
+			if constexpr (std::is_same_v<F, unsigned short>) size = 1;
+			else size = F::DIM();
+			glVertexAttribIPointer(index, size, type, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, int32_t, ivec2, ivec3, ivec4>()) {
+			type = GL_INT;
+			if constexpr (std::is_same_v<F, int>) size = 1;
+			else size = F::DIM();
+			glVertexAttribIPointer(index, size, type, stride, (void*)offset);
+		}
+		else if constexpr (isOneOf<F, uint32_t, uvec2, uvec3, uvec4>()) {
+			type = GL_UNSIGNED_INT;
+			if constexpr (std::is_same_v<F, uint32_t>) size = 1;
+			else size = F::DIM();
+			glVertexAttribIPointer(index, size, type, stride, (void*)offset);
+		}
+		else {
+			static_assert(true, "Can't resolve this attribute");
+		}
+		using thisType = CustomVertex<F, T...>;
+		enableVA(stride, index + 1, offset + offsetof(thisType, rest));
 	}
 
 	void Mesh::collect(bool removeUsing) {
