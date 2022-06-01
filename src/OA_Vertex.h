@@ -79,17 +79,18 @@ namespace onart {
 
 	/// <summary>
 	/// 속성을 직접 설정할 수 있는 정점 클래스입니다.
-	/// 단, 인수로는 (unsigned) char, (unsigned) short, (unsigend) int, float, double과 그에 대한 nvec만 가능합니다.
+	/// 단, 인수로는 unsigned char, signed char, (unsigned) short, (unsigend) int, float, double과 그에 대한 배열(최대 4차원) 및 nvec(최대 4차원)만 가능합니다.
 	/// </summary>
 	template<class... T>
 	struct CustomVertex;
 
 	/// <summary>
 	/// 속성을 직접 설정할 수 있는 정점 클래스입니다.
-	/// 단, 인수로는 (unsigned) char, (unsigned) short, (unsigend) int, float, double과 그에 대한 nvec만 가능합니다.
+	/// 단, 인수로는 unsigned char, signed char, (unsigned) short, (unsigend) int, float, double과 그에 대한 배열(최대 4차원) 및 nvec(최대 4차원)만 가능합니다.
 	/// </summary>
 	template<class F>
 	struct CustomVertex<F> {
+		template<class...> friend struct CustomVertex;
 		F first;
 		/// <summary>
 		/// 정점의 멤버에 접근할 수 있습니다. 생성은 초기화 리스트를 통하여 하는 것을 권장합니다.
@@ -98,7 +99,18 @@ namespace onart {
 		CustomVertex(const CustomVertex&) = default;
 		CustomVertex(CustomVertex&&) = default;
 		inline static void enableVA() { enableVA(sizeof(CustomVertex<F>), 0, 0); }
+		/// <summary>
+		/// P번 원소(0 base)의 오프셋을 컴파일 타임에 알려줍니다.
+		/// </summary>
+		template<unsigned P>
+		inline static constexpr size_t offset() {
+			static_assert(P == 0, "Index exceeded.");
+			return 0;
+		}
+	private:
 		inline static void enableVA(int stride, unsigned index, size_t offset);
+		template<unsigned P>
+		inline static constexpr size_t offset(size_t h) { return h; }
 	};
 
 	/// <summary>
@@ -107,6 +119,7 @@ namespace onart {
 	/// </summary>
 	template <class F, class... T>
 	struct CustomVertex<F, T...> {
+		template<class...> friend struct CustomVertex;
 		F first;
 		CustomVertex<T...> rest;
 		/// <summary>
@@ -116,10 +129,25 @@ namespace onart {
 		CustomVertex(const CustomVertex&) = default;
 		CustomVertex(CustomVertex&&) = default;
 		inline static void enableVA() { enableVA(sizeof(CustomVertex<F, T...>), 0, 0); }
+		template<unsigned P>
+		/// <summary>
+		/// P번 원소(0 base)의 오프셋을 컴파일 타임에 알려줍니다.
+		/// </summary>
+		inline static constexpr size_t offset() {
+			static_assert(sizeof...(T) >= P, "Index exceeded.");
+			return offset<P>(0);
+		}
+	private:
 		inline static void enableVA(int stride, unsigned index, size_t offset) {
 			CustomVertex<F>::enableVA(stride, index, offset);
 			using thisType = CustomVertex<F, T...>;
 			CustomVertex<T...>::enableVA(stride, index + 1, offset + offsetof(thisType, rest));
+		}
+		template<unsigned P>
+		inline static constexpr size_t offset(size_t h) {
+			using thisType = CustomVertex<F, T...>;
+			if constexpr (P == 0) return h;
+			return CustomVertex<T...>::offset(h + offsetof(thisType, rest));
 		}
 	};
 
@@ -307,7 +335,7 @@ namespace onart {
 				int32_t, ivec2, ivec3, ivec4, int32_t[1], int32_t[2], int32_t[3], int32_t[4],
 				uint32_t, uvec2, uvec3, uvec4, uint32_t[1], uint32_t[2], uint32_t[3], uint32_t[4]
 				>(), "Can't resolve this attribute: only float, double, signed/unsigned char(not JUST \'char\'), short, int and vectors(only onart::nvec) or standard C arrays(fixed 1~4 dim) of them are possible attribute types");
-			//  리빙포인트: isOneOf<F>만 남겨 false를 유발해도 동작은 같으나, 가능 타입을 직접 명시하기 위해 남겨 둠. (false로 하는 경우에는 이 조건에 넘어오지 않아도 반드시 컴파일에 실패)
+			//  리빙포인트: isOneOf<F>만 남겨 false를 유발해도 동작은 같으나, 가능 타입을 직접 명시하기 위해 남겨 둠. (리터럴 상수 false로 하는 경우에는 이 조건에 넘어오지 않아도 반드시 컴파일에 실패)
 		}
 	}
 
