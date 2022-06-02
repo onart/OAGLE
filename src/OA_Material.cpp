@@ -117,4 +117,37 @@ namespace onart {
 		}
 		return pTexture();
 	}
+
+	Cubemap::Cubemap() {
+		glGenTextures(1, &id);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	}
+
+	void Cubemap::loadFace(const char* file, Face face) {
+		int width, height, nrChannels;
+		unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
+		if (!data) { fprintf(stderr, "이미지 로드 실패"); return; }
+		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
+		glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + (int)face, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		stbi_image_free(data);
+	}
+
+	void Cubemap::loadFaceFromMemory(const unsigned char* file, size_t size, Face face) {		
+		int width, height, nrChannels;
+		unsigned char* data = stbi_load_from_memory(file, size, &width, &height, &nrChannels, 0);
+		if (!data) { fprintf(stderr, "이미지 로드 실패"); return; }
+		GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
+		glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + (int)face, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+		stbi_image_free(data);
+	}
 }

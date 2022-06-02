@@ -116,8 +116,32 @@ namespace onart {
 		float alpha;
 		float refractIdx;
 	};
+
+	/// <summary>
+	/// 6개 면 텍스처를 가지고 3차원 벡터로 샘플링하는 큐브맵입니다. 사용을 위해서는 전용 셰이더 코드를 따로 만들어야 합니다.
+	/// </summary>
+	class Cubemap {
+	public:
+		/// <summary>
+		/// 큐브맵의 각 면을 나타냅니다. PX는 positive x, NX는 negative x와 같은 규칙을 가집니다.
+		/// </summary>
+		enum class Face { PX = 0, NX, PY, NY, PZ, NZ };
+		/// <summary>
+		/// 빈 큐브맵을 생성합니다.
+		/// </summary>
+		Cubemap();
+		inline unsigned getId() { return id; }
+		/// <summary>
+		/// 큐브맵의 특정 면을 파일에서 불러옵니다.
+		/// </summary>
+		void loadFace(const char* file, Face face);
+		/// <summary>
+		/// 큐브맵의 특정 면을 메모리의 변수로부터 불러옵니다.
+		/// </summary>
+		void loadFaceFromMemory(const unsigned char* file, size_t size, Face face);
+	private:
+		unsigned id;
+	};
 }
 
 #endif // !__OA_MATERIAL_H__
-
-

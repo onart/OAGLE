@@ -45,6 +45,13 @@ namespace onart {
 		/// <param name="dppass">glStencilOp()의 인수(스텐실과 깊이 통과 시 동작)</param>
 		static void make(const char* name, unsigned width, unsigned height, ATTACHMENT colorBuffer, ATTACHMENT depthBuffer, ATTACHMENT stencilBuffer = ATTACHMENT::NONE, unsigned func = 0, int ref = 0, unsigned mask = 0, unsigned sfail = 0, unsigned dpfail = 0, unsigned dppass = 0);
 		/// <summary>
+		/// 포인트 그림자를 위하여, 큐브맵 깊이 텍스처를 가진 프레임버퍼를 생성합니다.
+		/// </summary>
+		/// <param name="name">접근할 이름입니다.</param>
+		/// <param name="width">프레임버퍼 폭입니다.</param>
+		/// <param name="height">프레임버퍼 높이입니다.</param>
+		static void makeCube(const char* name, unsigned width, unsigned height);
+		/// <summary>
 		/// 만든 프레임버퍼를 제거합니다.
 		/// </summary>
 		static void drop(const char* name);
@@ -99,6 +106,7 @@ namespace onart {
 	private:
 		FrameBuffer(unsigned width, unsigned height, ATTACHMENT color, ATTACHMENT depth, ATTACHMENT stencil, unsigned func = 0, int ref = 0, unsigned mask = 0, unsigned sfail = 0, unsigned dpfail = 0, unsigned dppass = 0);
 		FrameBuffer(unsigned width, unsigned height, ATTACHMENT color, ATTACHMENT depth);
+		FrameBuffer(unsigned width, unsigned height);
 		~FrameBuffer();
 
 		void setViewport();
