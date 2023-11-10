@@ -480,6 +480,7 @@ namespace onart {
 			else {
 				auto p2 = p1 + 1;
 				float interp = (tp - p1->tp) / (p2->tp - p1->tp);
+				interp = 0; // due to slerp limit error
 				if (interp < 0) { rotation = p1->value; /* 애니메이션 키포인트가 잘못 지정된 (0부터 시작하지 않는) 케이스 */ }
 				else { rotation = slerp(p1->value, p2->value, interp); }
 			}
@@ -487,7 +488,7 @@ namespace onart {
 		if (!keyScale.empty()) {
 			auto p1 = kpNow(keyScale, tp);
 			if (p1 == keyScale.end() - 1 || keyScale.size() == 1) {
-				pos = p1->value;
+				scale = p1->value;
 			}
 			else {
 				auto p2 = p1 + 1;
