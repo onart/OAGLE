@@ -1255,21 +1255,16 @@ namespace onart {
 	/// <param name="q2">선형 보간 대상 2(t=1에 가까울수록 이것에 가깝습니다.)</param>
 	/// <param name="t">선형 보간 값</param>
 	inline Quaternion slerp(const Quaternion& q1, const Quaternion& q2, float t) {
-		float Wa, Wb;
 		float costh = reinterpret_cast<const vec4*>(&q1)->dot(*reinterpret_cast<const vec4*>(&q2)) / q1.abs() / q2.abs();
-		// 정밀도 오차로 인한 nan 방지
-		if (costh > 1) costh = 1;
-		else if (costh < -1) costh = -1;
-		float theta = acos(costh);
-		float sn = sin(theta);
-
-		// q1=q2이거나 180도 차이인 경우
-		if (sn <= FLT_EPSILON) return q1;
-		Wa = sin((1 - t) * theta) / sn;
-		Wb = sin(t * theta) / sn;
-
-		Quaternion r = q1 * Wa + q2 * Wb;
-		return r / r.abs();
+		if (costh < 0) {
+			return slerp(-q1, q2, t);
+		}
+		if (costh > 0.95f) {
+			auto r = (q1 * (1 - t) + q2 * t);
+			return r / r.abs();
+		}
+		float th = std::acosf(costh);
+		return (q1 * std::sin((1 - t) * th) + q2 * std::sin(t * th)) * (1 / std::sin(th));
 	}
 
 	inline mat3 mat3::rotate(float roll, float pitch, float yaw) { return mat3(mat4::rotate(roll, pitch, yaw)); }
